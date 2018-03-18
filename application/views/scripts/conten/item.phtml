@@ -1,0 +1,38 @@
+<table>
+    <tr>
+        <td><label>Codigo</label></td>
+        <td>:</td>
+        <td>
+            <input type="text"
+                   class="ui-text"
+                   id="txtconten_idsigma"
+                   name="txtconten_idsigma"
+                   disabled="disabled"
+                   value="<?php echo $this->idsigma; ?>"/>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Descripci&oacute;n</label></td>
+        <td>:</td>
+        <td>
+            <textarea id="txtconten_vdescri"
+                      name="txtconten_vdescri"
+                      style="width: 280px;max-width: 280px;height: 50px; max-height: 50px;"
+                      class="ui-text"><?php echo $this->vdescri; ?></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Estado</label></td>
+        <td>:</td>
+        <td>
+            <input type="checkbox"
+                   id="chkconten_nestado"
+                   name="chkconten_nestado"
+                   value="estado"
+                   <?php if($this->nestado == '1') { echo 'checked="checked"';} ?>
+                />
+        </td>
+    </tr>
+</table>
+<script>
+</script>

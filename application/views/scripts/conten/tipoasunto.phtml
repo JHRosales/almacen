@@ -1,0 +1,188 @@
+<br/>
+<div id="panelConten">
+    <table id="tblConten"></table>
+    <div id="ptblConten"></div>
+</div>
+
+<script>
+    var buscadorConten = new buscadorJQGrid();
+    buscadorConten.panel = 'panelConten';
+    buscadorConten.table = 'tblConten';
+    buscadorConten.procedure = 'sp_conten_listar_tabla';
+    buscadorConten.prepareParams = function(){
+        buscadorConten.params = [
+            ['@p_schema', 'tramite'],
+            ['@p_idtabl', '0000000009']
+        ];
+    }
+    function saveConten(){
+        var descrip = $.trim($('#txtconten_vdescri').val());
+        if (descrip == ''){
+            openDialogInfo(
+                'Ingrese la descricip&oacute;n',
+                280,
+                100,
+                null,
+                function(){
+                    $('#txtconten_vdescri').focus();
+                }
+            );
+
+            return;
+        }
+        var estado = '0';
+        if($('#chkconten_nestado').attr('checked') == 'checked'){
+            estado = '1';
+        }
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "conten/itemsave/",
+            data: {
+                p_schema : 'tramite',
+                p_cidtabl : '0000000009',
+                p_idsigma : $('#txtconten_idsigma').val(),
+                p_vdescri : $('#txtconten_vdescri').val(),
+                p_nestado: estado
+            },
+            success: function(rData){
+                buscadorConten.execSearch();
+                closeDialog('jqDialog4');
+            },
+            error: function(rData, eNumber, eMessage){
+                console.log(rData + eNumber + eMessage);
+            }
+        });
+    }
+    btnAgregarConten = {
+        caption: 'Agregar',
+        title: 'Agregar',
+        buttonicon: 'ui-icon-plusthick',
+        onClickButton: function () {
+            openDialogDataFunction4(
+                'conten/item',
+                {
+                    pschema : 'tramite',
+                    idsigma : ''
+                },
+                380,
+                200,
+                'Agregar Registro',
+                function(){
+                    $('.ui-dialog-buttonpane').find('button:contains("Guardar")').button({
+                        icons: {primary: 'ui-icon-disk'}
+                    });
+                    $('.ui-dialog-buttonpane').find('button:contains("Cancelar")').button({
+                        icons: {primary: 'ui-icon-circle-close'}
+                    });
+                },
+                {
+                    'Guardar' : function(){
+                        saveConten();
+                    },
+                    'Cancelar' : function(){
+                        closeDialog('jqDialog4');
+                    }
+                }
+            );
+        }
+    };
+    function editarConten(){
+        var row = buscadorConten.getSelectedRow();
+        if (row.idsigma == null || row.idsigma == undefined){
+            openDialogInfo('Seleccionar registro para Editar.');
+            return;
+        }
+        openDialogDataFunction4(
+            'conten/item',
+            {
+                pschema : 'tramite',
+                idsigma : row.idsigma
+            },
+            380,
+            200,
+            'Editar Registro',
+            function(){
+                $('.ui-dialog-buttonpane').find('button:contains("Guardar")').button({
+                    icons: {primary: 'ui-icon-disk'}
+                });
+                $('.ui-dialog-buttonpane').find('button:contains("Cancelar")').button({
+                    icons: {primary: 'ui-icon-circle-close'}
+                });
+            },
+            {
+                'Guardar' : function(){
+                    saveConten();
+                },
+                'Cancelar' : function(){
+                    closeDialog('jqDialog4');
+                }
+            }
+        );
+    }
+    btnEditarConten = {
+        caption: 'Editar',
+        title: 'Editar',
+        buttonicon: 'ui-icon-pencil',
+        onClickButton: function () {
+            editarConten();
+        }
+    };
+
+    <?php if($this->showNavPanel == 'true') { ?>
+    buscadorConten.gridNavPanel = function(){
+        $('#tblConten').jqGrid('navGrid', '#ptblConten', {edit: false, add: false, del: false, search: false, refresh: false});
+        $('#tblConten').jqGrid('navButtonAdd', '#ptblConten', btnAgregarConten);
+        $('#tblConten').jqGrid('navSeparatorAdd', '#ptblConten');
+        $('#tblConten').jqGrid('navButtonAdd', '#ptblConten', btnEditarConten);
+        $('#tblConten').jqGrid('navSeparatorAdd', '#ptblConten');
+        $("#tblConten").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+    <?php } else if($this->showNavPanel == 'add'){ ?>
+    buscadorConten.gridNavPanel = function(){
+        $('#tblConten').jqGrid('navGrid', '#ptblConten', {edit: false, add: false, del: false, search: false, refresh: false});
+        $('#tblConten').jqGrid('navButtonAdd', '#ptblConten', btnAgregarConten);
+        $("#tblConten").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+    <?php } else { ?>
+    buscadorConten.gridNavPanel = function(){
+        $('#tblConten').jqGrid('navGrid', '#ptblConten', {edit: false, add: false, del: false, search: false, refresh: false});
+        $("#tblConten").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+    <?php } ?>
+
+    buscadorConten.option = {
+        // Props
+        caption: 'Asunto',
+        ignoreCase : true,
+        height: 140,
+        width: 700,
+        colNames: [
+            'Código',
+            'Descripción',
+            'cidtabl',
+            'nestado'
+        ],
+        colModel: [
+            {name:'idsigma', index:'idsigma', width: 75, hidden: false},
+            {name:'vdescri', index:'vdescri', width: 590, hidden: false},
+            {name:'cidtabl', index:'cidtabl', width: 80, hidden: true},
+            {name:'nestado', index:'nestado', width: 80, hidden: true}
+        ],
+        // Methods
+        ondblClickRow:function(){
+            <?php if($this->showNavPanel == 'true') { ?>
+            editarConten();
+            <?php } else { ?>
+            var row = buscadorConten.getSelectedRow();
+            $('#hidconten_tipoasunto').val(row.idsigma);
+            $('#txtconten_tipoasunto').val(row.vdescri);
+            closeDialog('jqDialog3');
+            <?php } ?>
+        }
+    };
+    $(document).ready(function(){
+        buscadorConten.execSearch();
+    });
+</script>

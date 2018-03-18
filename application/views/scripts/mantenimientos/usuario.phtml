@@ -1,0 +1,520 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoDoc=array(array("1","DNI"), array("2","PASAPORTE"));
+
+?>
+<style>
+    td{
+        text-align: left;
+    }
+</style>
+<div id="panelMantenimientoUsuario"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 900px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Personal</label>
+    </div>
+    <div id="usertabs">
+        <ul>
+            <li><a href="#tabUG" id="tabtitle">Personal</a></li>
+            <li><a href="#tabP">Permisos</a></li>
+        </ul>
+        <div id="tabUG">
+            <table border="0">
+                <tr>
+                    <td>
+                        <table border="0" class="ui-table-panelLayout" style="margin: 3px;width:480px;" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td>C&oacute;digo</td>
+                                <td>
+                                    <input type="hidden" id="hdestado" name="hdestado" value="<?php echo $this->estado; ?>" />
+                                    <input type="text" id="txtcidpersonal" name="txtcidpersonal"
+                                           value="<?php echo $this->cidpersonal; ?>"
+                                           readonly="readonly"
+                                           style="background-color: #e4e4e4;"
+                                        />
+                                </td>
+                            </tr>
+
+                            <!-- PERSONA -->
+                            <tr>
+                                <td>Nombre</td>
+                                <td>
+                                    <input type="text" id="txtvnombre" name="txtvnombre" value="<?php echo $this->vnombre; ?>"
+                                        style="width:225px;"/>
+                                </td>
+                            </tr>
+                            <!-- TIPO DOC -->
+                            <tr>
+                                <td>Tipo de Documento</td>
+                                <td>
+                                    <select id="cbotipodoc" name="cbotipodoc" style="width:120px;">
+                                        <?php  echo $library->ContenidoCombo($TipoDoc, $this->vtipdoc ,0); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- NRO DOC -->
+                            <tr>
+                                <td>Nro Doc</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtnrodoc"
+                                           name="txtnrodoc"
+                                           maxlength="12"
+                                           value="<?php echo $this->nrodoc; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- FECHA NACIMIENTO -->
+                            <tr>
+                                <td>Fecha Inicio</td>
+                                <td>
+                                    <input type="text" id="txtfechanac" name="txtfechanac"
+                                           value="<?php echo $this->fechanac;?>" />
+                                </td>
+                            </tr>
+                            <!-- DIRECCION -->
+                            <tr>
+                                <td>Direccion</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtdirec"
+                                           name="txtdirec"
+                                           maxlength="250"
+                                           style="width:325px;"
+                                           value="<?php echo $this->direcc; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- UBIGEO -->
+                            <tr>
+                                <td>Ubigeo</td>
+                                <td>
+                                    <select id="cboubigeo" name="cboubigeo" style="width:120px;">
+                                        <?php  echo $this->util()->getComboContenedorOtro( '1424',$this->vUbigeo,'Cmb_Ubigeo','@idUbi'); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- TELEFONO -->
+                            <tr>
+                                <td>Telefono</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txttelef"
+                                           name="txttelef"
+                                           maxlength="11"
+                                           value="<?php echo $this->telef; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- CELULAR -->
+                            <tr>
+                                <td>Celular</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtcelular"
+                                           name="txtcelular"
+                                           maxlength="11"
+                                           value="<?php echo $this->celular; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- CORREO -->
+                            <tr>
+                                <td>Correo</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtcorreo"
+                                           name="txtcorreo"
+                                           maxlength="50"
+                                           value="<?php echo $this->correo; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- CARGO -->
+                            <tr>
+                                <td>Cargo</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtcargo"
+                                           name="txtcargo"
+                                           maxlength="100"
+                                           value="<?php echo $this->cargo; ?>"/>
+                                </td>
+                            </tr>
+
+                            <!-- USUARIO -->
+                            <tr>
+                                <td>Usuario Login</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtusuario"
+                                           name="txtusuario"
+                                           maxlength="50"
+                                           value="<?php echo $this->usuario; ?>"/>
+                                </td>
+                            </tr>
+                            <!-- PASS -->
+                            <tr>
+                                <td>Password</td>
+                                <td>
+                                    <input type="text"
+                                           class="editable ui-text"
+                                           id="txtpass"
+                                           name="txtpass"
+                                           maxlength="50"
+                                           value="<?php echo $this->pass; ?>"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="tabP">
+            <div id="panelListaPermisos" align="center" style="width: 99%;margin: 3px;">
+                <table id="tblListaPermisos"></table>
+                <div id="ptblListaPermisos"></div>
+            </div>
+        </div>
+    </div>
+    <button id="btnguardarusuario" onclick="guardarUsuario()">Guardar</button>
+    <button id="btncancelusuario" onclick="cancelarUsuario()">Cancelar</button>
+</div>
+
+<script>
+    function agregarGrupo(){
+        var xcidusuario = "";
+        var xvusuario = "";
+        var xcidgrupo = "";
+        var xvgrupo = "";
+
+
+        var xestado = "1";
+        var xvhostnm = "";
+        var xvusernm = "";
+        var xddatetm = "";
+
+        var ugdata = {
+            cidusuario:xcidusuario,
+            vusuario:xvusuario,
+            cidgrupo:xcidgrupo,
+            vgrupo:xvgrupo,
+            estado:xestado,
+            vhostnm:xvhostnm,
+            vusernm:xvusernm,
+            ddatetm:xddatetm
+        };
+        var nrowid = $("#tblListaUG").jqGrid('getGridParam', 'records') + 1;
+        $("#tblListaUG").addRowData(nrowid, ugdata);
+    }
+
+    function seleccionarPersona(){
+        dobleclickPersona = function(row){
+            $("#hdcidpers").val(row.cidpers);
+            $("#txtvperson").val(row.crazsoc);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione al administrado...");
+    }
+    function quitarPersona(){
+        $("#hdcidpers").val("");
+        $("#txtvperson").val("");
+    }
+    function chkEstadoUG(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkestadoUG_'+options.rowId+'" ' + (cellvalue=='1' ? ' checked="checked"':'') + ' disabled/>';
+    }
+    function cancelarUsuario(){
+        closeDialog("jqDialog1");
+    }
+    function guardarUsuario(){
+        var xcidusuario = "";
+        var xnombre = "";
+        var xtipodoc = "1";
+        var xnrodoc = "";
+        var xfechanac = "";
+        var xdirec = "";
+        var xubigeo = "1424";
+        var xtele = "";
+        var xcell = "";
+        var xcorreo = "";
+        var xcargo = "";
+        var xusuario = "";
+        var xpass = "";
+        var xestado = "";
+
+        var xpermisos = $("#tblListaPermisos").jqGrid('getRowData');
+        
+        xcidusuario = $("#txtcidpersonal").val();
+        xnombre = $("#txtvnombre").val();
+        xtipodoc = $("#cbotipodoc").val();
+        xnrodoc = $("#txtnrodoc").val();
+        xfechanac = $("#txtfechanac").val();
+        xdirec = $("#txtdirec").val();
+        xubigeo = $("#cboubigeo").val();
+        xtele = $("#txttelef").val();
+        xcell = $("#txtcelular").val();
+        xcorreo = $("#txtcorreo").val();
+        xcargo = $("#txtcargo").val();
+        xusuario = $("#txtusuario").val();
+        xpass = $("#txtpass").val();
+        xestado = $("#hdestado").val();
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/guardarusuario/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data: {
+                "cidusuario":xcidusuario,
+                "nombre":xnombre,
+                "tipodoc":xtipodoc,
+                "nrodoc":xnrodoc,
+                "fechanac":xfechanac,
+                "direc":xdirec,
+                "ubigeo":xubigeo,
+                "telefono":xtele,
+                "celular":xcell,
+                "correo":xcorreo,
+                "cargo":xcargo,
+                "usuario":xusuario,
+                "pass":xpass,
+                "estado":xestado,
+                "permisos":JSON.stringify(xpermisos)
+
+            },
+            success: function(requestData){ 	//Llamada exitosa)
+                buscarUsuario();
+                closeDialog("jqDialog1");
+                $("#jqDialog1").html("");
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+    function cambiaEstadoPermiso(xobjid,xrowid){
+        var row = $("#tblListaPermisos").jqGrid('getRowData', xrowid);
+        if(row.estado_f == "1"){
+            row.estado_f = "0";
+            row.estado_r = "0";
+        }else{
+            row.estado_f = "1";
+            row.estado_r = "1";
+        }
+
+        $("#tblListaPermisos").jqGrid('setRowData', xrowid, row)
+    }
+    function chkEstadoPermiso(cellvalue, options, rowObject) {
+        
+        return '<input  type="checkbox" ' +
+            'id="chkestadopermiso_'+options.rowId+'" ' +
+            '' + (cellvalue=='1' ? ' checked="checked"':'') + ' ' +
+            'onclick="cambiaEstadoPermiso(this.id,'+options.rowId+')"' +
+            '/>';
+    }
+    optionPermisos = {
+        width: 700,
+        height: 252,
+		rowNum:200,
+        colNames: [
+            'Codigo',
+            'Objeto',
+            'cidobjetopadre',
+            'vobjeto_padre',
+            'Accion',
+            'orden',
+            'estado',
+            'vhostnm',
+            'vusernm',
+            'ddatetm',
+            'Estadof',
+            'Estadoi',
+            'Estado'
+        ],
+        colModel: [
+            {name: 'idObjeto', index:'idObjeto', width: 100},
+            {name: 'vobjeto', index:'vobjeto', width: 150},
+            {name: 'cidobjetopadre', index:'cidobjetopadre', hidden: true},
+            {name: 'vobjeto_padre', index:'vobjeto_padre', hidden: true},
+            {name: 'vform', index:'vform', width: 240},
+            {name: 'orden', index:'orden', hidden: true},
+            {name: 'vEstado', index:'vEstado', hidden: true},
+            {name: 'vhostnm', index:'vhostnm', hidden: true},
+            {name: 'vusernm', index:'vusernm', hidden: true},
+            {name: 'ddatetm', index:'ddatetm', hidden: true},
+            {name: 'estado_f', index:'estado_f', hidden: true},
+            {name: 'estado_i', index:'estado_i', hidden: true},
+            {name: 'estado_r', index:'estado_r', width: 20, formatter:chkEstadoPermiso}
+        ],
+        grouping:true,
+        groupingView : {
+            groupField : ['vobjeto_padre'],
+            groupColumnShow : [false],
+            groupText : ['<b> {0} </b>']
+        },
+        caption: "-",
+        ondblClickRow: function(){
+        },
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        },
+        gridComplete: function() {
+        }
+    };
+
+    buscarPermisos = function() {
+        var xidusuario = $("#txtcidpersonal").val();
+        var params = '['+
+            '["@p_cidusuario","'+xidusuario+'"]' +
+            ']';
+
+        var parameters = {
+            "name": "tblListaPermisos",
+            "procedure": "seguridad.listar_usuariopermiso",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaPermisos"
+            , "tblListaPermisos"
+            , optionPermisos
+            , parameters
+            , null
+            , null);
+    };
+
+    optionUG = {
+        width: 350,
+        height: 200,
+        colNames: [
+            'cidusuario',
+            'Usuario',
+            'cidgrupo',
+            'Grupo',
+            'Estado',
+            'vhostnm',
+            'vusernm',
+            'ddatetm'
+        ],
+        colModel: [
+            {name: 'cidusuario', index:'cidusuario', hidden: true},
+            {name: 'vusuario', index:'vusuario', width: 100},
+            {name: 'cidgrupo', index:'cidgrupo', hidden: true},
+            {name: 'vgrupo', index:'vgrupo', width: 100},
+            {name: 'estado', index:'estado', width: 50, formatter:chkEstadoUG},
+            {name: 'vhostnm', index:'vhostnm', hidden: true},
+            {name: 'vusernm', index:'vusernm', hidden: true},
+            {name: 'ddatetm', index:'ddatetm', hidden: true}
+        ],
+        caption: "-",
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        },
+        gridComplete: function() {
+        }
+    };
+    function buttonsGridUG(){
+        $("#tblListaUG")
+            .navGrid('#ptblListaUG', {edit:false,add:false,del:false,search:false,refresh:false},{},{},{},{multipleSearch:true})
+            .navButtonAdd('#ptblListaUG',{
+                caption:"",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+            .navButtonAdd('#ptblListaUG',{
+                caption:"",
+                buttonicon:"ui-icon-close",
+                onClickButton: function(){
+                },
+                position:"last"
+            })
+        ;
+    }
+
+    buscarUG = function() {
+        var xidusuario = "";
+        var xidgrupo = "";
+                xidusuario = $("#txtcidpersonal").val();
+                optionUG.caption = "Grupos del Usuario";
+
+
+        var params = '['+
+            '["@p_cidusuario","'+xidusuario+'"],' +
+            '["@p_cidgrupo","'+xidgrupo+'"]' +
+            ']';
+
+        var parameters = {
+            "name": "tblListaUG",
+            "procedure": "seguridad.listar_usuariogrupo",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaUG"
+            , "tblListaUG"
+            , optionUG
+            , parameters
+            , null
+            , buttonsGridUG);
+    };
+
+    $(document).ready(function() {
+        /*console.log($("#ck_flglegal").prop("checked"));
+        var xflglegal = "";
+        var st_cklegal=$("#ck_flglegal").prop("checked");
+        if (st_cklegal==true){xflglegal="1";}
+        if (st_cklegal==false){xflglegal="0";}
+        console.log(xflglegal);*/
+        
+        $("#cbotipousuario").val("<?php echo $this->tipousuario; ?>");
+        $("#cbonestado").val("<?php echo $this->nestado; ?>");
+        $("#cbontramite").val("<?php echo $this->ntramite; ?>");
+        themeComboBox("#cbotipodoc");
+        themeComboBox("#cbontramite");
+        themeComboBox("#cboubigeo");
+
+        $("#usertabs").tabs();
+            $("#tabtitle").html("Usuario");
+
+        $("#btnAgregarUG").button({icons:{primary:'ui-icon-check'}, text:true});
+        $("#btnguardarusuario").button({icons:{primary:'ui-icon-disk'},text:true});
+        $("#btncancelusuario").button({icons:{primary:'ui-icon-close'},text:true});
+        //$("#btnbuscarPersona").button({icons:{primary:'ui-icon-search'},text:false});
+        //$("#btnquitarPersona").button({icons:{primary:'ui-icon-trash'},text:false});
+        $("#txtfechanac").datepicker({
+            //defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 3,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+               // $("#txtfecha_fin").datepicker( "option", "minDate", selectedDate );
+            }
+        });
+
+        /*$("#txtfecha_fin").datepicker({
+            //defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 3,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $( "#txtfecha_inicio" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });*/
+        buscarUG();
+        buscarPermisos();
+    });
+</script>

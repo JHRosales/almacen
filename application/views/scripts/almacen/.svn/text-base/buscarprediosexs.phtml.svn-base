@@ -1,0 +1,7 @@
+<div id="panelMantenimientoPredio" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 1000px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Busqueda de Predios</label>
+    </div>
+    <?php echo $this->render("common/buscadorContribuyentePredio.php"); ?>
+</div>
+

@@ -1,0 +1,508 @@
+<script type="text/javascript">
+    document.oncontextmenu = function(){return false;}
+</script>
+<div id="panelMantenimientoProducto" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento Productos</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+
+
+
+                        <tr class="rowBuscarContribuyente">
+
+                            <td width="100" style="text-align: left">Modelo:</td>
+
+                            <td width="30">&nbsp;</td>
+
+                            <td style="text-align: left">
+                                Categoria
+                            </td>
+
+                            <td width="20">&nbsp;</td>
+
+
+
+                            <td style="text-align: left">
+                                Sub Categoria
+                            </td>
+
+                            <td width="20">&nbsp;</td>
+                        </tr>
+
+
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td>
+                                <input class="ui-text" id="txtmodelo"  onkeypress="if(event.keyCode==13){buscarProd();}" maxlength="50" style="width:150px" />
+                            </td>
+                            <td  width="10">&nbsp;</td>
+
+                            <td style="text-align: left">
+                                <select id="cbocategor" name="cbocategor" style="width:140px;">
+                                    <?php  echo $this->util()->getComboContenedorOtro( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
+                                </select>
+                            </td>
+
+
+                            <td  width="30">&nbsp;</td>
+
+
+
+                            <td style="text-align: left">
+                                <select id="cbocsubcateg" name="cbocsubcateg" style="width:140px;">
+                                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idSubCat,'Cmb_SubCategorias','@idCat'); ?>
+                                </select>
+                            </td>
+
+                            <td width="100">&nbsp;</td>
+
+                            <td>
+
+
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarProd()">Buscar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="7">
+                                <table border="0">
+                                    <tr>
+                                        <td><b>Busqueda por:</b>
+                                            <select id="cbo_bus">
+
+                                                <option value="1"> NOMBRE</option>
+                                                <option value="2"> DESCRIPCION</option>
+                                                <option value="3"> TECNOLOGIA</option>
+
+                                            </select>
+                                        </td>
+
+                                        <td  width="10">&nbsp;</td>
+                                        <td>
+                                            <table border="0"  width="10">
+
+                                                <tr class="selFiltroNom" style="display:none;">
+                                                    <td width="10"><b>Nombre</b></td>
+                                                    <td>
+                                                        <input type="text" id="id_nom" class="ui-text" style="text-align: left;width: 250px;"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="selFiltroDesc" style="display: none;">
+                                                    <td width="50"><b>Descripcion.</b></td>
+                                                    <td>
+                                                        <input type="text" id="id_desc" class="ui-text" style="text-align: left;width: 250px;"/>
+                                                    </td>
+                                                </tr>
+                                                <tr class="selFiltroTec" style="display: none;">
+                                                    <td width="50"><b>Tecnologia.</b></td>
+                                                    <td>
+                                                        <input type="text" id="id_tec" class="ui-text" style="text-align: left;width: 250px;"/>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+
+    <div id="panelListaProducto" align="left" style="width: 99%;margin: 3px;">
+        <table id="tblListaProducto"></table>
+        <div id="ptblListaProducto"></div>
+    </div>
+    <br/>
+</div>
+<script type="text/javascript">
+
+    $( "#txtmodelo" ).keyup(function( event ) {
+        buscarProd();
+        document.getElementById("txtmodelo").focus();
+    }).keydown(function( event ) {
+        if ( event.which == 13 ) {
+
+        }
+    });
+    $( "#id_nom" ).keyup(function( event ) {
+        buscarProd();
+        document.getElementById("id_nom").focus();
+    }).keydown(function( event ) {
+        if ( event.which == 13 ) {
+
+        }
+    });
+    $( "#id_desc" ).keyup(function( event ) {
+        buscarProd();
+        document.getElementById("id_desc").focus();
+    }).keydown(function( event ) {
+        if ( event.which == 13 ) {
+
+        }
+    });
+    $( "#id_tec" ).keyup(function( event ) {
+        buscarProd();
+        document.getElementById("id_tec").focus();
+    }).keydown(function( event ) {
+        if ( event.which == 13 ) {
+
+        }
+    });
+    var filtro = {
+        NOM: "1",
+        DESC: "2",
+        TEC: "3"
+    };
+    $(".selFiltroNom").show();
+    $("#cbo_bus").combobox({
+        selected: function (event, ui) {
+            $(".selFiltroNom").hide();
+            $(".selFiltroDesc").hide();
+            $(".selFiltroTec").hide();
+
+            switch ($("#cbo_bus").val()) {
+                case filtro.NOM:
+                    $(".selFiltroNom").show();
+                    break;
+                case filtro.DESC:
+                    $(".selFiltroDesc").show();
+                    break;
+                case filtro.TEC:
+                    $(".selFiltroTec").show();
+                    break;
+                default:
+                    alert("...");
+            }
+        }
+    });
+    optionPersona = {
+        width: 1250,
+        height: 250,
+        colNames: [
+            'Item',
+            'Modelo',
+            'Nombre',
+            'Descripcion',
+            'Categoria',
+            'Sub Categoria',
+            'Marca',
+            'vResolucion',
+            'vCapacidad',
+            'Tecnologia',
+            'nCosto',
+            'Estado',
+            'Ficha Técnica'
+        ],
+        colModel: [
+            {name: 'idProducto', index:'idProducto',hidden: false,width:30},
+            {name: 'vModelo', index:'vModelo', hidden: false},
+            {name: 'vNombre', index:'vNombre', width:300},
+            {name: 'vDescrip', index:'vDescrip', hidden: false, width:300},
+            {name: 'vNomCat', index:'vNomCat', hidden: false, width:80},
+            {name: 'vNomSubCat', index:'vNomSubCat', hidden: false, width:90},
+            {name: 'vMarca', index:'vMarca', hidden: true},
+            {name: 'vResolucion', index:'vResolucion', hidden: true},
+            {name: 'vCapacidad', index:'vCapacidad', hidden: true},
+            {name: 'vTecnologia', index:'vTecnologia', hidden: false, width:50},
+            {name: 'nCosto', index:'nCosto', hidden: true},
+            {name: 'vEstado', index:'vEstado', width:70, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter: chkEliminar},
+            {name: 'docadjunto', index: 'docadjunto', width: 140, align: 'left', formatter: linkadjunto}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Productos Registrados",
+        ondblClickRow: function(id){
+
+            var row = $(this).getRowData(id);
+            //console.log(row);
+
+            //dobleclickPersona(row);
+            editarProducto();
+        },
+
+        afterInsertRow:function(rowid,aData){
+        switch(
+                aData.vEstado
+            ){case'1':
+                break;
+            case '0':
+
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'idProducto','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vModelo','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vNombre','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vDescrip','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vNomCat','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vNomSubCat','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vTecnologia','',{color:'red'});
+
+break;
+
+
+        }
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+
+        }
+    };
+
+    function chkEliminar(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ?   ' checked="checked"' :''  ) +
+            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '0' ?   '  ': ''  ) + '/>';
+    }
+
+    function changecheckboxcconcluirexp(rowId) {
+
+        var row = jQuery("#tblListaProducto").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Cambiar estado?", 350, {
+            "Si": function () {
+                var parmter = {};
+                parmter.idProducto = row.idProducto;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "cotizacion/productdel", parmter, updCheckconcluir, 'json');
+            },
+            "No": function () {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', true);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+    function updCheckconcluir(data) {
+        //console.log(data);
+        /*{ "Aceptar": function() { closeDialog("jqDialogInfo"); }} */
+        buscarProd();
+       // openDialogInfo(data[0].msj, "250", "150", null, function () {
+            //buscarCotizacion();
+
+        // });
+    }
+
+    eliminar=function(a){
+        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaProducto").jqGrid('getRowData', selr);
+        if(row.idProducto == "" || row.idProducto == undefined){
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idProducto": row.idProducto
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+           "si":function(){
+               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+               $.ajax({
+                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarproducto",
+                   type: 'POST',
+                   cache: false,
+                   data: parameters,
+                   beforeSend: function (data) {
+
+                   },
+                   success: function (requestData) {
+                       $("#result").html(requestData);
+                       closeDialog("jqDialogConfirmacion1");
+                       closeDialog('jqDialog2');
+                       $("#c_codigocontrib").val("");
+                       buscarProd();
+
+
+                   },
+                   error: function (requestData, strError, strTipoError) {
+                       $("#result").html("Error " + strTipoError + ': ' + strError);
+                   },
+                   complete: function (requestData, exito) {
+                   }
+
+
+               });
+           },
+
+           "no":function(){
+               closeDialog("jqDialogConfirmacion1");
+
+           }
+       })
+
+
+    };
+
+    addProducto = function(){
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData2("mantenimientos/producto", parameters, 460);
+    };
+    editarProducto = function() {
+        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaProducto").jqGrid('getRowData', selr);
+        if(row.idProducto == "" || row.idProducto == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idProducto
+        };
+
+        openDialogData2("mantenimientos/producto", parameters, 460);
+
+    };
+
+
+    function buttonsGridPerson(){
+        $("#tblListaProducto")
+            .navGrid('#ptblListaProducto', {edit:false,add:false,del:false,search:false,refresh:false})
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Agregar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    addProducto();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    editarProducto();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Eliminar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    eliminar();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+            /*
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Imprimir&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    imprimir();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()*/
+        ;
+    }
+
+    $("#cbocategor").combobox({
+        selected: function(event, ui){
+            reiniCombo("cbocsubcateg");
+            getSubcategoria($("#cbocategor").val(),"cbocsubcateg");
+
+        }
+    });
+    function reiniCombo(celement){
+        var xelem = $("#" + celement);
+        xelem.combobox("destroy");
+        $("option:selected",xelem).removeAttr("selected");
+        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        //xelem.combobox();
+    }
+    function getSubcategoria(selecteds, celement){
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenersubcate1/",
+                data: "select="+selecteds+"&subcat=",
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+    buscarProd = function() {
+        var cate= $("#cbocategor").val();
+        var subcate= $("#cbocsubcateg").val();
+        if(cate=='9999999999'){
+            cate='';
+        }
+
+        if(subcate=='9999999999'){
+            subcate='';
+        }
+        var params = '['
+            + '["@vNombre", "' + $("#id_nom").val() + '"],'
+            + '["@vModelo", "' + $("#txtmodelo").val() + '"],'
+            + '["@vDescripcion", "' + $("#id_desc").val() + '"],'
+            + '["@vTecnolo", "' + $("#id_tec").val() + '"],'
+            + '["@vcategoria", "' + cate + '"],'
+            + '["@vsubcategoria", "' +subcate + '"]'
+
+            + ']';
+        parameters = {
+            "name": "tblListaProducto",
+            "procedure": "list_Producto",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaProducto"
+            , "tblListaProducto"
+            , optionPersona
+            , parameters
+            , null
+            , buttonsGridPerson
+        );
+    };
+
+    function linkadjunto(cellvalue, options, rowObject) {
+        return '<a href="#" onclick="linkadjuntoOpen(\'' + options.rowId + '\',\'' + cellvalue + '\')" > ' + cellvalue + '</a>'
+    }
+
+    function linkadjuntoOpen(rowId, cellvalue) {
+
+        var row = jQuery("#tblResultDocAdjunto").jqGrid('getRowData', rowId);
+
+//console.log(row);
+        window.open(path + "mantenimientos/forzardescarga?file=" +  cellvalue);
+    }
+
+    $(function(){
+        buscarProd();
+        $("#btnbuscar").button();
+
+        reiniCombo("cbocsubcateg");
+        getSubcategoria($("#cbocategor").val(),"cbocsubcateg");
+    });
+</script>

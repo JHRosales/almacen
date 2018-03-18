@@ -1,0 +1,154 @@
+<div id="panelMantenimientoUsuario"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 980px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Usuario/Grupo</label>
+    </div>
+    <div id="panelListaUsuario" align="center" style="width: 99%;margin: 3px;">
+        <table id="tblListaUsuario"></table>
+        <div id="ptblListaUsuario"></div>
+    </div>
+
+</div>
+<script>
+    function verUsuario(){
+        var selr = $('#tblListaUsuario').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaUsuario").jqGrid('getRowData', selr);
+        if(row.idPersonal == "" || row.idPersonal == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        var datausuario = {
+            "cidusuario": row.idPersonal
+        };
+        openDialogData1("mantenimientos/usuario",datausuario,950,500,"Editar Usuario/Grupo");
+    }
+    function nuevoUsuario(){
+        datamasunto = {
+            "cidusuario": ''
+        };
+
+        openDialogData1("mantenimientos/usuario",datamasunto,950,500, "Nuevo Usuario/Grupo");
+    }
+    function chkEstadoUsuario(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkestado_'+options.rowId+'" ' + (cellvalue=='1' ? ' checked="checked"':'') + ' disabled/>';
+    }
+    optionUsuario = {
+        width: 960,
+        height: 300,
+        colNames: [
+            'Codigo',
+            'vNombre',
+            'vTipoDoc',
+            'vNroDoc',
+            'dFecNac',
+            'vDireccion',
+            'idUbigeo',
+            'vTelefContac',
+            'vCelContac',
+            'vCorreoContac',
+            'vCargo',
+            'vUsuario',
+            'vPasswd',
+            'vEstado',
+            'vUsernm',
+            'vHostnm',
+            'dFecReg'
+        ],
+        colModel: [
+            {name: 'idPersonal', index:'idPersonal', width: 100},
+            {name: 'vNombre', index:'vNombre', hidden: false},
+            {name: 'vTipoDoc', index:'vTipoDoc', hidden: true, width: 150},
+            {name: 'vNroDoc', index:'vNroDoc', hidden: false, width: 80},
+            {name: 'dFecNac', index:'dFecNac', width: 80},
+            {name: 'vDireccion', index:'vDireccion', width: 200},
+            {name: 'idUbigeo', index:'idUbigeo', width: 150, hidden: true},
+            {name: 'vTelefContac', index:'vTelefContac', hidden: false, width: 80},
+            {name: 'vCelContac', index:'vCelContac', hidden: true},
+            {name: 'vCorreoContac', index:'vCorreoContac', hidden: true},
+            {name: 'vCargo', index:'vCargo', width: 100},
+            {name: 'vUsuario', index:'vUsuario', hidden: false, width: 80},
+            {name: 'vPasswd', index:'vPasswd', hidden: true},
+            {name: 'vEstado', index:'vEstado', width: 50, formatter:chkEstadoUsuario},
+            {name: 'vUsernm', index:'vUsernm', hidden: true},
+            {name: 'vHostnm', index:'vHostnm', hidden: true},
+            {name: 'dFecReg', index:'dFecReg', hidden: true},
+            //{ name: 'btndocumt', index: 'btndocumt', width: 40, align: 'center' ,formatter : btnDocumt}
+        ],
+        caption: "Mantenimiento de Usuarios - Grupos",
+        ondblClickRow: function(){
+            verUsuario();
+        },
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        },
+        gridComplete: function() {
+            var _rows = $("#tblListaUsuario").find(".jqgrow");
+            for (var i = 0; i < _rows.length; i++) {
+                if(parseInt(_rows[i].childNodes[0].textContent) == 0) {
+                    _rows[i].attributes["class"].value += " nivel5";
+                }
+            }
+        }
+    };
+    function btnDocumt(cellvalue, options, rowObject){
+        return '<div align="center" class="ui-pg-button " title="Documentos" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionBtnDocumt(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+    }
+
+    function accionBtnDocumt(rowId){
+        var rowdat = jQuery("#tblListaUsuario").jqGrid('getRowData',rowId);
+        var paramtrs ={ pcidUsuario : rowdat.cidusuario }
+
+        openDialogDataFunction1("mantenimientos/corusudoc", paramtrs, "1000", "520", "Documentos de " +rowdat.usuario +" - " +rowdat.vperson, null, {});
+    }
+
+    function buttonsGridUsuario(){
+        $("#tblListaUsuario")
+            .navGrid('#ptblListaUsuario', {edit:false,add:false,del:false,search:false,refresh:false},{},{},{},{multipleSearch:true})
+            .navButtonAdd('#ptblListaUsuario',{
+                caption:"Agregar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevoUsuario();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+            .navButtonAdd('#ptblListaUsuario',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verUsuario();
+                },
+                position:"last"
+            })
+        ;
+    }
+
+    buscarUsuario = function() {
+        var params = '['+
+            '["@p_cidusuario",""]'+
+            ']';
+
+        var parameters = {
+            "name": "tblListaUsuario",
+            "procedure": "seguridad.listar_usuario",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaUsuario"
+            , "tblListaUsuario"
+            , optionUsuario
+            , parameters
+            , null
+            , buttonsGridUsuario);
+    };
+
+
+    $(document).ready(function() {
+        buscarUsuario();
+    });
+</script>

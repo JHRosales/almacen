@@ -1,0 +1,57 @@
+<div class="ui-widget" style="width: 700px;">
+    <div class="ui-widget-header ui-corner-tl ui-corner-tr">
+        Backup de Informaci&oacute;n
+    </div>
+    <div class="ui-widget-content ui-corner-bl ui-corner-br" style="text-align: left;">
+        <button style="width: 250px;" onclick="backupFiles()" title="Genera archivo en formato .ZIP">
+            Generar backup de archivos
+        </button>
+        <span id="spFileBackup"><- Click para procesar</span>
+        <br/>
+        <button style="width: 250px;" onclick="backupDatabase()" title="Genera archivo en formato .BAK">
+            Generar backup de base de datos
+        </button>
+        <span id="spDbBackup"><- Click para procesar</span>
+    </div>
+</div>
+<script>
+    function backupFiles()
+    {
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/backupfiles/",
+            data: {},
+            success: function(requestData){ 	//Llamada exitosa)
+                $("#spFileBackup").html(requestData);
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+    function backupDatabase()
+    {
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/backupdb/",
+            data: {},
+            success: function(requestData){ 	//Llamada exitosa)
+                $("#spDbBackup").html(requestData);
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+</script>

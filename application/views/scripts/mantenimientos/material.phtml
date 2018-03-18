@@ -1,0 +1,185 @@
+<div id="panelMantenimientoProductos"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 465px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Materiales</label>
+    </div>
+<form id="frmmaterial" name="frmmaterial" method="post">
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                C&oacute;digo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma"
+                       name="txtidsigma"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Nombre
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="50"
+                       style=""
+                       type="text"
+                       id="txtvnombre"
+                       name="txtvnombre"
+                       value="<?php echo $this->vNombre; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Tipo Material
+            </td>
+            <td style="text-align: left">
+                <select id="cbotipomat" name="cbotipomat" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idTipoMaterial,'Cmb_TipoMaterial','@idTipoMat'); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Marca
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="50"
+                       style=""
+                       type="text"
+                       id="txtmarca"
+                       name="txtmarca"
+                       value="<?php echo $this->vMarca; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Unidad de Medida
+            </td>
+            <td style="text-align: left">
+                <select id="cboUnidadMed" name="cboUnidadMed" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idUnidadMedida,'Cmb_UnidadMedida','@idUnidMed'); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Categoria
+            </td>
+            <td style="text-align: left">
+                <select id="cbocatego" name="cbocatego" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idCategoria,'Cmb_Categoria','@idCat'); ?>
+                </select>
+            </td>
+        </tr>
+        <tr style="display: none">
+            <td style="text-align: left">
+                Descripci&oacute;n
+            </td>
+            <td style="text-align: left">
+                <textarea class="editable ui-text"
+                          style="width:260px; height:100px;max-width:260px; max-height:100px;"
+                          id="txtdescrip"
+                          name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
+            </td>
+        </tr>
+
+        <tr style="display: none">
+            <td style="text-align: left">
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+            </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="button" style="width:120px;" id="btnguardarperson" name="btnguardarperson" onclick="guardarMaterial()">
+                    Guardar
+                </button>
+                <button type="button" style="width:120px;" id="btncancelperson" name="btncancelperson" onclick="cerrarMantProd()">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+<script type="text/javascript">
+    $("#btnguardarperson").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelperson").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+    themeComboBox("#cbotipomat");
+    themeComboBox("#cbocatego");
+    themeComboBox("#cboUnidadMed");
+
+
+
+    function cerrarMantProd(){
+        closeDialog("jqDialog2");
+    }
+
+    function guardarMaterial(){
+        var vnombre = $("#txtvnombre").val();
+        var form= $("#frmmaterial");
+        var catego = $("#cbocatego").val();
+      /*  if(document.getElementById("estado").checked){
+            var nestado1=1;
+        }  else  {
+            var  nestado1=0;
+        }*/
+
+        if($.trim(vnombre) == ""){
+            openDialogError("Ingrese nombre", "250", "150", function() {
+                $("#txtvnombre").focus();
+            });
+            return;
+        }
+        if($.trim(catego) == "9999999999"){
+            openDialogError("Seleccione Categoria", "250", "150", function() {
+                $("#txtvnrodoc").focus();
+            });
+            return;
+        }
+
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/guardarmaterial/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize() ,
+            success: function(requestData){ 	//Llamada exitosa)
+                openDialogInfo("Registrado correctamente");
+                $("#c_codigocontrib").val(requestData);
+                buscarMate();
+                cerrarMantProd();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
+
+
+    $( document ).ready(function() {
+
+
+    });
+</script>

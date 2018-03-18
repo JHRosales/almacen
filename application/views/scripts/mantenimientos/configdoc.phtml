@@ -1,0 +1,261 @@
+
+<br/>
+<br/>
+
+<table>
+	<tr>
+		<td>
+			<div id="panelResultDoc" >
+			        <table id="tblResultDoc">
+			        </table>
+			        <div id="ptblResultDoc">
+			        </div>
+			        <input type="hidden" id="ctblResultDoc" name="ctblResultDoc" value="" />
+			</div>
+		</td>
+		<td>
+			<table border="0">
+				<tr>
+					<td  >
+						<div class="ui-widget ">
+							<b>Tipo Estructura</b>
+						</div>
+					</td>
+					<td>
+						<div class="ui-widget ">
+							<b>Orden</b>
+						</div>
+					</td>
+					<td rowspan="2"><button id="btnagregar">Agregar</button></td>
+				</tr>
+				<tr>	
+					<td>
+						<select id="cboestruc" style="width: 180px;">
+								<option>Seleccionar</option>
+							</select>
+					</td>
+					<td>
+						<input type="text" id="norden" value="" style="width: 50px" class="ui-text"  />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div id="panelResultmconfigdoc" >
+					        <table id="tblResultmconfigdoc">
+					        </table>
+					        <div id="ptblResultmconfigdoc">
+					        </div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+    <script>
+    $(document).ready(function() {
+    	 $('#norden').autoNumeric({mDec:0});
+
+        $("#btnagregar").button().click(function() { DdocumentoEstruc('N'); });
+    	    gridConfigDoc = {
+    	        height: 400,
+    	        width: 385,
+    	        colNames: ["idsigma", "ctipdoc","Descripcion", "vobjetoo","vobserv","cidtabl"],
+    	        colModel: [
+    		        { name: 'idsigma', index: 'idsigma', width: 100, align: 'center',hidden:true },
+    		        { name: 'ctipdoc', index: 'ctipdoc', width: 0.01, align: 'left' ,hidden:true},
+    		        { name: 'vdescri', index: 'vdescri', width: 350, align: 'left' },
+    		        { name: 'vobjeto', index: 'vobjeto', width: 130, align: 'left' ,hidden:true},
+    		        { name: 'vobserv', index: 'vobserv', width: 120, align: 'left',hidden:true },
+    		        { name: 'cidtabl', index: 'cidtabl', width: 200, align: 'left',hidden:true }
+    		        ],
+    	        caption: " Documentos",
+    	        rowNum: 17,
+    	        rownumbers: true,
+                onSelectRow: function(id){
+                    var row = jQuery("#tblResultDoc").jqGrid('getRowData', id);
+                    ProcesoBuscarDocEstructura(row.idsigma);
+                }
+    	    };
+
+    	    inicializarGrid("tblResultDoc", gridConfigDoc);
+    	    ProcesoBuscarDoc();
+
+    	    gridConfigmconfigdoc = {
+    	        height: 360,
+    	        width: 385,
+    	        colNames: ["idsigma", "ctipdocu","vtipdocu", "ctipestrdocu","Descripcion Estructura","Orden"],
+    	        colModel: [
+    		        { name: 'idsigma', index: 'idsigma', width: 100, align: 'center',hidden:true },
+    		        { name: 'ctipdocu', index: 'ctipdocu', width: 0.01, align: 'left' ,hidden:true},
+    		        { name: 'vtipdocu', index: 'vtipdocu', width: 350, align: 'left',hidden:true },
+    		        { name: 'ctipestrdocu', index: 'ctipestrdocu', width: 130, align: 'left' ,hidden:true},
+    		        { name: 'vtipestrdocu', index: 'vtipestrdocu', width: 285, align: 'left' },
+    		        { name: 'norden', index: 'norden', width: 45, align: 'left' }
+    		        ],
+    	        caption: " Estructura",
+    	        rowNum: 12,
+    	        rownumbers: true
+    	    };
+  			inicializarGrid("tblResultmconfigdoc", gridConfigmconfigdoc);
+
+    	});
+
+   ProcesoBuscarDoc = function() {
+    	//var paramtrs = '[{"0":"dve"},{"1":"dve"}]';
+    	var paramtrs = '['+
+                        '["@idsigma","0000000001"]'
+                        +']';
+
+		parameters = {
+		"name": "tblResultDoc",
+		"procedure": "tramite.obtener_tabla",
+		"print" :"true",
+		"parameters": paramtrs
+		};
+		
+		procesarConsultaSubProceso('registrar', parameters, procesoDoc, 'json');
+    };
+    procesoDoc = function(request){
+        var 
+        records = (request == null ? 0 : request.length),
+        bindkeysDoc = { "onEnter": OnEnterKeyDoc },
+        gridConfigdoc2 = $.extend(gridConfigDoc, {
+            data: request,
+            datatype: "local",
+            gridComplete: function(){
+                isGridComplete = true;
+                $("#tblResultDoc").jqGrid('setSelection', 1, true);
+            }
+        });
+
+        $("#panelResultDoc").html('<table id="tblResultDoc"></table><div id="ptblResultDoc"></div><input type="hidden" id="ctblResultDoc" name="ctblResultDoc" value="' + records + '" />');
+        inicializarGrid("tblResultDoc", gridConfigdoc2, bindkeysDoc);
+ 
+        
+	};
+	OnEnterKeyDoc = function() { };
+
+	ProcesoBuscarDocEstructura = function(pctipdocu){
+
+  var paramtrs = '['+
+                        '["@pctipdocu","'+pctipdocu+'"]'
+                        +']';
+
+        parameters = {
+        "name": "tblResultmconfigdoc",
+        "procedure": "tramite.mconfigdoc_get",
+        "print" :"true",
+        "parameters": paramtrs
+        };
+        
+        procesarConsultaSubProceso('registrar', parameters, procesoDocEstructura, 'json');
+	}
+
+	btnEliminarDocestruc = {
+    	    caption: "Eliminar",
+    	    title: "Eliminar el item seleccionado",
+    	    buttonicon: "ui-icon-trash",
+    	    onClickButton: function() {
+    	        var gsr = $("#tblResultmconfigdoc").jqGrid('getGridParam', 'selrow');
+    	        if (gsr) {
+    	            var row = jQuery("#tblResultmconfigdoc").jqGrid('getRowData', gsr);
+    	            openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar", 350, {
+    	                "Si": function() {
+    	                    closeDialog("jqDialogConfirmacion1");
+    	                    DdocumentoEstruc('M');
+    	                },
+    	                "No": function() {
+    	                    closeDialog("jqDialogConfirmacion1");
+    	                }
+    	            });
+    	        } else {
+    	            openDialogWarning("Seleccione la fila a eliminar.", 380, 150);
+    	        }
+    	    }
+    	};
+    navPanelDocEstruc = function() {
+        $("#tblResultmconfigdoc").jqGrid('navGrid', '#ptblResultmconfigdoc', { edit: false, add: false, del: false, search: false, refresh: false });
+        $("#tblResultmconfigdoc").jqGrid('navButtonAdd', '#ptblResultmconfigdoc', btnEliminarDocestruc);
+    };
+    procesoDocEstructura = function(request){
+        var 
+        records = (request == null ? 0 : request.length),
+        gridConfigmconfigdoc2 = $.extend(gridConfigmconfigdoc, {
+            data: request,
+            datatype: "local"
+        });
+
+        $("#panelResultmconfigdoc").html('<table id="tblResultmconfigdoc"></table><div id="ptblResultmconfigdoc"></div>');
+        inicializarGrid("tblResultmconfigdoc", gridConfigmconfigdoc2);
+        navPanelDocEstruc();
+    };
+
+
+
+
+        function DdocumentoEstruc (type) {
+        //$("#sestGrid").clearGridData(false);
+		configdoc="";
+    	var gsrdoc = $("#tblResultDoc").jqGrid('getGridParam', 'selrow');
+   		var rowdoc = jQuery("#tblResultDoc").jqGrid('getRowData', gsrdoc);
+
+		var norden=$('#norden').val();
+		var cboestruc= $('#cboestruc').val();
+
+		if (type=='N'){
+			if (cboestruc=='9999999999'){
+				openDialogError("Seleccionar tipo estructura", "250", "150", function() {
+					$("#linkestruc").focus();
+		        });
+		        return;
+			}
+			if (norden==''){
+				openDialogError("Ingresar numero de orden", "250", "150", function() {
+					$("#norden").focus();
+		        });
+		        return;
+				}	
+			}
+		
+		
+		
+		var gsrestruc = $("#tblResultmconfigdoc").jqGrid('getGridParam', 'selrow');
+		if (gsrestruc){
+    		var rowestruc = jQuery("#tblResultmconfigdoc").jqGrid('getRowData', gsrestruc);	
+    		configdoc=rowestruc.idsigma;
+    	}	
+   		
+
+        var parmter = {};
+        parmter.type = type;
+        parmter.configdoc = configdoc;
+        parmter.ctipdocu = rowdoc.idsigma;
+        parmter.ctipestrdocu = cboestruc;
+        parmter.norden =norden;
+        
+
+        $.post(path + "mantenimientos/configdocsave", parmter, updateDocEstructur, 'json');
+        
+
+    }
+
+      function updateDocEstructur(data) {
+        
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+        	//data[0].ddocument;
+        	closeDialog("jqDialog1");
+        	var gsrdoc = $("#tblResultDoc").jqGrid('getGridParam', 'selrow');
+   			var rowdoc = jQuery("#tblResultDoc").jqGrid('getRowData', gsrdoc);
+            ProcesoBuscarDocEstructura(rowdoc.idsigma);
+            $('#norden').val('');
+    		$('#cboestruc').combobox('destroy');
+    		$('#cboestruc').val('9999999999');
+    		$('#cboestruc').combobox();
+        });
+		
+        //console.log(data);
+    }
+</script>

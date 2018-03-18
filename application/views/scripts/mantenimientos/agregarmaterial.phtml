@@ -1,0 +1,90 @@
+<div id="paneldagregarMate" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Seleccionar Servicio</label>
+    </div>
+    <input type="hidden" class="ui-text"  id="txtidcotizacion" value="<?php echo $this->idcotizacion; ?>" style="width:99%" />
+    <div id="dialogMensaje">
+    </div>
+    <div id="paneladdMaterial" align="left" style="width: 99%;margin-left: 5px;">
+        <table id="tbladdMaterial"></table>
+        <div id="ptbladdMaterial">
+        </div>
+    </div>
+    <br/>
+
+</div>
+<script type="text/javascript">
+    var lastsel3;
+    optionaddMaterial = {
+        datatype: "local",
+        width: 370,
+        height: 180,
+        colNames: [
+            'Id',
+            'Servicio'
+        ],
+        colModel: [
+            {name: 'id', index:'id', width:90},
+            {name: 'nombre', index:'nombre', width:270}
+        ],
+        editurl: "clientArray",
+        caption: "&nbsp;&nbsp;&nbsp;Servicios Agregados a la cotizacion",
+        ondblClickRow: function(id){
+            var row = $(this).getRowData(id);
+
+        },
+        afterInsertRow:function(rowid,aData){
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+            agregarprodservicio();
+        }
+    };
+
+
+    agregarprodservicio=function(a){
+        var selr = $('#tbladdMaterial').jqGrid('getGridParam','selrow');
+        var row = $("#tbladdMaterial").jqGrid('getRowData', selr);
+        if(row.id == "" || row.id == undefined){
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.id,
+            "nombre": row.nombre,
+            "idcotizacion":  $("#txtidcotizacion").val()
+        };
+
+        openDialogData1("mantenimientos/agregarmaterialserv", parameters, 460,460);
+       // closeDialog("jqDialog2");
+     };
+
+    function buttonsGridaddMaterial(){
+        $("#tbladdMaterial").navGrid('#ptbladdMaterial', {edit:false,add:false,del:false,search:false,refresh:false}) ;
+    }
+
+    buscaraddMaterial = function() {
+        var params = '['
+            + '["@p_idcotiz", "' + $("#txtidcotizacion").val() + '"]'
+            + ']';
+        parameters = {
+            "name": "tbladdMaterial",
+            "procedure": "list_servicotiz",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "paneladdMaterial"
+            , "tbladdMaterial"
+            , optionaddMaterial
+            , parameters
+            , null
+            , buttonsGridaddMaterial
+        );
+    };
+
+    $(function(){
+     buscaraddMaterial();
+    });
+</script>

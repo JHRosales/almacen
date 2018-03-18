@@ -1,0 +1,249 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoDoc=array(array("1","DNI"), array("2","RUC"));
+
+ ?>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div id="panelMantenimientoProductos"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 415px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Servicios</label>
+    </div>
+<form id="frmproduct" name="frmproduct" method="post">
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                C&oacute;digo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma"
+                       name="txtidsigma"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Nombre
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="50"
+                       style=""
+                       type="text"
+                       id="txtvnombre"
+                       name="txtvnombre"
+                       value="<?php echo $this->vNombre; ?>"/>
+            </td>
+        </tr>
+        <tr  style="text-align: left; vertical-align: middle">
+            <td  style="text-align: left;">
+                Categoria
+            </td>
+            <td style="text-align: left; ">
+                <select id="cbocategoser" name="cbocategoser" style="width:120px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idCategoria,'Cmb_Categoria','@idCat'); ?>
+                </select>
+          <button type="button" style="width:120px;" id="btnaddmaterial" name="btnaddmaterial" onclick="nuevoMaterial()">
+              Add Material
+          </button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <div id="checks" align="center"></div>
+            </td>
+             </tr>
+        <tr>
+            <td style="text-align: left">
+                Descripci&oacute;n
+            </td>
+            <td style="text-align: left">
+                <textarea class="editable ui-text"
+                          style="width:260px; height:100px;max-width:260px; max-height:100px;"
+                          id="txtdescrip"
+                          name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
+            </td>
+        </tr>
+
+
+
+        <tr class="botonesServ">
+            <td colspan="2" style="text-align: center;">
+                <button type="button" style="width:120px;" id="btnguardarserv" name="btnguardarserv" onclick="guardarServicio()">
+                    Guardar
+                </button>
+                <button type="button" style="width:120px;" id="btncancelserv" name="btncancelserv" onclick="cerrarMantProdSer()">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+<script type="text/javascript">
+
+    var seleccionadas = new Array();
+
+    var catego = {
+        NATURAL : "1",
+        JURIDICA : "2"
+    };
+
+    themeComboBox("#cbocategoser");
+
+    $("#btnguardarserv").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelserv").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+    $("#btnaddmaterial").button({
+        icons:{primary:'ui-icon-plus'},
+        text:true
+    });
+
+    nuevoMaterial = function(){
+        var indice = 0;
+        $('#frmproduct input[type=checkbox]').each(function(){
+            if (this.checked) {
+                seleccionadas[indice] =  $(this).val();
+                indice = indice + 1;
+            }
+        });
+        console.log(seleccionadas);
+        $.each( seleccionadas, function( key, value ) {
+            console.log( key + ": " + value);
+        });
+
+
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData2("mantenimientos/material", parameters, 460);
+    };
+
+    buscarMate=function(){
+        listckech();
+        console.log(seleccionadas);
+    };
+
+
+
+    function cerrarMantProdSer(){
+        closeDialog("jqDialog2");
+    }
+
+    function guardarServicio(){
+        var vnombre = $("#txtvnombre").val();
+        var catego = $("#cbocategoser").val();
+
+
+       // var bEd = CKEDITOR.instances['txtdescrip'];
+       // var descrip1 = bEd.getData();
+       // var descrip = descrip1.replace(/&/gi, "#1");
+        var descrip='';
+
+        var form= $("#frmproduct");
+
+      /*  if(document.getElementById("estado").checked){
+            var nestado1=1;
+        }  else  {
+            var  nestado1=0;
+        }*/
+
+        if($.trim(vnombre) == ""){
+            openDialogError("Ingrese nombre", "250", "150", function() {
+                $("#txtvnombre").focus();
+            });
+            return;
+        }
+
+        if($.trim(catego) == "9999999999"){
+            openDialogError("Seleccione Categoria", "250", "150", function() {
+                $("#txtvnrodoc").focus();
+            });
+            return;
+        }
+
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/guardarservicio/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize()+"&txtdescrip1="+descrip ,
+            success: function(requestData){ 	//Llamada exitosa)
+                openDialogInfo("Registrado correctamente");
+               // $("#c_codigocontrib").val(requestData);
+                buscarServ();
+                cerrarMantProdSer();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+    $("#cbocategoser").combobox({
+        selected: function(event, ui){
+            listckech();
+        }
+    });
+    function listckech(){
+        var catego = $("#cbocategoser").val();
+        var serv = $("#txtidsigma").val();
+        var selecccion =JSON.stringify(seleccionadas)
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/arreglocheck/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:"catego="+catego+"&serv="+serv+"&selecionados="+selecccion ,
+            success: function(requestData){
+               $("#checks").html(requestData);
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+    $( document ).ready(function() {
+        listckech();
+
+        var isreadOnly = false;
+        var config1 = {
+            skin: 'v2'
+            , toolbar: [
+                ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-'
+                    , 'HorizontalRule', '-', 'Blockquote',  '-', 'JustifyLeft',
+                    'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
+                ['UIColor']
+            ]
+            , readOnly: isreadOnly
+            , height : '90'
+        };
+       // var hEd = CKEDITOR.instances['txtdescrip'];
+       // if (hEd) {
+       //     CKEDITOR.remove(hEd);
+       // }
+       // CKEDITOR.replace('txtdescrip', config1);
+
+
+    });
+</script>

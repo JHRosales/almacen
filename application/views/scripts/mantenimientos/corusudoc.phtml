@@ -1,0 +1,295 @@
+<style>
+    #info_dialog{
+        z-index: 99999 !important;
+    }
+</style>
+<table border="0">
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            <b>Periodo</b><select id="cboPeriodo">
+                <?php echo $this->optionsPeriodo; ?>
+            </select> <?php // echo $this->util()->getPeriodos(); ?>
+            &nbsp;&nbsp;<button id="btnNuevoPeriodo">Crear Nuevo Periodo</button>
+        </td>
+    </tr>
+    <tr>
+        <td >
+            <input type="hidden" id="hd_idUsuario" value="<?php echo $this->idUsuario; ?>"/>
+            <div id="panelResultDoc" >
+                <table id="tblResultDoc">
+                </table>
+                <div id="ptblResultDoc">
+                </div>
+            </div>
+        </td>
+        <td>
+            <!--<button id="btnDerechaTodo">>></button>-->
+            <button id="btnDerecha">&nbsp;&nbsp;>&nbsp;</button>
+            <button id="btnizquierda">&nbsp;&nbsp;<&nbsp;</button>
+            <!--            <button id="btnIzquierdaTodo"><<</button>-->
+        </td>
+        <td>
+            <div id="panelResultDocUsu" >
+                <table id="tblResultDocUsu">
+                </table>
+                <div id="ptblResultDocUsu">
+                </div>
+            </div>
+        </td>        
+    </tr>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#cboPeriodo").change(function() {
+            reloadGrids();
+        });
+        
+        $("#btnNuevoPeriodo").click(function(){
+            
+              openDialogConfirm1("Desea que el siguiente perido sea el predeterminado ?", 350, {
+    	                "Si": function() {
+                            closeDialog("jqDialogConfirmacion1");
+                            $.post(path + "mantenimientos/corusudoccrearperiodo", {pcidUsuario: $("#hd_idUsuario").val(),pPeriodoPredeterminado:"1"}, function(data){
+                                openDialogInfo(data[0].countRows + " Registros agregados", 300, 150,undefined,function(){
+                                    reloadGrids();
+                                });
+                            }, 'json');
+    	                },
+    	                "No": function() {
+                            closeDialog("jqDialogConfirmacion1");
+                            $.post(path + "mantenimientos/corusudoccrearperiodo", {pcidUsuario: $("#hd_idUsuario").val(),pPeriodoPredeterminado:"0"}, function(data){
+                                openDialogInfo(data[0].countRows + " Registros agregados", 300, 150,undefined,function(){
+                                    reloadGrids();
+                                });
+                            }, 'json');
+    	                }
+    	            });
+             
+        })
+        
+        $("#btnDerecha").button().click(function() {
+            var cperiodo = $("#cboPeriodo").val();
+            if (cperiodo === ""){
+                openDialogWarning("Seleccione un periodo", 300, 150);
+                return false;
+            }
+            var selRowsDoc;
+            selRowsDoc = jQuery("#tblResultDoc").jqGrid('getGridParam', 'selarrrow');
+            //console.log(selRowsDoc);
+            var vXmlDocuUsu = '';
+            var countSelRows = selRowsDoc.length;
+            if (countSelRows > 0) {
+                vXmlDocuUsu = '<d>'
+                for (var i = 0; i < countSelRows; i++) {
+                    var SelrowDoc = jQuery("#tblResultDoc").jqGrid('getRowData', selRowsDoc[i]);
+                    vXmlDocuUsu += '<r ';
+                    vXmlDocuUsu += 'usuario="' + $("#hd_idUsuario").val() + '" ';
+                    vXmlDocuUsu += 'ctipdocu="' + SelrowDoc.idsigma + '" ';
+                    vXmlDocuUsu += 'cperanio="' + $("#cboPeriodo").val() + '" ';
+                    vXmlDocuUsu += 'valor="0" ';
+                    vXmlDocuUsu += 'vsiglas="" ';
+                    //var newRowDocUsu = {idsigma: "0000000000", usuario: $("#hd_idUsuario").val(), ctipdocu: SelrowDoc.idsigma, vdescri: SelrowDoc.vdescri, cperanio: "2014", valor: "0", vsiglas: ""};
+                    //var newRowId = $("#tblResultDocUsu").jqGrid('getGridParam', 'records') + 1;
+                    //$("#tblResultDocUsu").addRowData(newRowId, newRowDocUsu);
+                    vXmlDocuUsu += '></r>'
+                }
+                vXmlDocuUsu += '</d>'
+                jqxhrDocuUsu = $.post(path + "mantenimientos/corusudocinsert", {pXmlDocuUsu: vXmlDocuUsu}, resultDocuUsuInsert, 'json');
+            }
+//            $("#tblResultDocUsu").trigger('reloadGrid');
+//            $("#tblResultDoc").trigger('reloadGrid');
+        });
+//        $("#btnDerechaTodo").button().click(function() {
+//
+//        });
+        $("#btnizquierda").button().click(function() {
+            reloadGrids();
+        }).hide();
+//        $("#btnIzquierdaTodo").button().click(function() {
+//
+//        });
+
+        function resultDocuUsuInsert(data) {
+            /*
+             openDialogInfo(data[0].msj, "250", "150", null, function() {
+             //data[0].ddocument;
+             closeDialog("jqDialog3");
+             ProcesoBuscarDoc();
+             });*/
+            reloadGrids();
+        }
+
+        function reloadGrids() {
+            $("#tblResultDoc").setGridParam({datatype: 'json'});
+            $("#tblResultDoc").setGridParam({url: path + "mantenimientos/getmdocnotusu?pcidUsuario=" + $("#hd_idUsuario").val() + "&pcperanio=" + $("#cboPeriodo").val()});
+            $("#tblResultDoc").trigger("reloadGrid", [{page: 1}]);
+            $("#tblResultDocUsu").setGridParam({datatype: 'json'});
+            $("#tblResultDocUsu").setGridParam({url: path + "mantenimientos/getmdocusuc?pcidUsuario=" + $("#hd_idUsuario").val() + "&pcperanio=" + $("#cboPeriodo").val()});
+            $("#tblResultDocUsu").trigger("reloadGrid", [{page: 1}]);
+        }
+
+        gridConfigDoc = {
+            height: 322,
+            width: 385,
+            //data:<?php echo $this->jsonResult; ?>,
+            datatype: 'json',
+            ignoreCase : true,
+            url: path + "mantenimientos/getmdocnotusu?pcidUsuario=<?php echo $this->idUsuario; ?>&pcperanio=" + $("#cboPeriodo").val(),
+            //datatype: "local",
+            /*gridComplete: function(){
+             isGridComplete = true;
+             $("#tblResultDoc").jqGrid('setSelection', 1, true);
+             },*/
+            colNames: ["idsigma", "ctipdoc", "Descripcion", "vobjetoo", "vobserv", "cidtabl"],
+            colModel: [
+                {name: 'idsigma', index: 'idsigma', width: 100, align: 'center', hidden: true, key: true},
+                {name: 'ctipdoc', index: 'ctipdoc', width: 0.01, align: 'left', hidden: true},
+                {name: 'vdescri', index: 'vdescri', width: 325, align: 'left'},
+                {name: 'vobjeto', index: 'vobjeto', width: 130, align: 'left', hidden: true},
+                {name: 'vobserv', index: 'vobserv', width: 120, align: 'left', hidden: true},
+                {name: 'cidtabl', index: 'cidtabl', width: 200, align: 'left', hidden: true}
+            ],
+            caption: " Documentos",
+            rowNum: 14,
+            multiselect: true,
+            rownumbers: true,
+            viewrecords: true,
+            jsonReader: {
+                root: "list",
+                repeatitems: false
+            }
+
+            /*,
+             onSelectRow: function(id){
+             var row = jQuery("#tblResultDoc").jqGrid('getRowData', id);
+             ProcesoBuscarDocEstructura(row.idsigma);
+             }*/
+        };
+        inicializarGrid("tblResultDoc", gridConfigDoc);
+        $("#tblResultDoc").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false});
+        //ProcesoBuscarDoc();
+        //var lastsel2;
+        gridConfigDocUsu = {
+            height: 322,
+            width: 530,
+            datatype: 'json',
+            //data:<?php echo $this->jsonResultDocUsu; ?>,
+            url: path + "mantenimientos/getmdocusuc?pcidUsuario=<?php echo $this->idUsuario; ?>&pcperanio=" + $("#cboPeriodo").val(),
+            //datatype: "local",
+
+            colNames: ["idsigma", "usuario", "ctipdocu", "Descripcion", "Año", "Correlativo", "Siglas", " ", " "],
+            colModel: [
+                {name: 'idsigma', index: 'idsigma', width: 100, align: 'center', hidden: true, key: true},
+                {name: 'usuario', index: 'usuario', width: 0.01, align: 'left', hidden: true},
+                {name: 'ctipdocu', index: 'ctipdocu', width: 80, align: 'left', hidden: true},
+                {name: 'vdescri', index: 'vdescri', width: 240, align: 'left', editable: false},
+                {name: 'cperanio', index: 'cperanio', width: 40, align: 'right', hidden: true, editable: false, search: false},
+                {name: 'valor', index: 'valor', width: 40, align: 'right', editable: true, search: false, editrules: {number: true}},
+                {name: 'vsiglas', index: 'vsiglas', width: 120, align: 'right', editable: true, search: false},
+                {name: 'estado', index: 'estado', width: 20, align: 'center', editable: true, search: false, /* edittype: "checkbox", editoptions: {value: "1:0"},*/ formatter: chkEstado, edittype: 'custom', editoptions: {custom_element: myElemChk, custom_value: myValueChk}},
+                {name: 'myac', width: 50, fixed: true, sortable: false, search: false, resize: false, formatter: 'actions',
+                    formatoptions: {
+                        keys: true,
+                        editbutton: true,
+                        delbutton: true,
+                        /*editOptions: {
+                         ajaxEditOptions: {
+                         contentType: 'application/json;charset=utf-8'
+                         }
+                         },*/
+
+                        delOptions: {
+                            /*afterSubmit: function(response, postdata) {
+                             console.log(response);
+                             }*/
+                            //reloadAfterSubmit: true
+                            afterComplete: function() {
+                                reloadGrids();
+                            }/*,
+                             afterSubmit: function() {
+                             reloadGrids();
+                             },
+                             
+                             ajaxDelOptions: {
+                             } */
+                        }
+                    }
+
+                }
+            ],
+            /*gridComplete: function() {
+             var ids = jQuery(this).jqGrid('getDataIDs');
+             for (var i = 0; i < ids.length; i++) {
+             $(this).editRow(ids[i], false);
+             //$("#"+ids[i]+"_vdatoitem").addClass("ui-text");
+             }
+             },*/
+            /*onSelectRow: function(id){
+             if(id && id!==lastsel2){
+             $('#tblResultDocUsu').jqGrid('restoreRow',lastsel2);
+             $('#tblResultDocUsu').jqGrid('editRow',id,true);
+             lastsel2=id;
+             }
+             },*/
+            editurl: path + 'mantenimientos/corusudocupdate', //'clientArray',
+            caption: " Documentos del Usuario",
+            rowNum: 14,
+            rownumbers: true,
+            jsonReader: {
+                root: "list",
+                repeatitems: false
+            },
+            ondblClickRow: function(rowid, iRow, iCol, e) {
+                jQuery.fn.fmatter.rowactions(rowid, 'tblResultDocUsu', 'edit', 8);
+            }
+        };
+        inicializarGrid("tblResultDocUsu", gridConfigDocUsu);
+        $("#tblResultDocUsu").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false});
+        /*$("#tblResultDocUsu").jqGrid('bindKeys', {"onEnter": function(rowid) {
+         jQuery.fn.fmatter.rowactions(rowid, 'tblResultDocUsu', 'edit', 8);
+         }});*/
+        //$("#tblResultDocUsu").jqGrid('navGrid',"#ptblResultDocUsu",{edit:false,add:false,del:false});
+        //$("#tblResultDocUsu").jqGrid('inlineNav',"#ptblResultDocUsu",{add:false,refresh:false});
+        function chkEstado(cellvalue, options, rowObject) {
+            //alert(cellvalue);
+            return '<input  type="checkbox" id="chkestado_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked ' : '') + ' value="1" offval="0" disabled/>';
+        }
+        function myElemChk(value, options) {
+            var el = document.createElement("input");
+            //console.log(value);
+            if ($(value).is(":checked")){
+                el.checked = true;
+                el.disabled=true;
+            }
+                
+            //var el = document.createElement('<input  type="checkbox" id="' + options.rowId + '_estado" ' + (cellvalue == '1' ? ' checked ' : '') + ' value="1" offval="0" />');
+            el.type = "checkbox";
+            el.value = "1";
+            el.offval = "0";
+            
+            return el;
+            //return $('<input  type="checkbox" id="' + options.rowId + '_estado" ' + (cellvalue == '1' ? ' checked ' : '') + ' value="1" offval="0" />');
+            
+        }
+
+        function myValueChk(elem, operation, value) {
+            if (operation === 'get') {
+                //return $(elem).val();
+                if ($(elem).is(":checked")) {
+                    return '1';
+                }
+                else {
+                    return '0';
+                }
+
+
+            } else if (operation === 'set') {
+                $('input', elem).val(value);
+            }
+        }
+    });
+</script>

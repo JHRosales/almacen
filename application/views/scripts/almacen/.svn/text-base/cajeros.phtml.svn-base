@@ -1,0 +1,37 @@
+
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 1000px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Cajeros</label>
+    </div>
+    <div id="dvbusqueda">
+    <table border="0" width="650px">
+		<tr>
+            <td width="50px"></td>
+            <td colspan="3">
+            </td>
+            <td rowspan="2" align="center">
+            	<button id="btnbuscar">Buscar</button>
+            	<button id="btnnuevo">Nuevo</button>
+            	<button id="btndeshabilitar">Deshabilitar</button>
+            </td>
+        </tr>
+        <tr>
+            <td width="50px"></td>
+            <td>
+            </td>
+            <td width="50px">Estado</td>
+            <td>
+           		 <select id="cboestado" style="width: 150px;"></select>
+            </td>
+        </tr>
+    </table>
+    </div>
+    <div id="dvaccion"></div>
+</div>
+<div id="panelResultmcajero">
+	<table id="tblResultmcajero"></table>
+	<div id="ptblResultmcajero"></div>
+</div>
+
+
+<!-- --------------------------------------------------------------------------------------------------------------------	 -->

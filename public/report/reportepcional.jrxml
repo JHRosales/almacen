@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportepcional" language="groovy" pageWidth="544" pageHeight="842" columnWidth="544" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\usuario\\Desktop\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idCotiz" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.idCotiz,b.vNombrePSM,
+ sum(b.nPrecUnit) as nPrecUnit,Case when SUBSTRING(b.vNombrePSM,0,9)='Material' then 'Global' 
+ else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)
+  as nPrecTotal ,Case when b.tipoPS!='1' then '1.jpg' 
+ else  dbo.imgadjunto(b.idProdServ)   end as img, 
+  Case when b.tipoPS!='1' then '' 
+ else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv
+  from compras.cotizacion
+a left join compras.detCotizacion b on a.idCotiz =b.idCotiz
+inner join cliente c on a.idCliente=c.idCliente
+left join personal p on a.idPersonal=p.idPersonal
+where a.idCotiz=$P{idCotiz}
+and opcional='1'
+group by  a.idCotiz,a.nSubTot,a.nTotal,b.vNombrePSM,b.nCantidad,idProdServ,tipoPS, p.vNombre
+order by tipoPS,b.idProdServ,nCantidad]]>
+	</queryString>
+	<field name="idCotiz" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vNombrePSM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nPrecUnit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nCantidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nPrecTotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="img" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Modelo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idprodserv" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="3" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[OPCIONAL:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="81" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="0" width="278" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNombrePSM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Modelo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="0" width="47" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nPrecUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="71" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nPrecTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="378" y="0" width="38" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nCantidad}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="3" y="19" width="98" height="61"/>
+				<imageExpression class="java.lang.String"><![CDATA["http://localhost/camaras/public/uploadDdocuments/"+$F{img}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="1" width="540" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="80" width="540" height="1"/>
+			</line>
+			<subreport>
+				<reportElement x="104" y="19" width="274" height="61"/>
+				<subreportParameter name="nombre">
+					<subreportParameterExpression><![CDATA[$F{vNombrePSM}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idcotiz">
+					<subreportParameterExpression><![CDATA[$P{idCotiz}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idprodserv">
+					<subreportParameterExpression><![CDATA[$F{idprodserv}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "subrep2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,232 @@
+<div id="panelMantenimientoListMante"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 400px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Servicio - Materiales</label>
+    </div>
+<form id="frmproductmantelst" name="frmproductmantelst" method="post">
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                C&oacute;digo
+            </td>
+            <td style="text-align: left">
+                <input class="ui-text"
+                       style="width: 70px;"
+                       type="text"
+                       id="txtidsigmalistm"
+                       name="txtidsigmalistm"
+                       value=""/>
+                <input type="hidden" id="servicio" name="servicio" value="<?php echo $this->servicio;?>">
+            </td>
+            <td>Nombre</td>
+            <td style="text-align: left">
+                <input class="ui-text"
+                       type="text"
+                       id="c_nombreprodlistm"
+                       name="c_nombreprodlistm"
+                       value=""/>
+            </td>
+            <td>
+                <button id="btnbuscarlst" name="btnbuscarlst" onclick="buscarlstMante()">Buscar</button>
+
+            </td>
+        </tr>
+        <tr style="display: none">
+            <td style="text-align: left">
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+            </td>
+
+        </tr>
+    </table>
+</form>
+</div>
+<div id="panelLstMaterial" align="left" style="width: 99%;margin: 3px;">
+    <table id="tblLstMaterial"></table>
+    <div id="ptblLstMaterial"></div>
+</div>
+
+<script type="text/javascript">
+
+    $("#btnguardarperson").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelperson").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+
+
+    optionLstMate = {
+        width: 385,
+        height: 200,
+        colNames: [
+            'Codigo',
+            'Nombre',
+            'Categoria',
+            'Estado'
+        ],
+        colModel: [
+            {name: 'idMaterial', index:'idMaterial', width:90},
+            {name: 'vNombre', index:'vNombre', width:280},
+            {name: 'idCatego', index:'idCatego', width:280},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Materiales Registrados",
+        ondblClickRow: function(id){
+            var row = $(this).getRowData(id);
+            addMaterialServ();
+        },
+
+        afterInsertRow:function(rowid,aData){
+            switch(
+                aData.nestado
+                ){case'1':
+                break;
+                case '0':
+                    jQuery("#tblLstMaterial").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                    jQuery("#tblLstMaterial").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                    jQuery("#tblLstMaterial").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                    jQuery("#tblLstMaterial").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    break;
+            }
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+
+        }
+    };
+    nuevoMaterialLst = function(){
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData2("mantenimientos/listmaterial", parameters, 460);
+    };
+    verMaterialLst = function() {
+        var selr = $('#tblLstMaterial').jqGrid('getGridParam','selrow');
+        var row = $("#tblLstMaterial").jqGrid('getRowData', selr);
+        if(row.idServicio == "" || row.idServicio == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idServicio
+        };
+
+        openDialogData2("mantenimientos/listmaterial", parameters, 460);
+
+    };
+
+    addMaterialServ=function(a){
+        var selr = $('#tblLstMaterial').jqGrid('getGridParam','selrow');
+        var row = $("#tblLstMaterial").jqGrid('getRowData', selr);
+        if(row.idMaterial == "" || row.idMaterial == undefined){
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "id": row.idMaterial,
+            "nombre": row.vNombre,
+            "servicio":  $("#servicio").val()
+        };
+
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
+            "si":function(){
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/materialadd",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function (data) {
+                    },
+                    success: function (requestData) {
+                       // var datos=JSON.parse(requestData);
+                       // console.log(datos[0].ok);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog3');
+                        buscarServMate();
+                    },
+                    error: function (requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function (requestData, exito) {
+                    }
+                });
+            },
+            "no":function(){
+                closeDialog("jqDialogConfirmacion1");
+            }
+        })
+
+
+    };
+
+    function buttonsGridLstMate(){
+        $("#tblLstMaterial")
+            .navGrid('#ptblLstMaterial', {edit:false,add:false,del:false,search:false,refresh:false})
+
+         /*   .navButtonAdd('#ptblLstMaterial',{
+                caption:"Add&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevoMaterialLst();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblLstMaterial',{
+                caption:"Edit&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verMaterialLst();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()*/
+        ;
+    }
+
+    buscarlstMante = function() {
+        var params = '['
+            + '["@idMaterial", "' + $("#txtidsigmalistm").val() + '"],'
+            + '["@vNombre", "' + $("#c_nombreprodlistm").val() + '"]'
+            + ']';
+        parameters = {
+            "name": "tblLstMaterial",
+            "procedure": "Bus_Material",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelLstMaterial"
+            , "tblLstMaterial"
+            , optionLstMate
+            , parameters
+            , null
+            , buttonsGridLstMate
+        );
+    };
+
+
+    function cerrarMantProd1(){
+        closeDialog("jqDialog3");
+    }
+
+
+
+
+
+    $( document ).ready(function() {
+        buscarlstMante();
+        $("#btnbuscarlst").button();
+
+
+    });
+</script>

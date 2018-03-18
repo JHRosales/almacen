@@ -1,0 +1,121 @@
+<div id="panelConsultaExterna" align="center" class="ui-widget ui-widget-content ui-corner-all " style="margin:5px;" >
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        Consulta de Expedientes
+    </div>
+    <div class="ui-widget ui-widget-content ui-corner-all" style="">
+        <table border="0" style="width:100%;">
+            <tr>
+                <td colspan="4"><span id="validMensaje"></span></td>
+            </tr>
+            <tr>
+                <td style="width:80px;"><b>Expediente</b></td>
+                <td style="width:20px;">:</td>
+                <td style="width:160px;">
+                    <input placeholder="Numero Expediente"
+                           class="editable ui-text"
+                           type="text"
+                           id="txtnumexp"
+                           name="txtnumexp"
+                           value=""
+                           style="width:150px;"/>
+                </td>
+				<td>
+					<a href="javascript:showHelp()">
+						
+						<span style="">
+							&iquest; Cual es mi n&uacute;mero de expediente ? 
+						</span>
+					</a>
+				</td>
+            </tr>
+            <tr>
+                <td><b>Fecha</b></td>
+                <td>:</td>
+                <td>
+                    <input placeholder="Fecha Registro"
+                           class="editable ui-text"
+                           type="text"
+                           id="txtfecexp"
+                           name="txtfecexp"
+                           value=""
+                           style="width:150px;"
+                           readonly="readonly"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="" colspan="3">
+                    <button type="button" id="btnExecBuscar" name="btnExecBuscar" onclick="buscarExpedienteViewExt()">Buscar</button>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table style="width:100%;" border="0" class="ui-widget" cellspacing="0" cellpadding="0">
+            <thead class="ui-widget-header">
+            <tr class="ui-state-hover">
+                <th><b>Numero Expediente</b></th>
+                <th><b>Administrado</b></th>
+                <th><b>Asunto</b></th>
+                <th><b>Ubicaci&oacute;n Actual</b></th>
+            </tr>
+            </thead>
+            <tbody class="ui-widget-content" id="tcontentResult">
+            <tr>
+                <td colspan="4" style="text-align:center;"><b>Ingrese numero y fecha del expediente a buscar.</b></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+</div>
+<script>
+	function showHelp(){
+		openDialogDataFunction1('externo/help', null,  640, 490);
+	}
+
+    $('#txtfecexp').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        maxDate: '0'
+    });
+    function buscarExpedienteViewExt(){
+        $('#validMensaje').html('');
+        var nrodoc = $.trim($('#txtnumexp').val());
+        var fecdoc = $.trim($('#txtfecexp').val());
+        var isValid = true;
+        if(nrodoc.length == 0){
+            $('#validMensaje').append('<span style="margin:10px; color:red;">Indique Numero de Expediente </span><br/>')
+            $('#txtnumexp').focus();
+            isValid = false;
+        }
+        if(fecdoc.length == 0){
+            $('#validMensaje').append('<span style="margin:10px; color:red;">Indique Fecha de Registro del Expediente </span><br/>')
+            if(isValid){
+                $('#txtfecexp').focus();
+            }
+            isValid = false;
+        }
+
+        if(isValid){
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "externo/buscar",
+                data:
+                {
+                    nrodoc: nrodoc,
+                    fecdoc: fecdoc
+                },
+                beforeSend:function(){
+                    $('#tcontentResult').html('<td style="text-align:center;" colspan="5"><b>Cargando ...</b></td>');
+                },
+                success: function(requestData) {
+                    $('#tcontentResult').html(requestData);
+                },
+                error: function(requestData, errNumber, errMessage) {
+                    console.log(requestData);
+                    console.log(errNumber);
+                    console.log(errMessage);
+                }
+            });
+        }
+    }
+</script>

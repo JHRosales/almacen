@@ -1,0 +1,151 @@
+    <?php
+    echo $this->render("mantenimientos/servicio.phtml");
+    ?>
+    <input type="hidden" class="ui-text"  id="txtidcotizacion" value="<?php echo $this->idcotizacion; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text"  id="txtidservi" value="<?php echo $this->idsigma; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text"  id="txtopcional" value="<?php echo $this->opcional; ?>" style="width:99%" />
+    <table style="width: 99%">
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <button type="button" style="width:120px;" id="btnguardarservm" name="btnguardarservm">
+                Guardar
+            </button>
+            <button type="button" style="width:120px;" id="btncancelpsermat" name="btncancelpsermat">
+                Cancelar
+            </button>
+        </td>
+    </tr>
+    </table>
+
+<script type="text/javascript">
+
+    $("#btnguardarservm").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    }).click(function(){
+        guardarServicio1();
+    });
+
+    $("#btncancelpsermat").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    }).click(function(){
+        closeDialog("jqDialog1");
+
+    });
+
+
+    function guardarServicio1(){
+        var vnombre = $("#txtvnombre").val();
+        var catego = $("#cbocatego").val();
+        var opcional = $("#txtopcional").val();
+        var form= $("#frmproduct");
+        if($.trim(vnombre) == ""){
+            openDialogError("Ingrese nombre", "250", "150", function() {
+                $("#txtvnombre").focus();
+            });
+            return;
+        }
+        if($.trim(catego) == "9999999999"){
+            openDialogError("Seleccione Categoria", "250", "150", function() {
+                $("#txtvnrodoc").focus();
+            });
+            return;
+        }
+
+        if(opcional=="1"){
+            actdetcop();
+        }else{
+            actdetc();
+        }
+        /*
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            //url: path + "mantenimientos/agregarprodserv/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            url: path + "mantenimientos/guardarservicio/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize() ,
+            success: function(requestData){ 	//Llamada exitosa)
+                openDialogInfo("Registrado correctamente");
+                // $("#c_codigocontrib").val(requestData);
+                //buscarServ();
+                if(opcional=="1"){
+                    actdetcop();
+                }else{
+                actdetc();
+                }
+               //ActualizargrillaCotiz();
+              //  closeDialog("jqDialog1");
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });*/
+    }
+
+   function actdetc(){
+       var form= $("#frmproduct");
+       $.ajax({
+           dataType: "html",
+           type: "POST",
+           url: path + "mantenimientos/agregarprodserv/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+           data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val() ,
+           success: function(requestData){ 	//Llamada exitosa)
+              // openDialogInfo("Registrado correctamente");
+              // actdetc();
+               ActualizargrillaCotiz();
+               closeDialog("jqDialog1");
+           },
+           error: function(requestData, errNumber, errMessage){
+               if(errNumber == '') {
+                   openDialogError("No se puede determinar el error.");
+               } else {
+                   openDialogError(errNumber +': ' + errMessage);
+               }
+           }
+       });
+   }
+    function actdetcop(){
+        var form= $("#frmproduct");
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/agregarprodservop/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val() ,
+            success: function(requestData){ 	//Llamada exitosa)
+                // openDialogInfo("Registrado correctamente");
+                // actdetc();
+                ActualizargrillaCotizop();
+                closeDialog("jqDialog1");
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
+
+    function ActualizargrillaCotiz(){
+       var idcotiz=$("#txtidcotizacion").val();
+       var idservi=$("#txtidservi").val();
+        buscardetCotizacion();
+    }
+    function ActualizargrillaCotizop(){
+        var idcotiz=$("#txtidcotizacion").val();
+        var idservi=$("#txtidservi").val();
+        buscardetCotizacionOpcional();
+    }
+    $(function(){
+        $(".botonesServ").hide();
+        $('#cbocategoser').combobox('disable');
+    });
+</script>

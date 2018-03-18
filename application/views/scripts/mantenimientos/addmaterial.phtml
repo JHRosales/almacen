@@ -1,0 +1,186 @@
+<div id="panelMantenimientoMaterial"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 415px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Servicio - Materiales</label>
+    </div>
+<form id="frmproduct" name="frmproduct" method="post">
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                C&oacute;digo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma"
+                       name="txtidsigma"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr style="display: none">
+            <td style="text-align: left">
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+            </td>
+
+        </tr>
+
+    </table>
+</form>
+</div>
+<div id="panelListaMaterial" align="left" style="width: 99%;margin: 3px;">
+    <table id="tblListaMaterial"></table>
+    <div id="ptblListaMaterial"></div>
+</div>
+
+<script type="text/javascript">
+
+
+
+    optionMaterialadd = {
+        width: 400,
+        height: 200,
+        colNames: [
+            'Codigo',
+            'codServ',
+            'NombServ',
+            'codMaterial',
+            'Nombre',
+            'Estado'
+        ],
+        colModel: [
+            {name: 'idServMaterial', index:'idServMaterial', width:100},
+            {name: 'idServicio', index:'idServicio', width:100, hidden: true},
+            {name: 'vNomServ', index:'vNomServ', width:100, hidden: true},
+            {name: 'idMaterial', index:'idMaterial', width:100, hidden: true},
+            {name: 'vNomMat', index:'vNomMat', width:300},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Materiales Registrados",
+        ondblClickRow: function(id){
+            var row = $(this).getRowData(id);
+            verPersona();
+        },
+
+        afterInsertRow:function(rowid,aData){
+            switch(
+                aData.nestado
+                ){case'1':
+                break;
+                case '0':
+                    jQuery("#tblListaMaterial").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                    jQuery("#tblListaMaterial").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                    jQuery("#tblListaMaterial").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                    jQuery("#tblListaMaterial").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    break;
+            }
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+
+        }
+    };
+    nuevoMaterial = function(){
+        parameters = {
+            "idsigma": '...',
+            "servicio": $("#txtidsigma").val()
+        };
+        openDialogDataFunction3("mantenimientos/listmaterial", parameters, 450);
+    };
+    verMaterial = function() {
+        var selr = $('#tblListaMaterial').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaMaterial").jqGrid('getRowData', selr);
+        if(row.idServicio == "" || row.idServicio == undefined){
+            openDialogDataFunction3("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idServicio
+        };
+
+        openDialogData2("mantenimientos/listmaterial", parameters, 450);
+
+    };
+    function buttonsGridPersonmat(){
+        $("#tblListaMaterial")
+            .navGrid('#ptblListaMaterial', {edit:false,add:false,del:false,search:false,refresh:false})
+
+            .navButtonAdd('#ptblListaMaterial',{
+                caption:"Add&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevoMaterial();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblListaMaterial',{
+                caption:"Edit&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verMaterial();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+           /* .navButtonAdd('#ptblListaMaterial',{
+                caption:"Eliminar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    eliminar();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaMaterial',{
+                caption:"Add Material&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    material();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()*/
+        ;
+    }
+
+    buscarServMate = function() {
+        var params = '['
+            + '["@idServicio", "' + $("#txtidsigma").val() + '"]'
+            + ']';
+        parameters = {
+            "name": "tblListaMaterial",
+            "procedure": "List_ServMaterial",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaMaterial"
+            , "tblListaMaterial"
+            , optionMaterialadd
+            , parameters
+            , null
+            , buttonsGridPersonmat
+        );
+    };
+
+
+    function cerrarMantProd(){
+        closeDialog("jqDialog2");
+    }
+
+
+
+    $( document ).ready(function() {
+        buscarServMate();
+
+    });
+</script>

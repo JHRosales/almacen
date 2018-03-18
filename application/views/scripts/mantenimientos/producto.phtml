@@ -1,0 +1,595 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoTecnolo=array(array("1","HDCVI"), array("2","IP"), array("3","IP WI-FI"), array("4","Todas"));
+$TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3"," 4MP(2K)"), array("4"," 5MP(2K)"), array("5"," 6MP(2K)"), array("6"," 8MP(4K)"), array("7"," 12MP(4K)"), array("8"," Todas"));
+
+ ?>
+<div id="panelMantenimientoProductos"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 415px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Productos</label>
+    </div>
+<form id="frmproduct" name="frmproduct" method="post" enctype="multipart/form-data">
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                C&oacute;digo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma"
+                       name="txtidsigma"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Nombre
+            </td>
+            <td style="text-align: left">
+                 <textarea style="width:300px;height:50px;text-transform: uppercase;" id="txtvnombre" name="txtvnombre" placeholder="Asunto detallado" placeholder="Asunto..."><?php echo $this->vNombre; ?></textarea>
+
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Categoria
+            </td>
+            <td style="text-align: left">
+                <select id="cbocatego" name="cbocatego" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
+                </select>
+            </td>
+        </tr>
+        <tr class="soloCATV1">
+            <td style="text-align: left">
+               Sub Categoria
+            </td>
+            <input type="hidden" id="idsubcate" name="idsubcate" value="<?php  echo $this->idSubCat ?>">
+            <td style="text-align: left">
+                <select id="cbocsubcate" name="cbocsubcate" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro( '1',$this->idSubCat,'Cmb_SubCategoria','@idCat'); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Marca
+            </td>
+            <input type="hidden" id="idmarca" name="idmarca" value="<?php  echo $this->vMarca ?>">
+            <td style="text-align: left">
+                <select id="cbomarca" name="cbomarca" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorxDescrip( '1',$this->vMarca,'Cmb_Marca','@idCat'); ?>
+                </select>
+                <span id="sp_testdd"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+               Modelo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       size="30"
+                       type="text"
+                       id="txtmodelo"
+                       name="txtmodelo"
+                       value="<?php echo $this->vModelo; ?>"/>
+
+            </td>
+        </tr>
+        <tr class="soloCATV" style="display: none">
+            <td style="text-align: left">
+                Resolucion
+            </td>
+            <td style="text-align: left">
+                <select id="cboresolu" name="cboresolu" style="width:140px;">
+                    <?php  echo $library->ContenidoCombo($TipoResolucion, $this->vResolucion ,0); ?>
+                </select>
+            </td>
+        </tr>
+        <tr class="soloCATV" style="display: none">
+            <td style="text-align: left">
+                Tecnologia
+            </td>
+            <td style="text-align: left">
+                <select id="cboTecno" name="cboTecno" style="width:140px;">
+                    <?php  echo $library->ContenidoComboSeleccionaporDescripcion($TipoTecnolo, $this->vTecnologia ,0); ?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Costo USD
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       type="text"
+                       id="txtcosto"
+                       name="txtcosto"
+                       value="<?php echo $this->ccosto; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Stock
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       type="text"
+                       id="txtstock"
+                       name="txtstock"
+                       value="<?php echo $this->cstock; ?>"/>
+            </td>
+        </tr>
+
+            <tr>
+            <td>Imagen:</td>
+            <td colspan="">
+                <div id="browserX" style="display:none;">
+                    <div id="manual-fine-uploader" ></div>
+                </div>
+                <img id="img_destino" name="img_destino" style="margin-left: 5px" width="200px"  src="<?php
+                if ($this->img!=''){
+                    $img=$this->img;
+                }else{
+                   $img= "1.jpg";
+                }
+                echo $this->util()->getImageAdjunto($img); ?>" alt="Tu imagen">
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Descripci&oacute;n
+            </td>
+            <td style="text-align: left">
+                <textarea class="editable ui-text"
+                          style="width:260px; height:60px;max-width:260px; max-height:100px;"
+                          id="txtdescrip"
+                          name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>Doc:</td>
+            <td colspan="">
+                <div id="browserX" style="display:block;">
+                    <div id="doc-fine-uploader" ></div>
+                </div>
+                <label id="docadj" name="docadj" ><?php echo $this->doc; ?></label>
+            </td>
+        </tr>
+
+        <tr style="display: none">
+            <td style="text-align: left">
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+            </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="button" style="width:120px;" id="btnguardarperson" name="btnguardarperson" onclick="guardarPersona()">
+                    Guardar
+                </button>
+                <button type="button" style="width:120px;" id="btncancelperson" name="btncancelperson" onclick="cerrarMantProd()">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+
+<script type="text/javascript">
+    function mostrarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img_destino').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+    var manualuploader;
+    var docluploader;
+    $( document ).ready(function() {
+        var form= $("#frmproduct");
+        manualuploader = new qq.FineUploader({
+            debug: false,
+            element: document.getElementById('manual-fine-uploader'),
+            request: {
+                //endpoint: 'uploadddocuments'
+                endpoint: path + "mantenimientos/uploadproduct",
+                data: form.serialize()
+            },
+            //template: "qq-template-manual-noedit",
+            autoUpload: false,
+            validation: {
+                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png'],
+                itemLimit: 1
+            },
+            messages:{
+                typeError: '{file} Error Solo se permite : {extensions}.',
+                tooManyItemsError:"Solo se permite 1 imagen.",
+                maxHeightImageError:"Imagen demasiado Alto (max 189 px)",
+                maxWidthImageError:"Imagen demasiado Ancho (max 189 px)",
+                minHeightImageError: "Altura minima de la imagen debe ser 170px",
+                minWidthImageError:"Ancho minimo de la imagen   debe ser 170px"
+            }
+        });
+
+        docluploader = new qq.FineUploader({
+            debug: false,
+            element: document.getElementById('doc-fine-uploader'),
+            request: {
+                //endpoint: 'uploadddocuments'
+                endpoint: path + "mantenimientos/uploaddocproduct",
+                data: form.serialize()
+            },
+            //template: "qq-template-manual-noedit",
+            autoUpload: false,
+            validation: {
+                allowedExtensions: ['pdf', 'doc', 'txt'],
+                itemLimit: 1
+            },
+            messages:{
+                typeError: '{file} Error Solo se permite : {extensions}.',
+                tooManyItemsError:"Solo se permite 1 imagen.",
+                maxHeightImageError:"Imagen demasiado Alto (max 189 px)",
+                maxWidthImageError:"Imagen demasiado Ancho (max 189 px)",
+                minHeightImageError: "Altura minima de la imagen debe ser 170px",
+                minWidthImageError:"Ancho minimo de la imagen   debe ser 170px"
+            }
+        });
+
+
+        if (navigator.appName == 'Microsoft Internet Explorer')
+        {
+            $("#browserX").show();
+        } else {
+            $("#browserX").show();
+        }
+
+        reiniCombo("cbocsubcate");
+        getSubcategoria($("#cbocatego").val(),"cbocsubcate");
+
+//'Styles','Format',
+
+        var isreadOnly = false;
+        var config = {
+            skin: 'v2'
+            , toolbar: [
+                ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-'
+                    , 'HorizontalRule', '-', 'Blockquote',  '-', 'JustifyLeft',
+                    'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
+                ['UIColor']
+            ]
+            , readOnly: isreadOnly
+            , height : '50'
+        };
+        var config1 = {
+            skin: 'v2'
+            , toolbar: [
+                ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-'
+                    , 'HorizontalRule', '-', 'Blockquote',  '-', 'JustifyLeft',
+                    'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
+                ['UIColor']
+            ]
+            , readOnly: isreadOnly
+            , height : '80'
+        };
+        var hEd = CKEDITOR.instances['txtdescrip'];
+        var iEd = CKEDITOR.instances['txtvnombre'];
+        if (hEd) {
+            CKEDITOR.remove(hEd);
+        }
+        if (iEd) {
+            CKEDITOR.remove(iEd);
+        }
+       CKEDITOR.replace('txtdescrip', config1);
+        CKEDITOR.replace('txtvnombre', config);
+
+    });
+
+    $("#file").change(function(){
+        mostrarImagen(this);
+    });
+
+
+    var catego = {
+        CATV : "1",
+        JURIDICA : "2"
+    };
+
+    themeComboBox("#cbocatego");
+    //themeComboBox("#cbocsubcate");
+    themeComboBox("#cboresolu");
+    themeComboBox("#cbomarca");
+    themeComboBox("#cboTecno");
+    themeComboBox("#cbotecnolo");
+
+
+
+    function validarCatego(tipper){
+        switch(tipper){
+            case catego.CATV : //
+                $(".soloCATV").show();
+
+                break;
+            case catego.JURIDICA : //
+                $(".soloCATV").hide();
+
+                break;
+            default:
+                break;
+        }
+    }
+    validarCatego($("#cbocatego").val());
+
+
+    $("#btnguardarperson").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelperson").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+
+
+
+    function validarTipoDocumento(tipdoc){
+        switch(tipdoc){
+            case "1": // DNI
+                var vdni = $("#txtvnrodoc").val();
+                if (vdni.length > 8){
+                    vdni = vdni.substr(0,8);
+                    $("#txtvnrodoc").val(vdni);
+                }
+                $("#txtvnrodoc").attr("maxlength","8");
+
+                break;
+            case "2": // RUC
+                var vruc = $("#txtvnrodoc").val();
+                if (vruc.length > 11){
+                    vruc = vruc.substr(0,11);
+                    $("#txtvnrodoc").val(vruc);
+                }
+                $("#txtvnrodoc").attr("maxlength","11");
+                break;
+            default:
+                $("#txtvnrodoc").attr("maxlength","20");
+                break;
+        }
+    }
+
+    //validarTipoDocumento($("#cboctipdoc").val());
+
+
+
+    $("#cboctipdoc").combobox({
+       selected : function(event, ui){
+           //validarTipoDocumento($("#cboctipdoc").val());
+       }
+    });
+
+
+    function cerrarMantProd(){
+  closeDialog("jqDialog2");
+    }
+
+    function guardarPersona(){
+        var catego = $("#cbocatego").val();
+        var aEd = CKEDITOR.instances['txtvnombre'];
+        var bEd = CKEDITOR.instances['txtdescrip'];
+        var nombre1 = aEd.getData();
+        var descrip1 = bEd.getData();
+
+
+        var nombre = nombre1.replace(/&/gi, "#1");
+        var descrip = descrip1.replace(/&/gi, "#1");
+     //  var descrip = $("#txtdescrip").val();;
+
+        var marc = document.getElementById("cbomarca");
+        var pro = marc.options[marc.selectedIndex].value;  //Valor
+        var marca = marc.options[marc.selectedIndex].text;  // Texto
+
+
+        var tecnologia = document.getElementById("cboTecno");
+        var tecnocodi = tecnologia.options[tecnologia.selectedIndex].value;  //Valor
+        var tecnologia = tecnologia.options[tecnologia.selectedIndex].text;  // Texto
+
+        var form= $("#frmproduct");
+
+      /*  if(document.getElementById("estado").checked){
+            var nestado1=1;
+        }  else  {
+            var  nestado1=0;
+        }*/
+
+        if($.trim(nombre) == ""){
+            openDialogError("Ingrese nombre", "250", "150", function() {
+                $("#txtvnombre").focus();
+            });
+            return;
+        }
+
+        if($.trim(catego) == "9999999999"){
+            openDialogError("Seleccione Categoria", "250", "150", function() {
+                $("#txtvnrodoc").focus();
+            });
+            return;
+        }
+
+        /*
+        * "idsigma="+idsigma
+         +"&vnombre="+vnombre
+         +"&ctipper="+ctipper
+         +"&vdirecc="+vdirecc
+         +"&ctipdoc="+ctipdoc
+         +"&vnrodoc="+vnrodoc
+         +"&vcorreo="+vcorreo
+         +"&personcont="+personcont
+         +"&vtelfij="+vtelfij
+         +"&vtelmov="+vtelmov
+        * */
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/guardarproducto/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize()+"&marca="+marca+"&txnombre="+nombre+"&txdescrip="+descrip+"&tecnologia="+tecnologia,
+            success: function(requestData){ 	//Llamada exitosa)
+                console.log(requestData);
+                manualuploader.uploadStoredFiles();
+                docluploader.uploadStoredFiles();
+                openDialogInfo("Registrado correctamente");
+                $("#c_codigocontrib").val(requestData);
+                buscarProd();
+                cerrarMantProd();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
+
+    $("#cbocatego").combobox({
+        selected: function(event, ui){
+            validarCatego($("#cbocatego").val())
+            reiniCombo("cbocsubcate");
+            getSubcategoria($("#cbocatego").val(),"cbocsubcate");
+            reiniCombo("cbomarca");
+            getmarca($("#cbocatego").val(),"cbomarca");
+        }
+    });
+    function reiniCombo(celement){
+        var xelem = $("#" + celement);
+        xelem.combobox("destroy");
+        $("option:selected",xelem).removeAttr("selected");
+        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        //xelem.combobox();
+    }
+
+    function getSubcategoria(selecteds, celement){
+        var idsub= $("#idsubcate").val() ;
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenersubcate/",
+                data: "select="+selecteds+"&subcat="+idsub,
+                success: function(requestData){ 	//Llamada exitosa)
+                    //console.log(requestData);
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+
+    function getmarca(selecteds, celement){
+        var idmarca= $("#idmarca").val() ;
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenermarca/",
+                data: "select="+selecteds+"&subcat="+idmarca,
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+
+
+
+
+    var Utf8 = {
+        encode : function (string) {
+            string = string.replace(/\r\n/g,"\n");
+            var utftext = "";
+
+            for (var n = 0; n < string.length; n++) {
+                var c = string.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                }
+                else if((c > 127) && (c < 2048)) {
+                   utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+                else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+            }
+            return utftext;
+        },
+
+        // public method for url decoding
+
+        decode : function (utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+
+            while ( i < utftext.length ) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                }
+                else if((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i+1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                }
+                else {
+                    c2 = utftext.charCodeAt(i+1);
+                    c3 = utftext.charCodeAt(i+2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return string;
+        }
+    }
+
+
+</script>

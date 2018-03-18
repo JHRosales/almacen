@@ -1,0 +1,23 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;margin: 3px;">
+	<div class="ui-widget ui-state-default ui-corner-top ui-title">
+		<label>ARANCEL</label>
+	</div>
+	<br/>
+	<table class="ui-tablecontent">
+	<tr>
+	<td>
+	<br/><button id="btningresar" name="btningresar">Ingresar</button>
+	</td>
+	</tr>
+	</table>
+</div>
+
+
+	<br/>
+	<div id="busqresult">
+	<div id="panelResult">
+	
+	</div>
+	</div>
+	
+

@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCotizacion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
+	<subDataset name="dataset1"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\usuario\\Desktop\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idCotiz" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.idCotiz, a.vnroCot,CONVERT(VARCHAR(10),a.dfecCot,103) as dfecCot,nSubTot,nTotal,b.vNombrePSM,
+ sum(b.nPrecUnit) as nPrecUnit,Case when SUBSTRING(b.vNombrePSM,0,9)='Material' then 'Global' 
+ else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)
+  as nPrecTotal ,c.idCliente,c.vNombre as cliente , Case when b.tipoPS!='1' then '1.jpg' 
+ else  dbo.imgadjunto(b.idProdServ)   end as img, 
+  Case when b.tipoPS!='1' then '' 
+ else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv,
+ coalesce(a.tiempEntrega,'') as tentrega , coalesce(a.vGarantia,'') as garantia,
+ p.vNombre as personal, a.nTasaCambio, case when dbo.tieneServ(a.idCotiz)='1' then 'Adelanto del 50% del total y al finalizar el pago del 50% con la conformidad de la Obra.' else 'Al contado' end as formapago
+  from compras.cotizacion
+a left join compras.detCotizacion b on a.idCotiz =b.idCotiz
+inner join cliente c on a.idCliente=c.idCliente
+left join personal p on a.idPersonal=p.idPersonal
+where a.idCotiz=$P{idCotiz}
+and opcional is null
+group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nTotal,b.vNombrePSM,b.nCantidad,c.idCliente,
+c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre, a.nTasaCambio
+order by tipoPS,b.idProdServ,nCantidad]]>
+	</queryString>
+	<field name="idCotiz" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vnroCot" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dfecCot" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nSubTot" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nTotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vNombrePSM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nPrecUnit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nCantidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nPrecTotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idCliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="img" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Modelo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idprodserv" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tentrega" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="garantia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="personal" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nTasaCambio" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="formapago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<image>
+				<reportElement x="8" y="2" width="146" height="49"/>
+				<imageExpression class="java.lang.String"><![CDATA["http://localhost/camaras/public/img/logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="413" y="1" width="137" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Telf.: 471 7304 / 997 149 778]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="389" y="12" width="161" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Av. Santa Catalina 104 dpto. 201]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="25" width="172" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[(Av. Canadá cdra. 8) La Victoria.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="37" width="163" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ventas@dhlsecurity.pe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="49" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[www.dhlsecurity.pe]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="106" splitType="Stretch">
+			<textField>
+				<reportElement x="105" y="20" width="185" height="20"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vnroCot}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="21" width="100" height="20"/>
+				<textElement markup="styled">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nro Cotizacion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="0" width="100" height="20"/>
+				<textElement markup="styled">
+					<font isBold="true" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="106" y="0" width="158" height="20"/>
+				<textElement>
+					<font isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dfecCot}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="42" width="100" height="20"/>
+				<textElement markup="styled">
+					<font isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="105" y="42" width="419" height="20"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="62" width="56" height="17"/>
+				<textElement markup="styled">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Presente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="79" width="532" height="20"/>
+				<textElement/>
+				<text><![CDATA[Por medio de la presente le informamos de la cotizacion solicitada.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="167" y="1" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="2" width="44" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="2" width="68" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Precio Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="2" width="63" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Sub Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="6" y="0" width="547" height="1"/>
+			</line>
+			<line>
+				<reportElement x="552" y="1" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="416" y="1" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="488" y="1" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="371" y="1" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="111" y="1" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="6" y="0" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement x="6" y="22" width="547" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="8" y="2" width="75" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="76" splitType="Stretch">
+			<textField>
+				<reportElement x="112" y="1" width="259" height="20"/>
+				<textElement markup="html">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNombrePSM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="2" width="64" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nPrecUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="487" y="2" width="65" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nPrecTotal}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="8" y="13" width="96" height="59"/>
+				<imageExpression class="java.lang.String"><![CDATA["http://localhost/camaras/public/uploadDdocuments/"+$F{img}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="379" y="2" width="34" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nCantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="3" width="102" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Modelo}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="112" y="16" width="259" height="56"/>
+				<subreportParameter name="nombre">
+					<subreportParameterExpression><![CDATA[$F{vNombrePSM}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idcotiz">
+					<subreportParameterExpression><![CDATA[$P{idCotiz}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idprodserv">
+					<subreportParameterExpression><![CDATA[$F{idprodserv}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "subrep1.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="110" y="0" width="1" height="70"/>
+			</line>
+			<line>
+				<reportElement x="6" y="0" width="1" height="70"/>
+			</line>
+			<line>
+				<reportElement x="551" y="0" width="1" height="70"/>
+			</line>
+			<line>
+				<reportElement x="370" y="0" width="1" height="70"/>
+			</line>
+			<line>
+				<reportElement x="415" y="1" width="1" height="70"/>
+			</line>
+			<line>
+				<reportElement x="488" y="0" width="1" height="70"/>
+			</line>
+		</band>
+		<band height="4">
+			<line>
+				<reportElement x="6" y="0" width="547" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="431" y="2" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="511" y="2" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="234">
+			<textField>
+				<reportElement x="438" y="21" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="379" y="2" width="59" height="20"/>
+				<textElement/>
+				<text><![CDATA[Subtotal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="22" width="53" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="438" y="2" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nSubTot}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="84" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tiempo de Entrega:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="99" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Garantia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="84" width="38" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tentrega}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="99" y="99" width="38" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{garantia}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="22" y="201" width="55" height="20"/>
+				<textElement/>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="77" y="201" width="234" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{personal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="138" y="84" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Días Hábiles]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="139" y="99" width="178" height="20"/>
+				<textElement/>
+				<text><![CDATA[Meses por equipos y Disco Duro.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="10" width="78" height="18"/>
+				<textElement/>
+				<text><![CDATA[Tipo de Cambio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="33" width="144" height="20"/>
+				<textElement/>
+				<text><![CDATA[Condiciones de instalacion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="47" width="449" height="20"/>
+				<textElement/>
+				<text><![CDATA[El cliente brindara las facilidades para la instalación, incluyendo los permisos ecesarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="68" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Condiciones comerciales:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="121" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Forma de pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="135" width="354" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cuenta corriente BCP soles: 191-1964430-0-26]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="150" width="354" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cuenta corriente BCP dólares: 191-2040241-1-04]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="174" width="42" height="17"/>
+				<textElement/>
+				<text><![CDATA[Atte.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="93" y="8" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nTasaCambio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="121" width="391" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{formapago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="22" splitType="Stretch">
+			<subreport>
+				<reportElement x="6" y="1" width="544" height="18"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="idCotiz">
+					<subreportParameterExpression><![CDATA[$P{idCotiz}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "reportepcional.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+	<noData>
+		<band height="8"/>
+	</noData>
+</jasperReport>

@@ -1,0 +1,30 @@
+<style>
+    .ui-autocomplete {
+        max-height: 218px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 8px;
+    }
+
+    /* IE 6 doesn't support max-height
+    * we use height instead, but this forces the menu to always be this tall
+    */
+    * html .ui-autocomplete {
+        height: 218px;
+    }
+</style>
+<script type="text/javascript">
+    Persona.ubigeo = <?php echo json_encode($this->rowUbigeo); ?>;
+</script>
+<div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Personas</label>
+    </div>
+    <?php
+        $this->id = "Persona";
+        echo $this->render("common/buscadorContribuyentePredio.php"); 
+    ?>
+</div>
+<?php echo $this->render("common/vistaPersona.php"); ?>

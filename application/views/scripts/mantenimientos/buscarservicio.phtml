@@ -1,0 +1,281 @@
+<div id="panelMantenimientoProducto" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento Servicios</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+                        <tr class="rowBuscarContribuyente">
+
+                            <td width="100" style="text-align: left">C&oacute;digo:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230" style="text-align: left">Nombre:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td>Desc</td>
+                            <td width="230" colspan="5" style="text-align: left">Categoria:</td>
+                            <td width="20">&nbsp;</td>
+
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td>
+                                <input class="ui-text" id="c_codigoprod" onkeypress="if(event.keyCode==13){buscarServ();}" maxlength="10" style="width:90px" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="3">
+                                <input class="ui-text pnl" id="c_nombreprod"  onkeypress="if(event.keyCode==13){buscarServ();}" style="width:100%" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_desc" onkeypress="if(event.keyCode==13){buscarServ();}" style="width:50%" />
+                            </td>
+                            <td style="text-align: left">
+                                <select id="cbocategor" name="cbocategor" style="width:140px;">
+                                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
+                                </select>
+                            </td>
+                            <td>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarServ()">Buscar</button>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+
+    <div id="panelListaProducto" align="left" style="width: 99%;margin: 3px;">
+        <table id="tblListaProducto"></table>
+        <div id="ptblListaProducto"></div>
+    </div>
+    <br/>
+</div>
+<script type="text/javascript">
+    optionPersona = {
+        width: 900,
+        height: 250,
+        keys: true,
+        colNames: [
+            'Codigo',
+            'Nombre',
+            'Descripcion',
+            'idCate',
+            'Categoria',
+            'Estado'
+        ],
+        colModel: [
+            {name: 'idServicio', index:'idServicio', width:80},
+            {name: 'vNombre', index:'vNombre', width:300,editable: true},
+            {name: 'vDescrip', index:'vDescrip', width:200,editable: true, edittype:"text"},
+            {name: 'idCategoria', index:'idCategoria', hidden: true, width:80},
+            {name: 'vNomCat', index:'vNomCat', hidden: false, width:200},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Servicios Registrados",
+        ondblClickRow: function(id){
+            var row = $(this).getRowData(id);
+            verPersona();
+        },
+
+        afterInsertRow:function(rowid,aData){
+        switch(
+                aData.nestado
+            ){case'1':
+                break;
+            case '0':
+
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+break;
+
+
+        }
+
+
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+
+        }
+    };
+
+
+
+    eliminar=function(a){
+        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaProducto").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+           "si":function(){
+               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+               $.ajax({
+                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarproducto",
+                   type: 'POST',
+                   cache: false,
+                   data: parameters,
+                   beforeSend: function (data) {
+
+                   },
+                   success: function (requestData) {
+                      // $("#result").html(requestData);
+                       closeDialog("jqDialogConfirmacion1");
+                       closeDialog('jqDialog2');
+                       $("#c_codigocontrib").val("");
+                       buscarServ();
+
+
+                   },
+                   error: function (requestData, strError, strTipoError) {
+                       $("#result").html("Error " + strTipoError + ': ' + strError);
+                   },
+                   complete: function (requestData, exito) {
+                   }
+
+
+               });
+           },
+
+           "no":function(){
+               closeDialog("jqDialogConfirmacion1");
+
+           }
+       })
+
+
+    };
+
+    nuevaPersona = function(){
+        parameters = {
+            "idsigma": ''
+        };
+        openDialogData2("mantenimientos/servicio", parameters, 460);
+    };
+    verPersona = function() {
+        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaProducto").jqGrid('getRowData', selr);
+        if(row.idServicio == "" || row.idServicio == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idServicio
+        };
+
+        openDialogData2("mantenimientos/servicio", parameters, 460);
+
+    };
+    material = function() {
+        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaProducto").jqGrid('getRowData', selr);
+        if(row.idServicio == "" || row.idServicio == undefined){
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idServicio
+        };
+
+        openDialogData2("mantenimientos/addmaterial", parameters, 500);
+
+    };
+
+    function buttonsGridPerson(){
+        $("#tblListaProducto")
+            .navGrid('#ptblListaProducto', {edit:false,add:false,del:false,search:false,refresh:false})
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Agregar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevaPersona();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verPersona();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Eliminar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    eliminar();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaProducto',{
+                caption:"Add Material&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    material();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+        ;
+    }
+
+
+
+
+    buscarServ = function() {
+        var params = '['
+            + '["@idServicio", "' + $("#c_codigoprod").val() + '"],'
+            + '["@vNombre", "' + $("#c_nombreprod").val() + '"],'
+			+ '["@vDesc", "' + $("#c_desc").val() + '"]'
+            + ']';
+        parameters = {
+            "name": "tblListaProducto",
+            "procedure": "List_Servicio",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaProducto"
+            , "tblListaProducto"
+            , optionPersona
+            , parameters
+            , null
+            , buttonsGridPerson
+        );
+    };
+
+    $(function(){
+        buscarServ();
+        $("#btnbuscar").button();
+    });
+</script>
