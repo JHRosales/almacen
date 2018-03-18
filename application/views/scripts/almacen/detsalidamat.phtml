@@ -3,8 +3,8 @@ $library = new Libreria_Pintar();
 $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
 ?>
 <style>
-    #tableTestigos { margin :  0 0 2em 0; border-collapse: collapse; width: 100%; }
-    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+    #tableTestigos { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
+    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
@@ -93,6 +93,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 <th>Codigo</th>
                 <th>Material</th>
                 <th>Unidad de Medida</th>
+                <th>Stock</th>
                 <th>Buscar</th>
                 <th>Cantidad</th>
                 <th></th>
@@ -105,10 +106,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     <input id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                 </td>
                 <td>
-                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:400px" >
+                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
                 </td>
                 <td>
                     <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                </td>
+                <td>
+                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
                 </td>
                 <td>
                     <button id="btnTestigoBuscarPersona">Buscar</button>
@@ -130,10 +134,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <input value="<?php echo $value["idMaterial"]; ?>" id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:400px" >
+                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
                     </td>
                     <td>
                         <input value="<?php echo $value["UnidadMediad"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    </td>
+                    <td>
+                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
                     </td>
                     <td>
                         <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
@@ -332,7 +339,7 @@ cargarCategoria = function () {
 
 }
 
-buscarPersonasPapeleta = function (d) {
+buscarMaterialSalida = function (d) {
     console.log(d);
     __gridConfigMaterial.data = [];
     __gridConfigMaterial.ondblClickRow = function (rowid) {
@@ -341,6 +348,7 @@ buscarPersonasPapeleta = function (d) {
             $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
             $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombreMat);
             $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
+            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
 //                $("#txtTestigoCodigoPersona").val(row.cidpers);
 //                $("#txtTestigoDNI").val(row.vnrodoc);
 //                $("#txtUnidadMedida").val(row.crazsoc);
@@ -379,7 +387,7 @@ agregarFilaTable = function (id) {
     themeComboBox("#" + id_combobox);
     $("#btnTestigoBuscarPersona_" + id + "_" + i).button().click(function () {
         invocaBusPersona = 1;
-        buscarPersonasPapeleta(this);
+        buscarMaterialSalida(this);
 
     });
     i++;

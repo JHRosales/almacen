@@ -4,7 +4,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 ?>
 <style>
     #tableTestigos { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
-    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
@@ -89,7 +89,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <label>Materiales </label>
         </div>
         <div style="text-align: left" >
-            <button id="btnTestigoAgregar">Agregar</button>
+            <button id="btnRegistroAgregar" style="display: none">Agregar</button>
         </div>
         <table id="tableTestigos" border="1" class="ui-widget ui-widget-content">
             <thead>
@@ -97,6 +97,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 <th>Codigo</th>
                 <th>Material</th>
                 <th>Unidad de Medida</th>
+                <th>Stock</th>
                 <th>Cantidad Salida</th>
                 <th>Cantidad Retorno</th>
                 <th>Observacion</th>
@@ -112,13 +113,16 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
                 </td>
                 <td>
-                    <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:80px" >
+                    <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                </td>
+                <td>
+                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
                 </td>
                 <td>
                     <input id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"   style="width:90px"  >
                 </td>
                 <td>
-                    <input id="txtCantidad"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
+                    <input id="txtCantidadretorno"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
                 </td>
                 <td>
                     <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"><?php echo $value["vobserv"]; ?></textarea>
@@ -139,14 +143,16 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["unidadMedida"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:80px" >
+                        <input value="<?php echo $value["unidadMedida"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                     </td>
-
+                    <td>
+                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
+                    </td>
                     <td>
                         <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"  style="width:90px"  >
                     </td>
                     <td>
-                        <input value="<?php echo $value["vnrodoc"]; ?>" id="txtCantidadretorno"  name="txtCantidad" class="ui-text" style="width:90px"  >
+                        <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno"  name="txtCantidad" class="ui-text" style="width:90px"  >
                     </td>
                     <td>
                         <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"><?php echo $value["vobserv"]; ?></textarea>
@@ -342,7 +348,7 @@ cargarCategoria = function () {
 
 }
 
-buscarPersonasPapeleta = function (d) {
+buscarMaterialRetorno = function (d) {
     console.log(d);
     __gridConfigMaterial.data = [];
     __gridConfigMaterial.ondblClickRow = function (rowid) {
@@ -387,9 +393,9 @@ agregarFilaTable = function (id) {
     }).end().appendTo("#" + id);
 
     themeComboBox("#" + id_combobox);
-    $("#btnTestigoBuscarPersona_" + id + "_" + i).button().click(function () {
+    $("#btnBuscarMaterial_" + id + "_" + i).button().click(function () {
         invocaBusPersona = 1;
-        buscarPersonasPapeleta(this);
+        buscarMaterialRetorno(this);
 
     });
     i++;
@@ -407,12 +413,12 @@ $(function () {
 
 // clone inspector
 
-    $("#btnTestigoBuscarPersona").button("destroy");
+    $("#btnBuscarMaterial").button("destroy");
     agregarFilaTable("tableTestigos");
-    $("#btnTestigoAgregar").click(function () {
+    $("#btnRegistroAgregar").click(function () {
         agregarFilaTable("tableTestigos");
     });
-    $("#btnTestigoAgregar").button({icons: {primary: "ui-icon-plus"}});
+    $("#btnRegistroAgregar").button({icons: {primary: "ui-icon-plus"}});
 //fin clone inspector
 
     //--- Buscar persona
