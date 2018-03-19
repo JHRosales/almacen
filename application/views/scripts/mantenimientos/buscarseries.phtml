@@ -1,0 +1,440 @@
+<div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento Series</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+                        <tr class="rowBuscarContribuyente">
+
+                            <td width="180" colspan="2" style="text-align: left">Codigo Compra:</td>
+
+                            <td width="200" style="text-align: left">Nombre Producto:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="150" colspan="5" style="text-align: left">Nro. Serie:</td>
+                            <td width="20">&nbsp;</td>
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td colspan="2">
+                                <input class="ui-text" id="correos" onkeypress="if(event.keyCode==13){buscarPersona();}"  style="width:160px" />
+                            </td>
+
+                            <td colspan="3">
+                                <input class="ui-text pnl" id="c_nombrecontrib"  onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:100%" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_nrodoc" onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:70%" />
+                            </td>
+                            <td>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarPersona()">Buscar</button>
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+
+                        <tr class="rowcoti">
+
+                            <td width="100" style="text-align: left">Fecha Desde:</td>
+                            <td width="30">&nbsp;</td>
+                            <td width="200" style="text-align: left">Fecha Hasta:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200" colspan="5" style="text-align: left; display: none;">Nro. Cotizacion:</td>
+
+                        </tr>
+                        <tr class="rowbcoti" id="panelbcoti">
+
+                            <td>
+                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;"/>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="2">
+                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;"/>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left; display: none;">
+                                <input class="ui-text pnl" id="c_nrocoti" onkeypress="if(event.keyCode==13){buscarEntradaMate();}" style="width:50%" />
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+
+    <div id="panelListaPersona" align="left" style="width: 99%;margin: 3px;">
+        <table id="tblListaPersona"></table>
+        <div id="ptblListaPersona"></div>
+    </div>
+    <br/>
+</div>
+<script type="text/javascript">
+
+$( "#correos" ).keyup(function( event ) {
+    buscarPersona();
+    document.getElementById("correos").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+        buscarPersona();
+    }
+});
+
+$( "#c_nombrecontrib" ).keyup(function( event ) {
+    buscarPersona();
+    document.getElementById("c_nombrecontrib").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+        buscarPersona();
+    }
+});
+
+$( "#c_nrodoc" ).keyup(function( event ) {
+    buscarPersona();
+    document.getElementById("c_nrodoc").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+        buscarPersona();
+    }
+});
+
+
+
+    optionPersona = {
+        width: 900,
+        height: 250,
+        colNames: [
+            'Codigo',
+            'Persona',
+            'Direccion',
+            'vtipdoc',
+            'Nro Doc',
+            'ctipper',
+            'Distrito',
+            'Provucna',
+
+            'vPersContac',
+            'vTelefContac',
+            'vCelContac',
+            'Correo'
+        ],
+        colModel: [
+            {name: 'cidpers', index:'cidpers', width:70},
+            {name: 'vNombre', index:'vNombre', width:200},
+            {name: 'direccf', index:'direccf', hidden: false, width:220},
+            {name: 'vtipdoc', index:'vtipdoc', hidden: true},
+            {name: 'vnrodoc', index:'vnrodoc', hidden: false,width:100},
+            {name: 'vTipPers', index:'vTipPers', hidden: true},
+            {name: 'vDistrito', index:'vDistrito', hidden: false},
+            {name: 'vProvincia', index:'vProvincia', hidden: false},
+            //{name: 'nestado', index:'nestado', hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
+            {name: 'vPersContac', index:'vPersContac', hidden: true},
+            {name: 'vTelefContac', index:'vTelefContac', hidden: true},
+            {name: 'vCelContac', index:'vCelContac', hidden: true},
+            {name: 'vCorreoContac', index:'vCorreoContac', hidden: false},
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Personas Registradas",
+        ondblClickRow: function(id){
+
+            var row = $(this).getRowData(id);
+            //console.log(row);
+
+            //dobleclickPersona(row);
+            verPersona();
+        },
+
+        afterInsertRow:function(rowid,aData){
+        switch(
+                aData.nestado
+            ){case'1':
+                break;
+            case '0':
+
+                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+break;
+
+
+        }
+
+
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+
+
+        }
+    };
+
+
+
+    eliminar=function(a){
+        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+           "si":function(){
+               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+               $.ajax({
+                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarcliente",
+                   type: 'POST',
+                   cache: false,
+                   data: parameters,
+                   beforeSend: function (data) {
+
+                   },
+                   success: function (requestData) {
+                       $("#result").html(requestData);
+                       closeDialog("jqDialogConfirmacion1");
+                       closeDialog('jqDialog2');
+
+                       buscarPersona();
+
+
+                   },
+                   error: function (requestData, strError, strTipoError) {
+                       $("#result").html("Error " + strTipoError + ': ' + strError);
+                   },
+                   complete: function (requestData, exito) {
+                   }
+
+
+               });
+           },
+
+           "no":function(){
+               closeDialog("jqDialogConfirmacion1");
+
+           }
+       })
+
+
+    };
+
+
+    nuevaPersona = function(){
+        parameters = {
+            "idsigma": '0000000000'
+        };
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
+    };
+    verPersona = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
+
+    };
+
+    estadoPersona = function(){
+        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        openDialogData1("mantenimientos/estados",{codigo:row.cidpers},)
+
+    };
+
+
+    function buttonsGridPerson(){
+        $("#tblListaPersona")
+            .navGrid('#ptblListaPersona', {edit:false,add:false,del:false,search:false,refresh:false})
+
+            .navButtonAdd('#ptblListaPersona',{
+                caption:"Agregar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevaPersona();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblListaPersona',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verPersona();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaPersona',{
+                caption:"Eliminar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    eliminar();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+            /*
+            .navButtonAdd('#ptblListaPersona',{
+                caption:"Imprimir&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    imprimir();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()*/
+        ;
+    }
+
+
+    function imprimir(){
+        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+//console.log(row);
+        window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.cidpers );
+    }
+
+    buscarPersona = function() {
+
+        if ($("#cbdistrito").val()=='9999999999'){
+
+            var distrito='';
+
+        }
+
+        else
+
+        {
+            var distrito= $("#cbdistrito").val();
+        }
+
+        if ($("#cbprovincia").val()=='9999999999'){
+
+            var provincia='';
+
+        }
+
+        else
+
+        {
+            var provincia= $("#cbprovincia").val();
+        }
+
+
+        var params = '['
+
+            + '["@p_nvar2", "' + $("#c_nombrecontrib").val() + '"],'
+			+ '["@p_nvar4", "' + $("#c_nrodoc").val() + '"],'
+            + '["@p_nvar5", "' + $("#correos").val() + '"],'
+            + '["@p_nvar6", "' + provincia + '"],'
+            + '["@p_nvar7", "' + distrito + '"]'
+            + ']';
+        parameters = {
+            "name": "tblListaPersona",
+            "procedure": "buscar_proveedor",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaPersona"
+            , "tblListaPersona"
+            , optionPersona
+            , parameters
+            , null
+            , buttonsGridPerson
+        );
+    };
+
+    $(function(){ // cargar la pagina
+      buscarPersona();
+        $("#btnbuscar").button();
+    });
+
+
+
+    $("#cbprovincia").combobox({
+        selected: function(event, ui){
+           reiniCombo("cbdistrito");
+            getDistrito($("#cbprovincia").val(),"cbdistrito");
+            buscarPersona();
+
+
+        }
+    });
+
+    $("#cbdistrito").combobox({
+        selected: function(event, ui){
+
+            buscarPersona();
+
+
+        }
+    });
+
+    function reiniCombo(celement){
+        var xelem = $("#" + celement);
+        xelem.combobox("destroy");
+        $("option:selected",xelem).removeAttr("selected");
+        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        //xelem.combobox();
+    }
+
+
+
+    function getDistrito(selecteds, celement){
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+            $("#" + celement).combobox();
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenerdistrito/",
+                data: "select="+selecteds+"&distritos="+ selecteds,
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+</script>

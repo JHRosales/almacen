@@ -32,6 +32,13 @@ class MantenimientosController extends Zend_Controller_Action {
         }
     }
 
+    public function buscarseriesAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
     public function buscarproductoAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
