@@ -27,42 +27,44 @@
       <file leaf-file-name="AlmacenController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/controllers/AlmacenController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="937" column="36" selection-start-line="937" selection-start-column="36" selection-end-line="937" selection-end-column="36" />
+            <state vertical-scroll-proportion="-4.8545456">
+              <caret line="927" column="35" selection-start-line="927" selection-start-column="25" selection-end-line="927" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataAdapter.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/DataAdapter.php">
+      <file leaf-file-name="entradaprod.phtml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/entradaprod.phtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="156" column="31" selection-start-line="156" selection-start-column="31" selection-end-line="156" selection-end-column="31" />
+            <state vertical-scroll-proportion="-4.181818">
+              <caret line="474" column="13" selection-start-line="474" selection-start-column="13" selection-end-line="474" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="detentradaprod.phtml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detentradaprod.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.5454545">
+              <caret line="741" column="26" selection-start-line="741" selection-start-column="26" selection-end-line="741" selection-end-column="26" />
               <folding>
-                <marker date="1516577828247" expanded="true" signature="6089:6142" placeholder="select * fro..." />
-                <marker date="1516577828247" expanded="true" signature="8423:8476" placeholder="select * fro..." />
+                <marker date="1521428879669" expanded="true" signature="33770:33783" placeholder="..." />
+                <marker date="1521428879669" expanded="true" signature="35296:35309" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="detsalidamat.phtml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detsalidamat.phtml">
+      <file leaf-file-name="ingresarseries.phtml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/ingresarseries.phtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.44190142">
-              <caret line="480" column="37" selection-start-line="480" selection-start-column="37" selection-end-line="480" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="salidamat.phtml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/salidamat.phtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="458" column="24" selection-start-line="458" selection-start-column="13" selection-end-line="458" selection-end-column="24" />
-              <folding />
+            <state vertical-scroll-proportion="0.17439704">
+              <caret line="118" column="20" selection-start-line="118" selection-start-column="20" selection-end-line="118" selection-end-column="20" />
+              <folding>
+                <element signature="n#style#0;n#input#2;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,12 +72,9 @@
       <file leaf-file-name="detentradamat.phtml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detentradamat.phtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="555" column="16" selection-start-line="555" selection-start-column="16" selection-end-line="555" selection-end-column="66" />
-              <folding>
-                <marker date="1521156513869" expanded="true" signature="33454:33467" placeholder="..." />
-                <marker date="1521156513869" expanded="true" signature="34980:34993" placeholder="..." />
-              </folding>
+            <state vertical-scroll-proportion="-244.53847">
+              <caret line="374" column="77" selection-start-line="374" selection-start-column="77" selection-end-line="374" selection-end-column="77" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -106,22 +105,24 @@
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/retornoprod.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/retornomat.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/salidaprod.phtml" />
-        <option value="$PROJECT_DIR$/application/views/scripts/almacen/entradaprod.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/mantenimientos/material.phtml" />
         <option value="$PROJECT_DIR$/application/controllers/MantenimientosController.php" />
         <option value="$PROJECT_DIR$/application/views/scripts/mantenimientos/buscarmaterial.phtml" />
         <option value="$PROJECT_DIR$/application/controllers/LogeoController.php" />
-        <option value="$PROJECT_DIR$/application/views/scripts/almacen/entradamat.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/addpsm.phtml" />
         <option value="$PROJECT_DIR$/public/js/app/common/03_common.js" />
         <option value="$PROJECT_DIR$/public/js/app/common/14_buscadorContribuyentePredio.js" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/buscartecnico.phtml" />
-        <option value="$PROJECT_DIR$/application/views/scripts/almacen/detretornomat.phtml" />
-        <option value="$PROJECT_DIR$/application/views/scripts/almacen/salidamat.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/detentradamat.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/buscarpersona.phtml" />
-        <option value="$PROJECT_DIR$/application/controllers/AlmacenController.php" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/entradamat.phtml" />
         <option value="$PROJECT_DIR$/application/views/scripts/almacen/detsalidamat.phtml" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/detretornomat.phtml" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/salidamat.phtml" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/entradaprod.phtml" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/detentradaprod.phtml" />
+        <option value="$PROJECT_DIR$/application/controllers/AlmacenController.php" />
+        <option value="$PROJECT_DIR$/application/views/scripts/almacen/ingresarseries.phtml" />
       </list>
     </option>
   </component>
@@ -254,6 +255,14 @@
               <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="almacen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -269,7 +278,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -353,10 +362,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="1" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2065053" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24205749" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -393,27 +402,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/mantenimientos/tasacambio.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2447183">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/mantenimientos/servicio.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5316901">
-          <caret line="136" column="6" selection-start-line="136" selection-start-column="6" selection-end-line="136" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/mantenimientos/producto.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.410212">
-          <caret line="215" column="62" selection-start-line="215" selection-start-column="62" selection-end-line="215" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/scripts/mantenimientos/persona.phtml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.7711267">
@@ -561,13 +549,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/entradamat.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-51.0">
-          <caret line="400" column="26" selection-start-line="400" selection-start-column="26" selection-end-line="400" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/app/common/15_persona.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.25714287">
@@ -579,13 +560,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.449912">
           <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/common/14_buscadorContribuyentePredio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="627" column="29" selection-start-line="627" selection-start-column="29" selection-end-line="627" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -638,13 +612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detretornomat.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="145" column="66" selection-start-line="145" selection-start-column="66" selection-end-line="145" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/scripts/mantenimientos/agregarmaterialserv.phtml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43133804">
@@ -681,13 +648,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/common/03_common.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3793104">
-          <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/JqgridController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.04225352">
@@ -716,49 +676,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detentradamat.phtml">
+    <entry file="file://$PROJECT_DIR$/public/js/app/common/14_buscadorContribuyentePredio.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="555" column="16" selection-start-line="555" selection-start-column="16" selection-end-line="555" selection-end-column="66" />
-          <folding>
-            <marker date="1521156513869" expanded="true" signature="33454:33467" placeholder="..." />
-            <marker date="1521156513869" expanded="true" signature="34980:34993" placeholder="..." />
-          </folding>
+        <state vertical-scroll-proportion="3.547138">
+          <caret line="619" column="4" selection-start-line="619" selection-start-column="4" selection-end-line="619" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/salidamat.phtml">
+    <entry file="file://$PROJECT_DIR$/public/js/app/common/03_common.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="458" column="24" selection-start-line="458" selection-start-column="13" selection-end-line="458" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.7154882">
+          <caret line="34" column="26" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/DataAdapter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="-0.17957747">
           <caret line="156" column="31" selection-start-line="156" selection-start-column="31" selection-end-line="156" selection-end-column="31" />
           <folding>
-            <marker date="1516577828247" expanded="true" signature="6089:6142" placeholder="select * fro..." />
-            <marker date="1516577828247" expanded="true" signature="8423:8476" placeholder="select * fro..." />
+            <marker date="1516577828247" expanded="true" signature="-1:-1" placeholder="select * fro..." />
+            <marker date="1516577828247" expanded="true" signature="-1:-1" placeholder="select * fro..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/AlmacenController.php">
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/salidamat.phtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="937" column="36" selection-start-line="937" selection-start-column="36" selection-end-line="937" selection-end-column="36" />
+        <state vertical-scroll-proportion="-5.8846154">
+          <caret line="179" column="136" selection-start-line="179" selection-start-column="136" selection-end-line="179" selection-end-column="136" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/entradamat.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.565141">
+          <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detsalidamat.phtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44190142">
-          <caret line="480" column="37" selection-start-line="480" selection-start-column="37" selection-end-line="480" selection-end-column="38" />
+        <state vertical-scroll-proportion="-315.80768">
+          <caret line="483" column="0" selection-start-line="483" selection-start-column="0" selection-end-line="483" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detretornomat.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.7059859">
+          <caret line="57" column="91" selection-start-line="57" selection-start-column="91" selection-end-line="57" selection-end-column="91" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detentradamat.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-244.53847">
+          <caret line="374" column="77" selection-start-line="374" selection-start-column="77" selection-end-line="374" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/AlmacenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.8545456">
+          <caret line="927" column="35" selection-start-line="927" selection-start-column="25" selection-end-line="927" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/entradaprod.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.181818">
+          <caret line="474" column="13" selection-start-line="474" selection-start-column="13" selection-end-line="474" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/detentradaprod.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.5454545">
+          <caret line="741" column="26" selection-start-line="741" selection-start-column="26" selection-end-line="741" selection-end-column="26" />
+          <folding>
+            <marker date="1521428879669" expanded="true" signature="33770:33783" placeholder="..." />
+            <marker date="1521428879669" expanded="true" signature="35296:35309" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/scripts/almacen/ingresarseries.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17439704">
+          <caret line="118" column="20" selection-start-line="118" selection-start-column="20" selection-end-line="118" selection-end-column="20" />
+          <folding>
+            <element signature="n#style#0;n#input#2;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
