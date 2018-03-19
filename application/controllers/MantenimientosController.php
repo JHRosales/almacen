@@ -24,6 +24,14 @@ class MantenimientosController extends Zend_Controller_Action {
             $this->_helper->layout->disableLayout();
         }
     }
+
+    public function buscarproveedorAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
     public function buscarproductoAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -116,6 +124,63 @@ class MantenimientosController extends Zend_Controller_Action {
         $func->PintarEvento($evt);
     }
 
+    public function proveedorAction() {
+        $func = new Libreria_Pintar();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+
+            $cn = new Model_DataAdapter ();
+            $parametros = null;
+            $parametros[] = array('@p_nvar1', $idsigma);
+
+            $datos = $cn->executeAssocQuery(
+                'buscar_proveedor'
+                , $parametros
+            );
+
+            $this->view->idsigma = $idsigma;
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->vnombre = '';
+                $this->view->ctipper = '1';
+                $this->view->tipdoc = 'DNI';
+                $this->view->vnrodoc = '';
+                $this->view->vcorreo = '';
+                $this->view->personcont = "";
+                $this->view->vtelfij = "";
+                $this->view->vtelmov = "";
+                $this->view->departamento = "Lima";
+                $this->view->provincia = "Lima";
+                $this->view->distrito = "1408";
+
+                $this->view->vdirecc = '';
+
+            } else {
+                $this->view->vnombre = $datos[0]['vNombre'];
+                $this->view->ctipper = $datos[0]['vTipPers'];
+                $this->view->tipdoc = $datos[0]['vtipdoc'];
+                $this->view->vnrodoc = $datos[0]['vnrodoc'];
+                $this->view->vcorreo = $datos[0]['vCorreoContac'];
+                $this->view->personcont =$datos[0]['vPersContac'];
+                $this->view->vtelfij = $datos[0]['vTelefContac'];
+                $this->view->vtelmov = $datos[0]['vCelContac'];
+                $this->view->departamento = $datos[0]['vDepartamento'];
+                $this->view->provincia = $datos[0]['vProvincia'];
+                $this->view->distrito = $datos[0]['idUbigeo'];
+
+                $this->view->vdirecc = $datos[0]['direccf'];
+            }
+        }
+
+        $evt[] = array("txtvnrodoc", "keypress", "return validarnumerossinespacios(event);");
+        $func->PintarEvento($evt);
+    }
+
+
     public function guardarpersonaAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -175,6 +240,68 @@ class MantenimientosController extends Zend_Controller_Action {
             echo $person[0][0];
         }
     }
+
+
+    public function guardarproveedorAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $vnombre = $this->_request->getPost('vnombre');
+            $ctipper = $this->_request->getPost('ctipper');
+            $vdirecc = $this->_request->getPost('vdirecc');
+            $tipdoc = $this->_request->getPost('tipdoc');
+            $vnrodoc = $this->_request->getPost('vnrodoc');
+            $vcorreo = $this->_request->getPost('vcorreo');
+            $personcont = $this->_request->getPost('personcont');
+            $vtelfij = $this->_request->getPost('vtelfij');
+            $vtelmov = $this->_request->getPost('vtelmov');
+            $idUbigeo = $this->_request->getPost('idUbigeo');
+
+
+            echo"<pre>";
+            // print_r($txtdescrip);
+
+
+            $texto2 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
+                array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
+                    "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
+            print_r($texto2);
+
+            echo"</pre>";
+
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idsigma);
+            // $params[] = array('@p_vnombre', strtoupper($vnombre));
+            $params[] = array('@p_vnombre',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',strtoupper($texto2)))));
+
+            $params[] = array('@p_ctipper', $ctipper);
+            $params[] = array('@p_vdirecc', strtoupper($vdirecc));
+            $params[] = array('@p_ctipdoc', $tipdoc);
+            $params[] = array('@p_vnrodoc', $vnrodoc);
+            $params[] = array('@p_vcorreo', $vcorreo);
+            $params[] = array('@p_personcont', $personcont);
+            $params[] = array('@p_ctelfij', $vtelfij);
+            $params[] = array('@p_ctelmov', $vtelmov);
+            $params[] = array('@p_ubigeo', $idUbigeo);
+            $params[] = array('@p_usuario', $usuario);
+            $params[] = array('@p_host', $host);
+
+            $person = $cn->ejec_store_procedura_sql('guardar_proveedor', $params);
+            $cperson = count($person);
+            echo $person[0][0];
+        }
+    }
+
 
 
     public function eliminarpersonaAction() {

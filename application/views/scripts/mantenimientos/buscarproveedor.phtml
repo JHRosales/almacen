@@ -1,6 +1,6 @@
 <div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <label>Mantenimiento Clientess</label>
+        <label>Mantenimiento Proveedor</label>
     </div>
     <div id="dialogBuscarContribuyentePredio">
         <table class="ui-panelLayout-main">
@@ -240,7 +240,7 @@ break;
         parameters = {
             "idsigma": '0000000000'
         };
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
     };
     verPersona = function() {
         var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
@@ -253,7 +253,7 @@ break;
             "idsigma": row.cidpers
         };
 
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
 
     };
 
@@ -365,7 +365,7 @@ break;
             + ']';
         parameters = {
             "name": "tblListaPersona",
-            "procedure": "buscar_cliente",
+            "procedure": "buscar_proveedor",
             "print": "true",
             "parameters": params
         };
