@@ -27,3 +27,4 @@ extras/documentation
 .idea/misc.xml
 .idea/workspace.xml
 .idea/workspace.xml
+application/models/DataAdapter.php
