@@ -1,6 +1,7 @@
 # Composer files
 composer.phar
 vendor/
+*.idea
 
 # Local configs
 config/autoload/*.local.php
@@ -23,3 +24,6 @@ data/DoctrineORMModule/cache/
 # Legacy ZF1
 demos/
 extras/documentation
+.idea/misc.xml
+.idea/workspace.xml
+.idea/workspace.xml
