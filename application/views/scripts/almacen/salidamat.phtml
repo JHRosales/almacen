@@ -177,9 +177,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
             {name: 'idTecnico', index:'idTecnico', width:70},
             {name: 'vTecnico', index:'vTecnico', width:150},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: true},
             { name: 'btndocudevo', index: 'btndocudevo', width: 60, align: 'center' ,formatter : btnRetorno,search:false}
         ],
         caption: "&nbsp;&nbsp;&nbsp;Salida de Materiales",

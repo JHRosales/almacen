@@ -756,6 +756,46 @@ class AlmacenController extends Zend_Controller_Action {
         }
     }
 
+public function detentradaprodAction() {
+    $this->view->tieneop=0;
+    $this->view->vMotivo="SISTEMA CCTV HDCVI - HD";
+    $this->view->vFormaPago="Al contado";
+    $this->view->dfecentrada = date('d/m/Y');
+    if ($this->getRequest()->isXmlHttpRequest()) {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+        $identradaprod = $this->_request->getParam('idEntradaProd');
+        $this->view->idEntradaProd =$identradaprod;
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@tBusqueda', "1");
+        $params[] = array('@vDatoBus', $identradaprod);
+        $params[] = array('@vFecIni', "");
+        $params[] = array('@vFecFin', "");
+        $datos = $cn->ejec_store_procedura_sql('almacen.Bus_EntradaProd', $params);
+
+        $cdatos = count($datos);
+        if ($cdatos == 0) {
+            $this->view->idEntradaProd =$datos[0][0];
+            $this->view->idProveedor=$datos[0][1];
+            $this->view->nombreproveed=$datos[0][2];
+            $this->view->nrofactura=$datos[0][3];
+            $this->view->subtotal=$datos[0][4];
+            $this->view->igv=$datos[0][5];
+            $this->view->total=$datos[0][6];
+            $this->view->dfecentrada =$datos[0][7];
+        }else{
+            $this->view->idEntradaProd =$datos[0][0];
+            $this->view->idProveedor=$datos[0][1];
+            $this->view->nombreproveed=$datos[0][2];
+            $this->view->nrofactura=$datos[0][3];
+            $this->view->subtotal=$datos[0][4];
+            $this->view->igv=$datos[0][5];
+            $this->view->total=$datos[0][6];
+            $this->view->dfecentrada =$datos[0][7];
+        }
+    }
+}
+
     public function detretornomatAction() {
         $this->view->tieneop=0;
         $this->view->dFecSalida = date('d/m/Y');
@@ -765,28 +805,32 @@ class AlmacenController extends Zend_Controller_Action {
             $idsalidamat = $this->_request->getParam('idSalidaMat');
             $this->view->idsalidamat =$idsalidamat;
             $cn = new Model_DataAdapter ();
-            $params[] = array('@tBusqueda', "0");
+            $params[] = array('@tBusqueda', "3");
             $params[] = array('@vDatoBus', $idsalidamat);
             $params[] = array('@vFecIni', "");
             $params[] = array('@vFecFin', "");
-            $datos = $cn->ejec_store_procedura_sql('almacen.List_SalidaMat', $params);
+            $datos = $cn->ejec_store_procedura_sql('almacen.List_RetornoMat', $params);
 
             $cdatos = count($datos);
             if ($cdatos == 0) {
-                $this->view->idSalidaMat =$datos[0][0];
-                $this->view->dFecSalida =$datos[0][1];
-                $this->view->obra=$datos[0][2];
-                $this->view->lugar=$datos[0][3];
-                $this->view->idtecnico=$datos[0][4];
-                $this->view->nomtecnico=$datos[0][5];
+                $this->view->idRetornoMat =$datos[0][0];
+                $this->view->idSalidaMat =$datos[0][1];
+                $this->view->dFecSalida =$datos[0][2];
+                $this->view->dFecRetorno =$datos[0][3];
+                $this->view->obra=$datos[0][4];
+                $this->view->lugar=$datos[0][5];
+                $this->view->idtecnico=$datos[0][6];
+                $this->view->nomtecnico=$datos[0][7];
 
             }else{
-                $this->view->idSalidaMat =$datos[0][0];
-                $this->view->dFecSalida =$datos[0][1];
-                $this->view->obra=$datos[0][2];
-                $this->view->lugar=$datos[0][3];
-                $this->view->idtecnico=$datos[0][4];
-                $this->view->nomtecnico=$datos[0][5];
+                $this->view->idRetornoMat =$datos[0][0];
+                $this->view->idSalidaMat =$datos[0][1];
+                $this->view->dFecSalida =$datos[0][2];
+                $this->view->dFecRetorno =$datos[0][3];
+                $this->view->obra=$datos[0][4];
+                $this->view->lugar=$datos[0][5];
+                $this->view->idtecnico=$datos[0][6];
+                $this->view->nomtecnico=$datos[0][7];
             }
 
             $arrDetMateriales = array();
@@ -870,6 +914,22 @@ class AlmacenController extends Zend_Controller_Action {
         }
     }
 
+
+    public function ingresarseriesAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $idsigma = $this->_request->getPost('idsigma');
+            $idprod = $this->_request->getPost('idProducto');
+            $nombproduct = $this->_request->getPost('nombreProd');
+            $nCantidad = $this->_request->getPost('nCantidad');
+            $this->view->iddetentradaprod = $idsigma;
+            $this->view->idproducto = $idprod;
+            $this->view->nombreprod = $nombproduct;
+            $this->view->cantidad = $nCantidad;
+        }
+    }
+
     public function detentradamataddAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -949,7 +1009,55 @@ class AlmacenController extends Zend_Controller_Action {
             // print_r(json_encode($resultDescta[0]["b"]));
         }
     }
+    public function guardarretornomatAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
 
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pPapeleta = $this->_request->getParam('objSalidaMat');
+            $jPapeleta = json_decode($pPapeleta);
+
+            $dataSet = new Model_DataAdapter();
+            if ($jPapeleta->idRetornoMat == "") {
+                $trans = "1";
+            } else {
+                $trans = "2";
+            }
+            $_procedure = 'almacen.InsUpd_retornoMat';
+            $params[] = array('@ttrans', $trans);
+            $params[] = array('@p_idretornomat', $jPapeleta->idRetornoMat);
+            $params[] = array('@p_idsalidamat', $jPapeleta->idSalidaMat);
+            $params[] = array('@p_obra', $jPapeleta->obra);
+            $params[] = array('@p_lugar', $jPapeleta->lugar);
+            $params[] = array('@p_fecha', $jPapeleta->fecha);
+            $params[] = array('@p_idtecnico', $jPapeleta->idtecnico);
+            $params[] = array('@vUsernm', $userlogin);
+            $params[] = array('@vHostnm', 'local');
+
+            $resultPapeleta = $dataSet->executeAssocQuery($_procedure, $params);
+
+            $_proc_dtestigo = 'add_detretornomat';
+
+            foreach ($jPapeleta->materiales as $value) {
+                $params = null;
+                $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
+                $params[] = array('@p_idretornomat', $resultPapeleta[0]["idRetornoMat"]);   #p_mpapeleta
+                $params[] = array('@p_iddetretornomat',  $value->idDetRetornoMat);  #p_mperson
+                $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #cantidad
+                $params[] =  array('@p_observ',  $value->observacion); #cantidad
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($resultPapeleta[0]));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
 
 
 
