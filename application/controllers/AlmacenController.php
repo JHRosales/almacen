@@ -756,6 +756,46 @@ class AlmacenController extends Zend_Controller_Action {
         }
     }
 
+public function detentradaprodAction() {
+    $this->view->tieneop=0;
+    $this->view->vMotivo="SISTEMA CCTV HDCVI - HD";
+    $this->view->vFormaPago="Al contado";
+    $this->view->dfecentrada = date('d/m/Y');
+    if ($this->getRequest()->isXmlHttpRequest()) {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+        $identradaprod = $this->_request->getParam('idEntradaProd');
+        $this->view->idEntradaProd =$identradaprod;
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@tBusqueda', "1");
+        $params[] = array('@vDatoBus', $identradaprod);
+        $params[] = array('@vFecIni', "");
+        $params[] = array('@vFecFin', "");
+        $datos = $cn->ejec_store_procedura_sql('almacen.Bus_EntradaProd', $params);
+
+        $cdatos = count($datos);
+        if ($cdatos == 0) {
+            $this->view->idEntradaProd =$datos[0][0];
+            $this->view->idProveedor=$datos[0][1];
+            $this->view->nombreproveed=$datos[0][2];
+            $this->view->nrofactura=$datos[0][3];
+            $this->view->subtotal=$datos[0][4];
+            $this->view->igv=$datos[0][5];
+            $this->view->total=$datos[0][6];
+            $this->view->dfecentrada =$datos[0][7];
+        }else{
+            $this->view->idEntradaProd =$datos[0][0];
+            $this->view->idProveedor=$datos[0][1];
+            $this->view->nombreproveed=$datos[0][2];
+            $this->view->nrofactura=$datos[0][3];
+            $this->view->subtotal=$datos[0][4];
+            $this->view->igv=$datos[0][5];
+            $this->view->total=$datos[0][6];
+            $this->view->dfecentrada =$datos[0][7];
+        }
+    }
+}
+
     public function detretornomatAction() {
         $this->view->tieneop=0;
         $this->view->dFecSalida = date('d/m/Y');
@@ -871,6 +911,22 @@ class AlmacenController extends Zend_Controller_Action {
             $this->view->idMaterial = $idMaterial;
             $this->view->cantidad = $nCantidad;
             $this->view->punitario = $nPrecioUnit;
+        }
+    }
+
+
+    public function ingresarseriesAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $idsigma = $this->_request->getPost('idsigma');
+            $idprod = $this->_request->getPost('idProducto');
+            $nombproduct = $this->_request->getPost('nombreProd');
+            $nCantidad = $this->_request->getPost('nCantidad');
+            $this->view->iddetentradaprod = $idsigma;
+            $this->view->idproducto = $idprod;
+            $this->view->nombreprod = $nombproduct;
+            $this->view->cantidad = $nCantidad;
         }
     }
 
