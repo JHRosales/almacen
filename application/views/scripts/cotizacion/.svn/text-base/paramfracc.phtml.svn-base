@@ -1,0 +1,74 @@
+
+<input type="hidden" id="txtidsigma"/>
+	<div class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;margin: 3px;">
+	
+	<br/>
+	<table class="ui-tablecontent">
+	
+	</table>
+
+	
+	
+		<table border="0">
+		  
+		<tr>
+		<td><b>Seleccion el monto minimo de la Cuota Inicial:</b></td>
+		</tr>
+		
+		<tr> 
+			<td> <input name="option" type="radio" id="opcion1">Sin monto minimo de cuota inicial</td>
+		</tr>
+		
+		<tr> 
+		<td> <input name="option" type="radio" id="opcion2">Con monto minimo de cuota inicial para todos los Contribuyentes</td>
+		</tr>
+		<tr>
+			<td>  Porcentaje del Importe Fraccionado(%):</td>
+			<td> <input id="txtporimpofracct"  >	</td>
+		</tr>
+		
+		<tr>
+			<td>	  Monto Determinado(S/.):	</td>
+			<td>	 <input id="txtmontdetert" >	</td>
+		</tr>
+		
+		</table>
+	
+	 
+<br/>
+<b>Ingrese la Ordenanza que aprueba los Montos Minimos de Cuota Inicial.</b>
+<br/>
+
+
+		<table border="0">		  
+		<tr>
+		<td>Codigo Documento:</td>
+		<td>Numero Documento:</td>
+		<td>Fecha:</td>
+		</tr>	
+		<tr>
+		<td><select id="cbocoddoc"> </select></td>
+		<td><input id="txtnrodoc" /></td>
+		<td><input id="txtfechdoc"></td>
+		</tr>	
+
+		<tr>
+			<td colspan="4" align="center">
+			<button id="btngrabar">Grabar</button>
+			</td>
+		</tr>
+		
+		</table>
+
+
+</div>
+
+
+<span id="locategrid" class="visibility:false;"></span>
+
+
+
+
+
+
+

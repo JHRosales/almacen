@@ -533,6 +533,21 @@ $(function() {
         flyOut: true
     });
 
+    $("#itemMenu4").menuBar({
+        content: $("#itemMenu4").next().html(),
+        showSpeed: 1,
+        flyOut: true
+    });
+    $("#itemMenu5").menuBar({
+        content: $("#itemMenu5").next().html(),
+        showSpeed: 1,
+        flyOut: true
+    });
+    $("#itemMenu6").menuBar({
+        content: $("#itemMenu6").next().html(),
+        showSpeed: 1,
+        flyOut: true
+    });
     themeTextBox();
     themeComboBox();
 

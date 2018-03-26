@@ -1,0 +1,585 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoTecnolo=array(array("1","IP"), array("2","HCVI"));
+$TipoResolucion=array(array("1","HD"), array("2","FULLHD"));
+
+?>
+
+<div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Buscar Cotizacion</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main" >
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+                        <tr><td>
+                              <b>  Datos Cliente</b>
+                            </td></tr>
+                        <tr class="rowBuscarContribuyente">
+
+                            <td width="100" style="text-align: left">Correo Electr&oacute;nico:</td>
+                            <td width="30">&nbsp;</td>
+                            <td width="200" style="text-align: left">Apellidos y Nombre:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200" colspan="5" style="text-align: left">Nro. Documento:</td>
+                            <td width="20">&nbsp;</td>
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td>
+                                <input class="ui-text" id="c_codigocontrib" onkeypress="if(event.keyCode==13){buscarCotizacion();}"  style="width:190px" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="3">
+                                <input class="ui-text pnl" id="c_nombrecontrib"  onkeypress="if(event.keyCode==13){buscarCotizacion();}" style="width:90%" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_nrodoc" onkeypress="if(event.keyCode==13){buscarCotizacion();}" style="width:50%" />
+                            </td>
+                            <td rowspan="3">
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarCotizacion()">Buscar</button>
+                            </td>
+                        </tr>
+
+                        <tr><td>
+                                <b>  Datos Cotizacion</b>
+                            </td></tr>
+                        <tr class="rowcoti">
+
+                            <td width="100" style="text-align: left">Fecha Desde:</td>
+                            <td width="30">&nbsp;</td>
+                            <td width="200" style="text-align: left">Fecha Hasta:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200" colspan="5" style="text-align: left">Nro. Cotizacion:</td>
+
+                        </tr>
+                        <tr class="rowbcoti" id="panelbcoti">
+
+                            <td>
+                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;"/>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="2">
+                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;"/>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_nrocoti" onkeypress="if(event.keyCode==13){buscarCotizacion();}" style="width:50%" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+
+                        <tr><td>
+                                <b>  Datos Producto / Servicio</b>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+                    </table>
+                    <table border="0" style="margin-left:45px;">
+                        <tr>
+                            <td>Titulo:
+
+                            </td>
+                        </tr>
+                        <tr class="rowdatospsm" id="rowdatospsm">
+
+
+                            <td style="text-align: left">
+                                <select id="cbotitulo" name="cbotitulo" style="width:140px;">
+                                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idcotiz,'Cmb_titulo','@idCotiz'); ?>
+                                </select>
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+    <div id="panelListaCotizacion" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
+        <table id="tblListaCotizacion"></table>
+        <div id="ptblListaCotizacion"></div>
+    </div>
+    <br/>
+</div>
+<script type="text/javascript">
+    $("#cbo_bus").combobox({
+        selected: function(event, ui){
+            if($("#cbo_bus").val()=='1'){
+                $(".clprod").show();
+                $(".clserv").hide();
+                $("#txtnombre").val("");
+
+            }else{
+                $(".clprod").hide();
+                $(".clserv").show();
+                $("#txtmodelo").val("");
+            }
+        }
+    });
+
+
+    $("#cbotitulo").combobox({
+        selected: function(event, ui){
+
+            buscarCotizacion();
+
+
+        }
+    });
+
+
+    optionPersona = {
+        width: 1100,
+        height: 250,
+        colNames: [
+            'Id',
+            'Nro Cotizacion',
+            'Fecha',
+            'idCliente',
+            'Cliente',
+            'Sub Total',
+            'IGV',
+            'Total',
+            'Venta',
+            'borrar',
+            'Editar',
+            "Vendedor",
+            "Borrar",
+            "Nuevo",
+            "Imprimir"
+        ],
+        colModel: [
+            {name: 'idCotiz', index:'idCotiz', width:100},
+            {name: 'vnroCot', index:'vnroCot', width:100},
+            {name: 'dfecCot', index:'dfecCot', width:90},
+            {name: 'idCliente', index:'idCliente', width:100, hidden: true},
+            {name: 'vNombre', index:'vNombre', width:200},
+            {name: 'nSubTot', index:'nSubTot', width:100},
+            {name: 'nIgv', index:'nIgv', width:80},
+            {name: 'nTotal', index:'nTotal', width:80},
+            {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}, formatter: chkEliminar},
+            {name: 'vhostnm', index:'vhostnm',width:100, hidden: true},
+            {name: 'vusernm', index:'vusernm', width:100, hidden: true},
+            {name: 'personal', index:'personal', width:150, hidden: false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Cotizaciones",
+        ondblClickRow: function(id){
+            var row = $(this).getRowData(id);
+            //console.log(row);
+            //dobleclickPersona(row);
+            verCotizacion();
+        },
+        afterInsertRow:function(rowid,aData){
+        switch(
+                aData.nestado
+            ){case'1':
+                break;
+            case '0':
+
+                jQuery("#tblListaCotizacion").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                jQuery("#tblListaCotizacion").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                jQuery("#tblListaCotizacion").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                jQuery("#tblListaCotizacion").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+break;
+
+
+        }
+
+
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+        }
+    };
+
+    /*
+     <div id="panelListaCotizacion" align="center" style="width: 99%;margin: 3px;">
+     <table id="tblListaCotizacion"></table>
+     <div id="ptblListaCotizacion"></div>
+     </div>
+    */
+
+    eliminar=function(a){
+        var selr = $('#tblListaCotizacion').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaCotizacion").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+           "si":function(){
+               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+               $.ajax({
+                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                   type: 'POST',
+                   cache: false,
+                   data: parameters,
+                   beforeSend: function (data) {
+
+                   },
+                   success: function (requestData) {
+                       $("#result").html(requestData);
+                       closeDialog("jqDialogConfirmacion1");
+                       closeDialog('jqDialog1');
+
+
+
+                   },
+                   error: function (requestData, strError, strTipoError) {
+                       $("#result").html("Error " + strTipoError + ': ' + strError);
+                   },
+                   complete: function (requestData, exito) {
+                   }
+
+
+               });
+           },
+
+           "no":function(){
+               closeDialog("jqDialogConfirmacion1");
+
+           }
+       })
+
+
+    };
+
+
+
+    function chkEliminar(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? '  ' : '') + '/>';
+    }
+
+    function changecheckboxcconcluirexp(rowId) {
+
+        var row = jQuery("#tblListaCotizacion").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Cambiar estado?", 350, {
+            "Si": function () {
+                var parmter = {};
+                parmter.idCotiz = row.idCotiz;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "cotizacion/cotizaciondel", parmter, updCheckconcluir, 'json');
+            },
+            "No": function () {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', false);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+    function updCheckconcluir(data) {
+        //console.log(data);
+        /*{ "Aceptar": function() { closeDialog("jqDialogInfo"); }} */
+        buscarCotizacion();
+        /*openDialogInfo("Estado Modificado", "250", "150", null, function () {
+            buscarCotizacion();
+        });*/
+    }
+
+
+
+
+
+    // -----> Borrar============================================00
+    function btndocumtall(cellvalue, options, rowObject){
+
+        return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
+            'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+            'onclick="accionborrarcotizacion(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            '<span class="ui-icon ui-icon-trash"></span></div></div>';
+    }
+
+    function accionborrarcotizacion(rowId){
+        var rowdat = jQuery("#tblListaCotizacion").jqGrid('getRowData',rowId);
+
+        var paramtrs ={ idCotiz :rowdat.idCotiz }
+        openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
+            "Si": function () {
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/cotizacion/eliminarcotizacion",
+                    type: 'POST',
+                    cache: false,
+                    data: paramtrs,
+                    beforeSend: function (data) {
+                    },
+                    success: function (requestData) {
+                        var datos=JSON.parse(requestData);
+
+
+                                console.log(datos);
+                        var parameters ={ idcotizacion :datos[0].idcotiz };
+                        buscarCotizacion();
+                        closeDialog("jqDialogConfirmacion1");
+                    },
+                    error: function (requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function (requestData, exito) {
+                    }
+                });
+            },
+            "No": function () {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+
+
+    }
+    // -----> Nuevo ====================================================
+    function btnNuevo(cellvalue, options, rowObject){
+
+        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
+    }
+
+    function accionbtnNuevo(rowId){
+        var rowdat = jQuery("#tblListaCotizacion").jqGrid('getRowData',rowId);
+        var paramtrs ={ idCotiz :rowdat.idCotiz }
+        console.log(paramtrs);
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/cotizacion/copiarcotiz",
+            type: 'POST',
+            cache: false,
+            data: paramtrs,
+            beforeSend: function (data) {
+
+            },
+            success: function (requestData) {
+                var datos=JSON.parse(requestData);
+              console.log(datos);
+                var parameters ={ idcotizacion :datos[0].idcotiz }
+                var _post = $.post(path + "cotizacion/detcotizacion", parameters);
+                _post.success(function(request) {
+                    $("#panelMantenimientoCotizacion").html(request);
+                });
+            },
+            error: function (requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function (requestData, exito) {
+            }
+       });
+
+
+
+    }
+
+    // -----> Imprimir ====================================================
+    function btnImprimir(cellvalue, options, rowObject){
+
+        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\''+options.rowId+'\');">' +
+            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
+    }
+
+    function accionbtnImprimir(rowId){
+        var rowdat = jQuery("#tblListaCotizacion").jqGrid('getRowData',rowId);
+        var paramtrs ={ idCotiz :rowdat.idCotiz }
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        window.open(host+"rptCotizacion.php?idCotiz="+ rowdat.idCotiz ,'_blank');
+    }
+
+
+
+
+
+
+    nuevaCotizacion = function(){
+        parameters = {
+            "idsigma": '0000000000'
+        };
+       // openDialogData2("mantenimientos/persona", parameters, 460);
+
+            window.open(path + "cotizacion/detcotizacion", "_self");
+
+    };
+    verCotizacion = function() {
+        var selr = $('#tblListaCotizacion').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaCotizacion").jqGrid('getRowData', selr);
+        if(row.idCotiz == "" || row.idCotiz == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idcotizacion": row.idCotiz
+        };
+
+        //openDialogData2("cotizacion/detcotizacion", parameters, 660);
+       // $.post(path + "cotizacion/detcotizacion", parameters, null, 'json');
+        var _post = $.post(path + "cotizacion/detcotizacion", parameters);
+        _post.success(function(request) {
+            $("#panelMantenimientoCotizacion").html(request);
+        });
+
+
+    };
+
+    estadoPersona = function(){
+        var selr = $('#tblListaCotizacion').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaCotizacion").jqGrid('getRowData', selr);
+        if(row.cidpers == "" || row.cidpers == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        openDialogData1("mantenimientos/estados",{codigo:row.cidpers},)
+
+    };
+
+
+    function buttonsGridPerson(){
+        $("#tblListaCotizacion")
+            .navGrid('#ptblListaCotizacion', {edit:false,add:false,del:false,search:false,refresh:false})
+
+            .navButtonAdd('#ptblListaCotizacion',{
+                caption:"Crear&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevaCotizacion();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+        /*
+            .navButtonAdd('#ptblListaCotizacion',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verCotizacion();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaCotizacion',{
+                caption:"Eliminar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    eliminar();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()*/
+
+            .navButtonAdd('#ptblListaCotizacion',{
+                caption:"Imprimir&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    imprimir();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+        ;
+    }
+
+
+    function imprimir(){
+        var selr = $('#tblListaCotizacion').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaCotizacion").jqGrid('getRowData', selr);
+//console.log(row);
+        //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.idCotiz );
+        if(row.idCotiz == "" || row.idCotiz == undefined){
+            openDialogWarning("Seleccione cotizacion.");
+            return;
+        }
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        window.open(host+"rptCotizacion.php?idCotiz="+ row.idCotiz ,'_blank');
+    }
+
+
+
+    buscarCotizacion = function() {
+
+        var titulo=$("#cbotitulo").val();
+        if(titulo=="9999999999"){
+            titulo='';
+        }
+
+        else
+        {
+            titulo=titulo;
+        }
+
+        var params = '['
+            + '["@p1_cod", "' + $("#c_codigocontrib").val() + '"],'
+            + '["@p2_nomb", "' + $("#c_nombrecontrib").val() + '"],'
+            + '["@p3_doc", "' + $("#c_nrodoc").val() + '"],'
+            + '["@p4_fini", "' + $("#fecdesde").val() + '"],'
+            + '["@p5_ffin", "' + $("#fechasta").val() + '"],'
+			+ '["@p6_ncoti", "' + $("#c_nrocoti").val() + '"],'
+			+ '["@p8_tipops", "' + $("#cbo_bus").val() + '"],'
+			+ '["@p9_prodmod", "' + $("#txtmodelo").val() + '"],'
+			+ '["@p10_descrip", "' + $("#txtdescri").val() + '"],'
+			+ '["@p11_servnom", "' + $("#txtnombre").val() + '"],'
+            + '["@p12_titulo", "' + titulo + '"]'
+            + ']';
+        parameters = {
+            "name": "tblListaCotizacion",
+            "procedure": "buscar_cotizacion",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaCotizacion"
+            , "tblListaCotizacion"
+            , optionPersona
+            , parameters
+            , null
+            , buttonsGridPerson
+        );
+    };
+
+    $(function(){
+        $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+        $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+         buscarCotizacion();
+        $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+    });
+
+
+    //themeComboBox("#cboresolu");
+    themeComboBox("#cbo_bus");
+    //themeComboBox("#cboTecno");
+    //themeComboBox("#cboTecnolo");
+
+</script>

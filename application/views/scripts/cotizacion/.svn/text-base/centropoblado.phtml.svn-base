@@ -1,0 +1,25 @@
+<div class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;margin: 3px;">
+	<div class="ui-widget ui-state-default ui-corner-top ui-title">
+		<label>CENTRO POBLADO</label>
+	</div>
+	<br/>
+	<table class="ui-tablecontent" width="50%" border="0">
+	<tr id="panelbusqueda">
+	<td>Centro Poblado: &nbsp; <input class="ui-text" id="txtbusq" /> 
+	 	<button id="btnbuscar" name="btnbuscar">Buscar</button> </td>
+	 	</tr>
+	
+	</table>	
+	
+	<div id="busqresult">
+	<div id="panelResult">
+	
+	</div>
+	</div>
+</div>
+
+
+	<br/>		
+
+
+	

@@ -1,7 +1,7 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoTecnolo=array(array("1","HDCVI"), array("2","HDTVI"),array("3","IP"), array("4","IP WIFI"), array("5","Todas"));
-$TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"), array("4","5MP (2K)"), array("5","6MP (2K)"), array("6","8MP (4K)"), array("7","12MP (4K)"), array("8","para CCTV"), array("9","para grabador"), array("10","Todas"));
+$TipoTecnolo=array(array("1","HDCVI"), array("2","IP"), array("3","IP WI-FI"), array("4","Todas"));
+$TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3"," 4MP(2K)"), array("4"," 5MP(2K)"), array("5"," 6MP(2K)"), array("6"," 8MP(4K)"), array("7"," 12MP(4K)"), array("8"," Todas"));
 
  ?>
 <div id="panelMantenimientoProductos"
@@ -9,7 +9,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
      class="ui-widget ui-widget-content ui-corner-top"
      style="width: 415px;margin: 3px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <label>Mantenimiento de Productoss</label>
+        <label>Mantenimiento de Productos</label>
     </div>
 <form id="frmproduct" name="frmproduct" method="post" enctype="multipart/form-data">
     <table border="0" class="ui-table-panelLayout">
@@ -41,7 +41,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
             </td>
             <td style="text-align: left">
                 <select id="cbocatego" name="cbocatego" style="width:140px;">
-                    <?php  //echo $this->util()->getComboContenedorOtro( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
+                    <?php  echo $this->util()->getComboContenedorOtro( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
                 </select>
             </td>
         </tr>
@@ -52,7 +52,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
             <input type="hidden" id="idsubcate" name="idsubcate" value="<?php  echo $this->idSubCat ?>">
             <td style="text-align: left">
                 <select id="cbocsubcate" name="cbocsubcate" style="width:140px;">
-                    <?php  //echo $this->util()->getComboContenedorOtro( '1',$this->idSubCat,'Cmb_SubCategoria','@idCat'); ?>
+                    <?php  echo $this->util()->getComboContenedorOtro( '1',$this->idSubCat,'Cmb_SubCategoria','@idCat'); ?>
                 </select>
             </td>
         </tr>
@@ -63,7 +63,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
             <input type="hidden" id="idmarca" name="idmarca" value="<?php  echo $this->vMarca ?>">
             <td style="text-align: left">
                 <select id="cbomarca" name="cbomarca" style="width:140px;">
-                    <?php  //echo $this->util()->getComboContenedorxDescrip( '1',$this->vMarca,'Cmb_Marca','@idCat'); ?>
+                    <?php  echo $this->util()->getComboContenedorxDescrip( '1',$this->vMarca,'Cmb_Marca','@idCat'); ?>
                 </select>
                 <span id="sp_testdd"></span>
             </td>
@@ -89,7 +89,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
             </td>
             <td style="text-align: left">
                 <select id="cboresolu" name="cboresolu" style="width:140px;">
-                    <?php  //echo $library->ContenidoComboSeleccionaporDescripcion($TipoResolucion, $this->vResolucion ,0); ?>
+                    <?php  echo $library->ContenidoCombo($TipoResolucion, $this->vResolucion ,0); ?>
                 </select>
             </td>
         </tr>
@@ -99,7 +99,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"), array("3","4MP (2K)"
             </td>
             <td style="text-align: left">
                 <select id="cboTecno" name="cboTecno" style="width:140px;">
-                    <?php  //echo $library->ContenidoComboSeleccionaporDescripcion($TipoTecnolo, $this->vTecnologia ,0); ?>
+                    <?php  echo $library->ContenidoComboSeleccionaporDescripcion($TipoTecnolo, $this->vTecnologia ,0); ?>
                 </select>
             </td>
         </tr>
