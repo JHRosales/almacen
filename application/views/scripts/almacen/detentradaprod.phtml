@@ -210,10 +210,10 @@ $("#cbtipomon").combobox({
         keys: true,
         rowNum:80,
         colNames: [
-            'Id Detalle',
-            'Id Entrada',
-            'idMaterial',
-            'Material',
+            'Id Detalle Entrada',
+            'Id Entrada Prod',
+            'IdProducto',
+            'Producto',
             'Cantidad',
             'PU',
             'P. Total',
@@ -226,13 +226,13 @@ $("#cbtipomon").combobox({
             {name: 'idEntradaProd', index:'idEntradaProd', width:80,hidden: false},
             {name: 'idProducto', index:'idProducto', width:80},
             {name: 'producto', index:'producto', width:260},
-            {name: 'nCantidad', index:'nCantidad', width:80,editable: false,editoptions: { dataInit: function (elem) {
+            {name: 'nCantidad', index:'nCantidad', width:80,editable: true,editoptions: { dataInit: function (elem) {
                 setTimeout(function(){
                     $(elem).numeric();
                 }, 100);
             }
             } },
-            {name: 'nPrecioUnit', index:'nPrecioUnit', width:80,editable: false , edittype:"text", editoptions: {   dataInit: function (elem) {
+            {name: 'nPrecioUnit', index:'nPrecioUnit', width:80,editable: true , edittype:"text", editoptions: {   dataInit: function (elem) {
                 setTimeout(function(){
                     $(elem).numeric();
                 }, 100);
@@ -264,10 +264,10 @@ $("#cbtipomon").combobox({
                 case'':
             break;
             case '1':
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idDetEntradaMat','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idEntradaMat','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idMaterial','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'material','',{background:'#ddeaa6'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idDetEntradaProd','',{background:'#ddeaa6'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idEntradaProd','',{background:'#ddeaa6'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idProducto','',{background:'#ddeaa6'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'producto','',{background:'#ddeaa6'});
             jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nCantidad','',{background:'#ddeaa6'});
             jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioUnit','',{background:'#ddeaa6'});
             jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioTotal','',{background:'#ddeaa6'});
@@ -275,11 +275,7 @@ $("#cbtipomon").combobox({
             }
         },
         onSelectRow: function(id) {
-            //var row = $(this).getRowData(id);
-           // console.log(lastsel3);
             if(lastsel3!=undefined)
-            //calcular();
-
 
             if(id && id!==lastsel3){
                 jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
@@ -733,6 +729,7 @@ function btncalcular(cellvalue, options, rowObject){
 
 
 function AgregarSeries(rowId) {
+jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
 var row = jQuery("#tblDetEntradaProd").jqGrid('getRowData', rowId);
 //calcular();
 //actualizarcantdetalleCot();

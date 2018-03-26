@@ -693,7 +693,7 @@ if ($idsigma=='...'){
 
             } else {
                 $this->view->idmate = $datos[0]['idMaterial'];
-                $this->view->vNombre = $datos[0]['vNombreMat'];
+                $this->view->vNombre = $datos[0]['vNombre'];
                 $this->view->idTipoMaterial = $datos[0]['idTipoMaterial'];
                 $this->view->vMarca = $datos[0]['vMarca'];
                 $this->view->idUnidadMedida = $datos[0]['idUnidadMed'];

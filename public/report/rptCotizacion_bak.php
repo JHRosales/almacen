@@ -142,7 +142,7 @@ class PDF1 extends TCPDF{
 		$this->SetXY($x,$h+6);
 		$this->MultiCell(80,5,'Condiciones de la instalacion',0,'L');
 		$this->SetXY($x,$h+10);
-		$this->MultiCell(150,5,'El cliente brindará las facilidades para la instalación, incluyendo los permisos necesarios.',0,'L');
+		$this->MultiCell(150,5,'El cliente brindara las facilidades para la instalaion, incluyendo los permisos necesarios.',0,'L');
 		$this->SetXY($x,$h+20);
 		$this->MultiCell(180,5,'Condiciones Comerciales',0,'L');
 		$this->SetXY($x,$h+25);
@@ -241,7 +241,7 @@ class PDF1 extends TCPDF{
 
             $this->SetFont('times', '', 11);
             $this->SetXY($lw,$lh+29);
-            $this->MultiCell(100,5,"Por medio de la presente le enviamos la cotización solicitada",0,'J');
+            $this->MultiCell(100,5,"Por medio de la presente le enviamos la cotizacion solicitada",0,'J');
 
 
             $this->SetFont('times', 'B', 11);
@@ -277,7 +277,7 @@ class PDF1 extends TCPDF{
 
             $this->SetFont('times', '', 11);
             $this->SetXY($lw,$lh+27);
-            $this->MultiCell(100,5,"Por medio de la presente le enviamos la cotización solicitada.",0,'J');
+            $this->MultiCell(100,5,"Por medio de la presente le enviamos la cotizacion solicitada.",0,'J');
 
             $this->SetFont('times', 'B', 11);
             $this->SetXY($lw,$lh+34);
@@ -310,7 +310,7 @@ CONVERT(varchar, convert(money, nSubTot), 1)as nSubTot
   Case when b.tipoPS!='1' then ''
  else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv,
  coalesce(a.tiempEntrega,'') as tentrega , coalesce(a.vGarantia,'') as garantia,
- p.vNombre as personal,  p.vCargo as cargo,a.nTasaCambio,
+ p.vNombre as personal, a.nTasaCambio,
   a.vNota ,a.vDisco,a.vFormaPago
   /*case when dbo.tieneServ(a.idCotiz)='1' then 'Adelanto del 50% del total y al finalizar el pago del 50% con la conformidad de la Obra.' else 'Al contado' end*/ as formapago
    ,
@@ -325,7 +325,7 @@ left join personal p on a.idPersonal=p.idPersonal
 where a.idCotiz=$idcotiz
 and (opcional is null or opcional='' or opcional='0' )
 group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nIgv,a.nTotal,b.vNombrePSM,b.nCantidad,c.idCliente,
-c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre,p.vCargo, a.nTasaCambio,b.tipops, a.vMotivo,c.vPersContac,a.nTipoMoneda,a.vFormaPago,a.vNota,a.vDisco
+c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre, a.nTasaCambio,b.tipops, a.vMotivo,c.vPersContac,a.nTipoMoneda,a.vFormaPago,a.vNota,a.vDisco
 order by tipoPS,subcat,b.vNombrePSM desc");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
@@ -410,7 +410,6 @@ $pdf->SetXY($lw+2.5,$lh = $var1);
 
 
 $personal = $rowTipoP['personal'];
-$cargo = $rowTipoP['cargo'];
 $garantia = $rowTipoP['garantia'];
 $tentrega = $rowTipoP['tentrega'];
 $formapago = $rowTipoP['formapago'];
@@ -463,17 +462,7 @@ while($N < $numRows) {
 	}
 	$tipops= $row['tipops'];
 if($tipops=='2'){
-    $saltos=substr_count($det, '<br>');
-    /*if($saltos>1){
-        $saltos=5;
-    }else{
-        $saltos=2;
-    }*/
-
-
-
-
-	$modelo=str_repeat('<br>',$saltos-2).$Nombre;
+	$modelo='<br>'.'<br>'.'<br>'.$Nombre;
 	$Nombre='';
     $det=$det.'<br>';
 
@@ -482,19 +471,19 @@ if($tipops=='2'){
 	$numlineas=$cantiletras/70;
 		$numsaltos = $numlineas+1;*/
 
-    $x='<b>'.'Condiciones de la instalación: '.'</b>'.'<br>'.'El cliente brindará las facilidades para la instalación, incluyendo los permisos necesarios.'.'<br>'.'<br>';
+    $x='<b>'.'Condiciones de la instalación: '.'</b>'.'<br>'.'El cliente brindara las facilidades para la instalaion, incluyendo los permisos necesarios.'.'<br>'.'<br>';
 
 
     $html .= '
 	<tr nobr="true" style="text-align: center; vertical-align: 10%">
-	<td width="30px" >'.str_repeat('<br>',$saltos).($N+1).'</td>
+	<td width="30px" >'.str_repeat('<br>',5).($N+1).'</td>
 	<td width="142px" style="font-size: 9px;" ><b><br>'.$modelo.'</b><br>'.$img.'</td>
-	<td width="35px">'.str_repeat('<br>',$saltos).$cant.'</td>
+	<td width="35px">'.str_repeat('<br>',5).$cant.'</td>
 	<td  align="left" width="355px"><b>'.$Nombre.'</b>'.
         $det.'
 </td>
-	<td width="63.5px" >'.str_repeat('<br>',$saltos).$pu.'</td>
-	<td width="64px" >'.str_repeat('<br>',$saltos).$vTipoMoneda.' '.$pt.'</td>';
+	<td width="63.5px" >'.str_repeat('<br>',5).$pu.'</td>
+	<td width="64px" >'.str_repeat('<br>',5).$vTipoMoneda.' '.$pt.'</td>';
 
     $html .= '	</tr>';
 
@@ -589,20 +578,16 @@ if($tieneOpcional>0){
 //OPCIONAL
 $Rs_opcional = new TSPResult($ConeccionRatania,"");
 $Rs_opcional->Poner_MSQL("select a.idCotiz,b.vNombrePSM,
- --sum(b.nPrecUnit) as nPrecUnit,
- --Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)  as nPrecTotal ,
-   Case when b.tipoPS!='1' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end as nPrecUnit,
-   Case when b.tipoPS!='1' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,cast(sum(b.nPrecTotal)as numeric(12,2))
-  as nPrecTotal,
-
-  Case when b.tipoPS!='1' then '1.jpg'
+ sum(b.nPrecUnit) as nPrecUnit,Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then '-'
+ else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)
+  as nPrecTotal ,Case when b.tipoPS!='1' then '1.jpg'
  else  dbo.imgadjunto(b.idProdServ)   end as img,
   Case when b.tipoPS!='1' then ''
  else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv
   ,dbo.detalleservicio_opcional(a.idCotiz,b.vNombrePSM,b.idprodserv) as detalle,b.tipops,
 
   case when b.tipoPS!='1' then REPLACE(dbo.detalleservicio_opcional(a.idCotiz,b.vNombrePSM,b.idprodserv),CHAR(10),'<br>') else
-   dbo.detalleservicio_opcional(a.idCotiz,b.vNombrePSM,b.idprodserv) end as detalle
+   dbo.detalleservicio(a.idCotiz,b.vNombrePSM,b.idprodserv) end as detalle
 
   from compras.cotizacion
 a left join compras.detCotizacion b on a.idCotiz =b.idCotiz
@@ -655,14 +640,7 @@ $numRows = $Rs_opcional->pg_Num_Rows();
         }
         $tipops= $row['tipops'];
         if($tipops=='2'){
-            $saltos=substr_count($det, '<br>');
-            /*if($saltos>1){
-                $saltos=5;
-            }else{
-                $saltos=2;
-            }*/
-
-            $modelo=str_repeat('<br>',$saltos-2).$Nombre;
+            $modelo='<br>'.'<br>'.'<br>'.$Nombre;
             $Nombre='';
             $det=$det.'<br>';
         }else{
@@ -673,17 +651,17 @@ $numRows = $Rs_opcional->pg_Num_Rows();
         $Nombre = str_replace("</p>",'',$Nombre);
         $htmlOpcional .= '
 	<tr nobr="true">
-	<td width="30px" align="center" >'.str_repeat('<br>',$saltos).($N+1).'</td>
+	<td width="30px" align="center" >'.str_repeat('<br>',5).($N+1).'</td>
 
 	<td width="142px" align="center" ><b><br>'.$modelo.'</b> <BR>'.$img.'</td>
 
-	<td width="35px" align="center" style="vertical-align: middle">'.str_repeat('<br>',$saltos).$cant.'</td>
+	<td width="35px" align="center" style="vertical-align: middle">'.str_repeat('<br>',5).$cant.'</td>
 
 	<td  align="left" width="355px"><b>'.$Nombre.'</b>'.
             $det.'
 </td>
-	<td width="63.5px" align="center" style="text-align:center;vertical-align:middle">'.str_repeat('<br>',$saltos).$vTipoMoneda.' '.$pu.'</td>
-	<td width="64px" align="center" valign="middle">'.str_repeat('<br>',$saltos).$vTipoMoneda.' '.$pt.'</td>';
+	<td width="63.5px" align="center" style="text-align:center;vertical-align:middle">'.str_repeat('<br>',5).$vTipoMoneda.' '.$pu.'</td>
+	<td width="64px" align="center" valign="middle">'.str_repeat('<br>',5).$vTipoMoneda.' '.$pt.'</td>';
         $htmlOpcional .= '	</tr>';
         $Rs_opcional->pg_Move_Next();
         $N ++;
@@ -692,7 +670,7 @@ $numRows = $Rs_opcional->pg_Num_Rows();
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL OPCIONAL INCLUIDO IGV</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 11px;">
-<b><span style="color: red"> '.$vTipoMoneda.' '.number_format($totalop, 2, '.', ',').'</span></b>
+<b><span style="color: red"> '.$vTipoMoneda.' '.$totalop.'</span></b>
 </td></tr>';
 $htmlOpcional .= '
 </table>
@@ -702,11 +680,11 @@ $pdf->writeHTML($htmlOpcional, true, false, true, false, '');
 }
 
 if ($tentrega > '1') {
-    $msj= $tentrega." días hábiles";
+    $msj= $tentrega." días habiles";
 } elseif ($tentrega == ' ' or $tentrega == '0') {
     $msj= "Inmediata";
 } else {
-    $msj= $tentrega." día hábil";
+    $msj= $tentrega." día habil";
 }
 
 
@@ -716,7 +694,7 @@ if($disco == ' ' or $disco == '0' ){
 
 else{
 
-    $ms='Grabación aproximada del disco duro '.$disco.' días'.'<br>';
+    $ms='Grabacion aproximada del disco duro '.$disco.' días'.'<br>';
 }
 
 
@@ -748,12 +726,12 @@ Cuenta corriente BCP Soles: 191-1964430-0-26
 Cuenta corriente BCP dólares: 191-2040241-1-04
 <br>
 <br>
-Atte.
+Atte
 <br><br>
 
 <b> '.$personal.'</b><br>
-'.$cargo.'
-
+Asesor de ventas
+DHL Security
 <br>
 
 
@@ -782,7 +760,7 @@ function limpia_espacios($cadena){
 }
 
 
-$pdf->Output('COTIZACION '.$nroCotiz.'_'.str_replace(' ', '   ', $motivo).'.pdf', 'I');
+$pdf->Output('COTIZACION '.$nroCotiz.'_'.str_replace(' ', '', $motivo).'.pdf', 'I');
 
 
 

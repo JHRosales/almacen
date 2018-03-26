@@ -26,7 +26,7 @@ var config = {
         ],
         colModel: [
             {name: 'idMaterial', index:'idMaterial', width:60},
-            {name: 'vNombreMat', index:'vNombreMat', width:150},
+            {name: 'vNombre', index:'vNombre', width:150},
             {name: 'idTipoMaterial', index:'idTipoMaterial', hidden:true},
             {name: 'vTipoMaterial', index:'vTipoMaterial', width:120},
             {name: 'vMarca', index:'vMarca', width:100},
