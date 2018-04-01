@@ -6,7 +6,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
 
 
 <div  id="panelMantenimientoEntradaProd" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
         <label>Mantenimiento - Entrada Productos</label>
     </div>
     <input type="hidden" id="identradaprod" name="identradaprod" value="<?php echo $this->idEntradaProd;?>">
@@ -110,7 +110,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
         <tr>
             <td><button id="btncancelardet" name="btncancelardet">Cancelar</button></td>
         <td>
-            <button id="btnguardar" name="btnguardar" onclick="GuardardetalleCot()">Guardar</button>
+            <button id="btnguardar" name="btnguardar" onclick="GuardardetalleEProd()">Guardar</button>
         </td>
         </tr>
 
@@ -176,7 +176,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
 
 <script type="text/javascript">
 themeComboBox();
-
+/*
 function validarTipoCambio(tipo){
     switch(tipo){
         case '1' : // Dolares
@@ -199,7 +199,7 @@ $("#cbtipomon").combobox({
         ActualizarMontos();
     }
 });
-
+*/
 
 
     var lastsel3;
@@ -207,7 +207,6 @@ $("#cbtipomon").combobox({
         datatype: "local",
         width: 950,
         height: 250,
-        keys: true,
         rowNum:80,
         colNames: [
             'Id Detalle Entrada',
@@ -245,7 +244,7 @@ $("#cbtipomon").combobox({
             }}
             },
             {name: 'vEstado', index:'vEstado', width:100, hidden: true,editable: false},
-            { name: 'btndocumall', index: 'btndocumall', width: 60, align: 'center' ,formatter : btncalcular,search:false,hidden:false},
+            { name: 'btndocumall', index: 'btndocumall', width: 60, align: 'center' ,formatter : btnAgregarserie,search:false,hidden:false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndelete,search:false}
             //{name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left', formatter: linkadjunto},
             // {name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left',hidden:true},
@@ -254,7 +253,7 @@ $("#cbtipomon").combobox({
         caption: "&nbsp;&nbsp;&nbsp;Detalle de entrada Productos",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
-            EditPSM();
+            EditProducto();
             //console.log(row);
             //dobleclickPersona(row);
           //  verCotizacion();
@@ -276,6 +275,7 @@ $("#cbtipomon").combobox({
         },
         onSelectRow: function(id) {
             if(lastsel3!=undefined)
+                    calcular();
 
             if(id && id!==lastsel3){
                 jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
@@ -305,19 +305,16 @@ $("#cbtipomon").combobox({
                 }
             }
         },
-        aftersavefunc: function (rowid) { // can add jqXHR, sentData, options
-            alert(rowid + " is saved");
-        },
         loadComplete: function(){
             $("tr.jqgrow", this).contextMenu('myMenu1', {
                 bindings: {
                     'edit': function(trigger) {
                         // trigger is the DOM element ("tr.jqgrow") which are triggered
-                        EditPSM();
+                        EditProducto();
                         //jQuery('#tblDetEntradaProd').editGridRow(trigger.id, "");
                     },
-                    'add': function(/*trigger*/) {
-                        nuevaPSM();
+                    'add': function() {
+                        nuevoProducto();
                         //jQuery('#tblDetEntradaProd').editGridRow("new", "");
                     },
                     'del': function(trigger) {
@@ -330,7 +327,7 @@ $("#cbtipomon").combobox({
                         }
                     }
                 },
-                onContextMenu: function(event/*, menu*/) {
+                onContextMenu: function(event, menu) {
                     var rowId = $(event.target).closest("tr.jqgrow").attr("id");
                     //grid.setSelection(rowId);
                     // disable menu for rows with even rowids
@@ -351,7 +348,8 @@ $("#cbtipomon").combobox({
 
     buscarProveedor = function(){
         parameters = {
-            "idsigma":  $("#identradamat").val()
+            "idsigma":  $("#identradaprod").val(),
+            "pag":"2"
         };
         openDialogData1("almacen/buscarpersona", parameters, 660,500);
         //   window.open(path + "mantenimientos/backup", "_self");
@@ -411,7 +409,7 @@ function linkadjuntoOpen(rowId, cellvalue) {
     window.open(path + "mantenimientos/forzardescarga?file=" +  cellvalue);
 }
 
-
+/*
 function ActualizarMontos() {
 
     jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
@@ -460,7 +458,7 @@ function ActualizarMontos() {
 
     }
     return true;
-};
+};*/
 
     function calcular() {
         var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
@@ -468,11 +466,8 @@ function ActualizarMontos() {
         }else{
             return;
         }
-
-        console.log(lastsel3);
         if(lastsel3==undefined){
             lastsel3=1;}
-        console.log(lastsel3);
        jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
         gsrr = jQuery("#tblDetEntradaProd").jqGrid('getRowData');
       //var nrowid = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
@@ -501,22 +496,20 @@ function ActualizarMontos() {
         return true;
     };
 
-    GuardardetalleCot = function(){
-      /*  jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
+GuardardetalleEProd = function(){
+        jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
         var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
         if (rows.length > 0) {
-            var subtotal = 0;
             for (var i=0;i<rows.length;i++) {
                 var row=rows[i];
                 parameters = {
-                    "idDetCotiz": row.idDetCotiz,
+                    "idDetEntradaProd": row.idDetEntradaProd,
                     "nPrecioUnit": row.nPrecioUnit,
                     "nCantidad": row.nCantidad,
-                    "nPrecTotal": row.nPrecioTotal,
-                    "nDescu": row.nDesc
+                    "nPrecTotal": row.nPrecioTotal
                 };
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/detcotizacionupdate",
+                    url: jQuery.scriptPath + "index.php/almacen/detentradaprodupdate",
                     type: 'POST',
                     cache: false,
                     data: parameters,
@@ -527,12 +520,12 @@ function ActualizarMontos() {
                     complete: function (requestData, exito) {    }
                 });
             }
-        }*/
+        }
 
 
         var tieneDes=0;
         parameters1 = {
-            "idsigma":  $("#identradamat").val(),
+            "idsigma":  $("#identradaprod").val(),
             "subtotal":  $("#txtsubtotal").val(),
             "igv":  $("#txtigv").val(),
             "total":  $("#txttotal").val(),
@@ -542,7 +535,7 @@ function ActualizarMontos() {
 
         };
         $.ajax({
-            url: jQuery.scriptPath + "index.php/almacen/entradamatupdate",
+            url: jQuery.scriptPath + "index.php/almacen/entradaprodupdate",
             type: 'POST',
             cache: false,
             data: parameters1,
@@ -556,45 +549,45 @@ function ActualizarMontos() {
         });
 
     };
-    nuevaPSM = function(){
+
+    nuevoProducto = function(){
+
         parameters = {
-            "idsigma": $("#identradamat").val()
+            "idsigma": $("#identradaprod").val()
         };
-        openDialogData1("almacen/addpsm", parameters, 560,560);
+        openDialogData1("almacen/addproducto", parameters, 650,560);
 
     };
-EditPSM= function(){
-    var selr = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
-    var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
-    if(row.idDetEntradaMat == "" || row.idDetEntradaMat == undefined){
-        openDialogWarning("Seleccione un registro para editar.");
-        return;
-    }
-    parameters = {
-        "idsigma": $("#identradamat").val(),
-        "iddetentrada": row.idDetEntradaMat,
-        "idMaterial":row.idMaterial,
-        "nCantidad":row.nCantidad,
-        "nPrecioUnit":row.nPrecioUnit
-    };
-    openDialogData1("almacen/addpsm", parameters, 560,560);
+    EditProducto= function(){
+        var selr = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
+        var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
+        if(row.idDetEntradaProd == "" || row.idDetEntradaProd == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": $("#identradaprod").val(),
+            "iddetentrada": row.idDetEntradaProd,
+            "idProducto":row.idProducto
+        };
+        openDialogData1("almacen/addproducto", parameters, 650,560);
 
-};
+    };
 /*addopcional= function(){
     parameters = {
-        "idsigma": $("#identradamat").val(),
+        "idsigma": $("#identradaprod").val(),
         "opcional": 1
     };
     openDialogData1("almacen/addpsm", parameters, 560,500);
-};*/
+};
+    crearmaterial = function(){
+        parameters = {
+            "idsigma": '...'
+        };
 
-crearmaterial = function(){
-    parameters = {
-        "idsigma": '...'
+        openDialogData2("mantenimientos/material", parameters, 460,200);
     };
 
-    openDialogData2("mantenimientos/material", parameters, 460,200);
-};
 addMaterial=function(a){
     var selr = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
     var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
@@ -608,14 +601,14 @@ addMaterial=function(a){
     parameters = {
         "idsigma": row.idProdServ,
         "nombre": row.vNombrePSM,
-        "idcotizacion":  $("#identradamat").val(),
+        "idcotizacion":  $("#identradaprod").val(),
         "Descripcion":  row.vDescrip
     };
 
     openDialogData1("mantenimientos/agregarmaterialserv", parameters, 460,460);
     // closeDialog("jqDialog2");
 };
-
+ */
 
 
     function buttonsGridDetcoti(){
@@ -626,7 +619,7 @@ addMaterial=function(a){
                 caption:"Agregar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-plus",
                 onClickButton: function(){
-                    nuevaPSM();
+                    nuevoProducto();
                 },
                 position:"last"
             })
@@ -636,7 +629,7 @@ addMaterial=function(a){
                 caption:"Editar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-pencil",
                 onClickButton: function(){
-                    EditPSM();
+                    EditProducto();
                 },
                 position:"last"
             })
@@ -672,7 +665,7 @@ addMaterial=function(a){
         var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
 
         host = '<?php echo $this->util()->getPath(); ?>report/';
-         window.open(host+"rptCotizacion.php?idCotiz="+ $("#identradamat").val() ,'_blank');
+         window.open(host+"rptCotizacion.php?idCotiz="+ $("#identradaprod").val() ,'_blank');
      //console.log(host);
 
     }
@@ -692,7 +685,7 @@ function eliminardetentradama(rowId) {
     openDialogConfirm1("Eliminar Registro?", 350, {
         "Si": function () {
             var parmter = {};
-            parmter.idDetEntradaMat = row.idDetEntradaMat;
+            parmter.idDetEntradaProd = row.idDetEntradaProd;
             closeDialog("jqDialogConfirmacion1");
             $.post(path + "almacen/detentradamatdel", parmter, updCheckdelete, 'json');
         },
@@ -704,21 +697,14 @@ function eliminardetentradama(rowId) {
     });
 }
 function updCheckdelete(data) {
-    //console.log(data);
-    /*{ "Aceptar": function() { closeDialog("jqDialogInfo"); }} */
     lastsel3=undefined
     buscarDetEntradaProd();
-    /*openDialogInfo("Eliminado", "250", "150", null, function () {
-         lastsel3=undefined
-     buscarDetEntradaProd();
-
-    });*/
 }
 
 
 
 // -----> Calcular============================================00
-function btncalcular(cellvalue, options, rowObject){
+function btnAgregarserie(cellvalue, options, rowObject){
 
     return '<div align="center" class="ui-pg-button " ' +
         'title="Calcular" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
@@ -729,10 +715,10 @@ function btncalcular(cellvalue, options, rowObject){
 
 
 function AgregarSeries(rowId) {
+    console.log(lastsel3);
 jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
 var row = jQuery("#tblDetEntradaProd").jqGrid('getRowData', rowId);
-//calcular();
-//actualizarcantdetalleCot();
+calcular();
     parameters = {
         "idsigma":row.idDetEntradaProd,
         "idProducto":row.idProducto,
@@ -774,7 +760,7 @@ var row = jQuery("#tblDetEntradaProd").jqGrid('getRowData', rowId);
     }
 
 
-actualizarcantdetalleCot = function(){
+/*actualizarcantdetalleCot = function(){
     jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
     var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
     if (rows.length > 0) {
@@ -782,7 +768,7 @@ actualizarcantdetalleCot = function(){
         for (var i=0;i<rows.length;i++) {
             var row=rows[i];
             parameters = {
-                "idDetCotiz": row.idDetCotiz,
+                "idDetCotiz": row.idDetEntradaProd,
                 "nPrecioUnit": row.nPrecioUnit,
                 "nCantidad": row.nCantidad,
                 "nPrecioTotal": row.nPrecioTotal,
@@ -803,26 +789,19 @@ actualizarcantdetalleCot = function(){
         }
     }
 
-}
+}*/
 
 
     $(function(){
         $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
         $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-       /* var mydata = [
-            {idDetEntradaMat:"1",identradaprod:"1",idMaterial:"2",material:"sss",nCantidad:"1",nPrecioUnit:"200.00",nPrecioTotal:"10.00",vEstado:"0"},
-            {idDetEntradaMat:"2",identradaprod:"1",idMaterial:"2",material:"sss",nCantidad:"1",nPrecioUnit:"200.00",nPrecioTotal:"10.00",vEstado:"0"}
-        ];
-       inicializarGrid("tblDetEntradaProd",optionDetEntradaProd,null,buttonsGridDetcoti);
-         for(var i=0;i<=mydata.length;i++)
-          jQuery("#tblDetEntradaProd").jqGrid('addRowData',i+1,mydata[i]);*/
 
         buscarDetEntradaProd();
 
 
-        $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
-        $("#btnguardar").button({icons: {primary: "ui-icon-disk"}});
-        $("#btncancelardet").button({icons: {primary: "ui-icon-cancel"}}).click(function () {
+        $("#btnbuscar").button(ICON_SEARCH);
+        $("#btnguardar").button(ICON_SAVE);
+        $("#btncancelardet").button(ICON_CANCEL).click(function () {
             Cancelar('');
         });
 
@@ -838,11 +817,8 @@ function reiniCombo(celement){
     $("option[value='9999999999']",xelem).attr("selected", "selected");
     //xelem.combobox();
 }
-
+/*
 function visorarchivo(nom_archivo) {
-    /*openDialogDataFunction1("documentos/ddocumentomante", { type: "M", ddocument: row.idsigma,cidsigma :$('#cidsigma').val(),ctipjerar: $('#ctipjerar').val() }, "980", "630", "Modificar Documento " + row.dstipdocu, null, { 'Aceptar': function() { DdocumentoSave('M'); }, 'Cancelar': function() { closeDialog("jqDialog1"); } });*/
-//http://localhost:81/titaniaSQL/public/uploadDdocuments/
-//console.log(jQuery.scriptPath+'uploadDdocuments/'+nom_archivo);
     var page = '';
     arrarchivo = nom_archivo.split(".");
     extarchivo = arrarchivo[1];
@@ -901,10 +877,6 @@ function visorarchivo(nom_archivo) {
             $dialog.dialog('open');
 
         }
-
-
-
-
     } else {
         page = jQuery.scriptPath + 'FichaTecnica/' + nom_archivo;
         var $dialog = $('<div></div>')
@@ -918,6 +890,6 @@ function visorarchivo(nom_archivo) {
             });
         $dialog.dialog('open');
     }
-}
+}*/
 
 </script>

@@ -8,10 +8,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-rojo ui-corner-top ui-title">
-        <label>Mantenimiento - Salida Materiales</label>
+    <div class="ui-widget ui-state-azul ui-corner-top ui-title">
+        <label>Mantenimiento - Retorno Prodcuto</label>
     </div>
-    <input type="hidden" id="idsalidamat" name="idsalidamat" value="<?php echo $this->idSalidaMat;?>">
+    <input type="hidden" id="idRetornoMat" name="idRetornoMat" value="<?php echo $this->idRetornoMat;?>">
+    <input type="hidden" id="idSalidaMat" name="idSalidaMat" value="<?php echo $this->idSalidaMat;?>">
 
     <div id="panelPapeleta" align="center" class="ui-widget ui-widget-content ui-corner-all"
          style="width: 99%;margin: 3px;padding-bottom: 5px;">
@@ -19,10 +20,14 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:45px;">
+
                         <tr>
+
                             <td  style="text-align: left" colspan="4">Obra:</td>
                             </tr>
+
                         <tr>
+
                             <td colspan="4">
                                 <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="10" style="width:100%" />
                             </td>
@@ -40,7 +45,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <tr class="rowbcoti" id="panelbcoti">
 
                             <td>
-                                <input type="text" id="fecsalida" value="<?php echo $this->dFecSalida;?>"  class="ui-text-disable " readonly style="text-align: left;width: 80px;"/>
+                                <input type="text" id="fecsalida" value="<?php echo $this->dFecRetorno;?>"  class="ui-text-disable " readonly style="text-align: left;width: 80px;"/>
                             </td>
                            <td>&nbsp; </td>
                             <td class="soloSolesa">&nbsp;<input type="text" class="ui-text pnl" id="txtlugar"   value="<?php  echo $this->lugar; ?>"  style="width:96%" /></td>
@@ -85,7 +90,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <label>Materiales </label>
         </div>
         <div style="text-align: left" >
-            <button id="btnTestigoAgregar">Agregar</button>
+            <button id="btnRegistroAgregar" style="display: none">Agregar</button>
         </div>
         <table id="tableTestigos" border="1" class="ui-widget ui-widget-content">
             <thead>
@@ -94,19 +99,20 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 <th>Material</th>
                 <th>Unidad de Medida</th>
                 <th>Stock</th>
-                <th>Buscar</th>
-                <th>Cantidad</th>
+                <th>Cantidad Salida</th>
+                <th>Cantidad Retorno</th>
+                <th>Observacion</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr style="display: none;">
                 <td>
-                    <input type="hidden" name="txtidDetSalidaMat" id="txtidDetSalidaMat"/>
-                    <input id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input type="hidden" name="txtidDetRetornoMat" id="txtidDetRetornoMat"/>
+                    <input id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                 </td>
                 <td>
-                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
+                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
                 </td>
                 <td>
                     <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
@@ -115,10 +121,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
                 </td>
                 <td>
-                    <button id="btnTestigoBuscarPersona">Buscar</button>
+                    <input id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"   style="width:90px"  >
                 </td>
                 <td>
-                    <input id="txtCantidad"  name="txtCantidad" class="ui-text"  style="width:150px"  >
+                    <input id="txtCantidadretorno"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
+                </td>
+                <td>
+                    <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"></textarea>
                 </td>
                 <td>
                     <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -126,27 +135,30 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     </div>
                 </td>
             </tr>
-            <?php foreach ($this->detSalidaMat as $value) { ?>
+            <?php foreach ($this->detMateriales as $value) { ?>
 
                 <tr>
                     <td>
-                        <input value="<?php echo $value["idDetSalidaMat"]; ?>" type="hidden" name="txtidDetSalidaMat" id="txtidDetSalidaMat" />
-                        <input value="<?php echo $value["idMaterial"]; ?>" id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["idDetRetornoMat"]; ?>" type="hidden" name="txtidDetRetornoMat" id="txtidDetRetornoMat" />
+                        <input value="<?php echo $value["idMaterial"]; ?>" id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
+                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["UnidadMediad"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["unidadMedida"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                     </td>
                     <td>
                         <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
                     </td>
                     <td>
-                        <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
+                        <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"  style="width:90px"  >
                     </td>
                     <td>
-                        <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad"  name="txtCantidad" class="ui-text" style="width:150px"  >
+                        <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
+                    </td>
+                    <td>
+                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"><?php echo $value["vObserv"]; ?></textarea>
                     </td>
                     <td>
                         <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -325,7 +337,7 @@ $("#cbformapago").combobox({
 
 //Funcion para regresar al la grilla naterior
     function Cancelar(){
-        window.open(path + "almacen/salidamat", "_self");
+        window.open(path + "almacen/salidaprod", "_self");
     }
 
 
@@ -339,7 +351,7 @@ cargarCategoria = function () {
 
 }
 
-buscarMaterialSalida = function (d) {
+buscarMaterialRetorno = function (d) {
     console.log(d);
     __gridConfigMaterial.data = [];
     __gridConfigMaterial.ondblClickRow = function (rowid) {
@@ -348,7 +360,6 @@ buscarMaterialSalida = function (d) {
             $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
             $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombreMat);
             $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
-            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
 //                $("#txtTestigoCodigoPersona").val(row.cidpers);
 //                $("#txtTestigoDNI").val(row.vnrodoc);
 //                $("#txtUnidadMedida").val(row.crazsoc);
@@ -385,9 +396,9 @@ agregarFilaTable = function (id) {
     }).end().appendTo("#" + id);
 
     themeComboBox("#" + id_combobox);
-    $("#btnTestigoBuscarPersona_" + id + "_" + i).button().click(function () {
+    $("#btnBuscarMaterial_" + id + "_" + i).button().click(function () {
         invocaBusPersona = 1;
-        buscarMaterialSalida(this);
+        buscarMaterialRetorno(this);
 
     });
     i++;
@@ -396,10 +407,11 @@ agregarFilaTable = function (id) {
 $(function () {
     $("#fecsalida").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#div_titulo").html("Almacen => Retorno Materiales");
 
     $("#btnbuscartec").button({icons: {primary: "ui-icon-search"}});
-    $("#btnguardar").button({icons: {primary: "ui-icon-disk"}}).click(function () {
-        Guardar();
+    $("#btnguardar").button({icons: {primary: "ui-icon-disk"}}).click(function(){
+        guardar();
     });
     $("#btncancelardet").button({icons: {primary: "ui-icon-cancel"}}).click(function () {
         Cancelar('');
@@ -407,12 +419,12 @@ $(function () {
 
 // clone inspector
 
-    $("#btnTestigoBuscarPersona").button("destroy");
+    $("#btnBuscarMaterial").button("destroy");
     agregarFilaTable("tableTestigos");
-    $("#btnTestigoAgregar").click(function () {
+    $("#btnRegistroAgregar").click(function () {
         agregarFilaTable("tableTestigos");
     });
-    $("#btnTestigoAgregar").button({icons: {primary: "ui-icon-plus"}});
+    $("#btnRegistroAgregar").button({icons: {primary: "ui-icon-plus"}});
 //fin clone inspector
 
     //--- Buscar persona
@@ -444,47 +456,39 @@ $(function () {
 
 
 
-  function Guardar() {
+    function guardar() {
 
         var detallesalida = {};
         var materiales = [];
 
-      //Datos generales del salida de Materiales
-      detallesalida.idSalidaMat = $("#idsalidamat").val();
-      detallesalida.obra = $("#txtobra").val();
-      detallesalida.lugar = $("#txtlugar").val();
-      detallesalida.fecha = $("#fecsalida").val();
-      detallesalida.idtecnico = $("#txtidtecnico").val();
+        //Datos generales del salida de Materiales
+        detallesalida.idRetornoMat = $("#idRetornoMat").val();
+        detallesalida.idSalidaMat = $("#idSalidaMat").val();
+        detallesalida.obra = $("#txtobra").val();
+        detallesalida.lugar = $("#txtlugar").val();
+        detallesalida.fecha = $("#fecsalida").val();
+        detallesalida.idtecnico = $("#txtidtecnico").val();
 
-      if($("#txtidtecnico").val()==""){
-          openDialogWarning("Seleccione un tecnico encargado.");
-          return;
-      }
-      if( $("#fecsalida").val()==""){
-          openDialogWarning("Seleccione la fecha.");
-          return;
-      }
-        //Datos materiales
+        //Datos del Testigo
         $('#tableTestigos > tbody  > tr').each(function () {
             var detMateriales = {};
-            if ($(this).find("[name=txtCodigoMaterial]").val() != '') {
-                detMateriales.idDetSalidaMat = $(this).find("[name=txtidDetSalidaMat]").val();
+            if ($(this).find("[name=txtCodigoMaterial]").val() != '' ) {
+                detMateriales.idDetRetornoMat = $(this).find("[name=txtidDetRetornoMat]").val();
                 detMateriales.idMaterial = $(this).find("[name=txtCodigoMaterial]").val();
-                detMateriales.Cantidad = $(this).find("[name=txtCantidad]").val();
+                detMateriales.cantidadRetorno = $(this).find("[name=txtCantidadretorno]").val();
+                detMateriales.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
                 materiales.push(detMateriales);
             }
         });
-      detallesalida.materiales = materiales;
+        detallesalida.materiales = materiales;
 
-        var pSalidaMat = {};
-      pSalidaMat.objSalidaMat = JSON.stringify(detallesalida);
+        var pRetornoMat = {};
+        pRetornoMat.objSalidaMat = JSON.stringify(detallesalida);
         //console.log(JSON.stringify(pPapeleta));
         //console.log(papeleta);
-
-
-        $.post(path + "almacen/guardarsalidamat", pSalidaMat, function (data) {
+        $.post(path + "almacen/guardarretornomat", pRetornoMat, function (data) {
             console.log(data);
-             console.log(data["idSalidaMat"]);
+            console.log(data["idRetornoMat"]);
             if (data["a"] == '0') {
                 openDialogInfo(data["b"], "280", "150", null, function () {
                     return;
@@ -492,12 +496,11 @@ $(function () {
             }else{
               // $("#iframeUploadDocPapeleta").attr("src", path + "papeleta/uploadarchivo?mpapeleta=" + data.idsigma);
               //  dialogUpload.dialog("open");
-               window.open(path + "almacen/salidamat", "_self");
+                window.open(path + "almacen/salidaprod", "_self");
             }
 
+//
         }, 'json');
-
-
     };
 })
 </script>

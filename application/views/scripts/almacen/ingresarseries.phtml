@@ -3,7 +3,7 @@ $library = new Libreria_Pintar();
 $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
 ?>
 <div id="paneldPSM" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 100%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+    <div class="ui-widget ui-state-rombo ui-corner-top ui-title">
         <label>Agregar Series</label>
     </div>
 
@@ -11,13 +11,16 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     <input type="hidden" class="ui-text"  id="txtidProducto" value="<?php echo $this->idproducto; ?>" style="width:99%" />
     <input type="hidden" class="ui-text"  id="txtCantidad"  style="width:99%" value="<?php echo $this->cantidad; ?>" />
     <br>
-    <input type="text" class="ui-text-disable" readonly id="txtnombreprod" value="<?php echo $this->nombreprod; ?>" style="width:99%" />
-  <br> <br>
+    <input type="text" class="ui-text-disable" readonly id="txtnombreprod" value="<?php echo $this->nombreprod; ?>" style="width:99%; display: none;" />
+    <h1>PRODUCTO:</h1>
+    <div class="ui-text-disable"><h1><?php echo $this->nombreprod; ?></h1></div>
+  <br>
+    <div class="ui-state-diag-negro" style="margin: 0 0.3em; line-height: 2em; text-align: center;">Cantidad Ingresada <?php echo $this->cantidad; ?> <span id="mensaje" style="margin: 0 2.3em; line-height: 2em; text-align: center; font-weight: normal; color: #fffc0c; "></span></div>
     <div id="dialogMensaje">
     </div>
-    <div id="panelPSM" align="left" style="width: 99%;margin-left: 5px;">
-        <table id="tblPSM"></table>
-        <div id="ptblPSM">
+    <div id="panelPrSerie" align="left" style="width: 99%;margin-left: 5px;">
+        <table id="tblPrSerie"></table>
+        <div id="ptblPrSerie">
         </div>
     </div>
     <br/>
@@ -26,10 +29,14 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         <label>Agregar Material</label>
     </div>-->
 
+      <button id="btnCancelarSe" name="btnCancelarSe">Cancelar</button>
+      <button id="btnGuardarSerie" name="btnGuardarSerie">Guardar</button>
     </div>
 
 <script type="text/javascript">
     themeComboBox();
+    var mydata = [];
+    var cant=0;
 
     $( "#txtnombre" ).keyup(function( event ) {
         buscarPServ();
@@ -110,24 +117,31 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         }
     });*/
 
-    var lastsel3;
+    var lastselSerie;
     optionPSM = {
+        datatype: "local",
         width: 530,
+       // keys: true,
         height: 250,
         colNames: [
             'Codigo',
             'Serie',
-            'Estado'
+            'EstadoAlmacen',
+            'Estado',
+            ''
         ],
         colModel: [
-            {name: 'idMaterial', index:'idMaterial', width:60,search:false},
-            {name: 'vNombreMat', index:'vNombreMat', width:250},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+            {name: 'idProdSeries', index:'idProdSeries', width:60,search:false},
+            {name: 'vNroSerie', index:'vNroSerie', width:250, editable:true,editoptions: {maxlength: 100}},
+            {name: 'vEstAlmacen', index:'vEstAlmacen', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
+            {name: 'btndel', index: 'btndel', width: 40, align: 'center' ,formatter : btnEliminaSerie,search:false}
         ],
+        editurl: "clientArray",
         caption: "&nbsp;&nbsp;&nbsp;Series",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
-            addprodserv();
+
         },
 
         afterInsertRow:function(rowid,aData){
@@ -137,139 +151,104 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 break;
                 case '0':
 
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    jQuery("#tblPrSerie").jqGrid('setCell',rowid,'idProdSeries','',{color:'red'});
+                    jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vNroSerie','',{color:'red'});
+                    jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vEstAlmacen','',{color:'red'});
+                    jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vEstado','',{color:'red'});
                     break;
             }
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
+           // if(lastselSerie!=undefined)
+
+                if(id && id!==lastselSerie){
+                    jQuery('#tblPrSerie').jqGrid('saveRow',lastselSerie);
+                    lastselSerie=id;
+                }
+            jQuery('#tblPrSerie').jqGrid('editRow',id,true);
         }
     };
 
-    eliminar=function(a){
-        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
-        var row = $("#tblPSM").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
-            openDialogWarning("Seleccione un registro para eliminar.");
-            return;
-        }
-        parameters = {
-            "idsigma": row.cidpers
-        };
-        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
 
-           "si":function(){
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+    // -----> Borrar============================================00
+    function btnEliminaSerie(cellvalue, options, rowObject){
 
-                   },
-                   success: function (requestData) {
-                       $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog2');
-                       closeDialog('jqDialog1');
-                     },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
-               });
-           },
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
-           }
-       })
-    };
+        return '<div align="center" class="ui-pg-button " ' +
+            'title="Borrar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+            'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+            'onclick="eliminarseriep(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            '<span class="ui-icon ui-icon-trash"></span></div></div>';
+    }
+    function eliminarseriep(rowId) {
+       var gr = jQuery("#tblPrSerie").jqGrid('getGridParam','selrow');
+        //jQuery("#tblPrSerie").jqGrid('delGrid');
+        $('#tblPrSerie').jqGrid('GridUnload');
+        console.log(mydata);
+        //mydata.splice(rowId-1,rowId); //Eliminado registro  splice(indexinicio,indexfin,[,campos que se agregan al aregllo])
 
-    addprodserv=function(a){
-        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
-        var row = $("#tblPSM").jqGrid('getRowData', selr);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
-            openDialogWarning("Seleccione un registro.");
-            return;
-        }
-        if( $("#txtidEntradaMat").val()==""){
-            openDialogWarning("Primero debe buscar el proveedor.");
-            return;
-        }
-        if( $("#txtCantidad").val()==""){
-            openDialogWarning("Agregar Cantidad.");
-            return;
-        }
-        if( $("#txtPrecioUnit").val()==""){
-            openDialogWarning("Agregar Precio Unitario.");
-            return;
-        }
-        parameters = {
-            "id": row.idMaterial,
-            "identradamat":  $("#txtidEntradaMat").val(),
-            "iddetentradamat":  $("#txtidDetEntradaMat").val(),
-            "Cantidad":$("#txtCantidad").val() ,
-            "PrecioUnitario": $("#txtPrecioUnit").val()
-        };
+        delete  mydata[rowId-1];
 
-        openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
-            "si":function(){
-                $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/detentradamatadd",
-                    type: 'POST',
-                    cache: false,
-                    data: parameters,
-                    beforeSend: function (data) {
-                    },
-                    success: function (requestData) {
-                        $("#result").html(requestData);
-                        var datos=JSON.parse(requestData);
-                        console.log(datos[0].ok);
-                        closeDialog("jqDialogConfirmacion1");
-                        closeDialog('jqDialog1');
-                        buscarDetEntradaMat();
-                    },
-                    error: function (requestData, strError, strTipoError) {
-                        $("#result").html("Error " + strTipoError + ': ' + strError);
-                    },
-                    complete: function (requestData, exito) {
-                    }
-                });
-            },
-            "no":function(){
-                closeDialog("jqDialogConfirmacion1");
+
+        actualizarGrid("tblPrSerie",optionPSM,null,buttonsGridPSM);
+        for(var i=0;i<=mydata.length;i++){
+            jQuery("#tblPrSerie").jqGrid('addRowData',i+1,mydata[i]);
+        }
+        var rows= jQuery("#tblPrSerie").jqGrid('getRowData');
+        if(cant>=rows.length){
+            jQuery("#tblPrSerie").jqGrid('hideCol',"btndel");
+            $("#mensaje").html("");
+        }else{
+            $("#mensaje").html(" Debe Eliminar "+(rows.length-cant)+ " SERIES de la grilla");
+        }
+    }
+
+    guardarSeries=function(a){
+       // var selr = $('#tblPrSerie').jqGrid('getGridParam','selrow');
+       // var row = $("#tblPrSerie").jqGrid('getRowData', selr);
+        jQuery('#tblPrSerie').jqGrid('saveRow',lastselSerie);
+        var rows= jQuery("#tblPrSerie").jqGrid('getRowData');
+
+        var detSeries = {};
+        var Series = [];
+        //Datos generales
+        detSeries.idproducto = $("#txtidProducto").val();
+        detSeries.identradaProd = $("#txtiddetEntradaProd").val();
+
+        //Datos Series
+        if (rows.length > 0) {
+            for (var i=0;i<rows.length;i++) {
+                var aSerie = {};
+                var row=rows[i];
+                aSerie.idProdSeries= row.idProdSeries;
+                aSerie.vNroSerie= row.vNroSerie;
+                Series.push(aSerie);
             }
-        })
+        }
+        detSeries.lstSeries=Series;
+        var parameters = {};
+        parameters.objSeries = JSON.stringify(detSeries);
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/guardarseries",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {   },
+            success: function (requestData) {
+                closeDialog('jqDialog1');
+            },
+            error: function (requestData, strError, strTipoError) {   },
+            complete: function (requestData, exito) {    }
+        });
+
     };
 
-    nuevaMaterial = function(){
-        parameters = {
-            "idsigma": '...'
-        };
-        openDialogData2("mantenimientos/material", parameters, 500);
-    };
-    verMaterial = function() {
-        var selr = $('#tblListaMate').jqGrid('getGridParam','selrow');
-        var row = $("#tblListaMate").jqGrid('getRowData', selr);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
-            openDialogWarning("Seleccione un registro para editar.");
-            return;
-        }
-        parameters = {
-            "idsigma": row.idMaterial
-        };
-        openDialogData2("mantenimientos/material", parameters, 500);
-    };
 
     function buttonsGridPSM(){
-        $("#tblPSM").navGrid('#ptblPSM', {edit:false,add:false,del:false,search:false,refresh:false})
+        $("#tblPrSerie").navGrid('#ptblPrSerie', {edit:false,add:false,del:false,search:false,refresh:false})
 
-            .navButtonAdd('#ptblPSM',{
+          /*  .navButtonAdd('#ptblPrSerie',{
                 caption:"Agregar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-plus",
                 onClickButton: function(){
@@ -277,7 +256,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 },
                 position:"last"
             })
-         .navButtonAdd('#ptblPSM',{
+         .navButtonAdd('#ptblPrSerie',{
                 caption:"Editar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-pencil",
                 onClickButton: function(){
@@ -285,95 +264,83 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 },
                 position:"last"
             })
-        ;
-        $("#tblPSM").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true});
+        ;*/
+       //$("#tblPrSerie").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true});
     }
 
-    /*function reiniCombo(celement){
-        var xelem = $("#" + celement);
-        xelem.combobox("destroy");
-        $("option:selected",xelem).removeAttr("selected");
-        $("option[value='9999999999']",xelem).attr("selected", "selected");
-        //xelem.combobox();
-    }
-    function getSubcategoria(selecteds, celement){
-        if (selecteds == "9999999999" || selecteds == ""){
-            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
-            $("#" + celement).val("9999999999");
-        }else{
-            $.ajax({
-                dataType: "html",
-                type: "POST",
-                url: path + "mantenimientos/obtenersubcate1/",
-                data: "select="+selecteds+"&subcat=",
-                success: function(requestData){ 	//Llamada exitosa)
-                    $("#" + celement).html(requestData);
-                    $("#" + celement).combobox({
-                        selected: function(event, ui){
-                            buscarMate();
-                        }
-                    });
-                },
-                error: function(requestData, errNumber, errMessage){
-                }
-            });
-        }
-    }*/
 
-    buscarMate = function() {
-        if ( $("#txtidMaterial").val()){
-
-        }
-        var params = '['
-            + '["@tBusqueda", "' + $("#cbotipob").val() + '"],'
-            + '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]'
-            + ']';
-        parameters = {
-            "name": "tblListaMate",
-            "procedure": "almacen.Bus_Material",
-            "print": "true",
-            "parameters": params
-        };
-        procesarProcedimientoJSON(
-            "panelPSM"
-            , "tblPSM"
-            , optionPSM
-            , parameters
-            , null
-            , buttonsGridPSM
-        );
-    };
     buscarMatePrimeravez = function() {
-        var tbus="";
-        if ( $("#txtidMaterial").val()!=""){
-            tbus="1";
-        }
-        else{
-            tbus="0";
-        }
+        var tbus="4";
+        cant =<?php echo $this->cantidad;?>;
+
         var params = '['
             + '["@tBusqueda", "' + tbus + '"],'
-            + '["@vDatoBus", "' + $("#txtidMaterial").val() + '"]'
+            + '["@vDatoBus", "' + $("#txtidProducto").val() + '"]'
+            + '["@vIddetEntradaProd", "' + $("#txtiddetEntradaProd").val() + '"]'
             + ']';
         parameters = {
-            "name": "tblListaMate",
-            "procedure": "almacen.Bus_Material",
-            "print": "true",
-            "parameters": params
+            "tBusqueda": tbus,
+            "vDatoBus":  $("#txtidProducto").val(),
+            "vIddetEntradaProd":  $("#txtiddetEntradaProd").val()
         };
-        procesarProcedimientoJSON(
-            "panelPSM"
-            , "tblPSM"
-            , optionPSM
-            , parameters
-            , null
-            , buttonsGridPSM
-        );
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/listarseries",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {
+            },
+            success: function (requestData) {
+                $("#result").html(requestData);
+                var datos=JSON.parse(requestData);
+                //console.log(datos[0].idProdSeries);
+                for(var i=0;i<datos.length;i++){
+                    mydata.push({idProdSeries:datos[i].idProdSeries,vNroSerie:datos[i].vNroSerie,vEstAlmacen:datos[i].vEstAlmacen,vEstado:datos[i].vEstado});
+                }
+                var dif=cant-datos.length;
+                if(dif>0){
+                    for (var i=0;i<dif;i++){
+                        mydata.push({idProdSeries:"",vNroSerie:"",vEstAlmacen:"",vEstado:""});
+                    }
+                }
+               // console.log(cant);
+               // console.log(mydata);
+
+                inicializarGrid("tblPrSerie",optionPSM,null,buttonsGridPSM);
+                for(var i=0;i<=mydata.length;i++){
+                    jQuery("#tblPrSerie").jqGrid('addRowData',i+1,mydata[i]);
+                }
+                if(dif>=0){
+                    jQuery("#tblPrSerie").jqGrid('hideCol',"btndel");
+                }else{
+                    $("#mensaje").html(" Debe Eliminar "+(datos.length-cant)+ " SERIES de la grilla");
+                }
+
+            },
+            error: function (requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function (requestData, exito) {
+            }
+        });
+
     };
+    //Funcion para regresar al la grilla naterior
+    function Cancelar(){
+        closeDialog('jqDialog1');
+    }
     $(function(){
         buscarMatePrimeravez();
-         $("#btnbuscarPSM").button({icons: {primary: "ui-icon-search"}});
+         $("#btnCancelarSe").button(ICON_CANCEL).click(function () {
+             Cancelar('');
+         });
+         $("#btnGuardarSerie").button(ICON_SAVE).click(function(){
+             guardarSeries();
+         });
        /*reiniCombo("cbocsubcateg");
        getSubcategoria($("#cbocategor").val(),"cbocsubcateg");*/
+
+
     });
 </script>

@@ -28,3 +28,4 @@ extras/documentation
 .idea/workspace.xml
 .idea/workspace.xml
 application/models/DataAdapter.php
+.idea/vcs.xml

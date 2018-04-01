@@ -8,7 +8,8 @@
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
                         <tr class="rowBuscarContribuyente">
-                            <input class="ui-text" id="identradamaterial" type="hidden" value="<?php echo $this->idsigma;?>" >
+                            <input class="ui-text" id="identrada" type="hidden" value="<?php echo $this->idsigma;?>" >
+                            <input class="ui-text" id="idpag" type="hidden" value="<?php echo $this->pag;?>" >
                             <td width="100" style="text-align: left">C&oacute;digo:</td>
                             <td width="10">&nbsp;</td>
                             <td width="180" style="text-align: left">Apellidos y Nombre:</td>
@@ -98,7 +99,12 @@ $( "#c_nrodoc" ).keyup(function( event ) {
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
             //console.log(row);
-            addCotizacion();
+            if($("#idpag").val()=="1"){ //##detentradamat
+                addIngresoMat();
+            }else{                  //##detentradaprod
+                addIngresoProd();
+            }
+
         },
         afterInsertRow:function(rowid,aData){
         switch(aData.nestado){
@@ -158,7 +164,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
 
     };
 
-   addCotizacion = function() {
+   addIngresoMat = function() {
         var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
         if(row.idProveedor == "" || row.idProveedor == undefined){
@@ -167,11 +173,11 @@ $( "#c_nrodoc" ).keyup(function( event ) {
         }
         parameters = {
             "idsigma": row.idProveedor,
-            "idEntrada": $("#identradamaterial").val()
+            "idEntrada": $("#identrada").val()
         };
 
         $.ajax({
-            url: jQuery.scriptPath + "index.php/almacen/almacensave",
+            url: jQuery.scriptPath + "index.php/almacen/entradamatsave",
             type: 'POST',
             cache: false,
             data: parameters,
@@ -183,7 +189,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 var datos=JSON.parse(requestData);
                 closeDialog('jqDialog2');
                 closeDialog('jqDialog1');
-                $("#identradamat").val(datos[0].idEntradaMat);
+                $("#identradamat").val(datos[0].idEntrada);
                 $("#codigocontrib").val(row.idProveedor);
                 $("#nombrecontrib").val(row.vNombre);
                 buscarDetEntradaMat();
@@ -196,14 +202,51 @@ $( "#c_nrodoc" ).keyup(function( event ) {
         });
 
     };
+addIngresoProd = function() {
+    var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+    var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+    if(row.idProveedor == "" || row.idProveedor == undefined){
+        openDialogWarning("Seleccione un registro.");
+        return;
+    }
+    parameters = {
+        "idsigma": row.idProveedor,
+        "idEntrada": $("#identrada").val()
+    };
 
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/entradaprodsave",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {
+
+        },
+        success: function (requestData) {
+            //$("#result").html(requestData);
+            var datos=JSON.parse(requestData);
+            closeDialog('jqDialog2');
+            closeDialog('jqDialog1');
+            $("#identradamat").val(datos[0].idEntrada);
+            $("#codigocontrib").val(row.idProveedor);
+            $("#nombrecontrib").val(row.vNombre);
+            buscarDetEntradaProd();
+        },
+        error: function (requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete: function (requestData, exito) {
+        }
+    });
+
+};
 
 
     nuevaPersona = function(){
         parameters = {
             "idsigma": '0000000000'
         };
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
     };
 
     verPersona = function() {
@@ -217,7 +260,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             "idsigma": row.idProveedor
         };
 
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("mantenimientos/proveedor", parameters, 460);
 
     };
 

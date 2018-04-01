@@ -57,6 +57,60 @@ class Zend_View_Helper_Util extends Zend_View_Helper_Abstract {
 		
 		
     }
+    public function getIp () {
+        global $_SERVER;
+        if(isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+            $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        else
+            $ip = $_SERVER["REMOTE_ADDR"];
+
+
+        $s_hxff =(isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : null );
+        $client_ip = $ip;
+        //echo "FOR IP ".$s_hxff."<br>";
+        //echo "CLIENT ".$client_ip."<br>";
+
+        if ($s_hxff) {
+            // los proxys van a?adiendo al final de esta cabecera
+            // las direcciones ip que van "ocultando". Para localizar la ip real
+            // del usuario se comienza a mirar por el principio hasta encontrar
+            // una direcci?n ip que no sea del rango privado. En caso de no
+            // encontrarse ninguna se toma como valor el REMOTE_ADDR
+            //echo "ENTRE AQUI";
+
+            $entries = split('[, ]', $s_hxff);
+            //echo "ENTRIE ".var_dump($entries)."<br>";
+            reset($entries);
+
+            while (list(, $entry) = each($entries)) {
+                $entry = trim($entry);
+                //echo "ENTRIES 2 ".var_dump($entries)."<br>";
+                if (preg_match('/^([0-9]+.[0-9]+.[0-9]+.[0-9]+)/', $entry, $client_ip)) {
+                    // http://www.faqs.org/rfcs/rfc1918.html
+                    $private_ip = array(
+                        '/^0./',
+                        '/^127.0.0.1/',
+                        '/^192.168..*/',
+                        '/^100.100..*/',
+                        '/^172.((1[6-9])|(2[0-9])|(3[0-1]))..*/',
+                        '/^10.*/'
+                    );
+//
+                    //echo "<br>PRIVATE IP ".var_dump($private_ip)."<br>";
+                    $found_ip = preg_replace($private_ip, $entry, $client_ip);
+                    //echo "<br>PRIVATE IP LISTAAA ".$ip_list[1]."<br>";
+
+                    //echo "<br>FOUND ".var_dump($found_ip[1])."<br>";
+                    if ($client_ip != $found_ip[1]) {
+                        $client_ip = $found_ip[1];
+                        break;
+                    }
+                }
+            }
+        }
+        //echo "CLIENT FINAL ".$client_ip."<br>";
+        return pg_escape_string($client_ip);
+    }
 
     public function getLink($url) {
         return $this->getPath2() . "index.php/" . $url;

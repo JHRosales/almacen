@@ -6,7 +6,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
 ?>
 
 <div id="panelMantenimientoEntradaProd" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
         <label>ENTRADA DE PRODUCTOS</label>
     </div>
     <div id="dialogBuscarContribuyentePredio">
@@ -14,40 +14,6 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
-
-
-                        <!-- <tr><td>
-                              <b>  Datos Cliente</b>
-                            </td></tr>
-                        <tr class="rowBuscarContribuyente">
-
-                            <td width="100" style="text-align: left">Correo Electr&oacute;nico:</td>
-                            <td width="30">&nbsp;</td>
-                            <td width="200" style="text-align: left">Apellidos y Nombre:</td>
-                            <td width="10">&nbsp;</td>
-                            <td width="200">&nbsp;</td>
-                            <td width="10">&nbsp;</td>
-                            <td width="200" colspan="5" style="text-align: left">Nro. Documento:</td>
-                            <td width="20">&nbsp;</td>
-                        </tr>
-                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
-
-                            <td>
-                                <input class="ui-text" id="c_codigocontrib" onkeypress="if(event.keyCode==13){buscarEntradaProd();}"  style="width:190px" />
-                            </td>
-                            <td>&nbsp;</td>
-                            <td colspan="3">
-                                <input class="ui-text pnl" id="c_nombrecontrib"  onkeypress="if(event.keyCode==13){buscarEntradaProd();}" style="width:90%" />
-                            </td>
-                            <td>&nbsp;</td>
-                            <td colspan="5" style="text-align: left;">
-                                <input class="ui-text pnl" id="c_nrodoc" onkeypress="if(event.keyCode==13){buscarEntradaProd();}" style="width:50%" />
-                            </td>
-
-                        </tr>
--->
-
-
 
                         <tr><td>
                                 <b>  Datos Busqueda</b>
@@ -75,7 +41,6 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                             <td width="200" style="text-align: left">Fecha Hasta:</td>
                             <td width="10">&nbsp;</td>
                             <td width="10">&nbsp;</td>
-                            <td width="200" colspan="5" style="text-align: left">Nro. Cotizacion:</td>
 
                         </tr>
                         <tr class="rowbcoti" id="panelbcoti">
@@ -88,28 +53,12 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                                 <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;"/>
                             </td>
                             <td>&nbsp;</td>
-                            <td colspan="5" style="text-align: left;">
-                                <input class="ui-text pnl" id="c_nrocoti" onkeypress="if(event.keyCode==13){buscarEntradaProd();}" style="width:50%" />
-                            </td>
 
                         </tr>
                         <tr>
                             <td colspan="13" height="8px"></td>
                         </tr>
 
-                        <!--
-                        <tr><td>
-                                <b>  Datos Producto / Servicio</b>
-                            </td></tr>
-
-                         <table border="0" style="margin-left:45px;">
-                            <tr>
-                                <td>Titulo:
-                                </td>
-                            </tr>
-
-
-                        </table>-->
                         <tr>
                             <td colspan="13" height="8px"></td>
                         </tr>
@@ -126,6 +75,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         <div id="ptblListaEntradaProd"></div>
     </div>
     <br/>
+
+
+
 </div>
 <script type="text/javascript">
 /*    $("#cbo_bus").combobox({
@@ -151,7 +103,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
     });
 
 
-    optionEntradaMat = {
+    optionEntradaProd = {
         width: 1100,
         height: 250,
         colNames: [
@@ -164,9 +116,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
             "nPrecioTotal",
             "dFecIngreso",
             "vEstado",
-            "Borrar",
-            "Nuevo",
-            "Imprimir"
+            "Borrar"
+            /*,"Nuevo"
+            ,"Imprimir"*/
         ],
         colModel: [
             {name: 'idEntradaProd', index:'idEntradaProd', width:80},
@@ -178,9 +130,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
             {name: 'nPrecioTotal', index:'nPrecioTotal', width:80, hidden: false},
             {name: 'dFecIngreso', index:'dFecIngreso', width:90, hidden: false},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false}
+            /*,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false}
+            ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
         ],
         caption: "&nbsp;&nbsp;&nbsp;Entrada de Productos",
         ondblClickRow: function(id){
@@ -286,7 +238,7 @@ break;
                 var parmter = {};
                 parmter.idCotiz = row.idCotiz;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "cotizacion/cotizaciondel", parmter, updCheckconcluir, 'json');
+                $.post(path + "almacen/cotizaciondel", parmter, updCheckconcluir, 'json');
             },
             "No": function () {
                 //ProcesoBuscarRuta(''); chkrecep_5
@@ -326,7 +278,7 @@ break;
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function () {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/cotizacion/eliminarcotizacion",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarcotizacion",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -367,7 +319,7 @@ break;
         var paramtrs ={ idCotiz :rowdat.idCotiz }
         console.log(paramtrs);
         $.ajax({
-            url: jQuery.scriptPath + "index.php/cotizacion/copiarcotiz",
+            url: jQuery.scriptPath + "index.php/almacen/copiarcotiz",
             type: 'POST',
             cache: false,
             data: paramtrs,
@@ -378,7 +330,7 @@ break;
                 var datos=JSON.parse(requestData);
               console.log(datos);
                 var parameters ={ idcotizacion :datos[0].idcotiz }
-                var _post = $.post(path + "cotizacion/detcotizacion", parameters);
+                var _post = $.post(path + "almacen/detcotizacion", parameters);
                 _post.success(function(request) {
                     $("#panelMantenimientoEntradaProd").html(request);
                 });
@@ -415,11 +367,11 @@ break;
 
 
 
-    nuevaCotizacion = function(){
+nuevaEntradaProd = function(){
         parameters = {
             "idsigma": '0000000000'
         };
-       window.open(path + "almacen/detentradamat", "_self");
+       window.open(path + "almacen/detentradaprod", "_self");
     };
     verEntradaProd = function() {
         var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
@@ -466,7 +418,7 @@ break;
                 caption:"Crear&nbsp;&nbsp;",
                 buttonicon:"ui-icon-plus",
                 onClickButton: function(){
-                    nuevaCotizacion();
+                    nuevaEntradaProd();
                 },
                 position:"last"
             })
@@ -542,7 +494,7 @@ break;
         procesarProcedimientoJSON(
             "panelListaEntradaProd"
             , "tblListaEntradaProd"
-            , optionEntradaMat
+            , optionEntradaProd
             , parameters
             , null
             , buttonsGridPerson
@@ -554,6 +506,7 @@ break;
         $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
          buscarEntradaProd();
         $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+        $("#div_titulo").html("Almacen => Entrada Productos");
     });
 
 

@@ -118,7 +118,7 @@ if($b==0){$refere='OTRO';}else{$refere=$this->nreferencial;}
     </div>
     <div id="dialogMensaje">
     </div>
-    <div id="panelDetCotizacion" align="left" style="width: 99%;margin-left: 45px;">
+    <div id="panelDetCotizacion" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
         <table id="tblDetCotizacion"></table>
         <div id="ptblDetCotizacion">
         </div>
@@ -212,7 +212,7 @@ if($b==0){$refere='OTRO';}else{$refere=$this->nreferencial;}
     </table>
     </div>
 
-    <div id="panelDetCotizacionOPC" align="left" style="width: 99%;margin-left: 45px;">
+    <div id="panelDetCotizacionOPC" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
         <table id="tblDetCotizacionOPC"></table>
         <div id="ptblDetCotizacionOPC">
         </div>
@@ -786,7 +786,7 @@ function ActualizarMontos() {
         parameters = {
             "idsigma": $("#idcotizacion").val()
         };
-        openDialogData1("cotizacion/addpsm", parameters, 560);
+        openDialogData1("cotizacion/addpsm", parameters, 560,560);
 
     };
 
@@ -795,7 +795,7 @@ addopcional= function(){
         "idsigma": $("#idcotizacion").val(),
         "opcional": 1
     };
-    openDialogData1("cotizacion/addpsm", parameters, 560,500);
+    openDialogData1("cotizacion/addpsm", parameters, 560,550);
     //inicializarGrid('tblDetCotizacionOPC',optionDetCotiOPC);
     //buscardetCotizacionOpcional();
 };
@@ -1582,6 +1582,7 @@ function visorarchivo(nom_archivo) {
 
     } else {
         page = jQuery.scriptPath + 'FichaTecnica/' + nom_archivo;
+        if (nom_archivo!=''){
         var $dialog = $('<div></div>')
             .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
             .dialog({
@@ -1592,6 +1593,9 @@ function visorarchivo(nom_archivo) {
                 title: "Visor de Archivos"
             });
         $dialog.dialog('open');
+        }else{
+            openDialogInfo("No tiene Ficha Tecnica", "250", "150", null,null)
+        }
     }
 }
 

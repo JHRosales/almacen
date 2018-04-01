@@ -6,7 +6,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
 
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
         <label>Mantenimiento - Entrada Materiales</label>
     </div>
     <input type="hidden" id="identradamat" name="identradamat" value="<?php echo $this->idEntradaMat;?>">
@@ -355,7 +355,8 @@ $("#cbtipomon").combobox({
 
     buscarProveedor = function(){
         parameters = {
-            "idsigma":  $("#identradamat").val()
+            "idsigma":  $("#identradamat").val(),
+            "pag":"1"
         };
         openDialogData1("almacen/buscarpersona", parameters, 660,500);
         //   window.open(path + "mantenimientos/backup", "_self");

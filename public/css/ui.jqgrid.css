@@ -54,7 +54,7 @@ tr.ui-search-toolbar select {margin: 1px 0px 0px 0px}
 .ui-jqgrid .ui-pg-table td {font-weight:normal; vertical-align:middle; padding:1px;}
 .ui-jqgrid .ui-pg-button  { height:19px !important;}
 .ui-jqgrid .ui-pg-button {color :black;}
-.ui-jqgrid .ui-pg-button:hover {color :white;}
+.ui-jqgrid .ui-pg-button:hover {color : rgba(30, 30, 30, 0.93);}
 .ui-jqgrid .ui-pg-button span { display: block; margin: 1px; float:left;}
 .ui-jqgrid .ui-pg-button:hover { padding: 0px; }
 .ui-jqgrid .ui-state-disabled:hover {padding:1px;}

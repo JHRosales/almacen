@@ -48,9 +48,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
             "nPrecioTotal",
             "dFecIngreso",
             "vEstado",
-            "Borrar",
-            "Nuevo",
-            "Imprimir"
+            "Borrar"
+            /*,"Nuevo"
+            ,"Imprimir"*/
         ],
         colModel: [
             {name: 'idEntradaMat', index:'idEntradaMat', width:100},
@@ -69,9 +69,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
             {name: 'nPrecioTotal', index:'nPrecioTotal', width:150, hidden: false},
             {name: 'dFecIngreso', index:'dFecIngreso', width:150, hidden: false},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false}
+           /* ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
         ],
         caption: "&nbsp;&nbsp;&nbsp;Entrada Materiales",
         ondblClickRow: function(id){
@@ -87,10 +87,10 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                 break;
                 case '0':
 
-                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'idEntradaMat','',{color:'red'});
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'idMaterial','',{color:'red'});
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'vNombreMat','',{color:'red'});
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell',rowid,'vMarca','',{color:'red'});
                     break;
 
 
@@ -173,7 +173,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                 var parmter = {};
                 parmter.idEntradaMat = row.idEntradaMat;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "cotizacion/cotizaciondel", parmter, updCheckconcluir, 'json');
+                $.post(path + "almacen/cotizaciondel", parmter, updCheckconcluir, 'json');
             },
             "No": function () {
                 //ProcesoBuscarRuta(''); chkrecep_5
@@ -213,7 +213,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function () {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/cotizacion/eliminarcotizacion",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarcotizacion",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -254,7 +254,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         var paramtrs ={ idEntradaMat :rowdat.idEntradaMat }
         console.log(paramtrs);
         $.ajax({
-            url: jQuery.scriptPath + "index.php/cotizacion/copiarcotiz",
+            url: jQuery.scriptPath + "index.php/almacen/copiarcotiz",
             type: 'POST',
             cache: false,
             data: paramtrs,
@@ -265,7 +265,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                 var datos=JSON.parse(requestData);
                 console.log(datos);
                 var parameters ={ idcotizacion :datos[0].idEntradaMat }
-                var _post = $.post(path + "cotizacion/detcotizacion", parameters);
+                var _post = $.post(path + "almacen/detcotizacion", parameters);
                 _post.success(function(request) {
                     $("#panelMantenimientoCotizacion").html(request);
                 });
@@ -439,6 +439,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
         buscarEntradaMate();
         $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+        $("#div_titulo").html("Almacen => Entrada Materiales");
+
     });
 
 
@@ -446,7 +448,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
 
 </script>
 <div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
         <label>ENTRADA MATERIALES</label>
     </div>
     <div id="dialogBuscarContribuyentePredio">

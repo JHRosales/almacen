@@ -9,7 +9,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-rojo ui-corner-top ui-title">
-        <label>Mantenimiento - Salida Materiales</label>
+        <label>Mantenimiento - Salida Prodducto</label>
     </div>
     <input type="hidden" id="idsalidamat" name="idsalidamat" value="<?php echo $this->idSalidaMat;?>">
 
@@ -325,7 +325,7 @@ $("#cbformapago").combobox({
 
 //Funcion para regresar al la grilla naterior
     function Cancelar(){
-        window.open(path + "almacen/salidamat", "_self");
+        window.open(path + "almacen/salidaprod", "_self");
     }
 
 
@@ -492,7 +492,7 @@ $(function () {
             }else{
               // $("#iframeUploadDocPapeleta").attr("src", path + "papeleta/uploadarchivo?mpapeleta=" + data.idsigma);
               //  dialogUpload.dialog("open");
-               window.open(path + "almacen/salidamat", "_self");
+               window.open(path + "almacen/salidaprod", "_self");
             }
 
         }, 'json');

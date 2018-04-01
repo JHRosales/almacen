@@ -8,7 +8,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
-    <div class="ui-widget ui-state-highlight ui-corner-top ui-title">
+    <div class="ui-widget ui-state-azul ui-corner-top ui-title">
         <label>Mantenimiento - Retorno Materiales</label>
     </div>
     <input type="hidden" id="idRetornoMat" name="idRetornoMat" value="<?php echo $this->idRetornoMat;?>">
@@ -407,6 +407,7 @@ agregarFilaTable = function (id) {
 $(function () {
     $("#fecsalida").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#div_titulo").html("Almacen => Retorno Materiales");
 
     $("#btnbuscartec").button({icons: {primary: "ui-icon-search"}});
     $("#btnguardar").button({icons: {primary: "ui-icon-disk"}}).click(function(){

@@ -70,7 +70,7 @@ class LogeoController extends Zend_Controller_Action implements Zend_Auth_Adapte
                         $ddatosuserlog->userlogin = $datos[0][2];
                         $ddatosuserlog->arealogin = $datos[0][3];
                         $ddatosuserlog->codcajero = $datos[0][4];
-                        $ddatosuserlog->vhostnm = 'vhostnm';
+                        $ddatosuserlog->vhostnm = $this->view->util()->getIp();
                         $ddatosuserlog->idlocal = $local;
                         $ddatosuserlog->cidapertura = $datos[0][6];
                         $ddatosuserlog->consult = $datos[0][7];

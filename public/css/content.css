@@ -11,9 +11,16 @@ Mayusculas para los textos de los filtros
 input[id^=gs_] {
     text-transform: uppercase;
 }
-
+input{
+    height: 20px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border: 1px solid gray;
+}
 html, body {
-    overflow: auto;
+    /*overflow: auto;*/
     padding: 0px;
     margin: 0px;
     height: 100%;
