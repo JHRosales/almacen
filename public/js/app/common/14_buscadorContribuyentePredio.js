@@ -525,7 +525,7 @@ BuscadorPredio = {
         };
         procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
     }
-},
+}
     BuscadorMaterial = {
     // Constantes Publicas
     MODO_CERO: 0,
@@ -669,6 +669,150 @@ BuscadorPredio = {
                     $("#dialogMensaje").dialog("open");
                 }
                 BuscadorMaterial.configBeforeGrid(request);
+            };
+        procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
+    }
+};
+
+BuscadorSeries = {
+    // Constantes Publicas
+    MODO_CERO: 0,
+    MODO_FULL: 1,
+    PROCEDIMIENTO_BUSCAR_PERSONA: "almacen.Bus_ProdSeries",
+
+    // Propiedades Publicas
+    procedimientoBuscarPersona: "",
+    gridConfigPersona: __gridConfigSeries,
+    titleDialog: "Buscador de Series",
+
+    // Metodos
+    buscar: function() {
+        var valid = [false, false];
+
+        valid[0] = valid[0] || (trim($("#cbotipob").val()).length > 0);
+        valid[0] = valid[0] || (trim($("#c_textbusqueda").val()).length > 0);
+
+        if (valid[0]) {
+            BuscadorSeries.buscarAjax(BuscadorSeries.MODO_CERO);
+        }  else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    },
+
+    init: function (modo, modoAjax) {
+        $("#dialogMensaje").dialog({
+            title: "Almacen",
+            modal: true,
+            minHeight: 'auto',
+            width: 340,
+            position: ['center', 'center'],
+            resizable: false,
+            autoOpen: false,
+            closeOnEscape: true
+        });
+
+        $("#c_codigocontrib").numeric({
+            decimal: false,
+            negative: false
+        }, function() {
+            openDialogWarning("Solo Numeros Enteros Positivos.", 150, 90);
+            this.value = "";
+            this.focus();
+        });
+
+        inicializarGrid("tblResult", ( this.gridConfigPersona));
+
+        $("#panelBuscarContribuyente").on("keyup", "input", function(e) {
+            if (e.keyCode == 13) {
+                $("#btnbuscar").click();
+            }
+        });
+
+        $("#c_codigocontrib, #c_predial").on("focus", function() {
+            $("#dialogBuscarSeries input.ui-text").val("");
+        });
+
+        $(".pnl").on("focus", function() {
+            var name = $(this).attr("id");
+            if (name == 'c_apepatcontrib' || name == 'c_nombrecontrib' || name == 'c_viacontrib' || name == 'c_nroviacontrib' || name == 'c_mzacontrib' || name == 'c_lotecontrib') {
+                $("#dialogBuscarSeries input.ui-text").val("");
+                $("#c_predial").val("");
+            }
+        });
+
+        $("#btnbuscar").button({ icons: {primary: 'ui-icon-search'} }).click(this.buscar);
+
+        if(modoAjax == true) {
+            $("#btnBuscarNuevoPredio, #btnBuscarNuevoContribuyente, #btnBuscarAceptar").button();
+        }
+
+        $("#btnBuscarAceptar").click(function(){
+            $("#dialogMensaje").dialog("close");
+        });
+
+        this.procedimientoBuscarPersona = this.PROCEDIMIENTO_BUSCAR_PERSONA;
+        if (modo == this.MODO_FULL) {
+            this.titleDialog = "Buscador de Materiales";
+            if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
+                $(".rowBuscarContribuyente").removeClass("row-hide");
+            }
+            if ($(".rowBuscarPredio").hasClass("row-hide")) {
+                $(".rowBuscarPredio").removeClass("row-hide");
+            }
+        }
+    },
+    bindkeysPersona: {"onEnter": function() {}},
+    configurarDialog: function() {
+        $("#dialogBuscarSeries").dialog({
+            title: this.titleDialog,
+            modal: true,
+            minHeight: 'auto',
+            width: 1030,
+            position: ['center', 'center'],
+            resizable: false,
+            autoOpen: false,
+            closeOnEscape: true
+        });
+    },
+    configBeforeGrid: function(request) {
+    },
+    obtenerParameterContribuyente: function() {
+        return '[' +
+            '["@tBusqueda", "' + $("#cbotipob").val() + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
+
+    },
+    buscarAjax: function(modo) {
+        var
+            parameters = {
+                "name": "tblResult",
+                "procedure": (this.procedimientoBuscarPersona ),
+                "print": "true",
+                "parameters": ( this.obtenerParameterContribuyente())
+            },
+            proceso = function(request) {
+                $("#panelResult").html('<table id="tblResult"></table><div id="ptblResult"></div><input type="hidden" id="ctblResult" name="ctblResult" value="" />');
+                var
+                    records = request.length,
+                    bindkeys = ( BuscadorSeries.bindkeysPersona ),
+                    gridConfig = $.extend(( BuscadorSeries.gridConfigPersona ), {
+                        data: request,
+                        datatype: "local"
+                    });
+                inicializarGrid("tblResult", gridConfig, bindkeys);
+                if (records == 0) {
+                    if (modo == BuscadorSeries.MODO_CERO) {
+                        if (!$("#btnBuscarNuevoPredio").hasClass("row-hide")) {
+                            $("#btnBuscarNuevoPredio").addClass("row-hide");
+                        }
+                        if ($("#btnBuscarNuevoContribuyente").hasClass("row-hide")) {
+                            $("#btnBuscarNuevoContribuyente").removeClass("row-hide");
+                        }
+                    }
+                    $("#dialogMensaje").dialog("open");
+                }
+                BuscadorSeries.configBeforeGrid(request);
             };
         procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
     }

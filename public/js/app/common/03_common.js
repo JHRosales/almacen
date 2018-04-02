@@ -42,6 +42,31 @@ var config = {
         ondblClickRow: function() {},
         gridComplete: function() {}
     },
+    __gridConfigSeries = {  //JHIMI 01042018
+        height: 300,
+        width: 1000,
+        colNames: ['Codigo',
+            'idDetEntradaProd',
+            'idProducto',
+            'producto',
+            'vNroSerie',
+            'vEstAlmacen',
+            'Estado'
+        ],
+        colModel: [
+            {name: 'idProdSeries', index:'idProdSeries', width:60},
+            {name: 'idDetEntradaProd', index:'idDetEntradaProd', width:80},
+            {name: 'idProducto', index:'idProducto', hidden:true},
+            {name: 'producto', index:'producto', width:450},
+            {name: 'vNroSerie', index:'vNroSerie', width:250},
+            {name: 'vEstAlmacen', index:'vEstAlmacen', width:80,hidden:true},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
+        onSelectRow: function() {},
+        ondblClickRow: function() {},
+        gridComplete: function() {}
+    },
 __gridConfigContribuyente = {
     height: 300,
     width: 1000,

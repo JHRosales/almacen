@@ -346,7 +346,7 @@ buscarMaterialSalida = function (d) {
         row = $("#tblResult").jqGrid('getRowData', rowid);
         if (invocaBusPersona == 1) {
             $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
-            $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombreMat);
+            $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombre);
             $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
             $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
 //                $("#txtTestigoCodigoPersona").val(row.cidpers);

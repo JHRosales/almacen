@@ -715,18 +715,18 @@ public function detentradaprodAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
-            $idsalidamat = $this->_request->getParam('idSalidaProd');
-            $this->view->idsalidamat =$idsalidamat;
+            $idsalidaProd = $this->_request->getParam('idSalidaProd');
+            $this->view->idsalidamat =$idsalidaProd;
             $cn = new Model_DataAdapter ();
             $params[] = array('@tBusqueda', "2");
-            $params[] = array('@vDatoBus', $idsalidamat);
+            $params[] = array('@vDatoBus', $idsalidaProd);
             $params[] = array('@vFecIni', "");
             $params[] = array('@vFecFin', "");
-            $datos = $cn->ejec_store_procedura_sql('almacen.List_SalidaMat', $params);
+            $datos = $cn->ejec_store_procedura_sql('almacen.List_SalidaProd', $params);
 
             $cdatos = count($datos);
             if ($cdatos == 0) {
-                $this->view->idSalidaMat =$datos[0][0];
+                $this->view->idSalidaProd =$datos[0][0];
                 $this->view->dFecSalida =$datos[0][1];
                 $this->view->obra=$datos[0][2];
                 $this->view->lugar=$datos[0][3];
@@ -734,7 +734,7 @@ public function detentradaprodAction() {
                 $this->view->nomtecnico=$datos[0][5];
 
             }else{
-                $this->view->idSalidaMat =$datos[0][0];
+                $this->view->idSalidaProd =$datos[0][0];
                 $this->view->dFecSalida =$datos[0][1];
                 $this->view->obra=$datos[0][2];
                 $this->view->lugar=$datos[0][3];
@@ -743,16 +743,16 @@ public function detentradaprodAction() {
             }
             $arrDetMateriales = array();
             $params_mat[] = array('@tBusqueda', "0");
-            $params_mat[] = array('@vIdSalidaMat',$idsalidamat);
+            $params_mat[] = array('@vIdSalidaProd',$idsalidaProd);
             $params_mat[] = array('@vDatoBus', "");
             $params_mat[] = array('@vFecIni', "");
             $params_mat[] = array('@vFecFin', "");
-            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetSalidaMat", $params_mat);
+            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetSalidaProd", $params_mat);
             if (count($dtbdtestigo) > 0) {
                 $arrDetMateriales = $dtbdtestigo;
             }
 
-            $this->view->detSalidaMat = $arrDetMateriales;
+            $this->view->detSalidaProd = $arrDetMateriales;
 
         }
     }
@@ -811,7 +811,53 @@ public function detentradaprodAction() {
         }
     }
 
+    public function guardarsalidaprodAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
 
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pSalidap = $this->_request->getParam('objSalidaProd');
+            $jSalidaP = json_decode($pSalidap);
+
+            $dataSet = new Model_DataAdapter();
+            if ($jSalidaP->idsalidaprod == "") {
+                $trans = "1";
+            } else {
+                $trans = "2";
+            }
+            $_procedure = 'almacen.InsUpd_salidaProd';
+            $params[] = array('@ttrans', $trans);
+            $params[] = array('@p_idsalidaprod', $jSalidaP->idsalidaprod);
+            $params[] = array('@p_obra', $jSalidaP->obra);
+            $params[] = array('@p_lugar', $jSalidaP->lugar);
+            $params[] = array('@p_fecha', $jSalidaP->fecha);
+            $params[] = array('@p_idtecnico', $jSalidaP->idtecnico);
+            $params[] = array('@vUsernm', $userlogin);
+            $params[] = array('@vHostnm', 'local');
+
+            $resultPapeleta = $dataSet->executeAssocQuery($_procedure, $params);
+
+            $_proc_dtestigo = 'add_detsalidaprod';
+
+            foreach ($jSalidaP->series as $value) {
+                $params = null;
+                $params[] = array('@p_idsalidaprod', $resultPapeleta[0]["idSalidaprod"]);   #salida
+                $params[] = array('@p_iddetsalidaprod',  $value->idDetSalidaProd);  #detsalida
+                $params[] =  array('@p_idSerie',  $value->idSerie); #idSerie
+                $params[] =  array('@p_Serie',  $value->vSerie); #Serie
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($resultPapeleta[0]));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
 
 
 

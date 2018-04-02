@@ -1,17 +1,17 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
+$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), array("3","PRODUCTO"));
 ?>
 <style>
-    #tableTestigos { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
-    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
+    #tableSeries { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
+    #tableSeries td, #tableSeries th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-rojo ui-corner-top ui-title">
         <label>Mantenimiento - Salida Prodducto</label>
     </div>
-    <input type="hidden" id="idsalidamat" name="idsalidamat" value="<?php echo $this->idSalidaMat;?>">
+    <input type="hidden" id="idsalidaprod" name="idsalidaprod" value="<?php echo $this->idSalidaProd;?>">
 
     <div id="panelPapeleta" align="center" class="ui-widget ui-widget-content ui-corner-all"
          style="width: 99%;margin: 3px;padding-bottom: 5px;">
@@ -82,43 +82,36 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 
     <div id="panelDatosConductor" align="center" class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;height: 100%;margin: 3px;">
         <div class="ui-widget ui-state-default ui-corner-top ui-title">
-            <label>Materiales </label>
+            <label>SERIES </label>
         </div>
         <div style="text-align: left" >
             <button id="btnTestigoAgregar">Agregar</button>
         </div>
-        <table id="tableTestigos" border="1" class="ui-widget ui-widget-content">
+        <table id="tableSeries" border="1" class="ui-widget ui-widget-content">
             <thead>
             <tr class="ui-widget-header">
-                <th>Codigo</th>
-                <th>Material</th>
-                <th>Unidad de Medida</th>
-                <th>Stock</th>
+                <th>Codigo Serie</th>
+                <th>Producto</th>
+                <th>Serie</th>
                 <th>Buscar</th>
-                <th>Cantidad</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr style="display: none;">
                 <td>
-                    <input type="hidden" name="txtidDetSalidaMat" id="txtidDetSalidaMat"/>
-                    <input id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input type="hidden" name="txtidDetSalidaProd" id="txtidDetSalidaProd"/>
+                    <input id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                 </td>
                 <td>
-                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
+                   <!-- <input id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
+                    <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd">&nbsp;</div>
                 </td>
                 <td>
-                    <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
                 </td>
                 <td>
-                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
-                </td>
-                <td>
-                    <button id="btnTestigoBuscarPersona">Buscar</button>
-                </td>
-                <td>
-                    <input id="txtCantidad"  name="txtCantidad" class="ui-text"  style="width:150px"  >
+                   <button id="btnTestigoBuscarPersona">Buscar</button>
                 </td>
                 <td>
                     <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -126,27 +119,22 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     </div>
                 </td>
             </tr>
-            <?php foreach ($this->detSalidaMat as $value) { ?>
+            <?php foreach ($this->detSalidaProd as $value) { ?>
 
                 <tr>
                     <td>
-                        <input value="<?php echo $value["idDetSalidaMat"]; ?>" type="hidden" name="txtidDetSalidaMat" id="txtidDetSalidaMat" />
-                        <input value="<?php echo $value["idMaterial"]; ?>" id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["idDetSalidaProd"]; ?>" type="hidden" name="txtidDetSalidaProd" id="txtidDetSalidaProd" />
+                        <input value="<?php echo $value["idProdSeries"]; ?>" id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >
+                        <!--<input value="<?php echo $value["Producto"]; ?>" id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
+                        <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd"><?php echo $value["Producto"]; ?></div>
                     </td>
                     <td>
-                        <input value="<?php echo $value["UnidadMediad"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
-                    </td>
-                    <td>
-                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
+                        <input value="<?php echo $value["Serie"]; ?>" id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
                     </td>
                     <td>
                         <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
-                    </td>
-                    <td>
-                        <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad"  name="txtCantidad" class="ui-text" style="width:150px"  >
                     </td>
                     <td>
                         <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -172,7 +160,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 </div>
 
 
-<div id="dialogBuscarContribuyentePredio<?php echo $this->id; ?>">
+<div id="dialogBuscarSeries<?php echo $this->id; ?>">
     <table class="ui-panelLayout-main">
         <tr><td style="vertical-align: top;">
                 <table style="width: 100%;">
@@ -337,40 +325,37 @@ cargarCategoria = function () {
     $("#txtLicenciaCategoria").val('');
     contenidocomboContenedor('#cboLicenciaCategoria', $("#cboLicenciaClase").val())
 
-}
+};
 
-buscarMaterialSalida = function (d) {
+buscarSeriesSalida = function (d) {
     console.log(d);
-    __gridConfigMaterial.data = [];
-    __gridConfigMaterial.ondblClickRow = function (rowid) {
+    __gridConfigSeries.data = [];
+    __gridConfigSeries.ondblClickRow = function (rowid) {
         row = $("#tblResult").jqGrid('getRowData', rowid);
         if (invocaBusPersona == 1) {
-            $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
-            $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombreMat);
-            $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
-            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
-//                $("#txtTestigoCodigoPersona").val(row.cidpers);
-//                $("#txtTestigoDNI").val(row.vnrodoc);
-//                $("#txtUnidadMedida").val(row.crazsoc);
+            $(d).parent().parent().find("input[name=txtCodigoSerie]").val(row.idProdSeries);
+           // $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombre);
+            $(d).parent().parent().find("div[name=txtNombreProd]").html(row.producto );
+            $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
         }
-        closeDialog("dialogBuscarContribuyentePredio");
+        closeDialog("dialogBuscarSeries");
 
     };
-    BuscadorMaterial.bindkeysPersona = {"onEnter": __gridConfigMaterial.ondblClickRow};
+    BuscadorSeries.bindkeysPersona = {"onEnter": __gridConfigSeries.ondblClickRow};
     $("#tblResult").jqGrid("clearGridData");
     if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
         $(".rowBuscarContribuyente").removeClass("row-hide");
     }
     //$(".rowBuscarPredio").css({display: "none"});
-    $("#dialogBuscarContribuyentePredio").dialog("open");
+    $("#dialogBuscarSeries").dialog("open");
     $("#c_codigocontrib").focus();
-}
+};
 
 var i = 1;
 
 deleteFilaTable = function (d) {
     $(d).parent().parent().remove();
-}
+};
 agregarFilaTable = function (id) {
     var id_combobox = "";
 
@@ -385,19 +370,19 @@ agregarFilaTable = function (id) {
     }).end().appendTo("#" + id);
 
     themeComboBox("#" + id_combobox);
-    $("#btnTestigoBuscarPersona_" + id + "_" + i).button().click(function () {
+    $("#btnTestigoBuscarPersona_" + id + "_" + i).button(ICON_SEARCH).click(function () {
         invocaBusPersona = 1;
-        buscarMaterialSalida(this);
+        buscarSeriesSalida(this);
 
     });
     i++;
-}
+};
 
 $(function () {
     $("#fecsalida").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
 
-    $("#btnbuscartec").button({icons: {primary: "ui-icon-search"}});
+    $("#btnbuscartec").button(ICON_SEARCH);
     $("#btnguardar").button({icons: {primary: "ui-icon-disk"}}).click(function () {
         Guardar();
     });
@@ -408,49 +393,27 @@ $(function () {
 // clone inspector
 
     $("#btnTestigoBuscarPersona").button("destroy");
-    agregarFilaTable("tableTestigos");
+    agregarFilaTable("tableSeries");
     $("#btnTestigoAgregar").click(function () {
-        agregarFilaTable("tableTestigos");
+        agregarFilaTable("tableSeries");
     });
     $("#btnTestigoAgregar").button({icons: {primary: "ui-icon-plus"}});
 //fin clone inspector
 
-    //--- Buscar persona
+    //--- Buscar serie
     Persona.init(true);
-    BuscadorMaterial.init(BuscadorMaterial.MODO_FULL, true);
-    BuscadorMaterial.configurarDialog();
-    //---- fin buscar persona
-
-
-  /*  dialogPersona = $("#dialogBuscarPersona").dialog({
-        autoOpen: false,
-        height: 100,
-        width: 100,
-        modal: true,
-        buttons: {
-//                "Aceptar": function () {
-//
-//                },
-            Cerrar: function () {
-                //invocaBusPersona = 0;
-                dialogPersona.dialog("close");
-            }
-        },
-        close: function () {
-            invocaBusPersona = 0;
-            //dialogPersona.dialog("close");
-        }
-    });*/
-
+    BuscadorSeries.init(BuscadorSeries.MODO_FULL, true);
+    BuscadorSeries.configurarDialog();
+    //---- fin buscar serie
 
 
   function Guardar() {
 
         var detallesalida = {};
-        var materiales = [];
+        var series = [];
 
-      //Datos generales del salida de Materiales
-      detallesalida.idSalidaMat = $("#idsalidamat").val();
+      //Datos generales del salida de series
+      detallesalida.idsalidaprod = $("#idsalidaprod").val();
       detallesalida.obra = $("#txtobra").val();
       detallesalida.lugar = $("#txtlugar").val();
       detallesalida.fecha = $("#fecsalida").val();
@@ -464,27 +427,27 @@ $(function () {
           openDialogWarning("Seleccione la fecha.");
           return;
       }
-        //Datos materiales
-        $('#tableTestigos > tbody  > tr').each(function () {
-            var detMateriales = {};
-            if ($(this).find("[name=txtCodigoMaterial]").val() != '') {
-                detMateriales.idDetSalidaMat = $(this).find("[name=txtidDetSalidaMat]").val();
-                detMateriales.idMaterial = $(this).find("[name=txtCodigoMaterial]").val();
-                detMateriales.Cantidad = $(this).find("[name=txtCantidad]").val();
-                materiales.push(detMateriales);
+        //Datos series
+        $('#tableSeries > tbody  > tr').each(function () {
+            var detseries = {};
+            if ($(this).find("[name=txtCodigoSerie]").val() != '') {
+                detseries.idDetSalidaProd = $(this).find("[name=txtidDetSalidaProd]").val();
+                detseries.idSerie = $(this).find("[name=txtCodigoSerie]").val();
+                detseries.vSerie = $(this).find("[name=txtSerie]").val();
+                series.push(detseries);
             }
         });
-      detallesalida.materiales = materiales;
+      detallesalida.series = series;
 
-        var pSalidaMat = {};
-      pSalidaMat.objSalidaMat = JSON.stringify(detallesalida);
+        var pSalidaProd = {};
+      pSalidaProd.objSalidaProd = JSON.stringify(detallesalida);
         //console.log(JSON.stringify(pPapeleta));
         //console.log(papeleta);
 
 
-        $.post(path + "almacen/guardarsalidamat", pSalidaMat, function (data) {
+        $.post(path + "almacen/guardarsalidaprod", pSalidaProd, function (data) {
             console.log(data);
-             console.log(data["idSalidaMat"]);
+             console.log(data["idsalidaprod"]);
             if (data["a"] == '0') {
                 openDialogInfo(data["b"], "280", "150", null, function () {
                     return;
