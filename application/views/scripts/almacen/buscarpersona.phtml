@@ -227,7 +227,7 @@ addIngresoProd = function() {
             var datos=JSON.parse(requestData);
             closeDialog('jqDialog2');
             closeDialog('jqDialog1');
-            $("#identradamat").val(datos[0].idEntrada);
+            $("#identradaprod").val(datos[0].idEntrada);
             $("#codigocontrib").val(row.idProveedor);
             $("#nombrecontrib").val(row.vNombre);
             buscarDetEntradaProd();

@@ -245,7 +245,7 @@ $("#cbtipomon").combobox({
             },
             {name: 'vEstado', index:'vEstado', width:100, hidden: true,editable: false},
             { name: 'btndocumall', index: 'btndocumall', width: 60, align: 'center' ,formatter : btnAgregarserie,search:false,hidden:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndelete,search:false}
+            { name: 'btndocumall1', index: 'btndocumall1', width: 40, align: 'center' ,formatter : btndelete,search:false}
             //{name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left', formatter: linkadjunto},
             // {name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left',hidden:true},
         ],
@@ -259,30 +259,34 @@ $("#cbtipomon").combobox({
           //  verCotizacion();
         },
         afterInsertRow:function(rowid,aData){
-            switch( aData.opcional){
+            switch( aData.vEstado){
                 case'':
             break;
-            case '1':
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idDetEntradaProd','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idEntradaProd','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idProducto','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'producto','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nCantidad','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioUnit','',{background:'#ddeaa6'});
-            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioTotal','',{background:'#ddeaa6'});
+            case '0':
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idDetEntradaProd','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idEntradaProd','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'idProducto','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'producto','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nCantidad','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioUnit','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'nPrecioTotal','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'btndocumall','',{background:'pink'});
+            jQuery("#tblDetEntradaProd").jqGrid('setCell',rowid,'btndocumall1','',{background:'pink'});
             break;
             }
         },
         onSelectRow: function(id) {
             if(lastsel3!=undefined)
                     calcular();
+            var row = $(this).getRowData(id);
 
             if(id && id!==lastsel3){
                 jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
                 lastsel3=id;
             }
+            if(row.vEstado!='0'){
             jQuery('#tblDetEntradaProd').jqGrid('editRow',id,true);
-
+            }
         },
         gridComplete: function(id){
             calcular();
@@ -687,7 +691,7 @@ function eliminardetentradama(rowId) {
             var parmter = {};
             parmter.idDetEntradaProd = row.idDetEntradaProd;
             closeDialog("jqDialogConfirmacion1");
-            $.post(path + "almacen/detentradamatdel", parmter, updCheckdelete, 'json');
+            $.post(path + "almacen/detentradaproddel", parmter, updCheckdelete, 'json');
         },
         "No": function () {
             //ProcesoBuscarRuta(''); chkrecep_5

@@ -1,18 +1,19 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
+//array("0","GENERAL"), array("1","ID"), array("2","SERIE"), array("3","PRODUCTO"), array("4","DETENTRADA"),
+$TipoBusqueda=array( array("5","ID SALIDA"));
 ?>
 <style>
-    #tableTestigos { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
-    #tableTestigos td, #tableTestigos th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
+    #tableRetornoProd { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
+    #tableRetornoProd td, #tableRetornoProd th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
 </style>
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-azul ui-corner-top ui-title">
-        <label>Mantenimiento - Retorno Prodcuto</label>
+        <label>Mantenimiento - Retorno Producto</label>
     </div>
-    <input type="hidden" id="idRetornoMat" name="idRetornoMat" value="<?php echo $this->idRetornoMat;?>">
-    <input type="hidden" id="idSalidaMat" name="idSalidaMat" value="<?php echo $this->idSalidaMat;?>">
+    <input type="hidden" id="idRetornoProd" name="idRetornoProd" value="<?php echo $this->idRetornoProd;?>">
+    <input type="hidden" id="idSalidaProd" name="idSalidaProd" value="<?php echo $this->idSalidaProd;?>">
 
     <div id="panelPapeleta" align="center" class="ui-widget ui-widget-content ui-corner-all"
          style="width: 99%;margin: 3px;padding-bottom: 5px;">
@@ -29,7 +30,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <tr>
 
                             <td colspan="4">
-                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="10" style="width:100%" />
+                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="100" style="width:100%" />
                             </td>
                         </tr>
                 <tr>
@@ -37,7 +38,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 </tr>
                         <tr class="rowcoti">
 
-                            <td width="100" style="text-align: left">Fecha:</td>
+                            <td width="100" style="text-align: left">Fecha Retorno:</td>
                             <td width="10">&nbsp;</td>
                             <td width="230" style="text-align: left">Lugar</td>
                         </tr>
@@ -45,7 +46,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <tr class="rowbcoti" id="panelbcoti">
 
                             <td>
-                                <input type="text" id="fecsalida" value="<?php echo $this->dFecRetorno;?>"  class="ui-text-disable " readonly style="text-align: left;width: 80px;"/>
+                                <input type="text" id="fecretorno" value="<?php echo $this->dFecRetorno;?>"  class="ui-text-disable " readonly style="text-align: left;width: 80px;"/>
                             </td>
                            <td>&nbsp; </td>
                             <td class="soloSolesa">&nbsp;<input type="text" class="ui-text pnl" id="txtlugar"   value="<?php  echo $this->lugar; ?>"  style="width:96%" /></td>
@@ -90,44 +91,40 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <label>Materiales </label>
         </div>
         <div style="text-align: left" >
-            <button id="btnRegistroAgregar" style="display: none">Agregar</button>
+            <button id="btnRegistroAgregar" >Agregar</button>
         </div>
-        <table id="tableTestigos" border="1" class="ui-widget ui-widget-content">
+        <table id="tableRetornoProd" border="1" class="ui-widget ui-widget-content">
             <thead>
             <tr class="ui-widget-header">
                 <th>Codigo</th>
-                <th>Material</th>
-                <th>Unidad de Medida</th>
+                <th>Producto</th>
                 <th>Stock</th>
-                <th>Cantidad Salida</th>
-                <th>Cantidad Retorno</th>
+                <th>Serie</th>
                 <th>Observacion</th>
+                <th>Buscar</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr style="display: none;">
                 <td>
-                    <input type="hidden" name="txtidDetRetornoMat" id="txtidDetRetornoMat"/>
-                    <input id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:80px" >
+                    <input type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd"/>
+                    <input id="txtProdSeries"  name="txtProdSeries" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                 </td>
                 <td>
-                    <input id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
+                    <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto">&nbsp;</div>
                 </td>
                 <td>
-                    <input id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:70px" >
                 </td>
                 <td>
-                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
+                    <input id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:150px" >
                 </td>
                 <td>
-                    <input id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"   style="width:90px"  >
+                    <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"></textarea>
                 </td>
                 <td>
-                    <input id="txtCantidadretorno"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
-                </td>
-                <td>
-                    <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"></textarea>
+                    <button id="btnBuscarSerie">Buscar</button>
                 </td>
                 <td>
                     <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -135,30 +132,29 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     </div>
                 </td>
             </tr>
-            <?php foreach ($this->detMateriales as $value) { ?>
+            <?php foreach ($this->detSeries as $value) { ?>
 
                 <tr>
                     <td>
-                        <input value="<?php echo $value["idDetRetornoMat"]; ?>" type="hidden" name="txtidDetRetornoMat" id="txtidDetRetornoMat" />
-                        <input value="<?php echo $value["idMaterial"]; ?>" id="txtCodigoMaterial"  name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled"  style="width:80px" >
+                        <input value="<?php echo $value["idDetRetornoProd"]; ?>" type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd" />
+                        <input value="<?php echo $value["idProdSeries"]; ?>" id="txtProdSeries"  name="txtProdSeries" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["material"]; ?>" id="txtNombreMaterial"  name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:300px" >
+                        <!--<input value="<?php echo $value["Producto"]; ?>" id="txtProducto"  name="txtProducto" class="ui-text-disable" disabled="disabled"  style="width:300px" >-->
+                        <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto"><?php echo $value["Producto"]; ?></div>
+
                     </td>
                     <td>
-                        <input value="<?php echo $value["unidadMedida"]; ?>" id="txtUnidadMedida"  name="txtUnidadMedida" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:70px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:40px" >
+                        <input value="<?php echo $value["Serie"]; ?>" id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:150px" >
                     </td>
                     <td>
-                        <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad"  name="txtCantidad" class="ui-text-disable" disabled="disabled"  style="width:90px"  >
+                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"><?php echo $value["vObserv"]; ?></textarea>
                     </td>
                     <td>
-                        <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno"  name="txtCantidadretorno" class="ui-text" style="width:90px"  >
-                    </td>
-                    <td>
-                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"><?php echo $value["vObserv"]; ?></textarea>
+                        <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
                     </td>
                     <td>
                         <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -184,7 +180,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 </div>
 
 
-<div id="dialogBuscarContribuyentePredio<?php echo $this->id; ?>">
+<div id="dialogBuscarSeries<?php echo $this->id; ?>">
     <table class="ui-panelLayout-main">
         <tr><td style="vertical-align: top;">
                 <table style="width: 100%;">
@@ -197,13 +193,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                                     </td></tr>
                                 <tr class="rowBuscarContribuyente<?php echo $this->id; ?>">
                                     <td style="text-align: left">
-                                        <select id="cbotipob" name="cbotipob" style="width:140px;">
-                                            <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
+                                        <select id="cbotipob" name="cbotipob"  style="width:140px;" >
+                                            <?php  echo $library->ContenidoCombo($TipoBusqueda, 5,0); ?>
                                         </select>
                                     </td>
                                     <td>Texto de busqueda:</td>
                                     <TD colspan="3">
-                                        <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
+                                        <input class="ui-text pnl" id="c_textbusqueda" value="<?php echo $this->idSalidaProd;?>" readonly onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
                                     </TD>
                                     <td> &nbsp;&nbsp;</td>
                                 </tr>
@@ -350,32 +346,64 @@ cargarCategoria = function () {
     contenidocomboContenedor('#cboLicenciaCategoria', $("#cboLicenciaClase").val())
 
 }
+actualizarSerie=function(a){
 
-buscarMaterialRetorno = function (d) {
+    if(a == "" || a == undefined){
+        openDialogWarning("Seleccione un registro.");
+        return;
+    }
+    console.log(a);
+    parameters = {
+        "id": a
+    };
+
+
+            $.ajax({
+                url: jQuery.scriptPath + "index.php/almacen/actualizarserie",
+                type: 'POST',
+                cache: false,
+                data: parameters,
+                beforeSend: function (data) {
+                },
+                success: function (requestData) {
+                    $("#result").html(requestData);
+                    var datos=JSON.parse(requestData);
+                    console.log(datos[0].ok);
+                },
+                error: function (requestData, strError, strTipoError) {
+                    $("#result").html("Error " + strTipoError + ': ' + strError);
+                },
+                complete: function (requestData, exito) {
+                }
+            });
+};
+
+buscarSeriesSalida = function (d) {
     console.log(d);
-    __gridConfigMaterial.data = [];
-    __gridConfigMaterial.ondblClickRow = function (rowid) {
+    __gridConfigSeries.data = [];
+    __gridConfigSeries.ondblClickRow = function (rowid) {
         row = $("#tblResult").jqGrid('getRowData', rowid);
         if (invocaBusPersona == 1) {
-            $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
-            $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombreMat);
-            $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
-//                $("#txtTestigoCodigoPersona").val(row.cidpers);
-//                $("#txtTestigoDNI").val(row.vnrodoc);
-//                $("#txtUnidadMedida").val(row.crazsoc);
+            $(d).parent().parent().find("input[name=txtProdSeries]").val(row.idProdSeries);
+            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
+            $(d).parent().parent().find("div[name=txtProducto]").html(row.producto );
+            $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
         }
-        closeDialog("dialogBuscarContribuyentePredio");
+        actualizarSerie(row.idProdSeries);
+        closeDialog("dialogBuscarSeries");
 
     };
-    BuscadorMaterial.bindkeysPersona = {"onEnter": __gridConfigMaterial.ondblClickRow};
+    BuscadorSeries.bindkeysPersona = {"onEnter": __gridConfigSeries.ondblClickRow};
+    BuscadorSeries.buscar();
     $("#tblResult").jqGrid("clearGridData");
     if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
         $(".rowBuscarContribuyente").removeClass("row-hide");
     }
     //$(".rowBuscarPredio").css({display: "none"});
-    $("#dialogBuscarContribuyentePredio").dialog("open");
+    $("#dialogBuscarSeries").dialog("open");
     $("#c_codigocontrib").focus();
-}
+};
+
 
 var i = 1;
 
@@ -396,16 +424,16 @@ agregarFilaTable = function (id) {
     }).end().appendTo("#" + id);
 
     themeComboBox("#" + id_combobox);
-    $("#btnBuscarMaterial_" + id + "_" + i).button().click(function () {
+    $("#btnBuscarSerie_" + id + "_" + i).button().click(function () {
         invocaBusPersona = 1;
-        buscarMaterialRetorno(this);
+        buscarSeriesSalida(this);
 
     });
     i++;
 }
 
 $(function () {
-    $("#fecsalida").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#fecretorno").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#div_titulo").html("Almacen => Retorno Productos");
 
@@ -420,17 +448,17 @@ $(function () {
 // clone inspector
 
     $("#btnBuscarMaterial").button("destroy");
-    agregarFilaTable("tableTestigos");
+    agregarFilaTable("tableRetornoProd");
     $("#btnRegistroAgregar").click(function () {
-        agregarFilaTable("tableTestigos");
+        agregarFilaTable("tableRetornoProd");
     });
     $("#btnRegistroAgregar").button({icons: {primary: "ui-icon-plus"}});
 //fin clone inspector
 
     //--- Buscar persona
     Persona.init(true);
-    BuscadorMaterial.init(BuscadorMaterial.MODO_FULL, true);
-    BuscadorMaterial.configurarDialog();
+    BuscadorSeries.init(BuscadorSeries.MODO_CERO, true);
+    BuscadorSeries.configurarDialog();
     //---- fin buscar persona
 
 
@@ -458,37 +486,37 @@ $(function () {
 
     function guardar() {
 
-        var detallesalida = {};
-        var materiales = [];
+        var detalleretorno = {};
+        var objSeries = [];
 
-        //Datos generales del salida de Materiales
-        detallesalida.idRetornoMat = $("#idRetornoMat").val();
-        detallesalida.idSalidaMat = $("#idSalidaMat").val();
-        detallesalida.obra = $("#txtobra").val();
-        detallesalida.lugar = $("#txtlugar").val();
-        detallesalida.fecha = $("#fecsalida").val();
-        detallesalida.idtecnico = $("#txtidtecnico").val();
+        //Datos generales del salida de objSeries
+        detalleretorno.idRetornoProd = $("#idRetornoProd").val();
+        detalleretorno.idSalidaProd = $("#idSalidaProd").val();
+        detalleretorno.obra = $("#txtobra").val();
+        detalleretorno.lugar = $("#txtlugar").val();
+        detalleretorno.fecha = $("#fecretorno").val();
+        detalleretorno.idtecnico = $("#txtidtecnico").val();
 
-        //Datos del Testigo
-        $('#tableTestigos > tbody  > tr').each(function () {
-            var detMateriales = {};
-            if ($(this).find("[name=txtCodigoMaterial]").val() != '' ) {
-                detMateriales.idDetRetornoMat = $(this).find("[name=txtidDetRetornoMat]").val();
-                detMateriales.idMaterial = $(this).find("[name=txtCodigoMaterial]").val();
-                detMateriales.cantidadRetorno = $(this).find("[name=txtCantidadretorno]").val();
-                detMateriales.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
-                materiales.push(detMateriales);
+        //Datos del detalle
+        $('#tableRetornoProd > tbody  > tr').each(function () {
+            var detSeries = {};
+            if ($(this).find("[name=txtProdSeries]").val() != '' ) {
+                detSeries.idDetRetornoProd = $(this).find("[name=txtidDetRetornoProd]").val();
+                detSeries.idProdSeries = $(this).find("[name=txtProdSeries]").val();
+                //detSeries.cantidadRetorno = $(this).find("[name=txtCantidadretorno]").val();
+                detSeries.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
+                objSeries.push(detSeries);
             }
         });
-        detallesalida.materiales = materiales;
+        detalleretorno.objSeries = objSeries;
 
         var pRetornoMat = {};
-        pRetornoMat.objSalidaMat = JSON.stringify(detallesalida);
+        pRetornoMat.objSalidaProd = JSON.stringify(detalleretorno);
         //console.log(JSON.stringify(pPapeleta));
         //console.log(papeleta);
-        $.post(path + "almacen/guardarretornomat", pRetornoMat, function (data) {
+        $.post(path + "almacen/guardarretornoprod", pRetornoMat, function (data) {
             console.log(data);
-            console.log(data["idRetornoMat"]);
+            console.log(data["idRetornoProd"]);
             if (data["a"] == '0') {
                 openDialogInfo(data["b"], "280", "150", null, function () {
                     return;

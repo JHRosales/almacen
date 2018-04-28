@@ -49,6 +49,7 @@ var config = {
             'idDetEntradaProd',
             'idProducto',
             'producto',
+            'stock',
             'vNroSerie',
             'vEstAlmacen',
             'Estado'
@@ -58,6 +59,7 @@ var config = {
             {name: 'idDetEntradaProd', index:'idDetEntradaProd', width:80},
             {name: 'idProducto', index:'idProducto', hidden:true},
             {name: 'producto', index:'producto', width:450},
+            {name: 'nStock', index:'nStock', width:60},
             {name: 'vNroSerie', index:'vNroSerie', width:250},
             {name: 'vEstAlmacen', index:'vEstAlmacen', width:80,hidden:true},
             {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}

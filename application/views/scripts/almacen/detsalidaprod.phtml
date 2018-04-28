@@ -9,7 +9,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
 
 <div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-rojo ui-corner-top ui-title">
-        <label>Mantenimiento - Salida Prodducto</label>
+        <label>Mantenimiento - Salida Producto</label>
     </div>
     <input type="hidden" id="idsalidaprod" name="idsalidaprod" value="<?php echo $this->idSalidaProd;?>">
 
@@ -24,7 +24,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                             </tr>
                         <tr>
                             <td colspan="4">
-                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="10" style="width:100%" />
+                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="100" style="width:100%" />
                             </td>
                         </tr>
                 <tr>
@@ -92,6 +92,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
             <tr class="ui-widget-header">
                 <th>Codigo Serie</th>
                 <th>Producto</th>
+                <th>Stock</th>
                 <th>Serie</th>
                 <th>Buscar</th>
                 <th></th>
@@ -106,6 +107,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                 <td>
                    <!-- <input id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
                     <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd">&nbsp;</div>
+                </td>
+                <td>
+                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                 </td>
                 <td>
                     <input id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
@@ -129,6 +133,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                     <td>
                         <!--<input value="<?php echo $value["Producto"]; ?>" id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
                         <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd"><?php echo $value["Producto"]; ?></div>
+                    </td>
+                    <td>
+                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:100px" >
                     </td>
                     <td>
                         <input value="<?php echo $value["Serie"]; ?>" id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
@@ -179,7 +186,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                                     </td>
                                     <td>Texto de busqueda:</td>
                                     <TD colspan="3">
-                                        <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
+                                        <input class="ui-text pnl" id="c_textbusqueda" name="c_textbusqueda"  onkeypress="if(event.keyCode==13){BuscadorSeries.buscar();}" style="width:100%" />
                                     </TD>
                                     <td> &nbsp;&nbsp;</td>
                                 </tr>
@@ -312,9 +319,41 @@ $("#cbformapago").combobox({
 
 
 //Funcion para regresar al la grilla naterior
-    function Cancelar(){
+function Cancelar() {
+    var detallesalida = {};
+    var series = [];
+
+    //Datos series
+    $('#tableSeries > tbody  > tr').each(function () {
+        var detseries = {};
+        if ($(this).find("[name=txtCodigoSerie]").val() != '') {
+            detseries.idDetSalidaProd = $(this).find("[name=txtidDetSalidaProd]").val();
+            detseries.idSerie = $(this).find("[name=txtCodigoSerie]").val();
+            detseries.vSerie = $(this).find("[name=txtSerie]").val();
+            series.push(detseries);
+        }
+    });
+    detallesalida.series = series;
+
+    var pSalidaProd = {};
+    pSalidaProd.objSalidaProd = JSON.stringify(detallesalida);
+    if(series.length==0){
         window.open(path + "almacen/salidaprod", "_self");
+        return;
     }
+    $.post(path + "almacen/cancelarsalidaprod", pSalidaProd, function (data) {
+        console.log(data);
+        if (data[0] == '0') {
+            openDialogInfo(data["b"], "280", "150", null, function () {
+                return;
+            });
+            window.open(path + "almacen/salidaprod", "_self");
+        }else{
+
+            window.open(path + "almacen/salidaprod", "_self");
+        }
+    }, 'json');
+};
 
 
 
@@ -327,6 +366,39 @@ cargarCategoria = function () {
 
 };
 
+actualizarSerie=function(a){
+
+    if(a == "" || a == undefined){
+        openDialogWarning("Seleccione un registro.");
+        return;
+    }
+    console.log(a);
+    parameters = {
+        "id": a
+    };
+
+
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/actualizarseriesalida",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {
+        },
+        success: function (requestData) {
+            $("#result").html(requestData);
+            var datos=JSON.parse(requestData);
+            console.log(datos[0].ok);
+        },
+        error: function (requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete: function (requestData, exito) {
+        }
+    });
+};
+
+
 buscarSeriesSalida = function (d) {
     console.log(d);
     __gridConfigSeries.data = [];
@@ -334,14 +406,16 @@ buscarSeriesSalida = function (d) {
         row = $("#tblResult").jqGrid('getRowData', rowid);
         if (invocaBusPersona == 1) {
             $(d).parent().parent().find("input[name=txtCodigoSerie]").val(row.idProdSeries);
-           // $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombre);
+            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
             $(d).parent().parent().find("div[name=txtNombreProd]").html(row.producto );
             $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
         }
+        actualizarSerie(row.idProdSeries);
         closeDialog("dialogBuscarSeries");
 
     };
     BuscadorSeries.bindkeysPersona = {"onEnter": __gridConfigSeries.ondblClickRow};
+    BuscadorSeries.buscar();
     $("#tblResult").jqGrid("clearGridData");
     if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
         $(".rowBuscarContribuyente").removeClass("row-hide");
@@ -354,7 +428,47 @@ buscarSeriesSalida = function (d) {
 var i = 1;
 
 deleteFilaTable = function (d) {
-    $(d).parent().parent().remove();
+    var serie = $(d).parent().parent().find("input[name=txtCodigoSerie]").val();
+    var iddetsalidaprod = $(d).parent().parent().find("input[name=txtidDetSalidaProd]").val();
+
+
+    if(serie == "" || serie == undefined){
+        $(d).parent().parent().remove();
+        return;
+    }
+
+    parameters = {
+        "id": serie,
+        "idDetsalida": iddetsalidaprod
+    };
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/eliminarseriesalidaprod",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {
+        },
+        success: function (requestData) {
+            $("#result").html(requestData);
+            var datos=JSON.parse(requestData);
+            console.log(datos[0][1]);
+            console.log(datos[0][0]);
+            if(datos[0][0]=="ok"){
+                $(d).parent().parent().remove();
+            }else{
+                openDialogInfo(datos[0][1], "280", "150", null, function () {
+                    return;
+                });
+            }
+
+        },
+        error: function (requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete: function (requestData, exito) {
+        }
+    });
+
 };
 agregarFilaTable = function (id) {
     var id_combobox = "";

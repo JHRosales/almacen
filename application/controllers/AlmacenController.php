@@ -259,6 +259,9 @@ class AlmacenController extends Zend_Controller_Action {
         //$this->view->fechaini=date('d/m/Y');
         //$this->view->fechafin=date('d/m/Y');
         $this->view->idcotiz="se";
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@p_identradaprod', '');
+        $copiarcot = $cn->executeAssocQuery('eliminar_entradaprod', $params);
 
     }
     public function salidamatAction() {
@@ -589,6 +592,48 @@ public function detentradaprodAction() {
         }
     }
 
+    public function actualizarserieAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $idmat = $this->_request->getPost('id');
+            $params = null;
+            $params[] = array('@p_idprodserie',$idmat);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->executeAssocQuery('almacen.retorno_stockstadoprod', $params);
+            $cperson = count($detcot);
+            echo json_encode($detcot);
+        }
+    }
+    public function actualizarseriesalidaAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $idmat = $this->_request->getPost('id');
+            $params = null;
+            $params[] = array('@p_idprodserie',$idmat);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->executeAssocQuery('almacen.salida_stockstadoprod', $params);
+            $cperson = count($detcot);
+            echo json_encode($detcot);
+        }
+    }
     public function listarseriesAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -764,19 +809,19 @@ public function detentradaprodAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
-            $idsalidamat = $this->_request->getParam('idSalidaProd');
-            $this->view->idsalidamat =$idsalidamat;
+            $idsalidaprod = $this->_request->getParam('idSalidaProd');
+            $this->view->idsalidaprod =$idsalidaprod;
             $cn = new Model_DataAdapter ();
             $params[] = array('@tBusqueda', "3");
-            $params[] = array('@vDatoBus', $idsalidamat);
+            $params[] = array('@vDatoBus', $idsalidaprod);
             $params[] = array('@vFecIni', "");
             $params[] = array('@vFecFin', "");
-            $datos = $cn->ejec_store_procedura_sql('almacen.List_RetornoMat', $params);
+            $datos = $cn->ejec_store_procedura_sql('almacen.List_RetornoProd', $params);
 
             $cdatos = count($datos);
             if ($cdatos == 0) {
-                $this->view->idRetornoMat =$datos[0][0];
-                $this->view->idSalidaMat =$datos[0][1];
+                $this->view->idRetornoProd =$datos[0][0];
+                $this->view->idSalidaProd =$datos[0][1];
                 $this->view->dFecSalida =$datos[0][2];
                 $this->view->dFecRetorno =$datos[0][3];
                 $this->view->obra=$datos[0][4];
@@ -785,8 +830,8 @@ public function detentradaprodAction() {
                 $this->view->nomtecnico=$datos[0][7];
 
             }else{
-                $this->view->idRetornoMat =$datos[0][0];
-                $this->view->idSalidaMat =$datos[0][1];
+                $this->view->idRetornoProd =$datos[0][0];
+                $this->view->idSalidaProd =$datos[0][1];
                 $this->view->dFecSalida =$datos[0][2];
                 $this->view->dFecRetorno =$datos[0][3];
                 $this->view->obra=$datos[0][4];
@@ -796,18 +841,79 @@ public function detentradaprodAction() {
             }
 
             $arrDetMateriales = array();
-            $params_mat[] = array('@tBusqueda', "0"); #p_idsigma
-            $params_mat[] = array('@vIdSalidaMat',$idsalidamat);#p_mpapeleta
-            $params_mat[] = array('@vDatoBus', "");#p_mpapeleta
-            $params_mat[] = array('@vFecIni', "");#p_mpapeleta
-            $params_mat[] = array('@vFecFin', "");#p_mpapeleta
-            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetRetornoMat", $params_mat);
+            $params_prod[] = array('@tBusqueda', "0"); #p_idsigma
+            $params_prod[] = array('@vIdSalidaProd',$idsalidaprod);#
+            $params_prod[] = array('@vDatoBus', "");#
+            $params_prod[] = array('@vFecIni', "");#
+            $params_prod[] = array('@vFecFin', "");#
+            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetRetornoProd", $params_prod);
             if (count($dtbdtestigo) > 0) {
                 $arrDetMateriales = $dtbdtestigo;
             }
 
-            $this->view->detMateriales = $arrDetMateriales;
+            $this->view->detSeries = $arrDetMateriales;
 
+        }
+
+
+
+    }
+
+
+    public function cancelarsalidaprodAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pSalidap = $this->_request->getParam('objSalidaProd');
+            $jSalidaP = json_decode($pSalidap);
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_stockstadoprodcancelar';
+
+            foreach ($jSalidaP->series as $value) {
+                $params = null;
+                $params[] = array('@p_idprodserie',  $value->idSerie);  #prodserie
+                $params[] =  array('@p_idDetSalidaprod',  $value->idDetSalidaProd); #iddetsalidaprod
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($permiso[0]));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
+
+    public function eliminarseriesalidaprodAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidprodserie = $this->_request->getParam('id');
+            $piddetsalida = $this->_request->getParam('idDetsalida');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_stockstadoprodcancelar';
+
+                $params = null;
+                $params[] = array('@p_idprodserie',  $pidprodserie);  #prodserie
+                $params[] =  array('@p_idDetSalidaprod', $piddetsalida); #iddetsalidaprod
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+            // print_r(json_encode($resultDescta[0]["b"]));
         }
     }
 
@@ -859,11 +965,121 @@ public function detentradaprodAction() {
         }
     }
 
+    public function detentradamatdelAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $iddentrada = $this->_request->getPost('idDetEntradaMat');
+
+            $params = null;
+            $params[] = array('@p_iddentradamat', $iddentrada);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->ejec_store_procedura_sql('delete_dentradamat', $params);
+            echo json_encode($detcot);
+        }
+    }
+
+    public function detentradaproddelAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $iddentrada = $this->_request->getPost('idDetEntradaProd');
+
+            $params = null;
+            $params[] = array('@p_iddentradaprod', $iddentrada);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->ejec_store_procedura_sql('delete_dentradaprod', $params);
+            echo json_encode($detcot);
+        }
+    }
+    public function eliminarentradaprodAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $identradaprod = $this->_request->getPost('identradaProd');
+            $params = null;
+            $params[] = array('@p_identradaprod', $identradaprod);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $copiarcot = $cn->executeAssocQuery('eliminar_entradaprod', $params);
+            echo json_encode($copiarcot);
+        }
+    }
 
 
 
+    public function guardarretornoprodAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
 
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
 
+            $pPSeries = $this->_request->getParam('objSalidaProd');
+            $jProSeries = json_decode($pPSeries);
+
+            $dataSet = new Model_DataAdapter();
+            if ($jProSeries->idRetornoProd == "") {
+                $trans = "1";
+            } else {
+                $trans = "2";
+            }
+            $_procedure = 'almacen.InsUpd_retornoProd';
+            $params[] = array('@ttrans', $trans);
+            $params[] = array('@p_idretornoprod', $jProSeries->idRetornoProd);
+            $params[] = array('@p_idsalidaprod', $jProSeries->idSalidaProd);
+            $params[] = array('@p_obra', $jProSeries->obra);
+            $params[] = array('@p_lugar', $jProSeries->lugar);
+            $params[] = array('@p_fecha', $jProSeries->fecha);
+            $params[] = array('@p_idtecnico', $jProSeries->idtecnico);
+            $params[] = array('@vUsernm', $userlogin);
+            $params[] = array('@vHostnm', 'local');
+
+            $resultPapeleta = $dataSet->executeAssocQuery($_procedure, $params);
+
+            $_proc_dtestigo = 'add_detretornoprod';
+
+            foreach ($jProSeries->objSeries as $value) {
+                $params = null;
+                $params[] = array('@p_idprodser', $value->idProdSeries);  #p_idsigma
+                $params[] = array('@p_idretornoprod', $resultPapeleta[0]["idRetornoProd"]);   #p_mpapeleta
+                $params[] = array('@p_iddetretornoprod',  $value->idDetRetornoProd);  #p_mperson
+                //$params[] =  array('@p_cantidad',  $value->cantidadRetorno); #cantidad
+                $params[] =  array('@p_observ',  $value->observacion); #cantidad
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($resultPapeleta[0]));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
 
 
 
@@ -916,27 +1132,7 @@ public function detentradaprodAction() {
         }
     }
 
-    public function detentradamatdelAction() {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->layout->disableLayout();
-            $this->_helper->getHelper('ajaxContext')->initContext();
-            $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
-            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
-            $usuario = $ddatosuserlog->userlogin;
-            $host = $ddatosuserlog->vhostnm;
 
-            $iddentrada = $this->_request->getPost('idDetEntradaMat');
-
-            $params = null;
-            $params[] = array('@p_iddentradamat', $iddentrada);
-
-            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
-            $detcot = $cn->ejec_store_procedura_sql('delete_dentradamat', $params);
-            echo json_encode($detcot);
-        }
-    }
 
     public function copiarcotizAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -958,26 +1154,7 @@ public function detentradaprodAction() {
             echo json_encode($copiarcot);
         }
     }
-    public function eliminarcotizacionAction() {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->layout->disableLayout();
-            $this->_helper->getHelper('ajaxContext')->initContext();
-            $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
-            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
-            $usuario = $ddatosuserlog->userlogin;
-            $host = $ddatosuserlog->vhostnm;
 
-            $idcotiz = $this->_request->getPost('idCotiz');
-            $params = null;
-            $params[] = array('@p_idcotiz', $idcotiz);
-
-            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
-            $copiarcot = $cn->executeAssocQuery('eliminar_cotizacion1', $params);
-            echo json_encode($copiarcot);
-        }
-    }
 
     public function visordocsAction() {
 

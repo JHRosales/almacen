@@ -689,11 +689,23 @@ BuscadorSeries = {
     buscar: function() {
         var valid = [false, false];
 
+      if(trim($("#cbotipob").val())==1 && IsNumeric($("#c_textbusqueda").val())==false){  //Validar si es por id el campo de busqueda tiene que ser un numero entero.
+          openDialogWarning("Ingrese un Numero.", 380, 150);
+          return;
+      }
+
+
+
         valid[0] = valid[0] || (trim($("#cbotipob").val()).length > 0);
         valid[0] = valid[0] || (trim($("#c_textbusqueda").val()).length > 0);
-
+        console.log($("#cbotipob").val());
         if (valid[0]) {
-            BuscadorSeries.buscarAjax(BuscadorSeries.MODO_CERO);
+            if(trim($("#cbotipob").val())==5){
+                BuscadorSeries.buscarAjax(BuscadorSeries.MODO_CERO);
+            }else{
+                BuscadorSeries.buscarAjax(BuscadorSeries.MODO_FULL);
+            }
+
         }  else {
             openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
         }
@@ -722,7 +734,7 @@ BuscadorSeries = {
 
         inicializarGrid("tblResult", ( this.gridConfigPersona));
 
-        $("#panelBuscarContribuyente").on("keyup", "input", function(e) {
+        $("#rowBuscarContribuyente").on("keyup", "input", function(e) {
             if (e.keyCode == 13) {
                 $("#btnbuscar").click();
             }
@@ -751,8 +763,8 @@ BuscadorSeries = {
         });
 
         this.procedimientoBuscarPersona = this.PROCEDIMIENTO_BUSCAR_PERSONA;
-        if (modo == this.MODO_FULL) {
-            this.titleDialog = "Buscador de Materiales";
+        if (modo == this.MODO_FULL || modo==this.MODO_CERO) {
+            this.titleDialog = "Buscador de Series";
             if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
                 $(".rowBuscarContribuyente").removeClass("row-hide");
             }
@@ -783,13 +795,21 @@ BuscadorSeries = {
             ']';
 
     },
+    obtenerParameterSeriesSalida: function() {
+        return '[' +
+            '["@tBusqueda", "5"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
+
+    },
     buscarAjax: function(modo) {
+
         var
             parameters = {
                 "name": "tblResult",
                 "procedure": (this.procedimientoBuscarPersona ),
                 "print": "true",
-                "parameters": ( this.obtenerParameterContribuyente())
+                "parameters": ( modo == this.MODO_FULL ? this.obtenerParameterContribuyente() : this.obtenerParameterSeriesSalida() )
             },
             proceso = function(request) {
                 $("#panelResult").html('<table id="tblResult"></table><div id="ptblResult"></div><input type="hidden" id="ctblResult" name="ctblResult" value="" />');

@@ -24,7 +24,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                             </tr>
                         <tr>
                             <td colspan="4">
-                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="10" style="width:100%" />
+                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="100" style="width:100%" />
                             </td>
                         </tr>
                 <tr>
@@ -370,6 +370,7 @@ var i = 1;
 
 deleteFilaTable = function (d) {
     $(d).parent().parent().remove();
+
 }
 agregarFilaTable = function (id) {
     var id_combobox = "";

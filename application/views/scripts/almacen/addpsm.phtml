@@ -60,7 +60,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                         <TD colspan="3">
                             <input class="ui-text pnl" id="txtPrecioUnit"  value="<?php echo $this->punitario; ?>"  style="width:100%" />
                         </TD>
+                        <td> &nbsp;&nbsp; </td>
+                    </tr>
+                    <tr><td colspan="3"> &nbsp;&nbsp;</td>
                         <td> &nbsp;&nbsp;</td>
+                        <td> <button id="btnAgregar" name="btnAgregar" onclick="addprodserv()">Agregar</button></td>
                     </tr>
                 </table>
     </div>
@@ -427,6 +431,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     $(function(){
         buscarMatePrimeravez();
          $("#btnbuscarPSM").button({icons: {primary: "ui-icon-search"}});
+        $("#btnAgregar").button(ICON_SAVE);
+
        /*reiniCombo("cbocsubcateg");
        getSubcategoria($("#cbocategor").val(),"cbocsubcateg");*/
     });
