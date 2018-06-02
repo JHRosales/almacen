@@ -204,6 +204,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
+        }, gridComplete: function(){
+            isGridComplete = true;
+            $("#tblPSM").jqGrid('setSelection', 1, true);
         }
     };
 

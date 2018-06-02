@@ -256,7 +256,7 @@ class AlmacenController extends Zend_Controller_Action {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
         }
-        //$this->view->fechaini=date('d/m/Y');
+       // $this->view->fechaini=date('d/m/Y', strtotime('yesterday'));
         //$this->view->fechafin=date('d/m/Y');
         $this->view->idcotiz="se";
         $cn = new Model_DataAdapter ();
@@ -904,7 +904,7 @@ public function detentradaprodAction() {
 
 
             $dataSet = new Model_DataAdapter();
-            $_proc_dtestigo = 'almacen.salida_stockstadoprodcancelar';
+            $_proc_dtestigo = 'almacen.salida_stockstadoprodeliminar';
 
                 $params = null;
                 $params[] = array('@p_idprodserie',  $pidprodserie);  #prodserie

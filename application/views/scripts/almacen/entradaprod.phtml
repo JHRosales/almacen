@@ -9,76 +9,81 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
     <div class="ui-widget ui-state-verde ui-corner-top ui-title">
         <label>ENTRADA DE PRODUCTOS</label>
     </div>
-    <div id="dialogBuscarContribuyentePredio">
-        <table class="ui-panelLayout-main" >
-            <tr>
-                <td style="vertical-align: top;">
-                    <table border="0" style="margin-left:15px;">
+    <div id="dialogBuscarContribuyentePredio" style="margin-bottom: -30px">
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos del Producto</div>
 
-                        <tr><td>
-                                <b>  Datos Busqueda</b>
-                            </td></tr>
+        <div class="form-row">
+            <div class="form-group col-md-6 text-left">
+                <label for="inputModelo">Modelo</label>
+                <input type="text" class="form-control" id="txtModelo" name="txtModelo"  placeholder="Modelo">
+            </div>
+            <div class="form-group col-md-6 text-left">
+                <label for="inputSerie">Serie</label>
+                <input type="text" class="form-control" id="txtSerie" name="txtSerie"  placeholder="Serie">
+            </div>
+        </div>
 
-                        <tr class="rowdatospsm" id="rowdatospsm">
-                            <td style="text-align: left">
-                                <select id="cbotipob" name="cbotipob" style="width:140px;">
-                                    <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
-                                </select>
-                            </td>
-                            <td></td>
-                            <TD colspan="8">
-                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarEntradaProd();}" style="width:100%" />
-                            </TD>
-                            <td> &nbsp;&nbsp;</td>
-                            <td rowspan="3">
-                                <button id="btnbuscar" name="btnbuscar" onclick="buscarEntradaProd()">Buscar</button>
-                            </td>
-                        </tr>
-                        <tr class="rowcoti">
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos del Proveedor</div>
+        <div class="form-row">
+            <div class="form-group col-md-6 text-left">
+                <label for="inputRazonS" >Razon Social</label>
+                <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial"  placeholder="Razon social">
+            </div>
+            <div class="form-group col-md-6 text-left">
+                <label for="inputRUC">RUC</label>
+                <input type="text" class="form-control" id="txtRuc" name="txtRuc"  placeholder="Ruc">
+            </div>
+        </div>
 
-                            <td width="100" style="text-align: left">Fecha Desde:</td>
-                            <td width="30">&nbsp;</td>
-                            <td width="200" style="text-align: left">Fecha Hasta:</td>
-                            <td width="10">&nbsp;</td>
-                            <td width="10">&nbsp;</td>
 
-                        </tr>
-                        <tr class="rowbcoti" id="panelbcoti">
+        <div class="col-sm-12 text-left text-nowrap bg-success" ></div>
 
-                            <td>
-                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;"/>
-                            </td>
-                            <td>&nbsp;</td>
-                            <td colspan="2">
-                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;"/>
-                            </td>
-                            <td>&nbsp;</td>
+      <!--  <div class="form-group col-md-6 text-left">
+            <label for="inputZip">Tipo Busqueda</label>
+            <select id="cbotipob" name="cbotipob"   class="form-control col-md-12">
+                <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
+            </select>
+        </div>
 
-                        </tr>
-                        <tr>
-                            <td colspan="13" height="8px"></td>
-                        </tr>
+        <div class="form-group col-md-6 text-left">
+            <label for="inputRUC">Busqueda</label>
+            <input class="form-control" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarEntradaProd();}" />
+        </div>-->
 
-                        <tr>
-                            <td colspan="13" height="8px"></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+        <div class="form-group col-md-6 text-left">
+            <label for="inputCity">Fecha Desde   </label>
+            <input type="text" id="fecdesde" maxlength="10" class="form-control col-md-12" onkeypress="if(event.keyCode==13){buscarEntradaProd();}" value="<?php echo $this->fechaini; ?>" />
+        </div>
+        <div class="form-group col-md-6 text-left">
+            <label for="inputState">Fecha Hasta</label>
+            <input type="text" id="fechasta" maxlength="10" class="form-control col-md-12" onkeypress="if(event.keyCode==13){buscarEntradaProd();}" value="<?php echo $this->fechafin; ?>" />
+        </div>
 
-        </table>
-    </div>
-    <div id="dialogMensaje">
-    </div>
-    <div id="panelListaEntradaProd" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
+
+
+            <div class="form-group col-md-2 text-center" style="display: none">
+                <button id="btnbuscar" name="btnbuscar"  class="form-control" onclick="buscarEntradaProd()">Buscar</button>
+            </div>
+        <div  class="form-group">&thinsp;
+        </div>
+        </div>
+
+    <div class="container" id="panelListaEntradaProd" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
         <table id="tblListaEntradaProd"></table>
         <div id="ptblListaEntradaProd"></div>
     </div>
-    <br/>
-
 
 
 </div>
+
+
+
+
+
+
+<div id="dialogMensaje"  >
+</div>
+
 <script type="text/javascript">
 /*    $("#cbo_bus").combobox({
         selected: function(event, ui){
@@ -95,6 +100,31 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         }
     });
 */
+$("#txtModelo").keyup(function(e){
+    if($("#txtModelo").val().length>2 || e.keyCode==13 ){
+        buscarEntradaProd();
+        $("#txtModelo").focus();
+    }
+});
+$("#txtSerie").keyup(function(e){
+    if($("#txtSerie").val().length>2 || e.keyCode==13 ){
+        buscarEntradaProd();
+        $("#txtSerie").focus();
+    }
+});
+$("#txtRazonSocial").keyup(function(e){
+    if($("#txtRazonSocial").val().length>2 || e.keyCode==13 ){
+        buscarEntradaProd();
+        $("#txtRazonSocial").focus();
+    }
+});
+$("#txtRuc").keyup(function(e){
+    if($("#txtRuc").val().length>2 || e.keyCode==13 ){
+        buscarEntradaProd();
+        $("#txtRuc").focus();
+    }
+});
+
 
     $("#cbotipob").combobox({
         selected: function(event, ui){
@@ -469,15 +499,30 @@ nuevaEntradaProd = function(){
 
 
     buscarEntradaProd = function() {
+      var fecdes=$("#fecdesde").val();
+      var fechast =$("#fechasta").val();
+      var modelo=$("#txtModelo").val();
+      var serie=$("#txtSerie").val();
+      var razsoc=$("#txtRazonSocial").val();
+      var ruc=$("#txtRuc").val();
 
-        var tipob=$("#cbotipob").val();
+        console.log(modelo);
+       /* if(fecdes<fechast){
+            console.log(fd>fa);
+            openDialogWarning("La fecha desde debe ser menor que la fecha hasta");
+            return;
+        }*/
+
+        var tipob='0';
 
         var params = '['
             + '["@tBusqueda", "' +tipob + '"],'
-            + '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"],'
-            + '["@vSubCat", "' + $("#c_textbusqueda").val() + '"],'
-            + '["@vFecIni", "' + $("#fecdesde").val() + '"],'
-            + '["@vFecFin", "' + $("#fechasta").val() + '"]'
+            + '["@vModelo", "' + modelo + '"],'
+            + '["@vSerie", "' + serie + '"],'
+            + '["@vRazonSoc", "' + razsoc + '"],'
+            + '["@vRuc", "' + ruc + '"],'
+            + '["@vFecIni", "' + fecdes + '"],'
+            + '["@vFecFin", "' + fechast + '"]'
             + ']';
         parameters = {
             "name": "tblListaEntradaProd",
