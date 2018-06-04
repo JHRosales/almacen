@@ -111,7 +111,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
             {name: 'idTecnico', index:'idTecnico', width:70},
             {name: 'vTecnico', index:'vTecnico', width:150},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false, hidden: true},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: true},
             { name: 'btndocudevo', index: 'btndocudevo', width: 60, align: 'center' ,formatter : btnRetorno,search:false}
@@ -229,11 +229,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
     function accionborrarcotizacion(rowId){
         var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData',rowId);
 
-        var paramtrs ={ idCotiz :rowdat.idCotiz }
+        var paramtrs ={ idSalidaMat :rowdat.idSalidaMat }
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function () {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/cotizacion/eliminarcotizacion",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarsalidamat",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -241,10 +241,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
                     },
                     success: function (requestData) {
                         var datos=JSON.parse(requestData);
-
-
-                                console.log(datos);
-                        var parameters ={ idcotizacion :datos[0].idcotiz };
+                         console.log(datos);
+                        var parameters ={ idcotizacion :datos[0].idSalidaMat };
                         buscarSalidaMate();
                         closeDialog("jqDialogConfirmacion1");
                     },

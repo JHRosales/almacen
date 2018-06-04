@@ -250,6 +250,10 @@ class AlmacenController extends Zend_Controller_Action {
         //$this->view->fechafin=date('d/m/Y');
         $this->view->idcotiz="se";
 
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@p_identradamat', '');
+        $copiarcot = $cn->executeAssocQuery('eliminar_entradamat', $params);
+
     }
     public function entradaprodAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -916,6 +920,33 @@ public function detentradaprodAction() {
             // print_r(json_encode($resultDescta[0]["b"]));
         }
     }
+    public function eliminarmaterialsalidamatAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidprodserie = $this->_request->getParam('id');
+            $piddetsalida = $this->_request->getParam('idDetsalida');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_stockstadomateliminar';
+
+            $params = null;
+            $params[] = array('@p_idmaterial',  $pidprodserie);  #prodserie
+            $params[] =  array('@p_idDetSalidamat', $piddetsalida); #iddetsalidaprod
+            //print_r($params);
+            $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
 
     public function guardarsalidaprodAction()
     {
@@ -1028,7 +1059,47 @@ public function detentradaprodAction() {
             echo json_encode($copiarcot);
         }
     }
+    public function eliminarentradamatAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
 
+            $identradamat = $this->_request->getPost('idEntradaMat');
+            $params = null;
+            $params[] = array('@p_identradamat', $identradamat);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $copiarcot = $cn->executeAssocQuery('eliminar_entradamat', $params);
+            echo json_encode($copiarcot);
+        }
+    }
+
+    public function eliminarsalidamatAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $identradamat = $this->_request->getPost('idSalidaMat');
+            $params = null;
+            $params[] = array('@p_idsalidamat', $identradamat);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $copiarcot = $cn->executeAssocQuery('eliminar_salidamat', $params);
+            echo json_encode($copiarcot);
+        }
+    }
 
 
     public function guardarretornoprodAction()

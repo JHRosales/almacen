@@ -217,6 +217,7 @@ $("#cbtipomon").combobox({
             'PU',
             'P. Total',
             'estado',
+            "",
             "Serie",
             ""
         ],
@@ -244,6 +245,7 @@ $("#cbtipomon").combobox({
             }}
             },
             {name: 'vEstado', index:'vEstado', width:100, hidden: true,editable: false},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btncalcular,search:false},
             { name: 'btndocumall', index: 'btndocumall', width: 60, align: 'center' ,formatter : btnAgregarserie,search:false,hidden:false},
             { name: 'btndocumall1', index: 'btndocumall1', width: 40, align: 'center' ,formatter : btndelete,search:false}
             //{name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left', formatter: linkadjunto},
@@ -411,6 +413,26 @@ function linkadjuntoOpen(rowId, cellvalue) {
     var row = jQuery("#tblResultDocAdjunto").jqGrid('getRowData', rowId);
 //console.log(row);
     window.open(path + "mantenimientos/forzardescarga?file=" +  cellvalue);
+}
+
+
+
+// -----> Calcular============================================00
+function btncalcular(cellvalue, options, rowObject){
+
+    return '<div align="center" class="ui-pg-button " ' +
+        'title="Calcular" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+        'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+        'onclick="Calculaentradaprod(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+        '<span class="ui-icon ui-icon-calculator"></span></div></div>';
+}
+
+
+function Calculaentradaprod(rowId) {
+    var row = jQuery("#tblDetEntradaProd").jqGrid('getRowData', rowId);
+    calcular();
+
+    actualizarcantdetalleCot();
 }
 
 /*
@@ -701,8 +723,14 @@ function eliminardetentradama(rowId) {
     });
 }
 function updCheckdelete(data) {
-    lastsel3=undefined
-    buscarDetEntradaProd();
+//console.log(data[0][1])
+//console.log(data[0][0])
+    if (data[0][1]=="ERR"){
+        openDialogWarning(data[0][0]);
+    }else{
+        lastsel3=undefined;
+        buscarDetEntradaProd();
+    }
 }
 
 
@@ -764,28 +792,25 @@ calcular();
     }
 
 
-/*actualizarcantdetalleCot = function(){
+actualizarcantdetalleCot = function(){
     jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
     var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
     if (rows.length > 0) {
-        var subtotal = 0;
         for (var i=0;i<rows.length;i++) {
             var row=rows[i];
             parameters = {
-                "idDetCotiz": row.idDetEntradaProd,
+                "idDetEntradaProd": row.idDetEntradaProd,
                 "nPrecioUnit": row.nPrecioUnit,
                 "nCantidad": row.nCantidad,
-                "nPrecioTotal": row.nPrecioTotal,
-                "nDescu": row.nDesc
+                "nPrecTotal": row.nPrecioTotal
             };
             $.ajax({
-                url: jQuery.scriptPath + "index.php/almacen/detcotizacionupdate",
+                url: jQuery.scriptPath + "index.php/almacen/detentradaprodupdate",
                 type: 'POST',
                 cache: false,
                 data: parameters,
                 beforeSend: function (data) {   },
                 success: function (requestData) {
-
                 },
                 error: function (requestData, strError, strTipoError) {   },
                 complete: function (requestData, exito) {    }
@@ -793,7 +818,7 @@ calcular();
         }
     }
 
-}*/
+}
 
 
     $(function(){

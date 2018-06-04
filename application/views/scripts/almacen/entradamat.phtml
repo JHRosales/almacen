@@ -213,7 +213,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function () {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/eliminarcotizacion",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarentradamat",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,

@@ -369,7 +369,46 @@ buscarMaterialSalida = function (d) {
 var i = 1;
 
 deleteFilaTable = function (d) {
-    $(d).parent().parent().remove();
+      var idmaterial = $(d).parent().parent().find("input[name=txtCodigoMaterial]").val();
+    var iddetsalidamat = $(d).parent().parent().find("input[name=txtidDetSalidaMat]").val();
+
+
+    if(idmaterial == "" || idmaterial == undefined){
+        $(d).parent().parent().remove();
+        return;
+    }
+
+    parameters = {
+        "id": idmaterial,
+        "idDetsalida": iddetsalidamat
+    };
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/eliminarmaterialsalidamat",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {
+        },
+        success: function (requestData) {
+            $("#result").html(requestData);
+            var datos=JSON.parse(requestData);
+            console.log(datos[0][1]);
+            console.log(datos[0][0]);
+            if(datos[0][0]=="ok"){
+                $(d).parent().parent().remove();
+            }else{
+                openDialogInfo(datos[0][1], "280", "150", null, function () {
+                    return;
+                });
+            }
+
+        },
+        error: function (requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete: function (requestData, exito) {
+        }
+    });
 
 }
 agregarFilaTable = function (id) {

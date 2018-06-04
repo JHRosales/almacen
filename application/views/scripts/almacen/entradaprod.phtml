@@ -313,9 +313,13 @@ break;
                     },
                     success: function (requestData) {
                         var datos=JSON.parse(requestData);
-                        console.log(datos);
-                        var parameters ={ identradaprod :datos[0].identradaprod };
+                        console.log(datos[0].std);
+                        if(datos[0].std=="ERR"){
+                            openDialogWarning(datos[0].msg);
+                        }else{
+                        //var parameters ={ identradaprod :datos[0].identradaprod };
                         buscarEntradaProd();
+                        }
                         closeDialog("jqDialogConfirmacion1");
                     },
                     error: function (requestData, strError, strTipoError) {
