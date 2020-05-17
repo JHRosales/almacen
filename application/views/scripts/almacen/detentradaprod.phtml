@@ -56,7 +56,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
                             <td width="10">&nbsp;</td>
                             <td width="230" style="text-align: left">Factura</td>
                             <td width="10">&nbsp;</td>
-
+                            <td width="230" style="text-align: left">Tipo Moneda</td>
                         </tr>
 
                         <tr class="rowbcoti" id="panelbcoti">
@@ -70,6 +70,12 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
                             <td>&nbsp;
                             </td>
 
+                            <td colspan="2">
+                                <select id="cbtipomon" name="cbtipomon" style="width:140px;">
+                                    <?php  echo $library->ContenidoCombo($TipoMoneda, $this->ctipmon,0); ?>
+                                </select>
+
+                            </td>
                         </tr>
 
                         <tr>
@@ -556,8 +562,8 @@ GuardardetalleEProd = function(){
             "igv":  $("#txtigv").val(),
             "total":  $("#txttotal").val(),
             "fecha": $("#fecdesde").val(),
-            "factura": $("#txtfactura").val()
-
+            "factura": $("#txtfactura").val(),
+            "tipoMoneda": $("#cbtipomon").val()
 
         };
         $.ajax({
@@ -788,13 +794,34 @@ calcular();
 
 //Funcion para regresar al la grilla naterior
     function Cancelar(){
-        window.open(path + "almacen/entradaprod", "_self");
+        parameters = {
+            "identradaprod":$("#identradaprod").val()
+        }
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/cancelareliminadosentradaprod",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) { },
+            success: function (requestData) {
+                // $("#result").html(requestData);
+                //  var datos=JSON.parse(requestData);
+                window.open(path + "almacen/entradaprod", "_self");
+            },
+            error: function (requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function (requestData, exito) {    }
+        });
+
+
     }
 
 
 actualizarcantdetalleCot = function(){
     jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
     var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
+    console.log(rows.length);
     if (rows.length > 0) {
         for (var i=0;i<rows.length;i++) {
             var row=rows[i];

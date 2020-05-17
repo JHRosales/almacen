@@ -1,0 +1,442 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoDoc=array(array("1","DNI"), array("2","RUC"));
+$TipoPersona=array(array("1","Natural"), array("2","Juridica"));
+
+ ?>
+<div id="panelMantenimientoPersonas"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 415px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de Tecnico</label>
+    </div>
+
+    <table border="0" class="ui-table-panelLayout">
+        <tr style="display: none">
+            <td style="text-align: left">
+                C&oacute;digo
+                <input type="hidden" id="hdidsigma_mperson" name="hdidsigma_mperson" value="" />
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma_mperson"
+                       name="txtidsigma_mperson"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Nombre(s)
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="40"
+                       style=""
+                       type="text"
+                       id="txtvnombre"
+                       name="txtvnombre"
+                       value="<?php echo $this->vnombre; ?>"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Tipo de persona
+            </td>
+            <td style="text-align: left">
+                <select id="cboctipper" name="cboctipper" style="width:140px;">
+                    <?php  echo $library->ContenidoCombo($TipoPersona, $this->ctipper,0); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Tipo de documento
+            </td>
+            <td style="text-align: left">
+
+
+                <input class="editable ui-text-disable"
+                       size="20" READONLY
+                       style=""
+                       type="text"
+                       id="txtdocumento"
+                       name="txtdocumento"
+                       value="<?php echo $this->tipdoc; ?>"/>
+
+
+
+
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Número de documento
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       type="text"
+                       id="txtvnrodoc"
+                       name="txtvnrodoc"
+                       value="<?php echo $this->vnrodoc; ?>"/>
+            </td>
+        </tr>
+        <tr >
+            <td style="text-align: left">
+                Correo Electronico
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       size="40"
+                       type="text"
+                       id="txtvcorreo"
+                       name="txtvcorreo"
+                       value="<?php echo $this->vcorreo; ?>"/>
+            </td>
+        </tr>
+        <tr  class="soloJuridica">
+            <td style="text-align: left">
+                Persona Contacto
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       size="50"
+                       type="text"
+                       id="txtpersonacont"
+                       name="txtpersonacont"
+                       value="<?php echo $this->personcont; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Telefono Fijo
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       type="text"
+                       id="txtvtelfij"
+                       name="txtvtelfij"
+                       value="<?php echo $this->vtelfij; ?>"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Telefono Movil
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style=""
+                       type="text"
+                       id="txtvtelmov"
+                       name="txtvtelmov"
+                       value="<?php echo $this->vtelmov; ?>"/>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td style="text-align: left">
+                Departamento
+            </td>
+            <td style="text-align: left">
+                <select id="cdepartamento" name="cdepartamento" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->departamento,'Cmb_departamento','@idDep'); ?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Provincia
+            </td>
+            <td style="text-align: left">
+                <select id="cprovincia" name="cprovincia" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro1( $this->departamento,$this->provincia,'Cmb_provincia','@idDep'); ?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: left">
+                Distrito
+            </td>
+            <td style="text-align: left">
+                <select id="cdistrito" name="cdistrito" style="width:140px;">
+                    <?php  echo $this->util()->getComboContenedorOtro1( $this->provincia,$this->distrito,'Cmb_distrito','@idprov'); ?>
+                </select>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td style="text-align: left">
+                Direcci&oacute;n
+            </td>
+            <td style="text-align: left">
+                <textarea class="editable ui-text"
+                          style="width:260px; height:100px;max-width:260px; max-height:100px;"
+                          id="txtvdirecc"
+                          name="txtvdirecc"><?php echo $this->vdirecc; ?></textarea>
+            </td>
+        </tr>
+
+        <tr style="display: none">
+            <td style="text-align: left">
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+            </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="button" style="width:120px;" id="btnguardarperson" name="btnguardarperson" onclick="guardarPersona()">
+                    Guardar
+                </button>
+                <button type="button" style="width:120px;" id="btncancelperson" name="btncancelperson" onclick="cerrarMantPersona()">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+
+    var tipoPersona = {
+        NATURAL : "1",
+        JURIDICA : "2"
+    };
+
+    themeComboBox("#cboctipper");
+    themeComboBox("#cboctipdoc");
+    themeComboBox("#cdepartamento");
+    themeComboBox("#cprovincia");
+    themeComboBox("#cdistrito");
+
+    $("#btnguardarperson").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelperson").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+
+    function validarTipoPersona(tipper){
+        switch(tipper){
+            case tipoPersona.NATURAL : // NATURAL
+                $(".soloJuridica").hide();
+                break;
+            case tipoPersona.JURIDICA : // JURIDICA
+                $(".soloJuridica").show();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    function validarTipoDocumento(tipdoc){
+        switch(tipdoc){
+            case "1": // DNI
+                var vdni = $("#txtvnrodoc").val();
+                if (vdni.length > 8){
+                    vdni = vdni.substr(0,8);
+                    $("#txtvnrodoc").val(vdni);
+                }
+                $("#txtvnrodoc").attr("maxlength","8");
+
+                break;
+            case "2": // RUC
+                var vruc = $("#txtvnrodoc").val();
+                if (vruc.length > 11){
+                    vruc = vruc.substr(0,11);
+                    $("#txtvnrodoc").val(vruc);
+                }
+                $("#txtvnrodoc").attr("maxlength","11");
+                break;
+            default:
+                $("#txtvnrodoc").attr("maxlength","20");
+                break;
+        }
+    }
+
+    validarTipoPersona($("#cboctipper").val());
+    validarTipoDocumento($("#cboctipdoc").val());
+
+
+
+    $("#cboctipper").combobox({
+        selected: function(event, ui){
+            validarTipoPersona($("#cboctipper").val());
+
+            if($("#cboctipper").val()=="1"){
+                $("#txtdocumento").val("DNI");
+            }
+            else
+
+            { $("#txtdocumento").val("RUC");}
+
+        }
+        }
+    );
+
+
+    $("#cboctipdoc").combobox({
+        selected : function(event, ui){
+            validarTipoDocumento($("#cboctipdoc").val());
+        }
+    });
+
+
+
+
+    $("#cdepartamento").combobox({
+        selected: function(event, ui){
+            //reiniCombo("cprovincia");
+            getProvincia($("#cdepartamento").val(),"cprovincia");
+
+        }
+    });
+
+    $("#cprovincia").combobox({
+        selected: function(event, ui){
+            reiniCombo("cdistrito");
+            getDistrito($("#cprovincia").val(),"cdistrito");
+
+
+        }
+    });
+
+
+
+    function reiniCombo(celement){
+        var xelem = $("#" + celement);
+        xelem.combobox("destroy");
+        $("option:selected",xelem).removeAttr("selected");
+        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        //xelem.combobox();
+    }
+
+    function getProvincia(selecteds, celement){
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenerprovincia/",
+                data: "select="+selecteds+"&provincias="+ selecteds,
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+
+    function getDistrito(selecteds, celement){
+        if (selecteds == "9999999999" || selecteds == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "mantenimientos/obtenerdistrito/",
+                data: "select="+selecteds+"&distritos="+ selecteds,
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                    $("#" + celement).combobox();
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+    }
+
+
+    function cerrarMantPersona(){
+        closeDialog("jqDialog2");
+    }
+
+    function guardarPersona(){
+
+        var idsigma = $("#txtidsigma_mperson").val();
+        var vnombre = $("#txtvnombre").val();
+        var ctipper = $("#cboctipper").val();
+        var tipdoc = $("#txtdocumento").val();
+        var vnrodoc = $("#txtvnrodoc").val();
+        var vcorreo = $("#txtvcorreo").val();
+        var personcont = $("#txtpersonacont").val();
+        var vtelfij = $("#txtvtelfij").val();
+        var vtelmov  = $("#txtvtelmov").val();
+        var ubigeo  = $("#cdistrito").val();
+        var vdirecc = $("#txtvdirecc").val();
+
+
+      /*  if(document.getElementById("estado").checked){
+            var nestado1=1;
+        }  else  {
+            var  nestado1=0;
+        }*/
+
+
+        if($.trim(vnombre) == ""){
+            openDialogError("Ingrese nombre", "250", "150", function() {
+                $("#txtvnombre").focus();
+            });
+            return;
+        }
+
+    /*  if($.trim(vnrodoc) == ""){
+            openDialogError("Ingrese número de documento", "250", "150", function() {
+                $("#txtvnrodoc").focus();
+            });
+            return;
+        }*/
+
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "almacen/guardartecnico/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data: "idsigma="+idsigma
+                +"&vnombre="+vnombre
+                +"&ctipper="+ctipper
+                +"&vdirecc="+vdirecc
+                +"&tipdoc="+tipdoc
+                +"&vnrodoc="+vnrodoc
+                +"&vcorreo="+vcorreo
+                +"&personcont="+personcont
+                +"&vtelfij="+vtelfij
+                +"&vtelmov="+vtelmov
+                +"&idUbigeo="+ubigeo,
+            success: function(requestData){ 	//Llamada exitosa)
+                openDialogInfo("Registrado correctamente");
+               // $("#c_codigocontrib").val(requestData);
+                buscarPersona();
+                cerrarMantPersona();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+</script>

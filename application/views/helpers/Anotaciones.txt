@@ -1,4 +1,9 @@
 
+REINICIAR UN JQGRID (PARA DATA DE ARRAY)
+=====================
+  $('#tblPrSerie').jqGrid('GridUnload');
+
+
 OBTENER ALTO DE UN DIV Y AGREGALE MAS ALTURA
 ================================================
 var offsetHeight = document.getElementById('panelMantenimientoEntradaProd').offsetHeight;

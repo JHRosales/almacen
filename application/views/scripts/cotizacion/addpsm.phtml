@@ -109,7 +109,8 @@
             'Nombre',
             'Descripcion',
             'Tecnologia',
-                ""
+                "",
+            ""
         ],
         colModel: [
             {name: 'id', index:'id', width:20,search:false},
@@ -117,7 +118,8 @@
             {name: 'nombre', index:'nombre', width:120},
             {name: 'descri', index:'descri', width:180},
             {name: 'tecnologia', index:'tecnologia', width:69},
-            {name: 'pu', index:'pu', width:90,editable: false,hidden:true}
+            {name: 'pu', index:'pu', width:90,editable: false,hidden:true},
+            {name: 'idTipoMon', index:'idTipoMon', width:90,editable: false,hidden:true}
         ],
         editurl: "clientArray",
         ignoreCase:true,
@@ -229,6 +231,21 @@
     addprodserv=function(a){
         var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
         var row = $("#tblPSM").jqGrid('getRowData', selr);
+        var tasa= $("#tasacambio").val();
+        var tipomon= $("#cbtipomon").val();
+        var pu=0;
+        if(tipomon=='1'){  //Si es dolares
+           pu =row.pu;
+        }else{ //Si es soles
+            if(tasa == 0 || tasa == undefined || tasa == "" || isNaN(tasa)){
+                openDialogWarning("Ingrese la tasa de cambio.");
+                return;
+            }else{
+                var subt=parseFloat(row.pu);
+                pu=subt*tasa;
+            }
+        }
+
         if(row.id == "" || row.id == undefined){
             openDialogWarning("Seleccione un registro.");
             return;
@@ -237,14 +254,17 @@
             openDialogWarning("Primero debe buscar el cliente para la cotizacion.");
             return;
         }
+
         parameters = {
             "id": row.id,
             "nombre": row.nombre,
             "descri": row.descri,
-            "pu": row.pu,
+            "pu": pu,
             "idcotizacion":  $("#txtidcotizacion").val(),
             "tipo":  $("#cbo_bus").val(),
-            "opcional":  $("#txtopcional").val()
+            "opcional":  $("#txtopcional").val(),
+            "tipomon":  tipomon,
+            "tasa":tasa
         };
 var opci= $("#txtopcional").val();
         openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el producto o servicio?",350,{
@@ -288,7 +308,7 @@ var opci= $("#txtopcional").val();
     //inicializando funcion para producto
     buscarProd= function () {
         buscarPSM();
-    };
+    }
     nuevaProducto = function(){
         parameters = {
             "idsigma": '...'
@@ -449,6 +469,8 @@ var opci= $("#txtopcional").val();
         parameters = {
             "idsigma": ''
         };
+        PARAMETRO_NIVEL_LLAMADA=2;
+        ArregloMateriales.splice(0,ArregloMateriales.length); //Eliminar el arreglo
         openDialogData2("mantenimientos/servicio", parameters, 460);
     };
     editServicio = function() {
@@ -461,7 +483,8 @@ var opci= $("#txtopcional").val();
         parameters = {
             "idsigma": row.id
         };
-
+        PARAMETRO_NIVEL_LLAMADA=2;
+        ArregloMateriales.splice(0,ArregloMateriales.length); //Eliminar el arreglo
         openDialogData2("mantenimientos/servicio", parameters, 460);
 
     };

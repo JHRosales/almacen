@@ -49,6 +49,30 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                         <tr>
                             <td><br></td>
                         </tr>
+
+
+                        <tr>
+                            <td width="230" style="text-align: left">Cliente:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230" colspan="5" style="text-align: left"></td>
+                            <td width="150">&nbsp;</td>
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td colspan="3">
+                                <input class="ui-text-disable pnl" type="hidden" readonly id="codigoCliente"  value="<?php echo $this->idCliente;?>"  style="width:100%" />
+                                <input class="ui-text-disable pnl" readonly id="nombreCliente"  value="<?php echo $this->nomCliente;?>"  style="width:100%" />
+                            </td>
+
+                            <td colspan="5" style="text-align: left;">
+                            </td>
+                            <td rowspan="1">
+                                <button id="btnbuscarClie" name="btnbuscarClie" onclick="buscarCli()">Buscar Cliente</button>
+                            </td>
+                        </tr>
+
+
                         <tr>
                             <td width="230" style="text-align: left">Tecnico encargado:</td>
                             <td width="10">&nbsp;</td>
@@ -102,18 +126,21 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
             <tr style="display: none;">
                 <td>
                     <input type="hidden" name="txtidDetSalidaProd" id="txtidDetSalidaProd"/>
-                    <input id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                 </td>
                 <td>
                    <!-- <input id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
                     <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd">&nbsp;</div>
                 </td>
                 <td>
-                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:50px" >
                 </td>
                 <td>
                     <input id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
                 </td>
+                <!--<td>
+                    <input id="txtFechaSalida"  name="txtFechaSalida" class="ui-text-disable" disabled="disabled"  style="width:250px" >
+                </td>-->
                 <td>
                    <button id="btnTestigoBuscarPersona">Buscar</button>
                 </td>
@@ -128,18 +155,21 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
                 <tr>
                     <td>
                         <input value="<?php echo $value["idDetSalidaProd"]; ?>" type="hidden" name="txtidDetSalidaProd" id="txtidDetSalidaProd" />
-                        <input value="<?php echo $value["idProdSeries"]; ?>" id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["idProdSeries"]; ?>" id="txtCodigoSerie"  name="txtCodigoSerie" class="ui-text-disable" disabled="disabled"  style="width:80px" >
                     </td>
                     <td>
                         <!--<input value="<?php echo $value["Producto"]; ?>" id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
                         <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtNombreProd" name="txtNombreProd"><?php echo $value["Producto"]; ?></div>
                     </td>
                     <td>
-                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:100px" >
+                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:50px" >
                     </td>
                     <td>
                         <input value="<?php echo $value["Serie"]; ?>" id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:250px" >
                     </td>
+                    <!--<td>
+                    <input  value="<?php echo $value["fechareg"]; ?>" id="txtFechaSalida"  name="txtFechaSalida" class="ui-text-disable" disabled="disabled"  style="width:250px" >
+                </td>-->
                     <td>
                         <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
                     </td>
@@ -152,6 +182,17 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","SERIE"), a
 
             <?php } ?>
             </tbody>
+        </table>
+    </div>
+
+
+    <div>
+        <table align="left" style="width: 100%">
+            <tr>
+                <td>
+                    <textarea name="txtObs" id="txtObs" rows="3" style="width: 600px; margin-left:3px " ><?php echo $this->obs;?> </textarea>
+                </td>
+            </tr>
         </table>
     </div>
 <table>
@@ -320,39 +361,27 @@ $("#cbformapago").combobox({
 
 //Funcion para regresar al la grilla naterior
 function Cancelar() {
-    var detallesalida = {};
-    var series = [];
-
-    //Datos series
-    $('#tableSeries > tbody  > tr').each(function () {
-        var detseries = {};
-        if ($(this).find("[name=txtCodigoSerie]").val() != '') {
-            detseries.idDetSalidaProd = $(this).find("[name=txtidDetSalidaProd]").val();
-            detseries.idSerie = $(this).find("[name=txtCodigoSerie]").val();
-            detseries.vSerie = $(this).find("[name=txtSerie]").val();
-            series.push(detseries);
-        }
+    parameters = {
+        "idSalidaprod":$("#idsalidaprod").val()
+    };
+    console.log(parameters);
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/cancelarsalidaprod",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) { },
+        success: function (requestData) {
+            // $("#result").html(requestData);
+            //  var datos=JSON.parse(requestData);
+            window.open(path + "almacen/salidaprod", "_self");
+        },
+        error: function (requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete: function (requestData, exito) {    }
     });
-    detallesalida.series = series;
 
-    var pSalidaProd = {};
-    pSalidaProd.objSalidaProd = JSON.stringify(detallesalida);
-    if(series.length==0){
-        window.open(path + "almacen/salidaprod", "_self");
-        return;
-    }
-    $.post(path + "almacen/cancelarsalidaprod", pSalidaProd, function (data) {
-        console.log(data);
-        if (data[0] == '0') {
-            openDialogInfo(data["b"], "280", "150", null, function () {
-                return;
-            });
-            window.open(path + "almacen/salidaprod", "_self");
-        }else{
-
-            window.open(path + "almacen/salidaprod", "_self");
-        }
-    }, 'json');
 };
 
 
@@ -406,7 +435,7 @@ buscarSeriesSalida = function (d) {
         row = $("#tblResult").jqGrid('getRowData', rowid);
         if (invocaBusPersona == 1) {
             $(d).parent().parent().find("input[name=txtCodigoSerie]").val(row.idProdSeries);
-            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
+            $(d).parent().parent().find("input[name=txtStock]").val(row.nStock-1);
             $(d).parent().parent().find("div[name=txtNombreProd]").html(row.producto );
             $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
         }
@@ -432,8 +461,24 @@ deleteFilaTable = function (d) {
     var iddetsalidaprod = $(d).parent().parent().find("input[name=txtidDetSalidaProd]").val();
 
 
-    if(serie == "" || serie == undefined){
+    if(iddetsalidaprod == "" || iddetsalidaprod == undefined){
         $(d).parent().parent().remove();
+        parameters = {
+            "idProdSerie": serie,
+            "idDetsalida": 0
+        };
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/salidaprodregresaestadostockprodseries",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {},
+            success: function (requestData) {},
+            error: function (requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function (requestData, exito) { }
+        });
         return;
     }
 
@@ -492,6 +537,14 @@ agregarFilaTable = function (id) {
     i++;
 };
 
+buscarCli = function(){
+    parameters = {
+        "idsigma":  $("#identradamat").val()
+    };
+    openDialogData1("almacen/buscarcliente", parameters,660,500);
+    //   window.open(path + "mantenimientos/backup", "_self");
+
+};
 $(function () {
     $("#fecsalida").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
     $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
@@ -505,7 +558,7 @@ $(function () {
     });
 
 // clone inspector
-
+    $("#btnbuscarClie").button({icons: {primary: "ui-icon-search"}});
     $("#btnTestigoBuscarPersona").button("destroy");
     agregarFilaTable("tableSeries");
     $("#btnTestigoAgregar").click(function () {
@@ -532,6 +585,8 @@ $(function () {
       detallesalida.lugar = $("#txtlugar").val();
       detallesalida.fecha = $("#fecsalida").val();
       detallesalida.idtecnico = $("#txtidtecnico").val();
+      detallesalida.idcliente = $("#codigoCliente").val();
+      detallesalida.obs=  $("#txtObs").val();
 
       if($("#txtidtecnico").val()==""){
           openDialogWarning("Seleccione un tecnico encargado.");
@@ -548,6 +603,7 @@ $(function () {
                 detseries.idDetSalidaProd = $(this).find("[name=txtidDetSalidaProd]").val();
                 detseries.idSerie = $(this).find("[name=txtCodigoSerie]").val();
                 detseries.vSerie = $(this).find("[name=txtSerie]").val();
+                detseries.stock = $(this).find("[name=txtStock]").val();
                 series.push(detseries);
             }
         });

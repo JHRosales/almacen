@@ -100,7 +100,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             {name: 'nStock', index:'nStock', width:70},
             {name: 'idCategoria', index:'idCategoria', width:150,hidden:true},
             {name: 'vCategoria', index:'vCategoria', width:150},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+            {name: 'vEstado', index:'vEstado', width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
         ],
         caption: "&nbsp;&nbsp;&nbsp;Materiales Registrados",
         ondblClickRow: function(id){
@@ -137,7 +137,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             return;
         }
         parameters = {
-            "idsigma": row.idMaterial
+            "idMaterial": row.idMaterial
         };
 
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
@@ -185,7 +185,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         parameters = {
             "idsigma": '...'
         };
-        openDialogData2("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/material", parameters, 500);
     };
     verMaterial = function() {
         var selr = $('#tblListaMate').jqGrid('getGridParam','selrow');
@@ -198,7 +198,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             "idsigma": row.idMaterial
         };
 
-        openDialogData2("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/material", parameters, 500);
 
     };
 

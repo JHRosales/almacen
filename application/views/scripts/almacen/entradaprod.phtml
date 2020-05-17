@@ -30,8 +30,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                 <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial"  placeholder="Razon social">
             </div>
             <div class="form-group col-md-6 text-left">
-                <label for="inputRUC">RUC</label>
-                <input type="text" class="form-control" id="txtRuc" name="txtRuc"  placeholder="Ruc">
+                <label for="inputRUC">Nro Factura</label>
+                <input type="text" class="form-control" id="txtNFactura" name="txtNFactura"  placeholder="Nro Factura">
             </div>
         </div>
 
@@ -118,10 +118,10 @@ $("#txtRazonSocial").keyup(function(e){
         $("#txtRazonSocial").focus();
     }
 });
-$("#txtRuc").keyup(function(e){
-    if($("#txtRuc").val().length>2 || e.keyCode==13 ){
+$("#txtNFactura").keyup(function(e){
+    if($("#txtNFactura").val().length>2 || e.keyCode==13 ){
         buscarEntradaProd();
-        $("#txtRuc").focus();
+        $("#txtNFactura").focus();
     }
 });
 
@@ -144,6 +144,8 @@ $("#txtRuc").keyup(function(e){
             "nSubtotal",
             "nIgv",
             "nPrecioTotal",
+            "idTipo Moneda",
+            "Tipo Moneda",
             "dFecIngreso",
             "vEstado",
             "Borrar"
@@ -158,6 +160,8 @@ $("#txtRuc").keyup(function(e){
             {name: 'nSubtotal', index:'nSubtotal', width:80, hidden: false},
             {name: 'nIgv', index:'nIgv', width:80, hidden: false},
             {name: 'nPrecioTotal', index:'nPrecioTotal', width:80, hidden: false},
+            {name: 'nTipoMoneda', index:'nTipoMoneda', width:100, hidden: true},
+            {name: 'TipoMoneda', index:'TipoMoneda', width:100, hidden: false},
             {name: 'dFecIngreso', index:'dFecIngreso', width:90, hidden: false},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnborrarentradaprod,search:false}
@@ -508,7 +512,7 @@ nuevaEntradaProd = function(){
       var modelo=$("#txtModelo").val();
       var serie=$("#txtSerie").val();
       var razsoc=$("#txtRazonSocial").val();
-      var ruc=$("#txtRuc").val();
+      var factura=$("#txtNFactura").val();
 
         console.log(modelo);
        /* if(fecdes<fechast){
@@ -524,7 +528,7 @@ nuevaEntradaProd = function(){
             + '["@vModelo", "' + modelo + '"],'
             + '["@vSerie", "' + serie + '"],'
             + '["@vRazonSoc", "' + razsoc + '"],'
-            + '["@vRuc", "' + ruc + '"],'
+            + '["@vFactura", "' + factura + '"],'
             + '["@vFecIni", "' + fecdes + '"],'
             + '["@vFecFin", "' + fechast + '"]'
             + ']';

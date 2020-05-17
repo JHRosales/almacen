@@ -269,7 +269,7 @@ class PDF1 extends TCPDF{
             $this->MultiCell(80,5,"Señor(a): ",0,'L');
             $this->SetFont('times', 'B', 10);
             $this->SetXY($lw+14,$lh+16);
-            $this->MultiCell(80,5,$cliente,0,'L');
+            $this->MultiCell(90,5,$cliente,0,'L');
 
             $this->SetFont('times', '', 11);
             $this->SetXY($lw,$lh+22);
@@ -302,16 +302,16 @@ CONVERT(varchar, convert(money, nSubTot), 1)as nSubTot
 ,CONVERT(varchar, convert(money, a.nIgv), 1) as nIgv
 ,CONVERT(varchar, convert(money, nTotal), 1) as nTotal,b.vNombrePSM ,
  --Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end
- Case when b.tipoPS!='1' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end
+ Case when b.tipoPS!='1' then 'GLOBAL' else CONVERT(varchar, convert(money, sum(b.nPrecUnit)), 1)  end
  as nPrecUnit,Case when b.tipoPS!='1' then '-'
- else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)
+ else CAST(sum(b.nCantidad) AS varchar(5))  end nCantidad,CONVERT(varchar, convert(money, sum(b.nPrecTotal)), 1)
   as nPrecTotal ,c.idCliente,c.vNombre as cliente , Case when b.tipoPS!='1' then '1.jpg'
- else  dbo.imgadjunto(b.idProdServ)   end as img,
+ else  coalesce(dbo.imgadjunto(b.idProdServ),'1.jpg')     end as img,
   Case when b.tipoPS!='1' then ''
  else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv,
  coalesce(a.tiempEntrega,'') as tentrega , coalesce(a.vGarantia,'') as garantia,
  p.vNombre as personal,  p.vCargo as cargo,a.nTasaCambio,
-  a.vNota ,a.vDisco,a.vFormaPago
+  a.vNota ,a.vDisco ,a.tiempo,a.vFormaPago
   /*case when dbo.tieneServ(a.idCotiz)='1' then 'Adelanto del 50% del total y al finalizar el pago del 50% con la conformidad de la Obra.' else 'Al contado' end*/ as formapago
    ,
    case when b.tipoPS!='1' then REPLACE(dbo.detalleservicio(a.idCotiz,b.vNombrePSM,b.idprodserv),CHAR(10),'<br>') else
@@ -324,8 +324,8 @@ inner join cliente c on a.idCliente=c.idCliente
 left join personal p on a.idPersonal=p.idPersonal
 where a.idCotiz=$idcotiz
 and (opcional is null or opcional='' or opcional='0' )
-group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nIgv,a.nTotal,b.vNombrePSM,b.nCantidad,c.idCliente,
-c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre,p.vCargo, a.nTasaCambio,b.tipops, a.vMotivo,c.vPersContac,a.nTipoMoneda,a.vFormaPago,a.vNota,a.vDisco
+group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nIgv,a.nTotal,b.vNombrePSM,c.idCliente,
+c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre,p.vCargo, a.nTasaCambio,b.tipops, a.vMotivo,c.vPersContac,a.nTipoMoneda,a.vFormaPago,a.vNota,a.vDisco,a.tiempo
 order by tipoPS,subcat,b.vNombrePSM desc");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
@@ -334,7 +334,36 @@ $rowTipoP= $Rs_tipoPer->pg_Get_Row();
 
 $nroCotiz = $rowTipoP['vnroCot'];
 $motivo = $rowTipoP['vMotivo'];
+$motivo = str_replace("&ntilde;",'ñ',$motivo);
+$motivo = str_replace("&Ntilde;",'Ñ',$motivo);
+
+
+
+$motivo = str_replace("&aacute;",'á',$motivo);
+$motivo = str_replace("&eacute;",'é',$motivo);
+$motivo = str_replace("&iacute;",'í',$motivo);
+$motivo = str_replace("&oacute;",'ó',$motivo);
+$motivo = str_replace("&uacute;",'ú',$motivo);
+$motivo = str_replace("&Aacute;",'Á',$motivo);
+$motivo = str_replace("&Eacute;",'É',$motivo);
+$motivo = str_replace("&Iacute;",'Í',$motivo);
+$motivo = str_replace("&Oacute;",'Ó',$motivo);
+$motivo = str_replace("&Uacute;",'Ú',$motivo);
+
 $cliente = $rowTipoP['cliente'];
+$cliente = str_replace("&ntilde;",'ñ',$cliente);
+$cliente = str_replace("&Ntilde;",'Ñ',$cliente);
+$cliente = str_replace("&aacute;",'á',$cliente);
+$cliente = str_replace("&eacute;",'é',$cliente);
+$cliente = str_replace("&iacute;",'í',$cliente);
+$cliente = str_replace("&oacute;",'ó',$cliente);
+$cliente = str_replace("&uacute;",'ú',$cliente);
+$cliente = str_replace("&Aacute;",'Á',$cliente);
+$cliente = str_replace("&Eacute;",'É',$cliente);
+$cliente = str_replace("&Iacute;",'Í',$cliente);
+$cliente = str_replace("&Oacute;",'Ó',$cliente);
+$cliente = str_replace("&Uacute;",'Ú',$cliente);
+
 $fecha = $rowTipoP['dfecCot'];
 $vPersContac = $rowTipoP['vPersContac'];
 $vTipoMoneda = $rowTipoP['tipomoneda'];
@@ -420,6 +449,7 @@ $tcambio = $rowTipoP['nTasaCambio'];
 $mtotal = $rowTipoP['nTotal'];
 $msubtotal = $rowTipoP['nSubTot'];
 $migv = $rowTipoP['nIgv'];
+$periodo = $rowTipoP['tiempo'];
 
 
 $html= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
@@ -494,7 +524,7 @@ if($tipops=='2'){
         $det.'
 </td>
 	<td width="63.5px" >'.str_repeat('<br>',$saltos).$pu.'</td>
-	<td width="64px" >'.str_repeat('<br>',$saltos).$vTipoMoneda.' '.$pt.'</td>';
+	<td width="64px" >'.str_repeat('<br>',$saltos).' '.$pt.'</td>';
 
     $html .= '	</tr>';
 
@@ -525,8 +555,8 @@ if($tipops=='2'){
 	<td  align="left" width="355px"><b>'.$Nombre.'</b>'.
         $det.'
 </td>
-	<td width="63.5px" >'.str_repeat('<br>',5).$vTipoMoneda.' '.$pu.'</td>
-	<td width="64px" >'.str_repeat('<br>',5).$vTipoMoneda.' '.$pt.'</td>';
+	<td width="63.5px" >'.str_repeat('<br>',5).' '.$pu.'</td>
+	<td width="64px" >'.str_repeat('<br>',5).' '.$pt.'</td>';
 
     $html .= '	</tr>';
 }
@@ -592,7 +622,7 @@ $Rs_opcional->Poner_MSQL("select a.idCotiz,b.vNombrePSM,
  --sum(b.nPrecUnit) as nPrecUnit,
  --Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)  as nPrecTotal ,
    Case when b.tipoPS!='1' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end as nPrecUnit,
-   Case when b.tipoPS!='1' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,cast(sum(b.nPrecTotal)as numeric(12,2))
+   Case when b.tipoPS!='1' then '-' else CAST(sum(b.nCantidad) AS varchar(5))  end nCantidad,cast(sum(b.nPrecTotal)as numeric(12,2))
   as nPrecTotal,
 
   Case when b.tipoPS!='1' then '1.jpg'
@@ -610,7 +640,7 @@ inner join cliente c on a.idCliente=c.idCliente
 left join personal p on a.idPersonal=p.idPersonal
 where a.idCotiz=$idcotiz
 and opcional='1'
-group by  a.idCotiz,a.nSubTot,a.nTotal,b.vNombrePSM,b.nCantidad,idProdServ,tipoPS, p.vNombre
+group by  a.idCotiz,a.nSubTot,a.nTotal,b.vNombrePSM,idProdServ,tipoPS, p.vNombre
 order by tipoPS,b.idProdServ,nCantidad");
 $Rs_opcional->executeMSQL();
 $rowopcional= $Rs_opcional->pg_Get_Row();
@@ -701,12 +731,25 @@ $htmlOpcional .= '
 $pdf->writeHTML($htmlOpcional, true, false, true, false, '');
 }
 
-if ($tentrega > '1') {
-    $msj= $tentrega." días hábiles";
-} elseif ($tentrega == ' ' or $tentrega == '0') {
+
+
+if ($tentrega > '1' and $periodo=='Habil' ) {
+    $msj= $tentrega." días ".$periodo."es";
+
+}
+
+else if($tentrega > '1' and $periodo=='Calendario' ) {
+    $msj= $tentrega." días ".$periodo."s";
+
+}
+
+elseif ($tentrega == ' ' or $tentrega == '0') {
     $msj= "Inmediata";
-} else {
-    $msj= $tentrega." día hábil";
+}
+
+
+else {
+    $msj= $tentrega." día ".$periodo;
 }
 
 
@@ -717,6 +760,28 @@ if($disco == ' ' or $disco == '0' ){
 else{
 
     $ms='Grabación aproximada del disco duro '.$disco.' días'.'<br>';
+}
+
+if($vTipoMoneda == '$' ){
+    $g ='Tipo de Cambio: '.$tcambio.'
+    <br>';
+
+}
+
+
+if($disco == ' ' or $disco == '0' ){
+    $ms="";
+}
+
+else{
+
+    $ms='Grabación aproximada del disco duro '.$disco.' días'.'<br>';
+}
+
+if($vTipoMoneda == '$' ){
+    $g ='Tipo de Cambio: '.$tcambio.'
+    <br>';
+
 }
 
 
@@ -730,9 +795,8 @@ $htmlresumen .= '<table border="0">
 '.$ms.'
 
 
-Tipo de Cambio: '.$tcambio.'
-<br><br>
-
+'.$g.'
+<br>
 '.$x.'
 
 <b>Condiciones Comerciales:</b>

@@ -4,6 +4,7 @@
     <input type="hidden" class="ui-text"  id="txtidcotizacion" value="<?php echo $this->idcotizacion; ?>" style="width:99%" />
     <input type="hidden" class="ui-text"  id="txtidservi" value="<?php echo $this->idsigma; ?>" style="width:99%" />
     <input type="hidden" class="ui-text"  id="txtopcional" value="<?php echo $this->opcional; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text"  id="txtidDetcotizacion" value="<?php echo $this->iddetcotizacion; ?>" style="width:99%" />
     <table style="width: 99%">
     <tr>
         <td colspan="2" style="text-align: center;">
@@ -13,11 +14,19 @@
             <button type="button" style="width:120px;" id="btncancelpsermat" name="btncancelpsermat">
                 Cancelar
             </button>
+            <button type="button" style="width:120px;" id="btneliminar1" name="btneliminar1" onclick="hablBtns()">
+                Eliminar
+            </button>
         </td>
     </tr>
     </table>
 
 <script type="text/javascript">
+    //eliminarMate()
+
+    var seleccionadas = new Array();
+    var general =0;
+    var otros =0;
 
     $("#btnguardarservm").button({
         icons:{primary:'ui-icon-disk'},
@@ -26,13 +35,117 @@
         guardarServicio1();
     });
 
+
+    function hablBtns(){
+        //USADO PARA ELIMINAR ITEM POR ITEM MEDIANTE EL TACHITO
+        var x = document.getElementsByClassName("btnElim");
+        var i;
+        console.log( x.length);
+        for (i = 0; i < x.length; i++) {
+           // console.log( x[i]);
+            x[i].style.display = "inline";
+        }
+    }
+
     $("#btncancelpsermat").button({
         icons:{primary:'ui-icon-close'},
         text:true
     }).click(function(){
         closeDialog("jqDialog1");
-
     });
+
+    $("#btnaddmaterial").button().click(function(){
+        var indice = 0;
+        $('#frmproduct input[type=checkbox]').each(function(){
+            if (this.checked) {
+                seleccionadas[indice] =  $(this).val();
+                indice = indice + 1;
+            }
+        });
+        //console.log(seleccionadas);
+        $.each( seleccionadas, function( key, value ) {
+            console.log( key + ": " + value);
+        });
+    });
+
+
+    function eliminarMate(a){
+        //console.log(a);
+
+        parameters = {
+            "idMaterial": a
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+            "si":function(){
+                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminarmaterial",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function (data) {                },
+                    success: function (requestData) {
+                        $("#result").html(requestData);
+                        var datos=JSON.parse(requestData);
+                        if (datos[0][0]!='OK'){
+                            openDialogError(datos[0][0]);
+                        }
+                        closeDialog("jqDialogConfirmacion1");
+                        $("#c_codigocontrib").val("");
+                        listckech();
+                    },
+                    error: function (requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function (requestData, exito) {
+                    }                });
+
+
+               // eliminarMaterialesV();
+            },
+            "no":function(){
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        })
+
+
+    };
+
+    function eliminarMaterialesV(){
+        var form= $("#frmproduct");
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/eliminarmaterialserv/",
+           // url: path + "mantenimientos/agregarprodservop/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:form.serialize(),
+            success: function(requestData){ 	//Llamada exitosa)
+                $("#result").html(requestData);
+                var datos=JSON.parse(requestData);
+                if (datos[0].msj!='Eliminado'){
+                    openDialogError(datos[0].msj);
+                }
+                closeDialog("jqDialogConfirmacion1");
+                $("#c_codigocontrib").val("");
+                listckech();
+
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
 
 
     function guardarServicio1(){
@@ -89,11 +202,13 @@
 
    function actdetc(){
        var form= $("#frmproduct");
+       var tipomon= $("#cbtipomon").val();
+       var selecccion =JSON.stringify(ArregloMateriales);
        $.ajax({
            dataType: "html",
            type: "POST",
            url: path + "mantenimientos/agregarprodserv/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-           data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val() ,
+           data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val()+"&txtidDetcotizacion="+$("#txtidDetcotizacion").val() +"&tipomon="+tipomon+"&selecccionados="+selecccion,
            success: function(requestData){ 	//Llamada exitosa)
               // openDialogInfo("Registrado correctamente");
               // actdetc();
@@ -111,11 +226,13 @@
    }
     function actdetcop(){
         var form= $("#frmproduct");
+        var tipomon= $("#cbtipomon").val();
+        var selecccion =JSON.stringify(ArregloMateriales);
         $.ajax({
             dataType: "html",
             type: "POST",
             url: path + "mantenimientos/agregarprodservop/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-            data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val() ,
+            data:form.serialize()+"&txtidcotizacion="+$("#txtidcotizacion").val()+"&txtidservi="+$("#txtidservi").val()+"&txtidDetcotizacion="+$("#txtidDetcotizacion").val() +"&tipomon="+tipomon+"&seleccionados3="+selecccion,
             success: function(requestData){ 	//Llamada exitosa)
                 // openDialogInfo("Registrado correctamente");
                 // actdetc();
@@ -133,6 +250,118 @@
     }
 
 
+    function listckech(){
+        var catego = $("#cbocategoser").val();
+        var serv = $("#txtidsigma").val();
+        var idcotiz = $("#txtidcotizacion").val();
+        var opcional = $("#txtopcional").val();
+        var tipom = $("#cbotipomat").val();
+        var selecccion =JSON.stringify(seleccionadas);
+
+        //Para cargar todos los marcados del servicio
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/cargarmarcados/",
+            data:"catego="+catego+"&serv="+serv+"&idcotiz="+idcotiz+"&opcional="+opcional+"&selecionados="+selecccion,
+            success: function(requestData){
+                var datos=JSON.parse(requestData);
+                $("#checks").html(datos["data"]);
+                for(var i = datos["Seleccionado"].length - 1; i >= 0; i--) {
+                    if((general==0 &&  tipom==1)  ){
+                        AgregarLista(parseInt(datos["Seleccionado"][i], 10));
+                    }
+                }
+                deseleccionar_todo();
+                seleccionar_todo();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+
+
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "mantenimientos/arreglocheckdetcotiz/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:"catego="+catego+"&serv="+serv+"&idcotiz="+idcotiz+"&opcional="+opcional+"&selecionados="+selecccion +"&cbotipomat="+tipom,
+            success: function(requestData){
+                var datos=JSON.parse(requestData);
+                $("#checks").html(datos["data"]);
+               // datos["Seleccionado"].length();
+                //console.log( datos["Seleccionado"].length);
+
+                /*for (indice in datos["Seleccionado"]  ){
+                    console.log ( datos["Seleccionado"][indice].valueOf());
+                    if((general==0 &&  tipom==1) ||  (otros==0 &&  tipom==0) && datos["Seleccionado"][indice].valueOf()!=-1){
+                   console.log (indice+ "=>" + datos["Seleccionado"][indice]);
+                    AgregarLista(parseInt(datos["Seleccionado"][indice], 10));
+                    }
+                }*/
+                for(var i = datos["Seleccionado"].length - 1; i >= 0; i--) {
+                   // console.log ( datos["Seleccionado"][i].valueOf());
+                    if((general==0 &&  tipom==1) ||  (otros==0 &&  tipom==2) ){
+                        //AgregarLista(parseInt(datos["Seleccionado"][i], 10));
+                    }
+                }
+
+                if (tipom==1 ){
+                    general=1;
+                }else{
+                    otros=1;
+                }
+
+                deseleccionar_todo();
+                seleccionar_todo();
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+
+
+    }
+
+    //ArregloMateriales
+    /*function AgregarLista(a){
+        //console.log(a);
+        var pos = ArregloMateriales.indexOf(a);
+        //console.log("Pos="+pos);
+        if (pos==-1){
+            ArregloMateriales.push(a);
+        }else{
+            ArregloMateriales.splice(pos, 1);
+        }
+    }*/
+
+    function seleccionar_todo(){
+        for (i=0;i<document.frmproduct.elements.length;i++)
+            ArregloMateriales.forEach(function (elemento, indice) {
+
+            if(document.frmproduct.elements[i].type == "checkbox" && document.frmproduct.elements[i].value==elemento)
+              // console.log(document.frmproduct.elements[i].value );
+                document.frmproduct.elements[i].checked=1;
+            //console.log( indice, elemento);
+        });
+
+      /* for (indice in ArregloMateriales){
+            console.log (indice+ "=>" + ArregloMateriales[indice]);
+        }*/
+    }
+    function deseleccionar_todo(){
+        for (i=0;i<document.frmproduct.elements.length;i++)
+            if(document.frmproduct.elements[i].type == "checkbox")
+                document.frmproduct.elements[i].checked=0
+    }
 
     function ActualizargrillaCotiz(){
        var idcotiz=$("#txtidcotizacion").val();
@@ -144,8 +373,14 @@
         var idservi=$("#txtidservi").val();
         buscardetCotizacionOpcional();
     }
+
     $(function(){
         $(".botonesServ").hide();
         $('#cbocategoser').combobox('disable');
+        $("#btneliminar1").button({
+            icons:{primary:'ui-icon-close'},
+            text:true
+        });
+       listckech();
     });
 </script>

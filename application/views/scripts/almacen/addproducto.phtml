@@ -12,7 +12,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 
                 <td width="150" style="text-align: left">Categoria:</td>
                 <td width="150" class="clprod" style="text-align: left">SubCategoria:</td>
-
+                <input class="ui-text" id="idpag" type="hidden" value="<?php echo $this->pag;?>" >
 
 
                 <td> </td>
@@ -61,21 +61,31 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         height: 270,
         colNames: [
             'Id',
+            'Modelo',
             'Nombre',
             'Descripcion',
-            'PU'
+            'PU',
+            'Stock'
         ],
         colModel: [
             {name: 'id', index:'id', width:50,search:false},
+            {name: 'vModelo', index:'vModelo', width:150},
             {name: 'nombre', index:'nombre', width:260},
             {name: 'descri', index:'descri', width:250},
-            {name: 'pu', index:'pu', width:20,editable: false,hidden:true}
+            {name: 'pu', index:'pu', width:20,editable: false,hidden:true},
+            {name: 'nStock', index:'nStock', width:70}
         ],
         ignoreCase:true,
         caption: "&nbsp;&nbsp;&nbsp;Productos Registrados",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
-            addDetEntradaProd();
+            console.log($("#idpag").val());
+            if($("#idpag").val()=="2"){ //##detentradamat
+                addnuevosoporte();
+            }else{                  //##detentradaprod
+                addDetEntradaProd();
+            }
+
         },
 
         afterInsertRow:function(rowid,aData){
@@ -137,7 +147,24 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
            }
        })
     };*/
+    addnuevosoporte = function() {
+        var selr = $('#tblProduct').jqGrid('getGridParam','selrow');
+        var row = $("#tblProduct").jqGrid('getRowData', selr);
+        if(row.id == "" || row.id == undefined){
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.id,
+            "idEntrada": $("#identrada").val()
+        };
 
+        $("#codigoprod").val(row.id);
+        //$("#nombreprod").val(row.nombre);
+        $("#nombreprod").html(row.nombre);
+
+        closeDialog("jqDialog1");
+    };
     addDetEntradaProd=function(a){
         var selr = $('#tblProduct').jqGrid('getGridParam','selrow');
         var row = $("#tblProduct").jqGrid('getRowData', selr);

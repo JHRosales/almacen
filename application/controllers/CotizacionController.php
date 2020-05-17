@@ -612,6 +612,7 @@ class CotizacionController extends Zend_Controller_Action {
         $this->view->tieneop=0;
         $this->view->vMotivo="SISTEMA CCTV HDCVI - HD";
         $this->view->vFormaPago="Al contado";
+        $this->view->nreferencial="Seleccione";
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
@@ -641,6 +642,7 @@ class CotizacionController extends Zend_Controller_Action {
                 $this->view->vFormaPago=$datos[0][17];
                 $this->view->nreferencial=$datos[0][18];
                 $this->view->disco=$datos[0][19];
+                $this->view->tiempoo=$datos[0][21];
             }else{
             $this->view->vnrocot =$datos[0][1];
             $this->view->dfeccot=$datos[0][2];
@@ -660,6 +662,7 @@ class CotizacionController extends Zend_Controller_Action {
             $this->view->vFormaPago=$datos[0][17];
             $this->view->nreferencial=$datos[0][18];
             $this->view->disco=$datos[0][19];
+            $this->view->tiempoo=$datos[0][21];
                 $paramsop[] = array('@p_idcoti', $idcotizacion);
                 $opcional = $cn->ejec_store_procedura_sql('buscar_detopcional', $paramsop);
                 $copcional = count($opcional);
@@ -730,6 +733,8 @@ class CotizacionController extends Zend_Controller_Action {
             $idcotiz = $this->_request->getPost('idcotizacion');
             $tipo = $this->_request->getPost('tipo');
             $opcional = $this->_request->getPost('opcional');
+            $tipomon = $this->_request->getPost('tipomon');
+            $tasa = $this->_request->getPost('tasa');
 
             $params = null;
             $params[] = array('@p_idcotiz', $idcotiz);
@@ -739,6 +744,8 @@ class CotizacionController extends Zend_Controller_Action {
             $params[] = array('@p_pu', $pu);
             $params[] = array('@p_tipo', $tipo);
             $params[] = array('@p_opcional', $opcional);
+            $params[] = array('@p_tipom', $tipomon);
+            $params[] = array('@p_tasa', $tasa);
 
             //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
             $detcot = $cn->executeAssocQuery('add_detcotizacion', $params);
@@ -800,6 +807,7 @@ class CotizacionController extends Zend_Controller_Action {
             $formapago = $this->_request->getPost('Formapago');
             $referencial = $this->_request->getPost('Referencial');
             $disco = $this->_request->getPost('Disco');
+            $tiempo = $this->_request->getPost('Tiempo');
 
             if ($tasaCambio==''){
                 $tasaCambio=0;
@@ -812,9 +820,20 @@ class CotizacionController extends Zend_Controller_Action {
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $referencial);
             print_r($texto);
 
+            echo"</pre>";
 
+
+            echo"<pre>";
+            // print_r($txtdescrip);
+            $texto2 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
+                array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
+                    "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $motivo);
+            print_r($texto2);
 
             echo"</pre>";
+
+
+
 
             $params = null;
             $params[] = array('@p_idcotiz', $idcot);
@@ -826,10 +845,11 @@ class CotizacionController extends Zend_Controller_Action {
             $params[] = array('@p_Clientetec', $Clientetec);
             $params[] = array('@p_tiemEntrega', $tentrega);
             $params[] = array('@p_vgarantia', $garantia);
-            $params[] = array('@p_vmotivo', $motivo);
+            $params[] = array('@p_vmotivo', utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto2))));
             $params[] = array('@p_vformapago', $formapago);
             $params[] = array('@p_vreferencial', utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto))));
             $params[] = array('@p_disco', $disco);
+            $params[] = array('@p_tiempo', $tiempo);
 
             //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
             $detcot = $cn->ejec_store_procedura_sql('update_cotizacion', $params);
@@ -878,6 +898,28 @@ class CotizacionController extends Zend_Controller_Action {
             //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
             $detcot = $cn->ejec_store_procedura_sql('delete_cotiz', $params);
              //echo json_encode("Desabilitado.");
+        }
+    }
+
+    public function cancelarcotizAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $idcot = $this->_request->getPost('idCotiz');
+
+            $params = null;
+            $params[] = array('@p_idcotiz', $idcot);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->ejec_store_procedura_sql('cancelar_cotizacion', $params);
+            echo json_encode("Cancelando.");
         }
     }
 

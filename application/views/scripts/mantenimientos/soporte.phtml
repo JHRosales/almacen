@@ -1,0 +1,465 @@
+<div id="panelMantenimientoEntradaProd" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
+        <label>MANTENIMIENTO DEMOS</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio" style="margin-bottom: -30px">
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos Busqueda</div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6 text-left">
+                <label for="inputModelo">Producto</label>
+                <input type="text" class="form-control" id="txtFactura" name="txtFactura"  placeholder="Modelo">
+            </div>
+            <div class="form-group col-md-6 text-left">
+                <label for="inputSerie">Serie</label>
+                <input type="text" class="form-control" id="txtSerie" name="txtSerie"  placeholder="Serie">
+            </div>
+        </div>
+
+            <div class="form-group col-md-2 text-center" style="display: none">
+                <button id="btnbuscar" name="btnbuscar"  class="form-control" onclick="buscarSoporte()">Buscar</button>
+            </div>
+        <div  class="form-group">&thinsp;
+        </div>
+        </div>
+
+    <div class="container" id="panelListaEntradaProd" align="center" style="width: 100%;margin-left:
+     15px; margin-right: 15px;">
+        <div id="panelPrSerie" align="left" style="width: 99%;margin-left: 5px;">
+            <table id="tblPrSoporte"></table>
+            <div id="ptblPrSoporte">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+<div id="dialogMensaje"  >
+</div>
+
+<script type="text/javascript">
+    themeComboBox();
+var val=0;
+    var cant=0;
+
+
+$("#txtFactura").keyup(function(e){
+    if($("#txtFactura").val().length>2 || e.keyCode==13 ){
+        buscarSoporte();
+        $("#txtFactura").focus();
+    }
+});
+$("#txtSerie").keyup(function(e){
+    if($("#txtSerie").val().length>2 || e.keyCode==13 ){
+        buscarSoporte();
+        $("#txtSerie").focus();
+    }
+});
+
+
+
+    $("#cbotipob").combobox({
+        selected: function(event, ui){
+            buscarSoporte();
+        }
+    });
+
+
+
+
+
+
+$( "#txtnombre" ).keyup(function( event ) {
+    buscarPServ();
+    document.getElementById("txtnombre").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+
+    }
+});
+$( "#txtdescri" ).keyup(function( event ) {
+    buscarMate();
+    document.getElementById("txtdescri").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+
+    }
+});
+
+$('#txtPrecioUnit').on('keypress', function (e) {
+    // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
+
+    var field = $(this);
+    key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 8) return true;
+    if (key > 47 && key < 58) {
+        if (field.val() === "") return true;
+        var existePto = (/[.]/).test(field.val());
+        if (existePto === false){
+            regexp = /.[0-9]{10}$/;
+        }
+        else {
+            regexp = /.[0-9]{2}$/;
+        }
+
+        return !(regexp.test(field.val()));
+    }
+    if (key == 46) {
+        if (field.val() === "") return false;
+        regexp = /^[0-9]+$/;
+        return regexp.test(field.val());
+    }
+    return false;
+});
+$('#txtCantidad').on('keypress', function (e) {
+    // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
+
+    var field = $(this);
+    key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 8) return true;
+    if (key > 47 && key < 58) {
+        if (field.val() === "") return true;
+        var existePto = (/[.]/).test(field.val());
+        if (existePto === false){
+            regexp = /.[0-9]{10}$/;
+        }
+        else {
+            regexp = /.[0-9]{2}$/;
+        }
+
+        return !(regexp.test(field.val()));
+    }
+    return false;
+});
+
+
+var lastselSerie;
+optionPSM = {
+    datatype: "local",
+    width: 930,
+    // keys: true,
+    height: 250,
+    colNames: [
+        'Codigo',
+        'idProducto',
+        'vNombre',
+        'NroSerie',
+        'vEstado',
+        '',
+        'IdProdSeriesNue',
+        'Pasar a Venta'
+    ],
+    colModel: [
+        {name: 'idprodsoporte', index:'idprodsoporte', width:80,search:false},
+        {name: 'idProducto', index:'idProducto', width:80,search:false,hidden : true},
+        {name: 'vNombre', index:'vNombre', width:400,search:false,hidden : false},
+        {name: 'vNroSerie', index:'vNroSerie', width:200, editable:false,editoptions: {maxlength: 100}},
+        {name: 'vEstado', index:'vEstado', width:80, editable:false,editoptions: {maxlength: 100}},
+        {name: 'btndes', index: 'btndes', width: 50, align: 'center' ,formatter : btnAnulaSerie,search:false,hidden : true},
+        {name: 'idProdSeriesNue', index:'idProdSeriesNue', width:250, editable:false,editoptions: {maxlength: 100}, hidden: true},
+        { name: 'btndocudevo', index: 'btndocudevo', width: 80, align: 'center' ,formatter : btnRetorno,search:false}
+        //{name: 'vNroSerieNue', index:'vNroSerieNue', width:300, editable:true,editoptions: {maxlength: 100}, hidden: false},
+        //{name: 'btndel', index: 'btndel', width: 50, align: 'center' ,formatter : btnEliminaSerie,search:false, hidden: false}
+    ],
+    editurl: "clientArray",
+    caption: "&nbsp;&nbsp;&nbsp;Series",
+    ondblClickRow: function(id){
+        var row = $(this).getRowData(id);
+        EditSerieSoporte();
+    },
+
+    afterInsertRow:function(rowid,aData){
+        switch(
+            aData.nestado
+            ){case'1':
+            break;
+            case '0':
+
+                jQuery("#tblPrSoporte").jqGrid('setCell',rowid,'idProdSeries','',{color:'red'});
+                jQuery("#tblPrSoporte").jqGrid('setCell',rowid,'vNroSerie','',{color:'red'});
+                jQuery("#tblPrSoporte").jqGrid('setCell',rowid,'vEstAlmacen','',{color:'red'});
+                jQuery("#tblPrSoporte").jqGrid('setCell',rowid,'vEstado','',{color:'red'});
+                break;
+        }
+    },
+    onSelectRow: function(id) {
+        var row = $(this).getRowData(id);
+        // if(lastselSerie!=undefined)
+
+        if(id && id!==lastselSerie){
+            jQuery('#tblPrSoporte').jqGrid('saveRow',lastselSerie);
+            lastselSerie=id;
+        }
+        jQuery('#tblPrSoporte').jqGrid('editRow',id,true);
+    },
+    gridComplete: function(id){
+        habilitarColum()
+    }
+};
+
+    // -----> Retorno a venta====================================================
+    function btnRetorno(cellvalue, options, rowObject){
+
+        return '<div align="center" class="ui-pg-button " title="Pasar a Venta" style="text-align:center;' +
+            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetornoVenta(\''+options.rowId+'\');">' +
+            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
+    }
+    function accionbtnRetornoVenta(rowId){
+        var row = $("#tblPrSoporte").jqGrid('getRowData', rowId);
+        if(row.idprodsoporte == "" || row.idprodsoporte == undefined){
+            openDialogWarning("Seleccione un Registro");
+            return;
+        }
+        parameters = {
+            "idprodsoporte": row.idprodsoporte
+        };
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de pasar a Venta?",350,{
+            "si":function(){
+
+                var _post = $.post(path + "almacen/pasaraventa", parameters);
+                _post.success(function(request) {
+                   // $("#panelSalidaProducto").html(request);
+                    buscarSoporte();
+                    closeDialog("jqDialogConfirmacion1");
+                });
+
+            },
+            "no":function(){
+                closeDialog("jqDialogConfirmacion1");
+            }
+        })
+    }
+
+
+
+
+    habilitarColum= function(){
+   if  (val==1) {
+       jQuery("#tblPrSoporte").jqGrid('showCol',"vNroSerieNue");
+       jQuery("#tblPrSoporte").jqGrid('showCol',"btndel"); //Para la grilla de opcional
+
+   }else{
+       jQuery("#tblPrSoporte").jqGrid('hideCol',"vNroSerieNue");
+       jQuery("#tblPrSoporte").jqGrid('hideCol',"btndel"); //Para la grilla de opcional
+
+   }
+           /* jQuery("#tblDetCotizacion").jqGrid('hideCol',"nDesc");
+            jQuery('#tblDetCotizacion').jqGrid('saveRow',lastsel3);
+
+            //Para la grilla de opcional
+            jQuery("#tblDetCotizacionOPC").jqGrid('hideCol',"nDesc");
+            jQuery('#tblDetCotizacionOPC').jqGrid('saveRow',lastsel2);
+
+            var rows= jQuery("#tblDetCotizacion").jqGrid('getRowData');
+            if (rows.length > 0) {
+                for (var i=0;i<rows.length;i++) {
+                    $("#tblDetCotizacion").setRowData(i+1,{nDesc:0} );
+                }
+            }*/
+
+    };
+
+
+
+function btnAnulaSerie(cellvalue, options, rowObject){
+
+    return '<div align="center" class="ui-pg-button " ' +
+        'title="Borrar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+        'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+        'onclick="anularseriep(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+        '<span class="ui-icon ui-icon-trash"></span></div></div>';
+}
+
+function anularseriep(rowId) {
+    var gr = jQuery("#tblPrSoporte").jqGrid('getGridParam','selrow');
+    //jQuery("#tblPrSoporte").jqGrid('delGrid');
+    //$('#tblPrSoporte').jqGrid('GridUnload');
+    if  (val==1) {
+        val=0;
+    }else{
+        val=1;
+    }
+    habilitarColum();
+
+}
+
+
+
+// -----> Borrar============================================00
+function btnEliminaSerie(cellvalue, options, rowObject){
+
+    return '<div align="center" class="ui-pg-button " ' +
+        'title="Borrar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+        'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+        'onclick="eliminarseriep(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+        '<span class="ui-icon ui-icon-disk"></span></div></div>';
+}
+function eliminarseriep(rowId) {
+    var gr = jQuery("#tblPrSoporte").jqGrid('getGridParam','selrow');
+    //jQuery("#tblPrSoporte").jqGrid('delGrid');
+    //$('#tblPrSoporte').jqGrid('GridUnload');
+
+
+}
+
+guardarSeries=function(a){
+    // var selr = $('#tblPrSoporte').jqGrid('getGridParam','selrow');
+    // var row = $("#tblPrSoporte").jqGrid('getRowData', selr);
+    jQuery('#tblPrSoporte').jqGrid('saveRow',lastselSerie);
+    var rows= jQuery("#tblPrSoporte").jqGrid('getRowData');
+
+    var detSeries = {};
+    var Series = [];
+    //Datos generales
+    detSeries.idproducto = $("#txtidProducto").val();
+    detSeries.identradaProd = $("#txtiddetEntradaProd").val();
+
+    //Datos Series
+    if (rows.length > 0) {
+        for (var i=0;i<rows.length;i++) {
+            var aSerie = {};
+            var row=rows[i];
+            aSerie.idProdSeries= row.idProdSeries;
+            aSerie.vNroSerie= row.vNroSerie;
+            Series.push(aSerie);
+        }
+    }
+    detSeries.lstSeries=Series;
+    var parameters = {};
+    parameters.objSeries = JSON.stringify(detSeries);
+
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/almacen/guardarseries",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {   },
+        success: function (requestData) {
+            closeDialog('jqDialog1');
+        },
+        error: function (requestData, strError, strTipoError) {   },
+        complete: function (requestData, exito) {    }
+    });
+
+};
+
+
+function buttonsGridPSM(){
+    $("#tblPrSoporte").navGrid('#ptblPrSoporte', {edit:false,add:false,del:false,search:false,refresh:false})
+        .navButtonAdd('#ptblPrSoporte',{
+            caption:"Nuevo&nbsp;&nbsp;",
+            buttonicon:"ui-icon-plus",
+            onClickButton: function(){
+                nuevaSerieSoporte();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()
+
+        .navButtonAdd('#ptblPrSoporte',{
+            caption:"Editar&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+                EditSerieSoporte();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()
+
+        .navButtonAdd('#ptblPrSoporte',{
+            caption:"Nueva Serie&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+                nuevaSerieSoportedeVenta();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()
+    ;
+  }
+
+    nuevaSerieSoporte = function(){
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData3("mantenimientos/nuevosoporte", parameters, 600);
+    };
+    nuevaSerieSoportedeVenta = function(){
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData2("mantenimientos/nuevosoportedesdeventa", parameters, 600);
+    };
+    EditSerieSoporte = function() {
+        var selr = $('#tblPrSoporte').jqGrid('getGridParam','selrow');
+        var row = $("#tblPrSoporte").jqGrid('getRowData', selr);
+        if(row.idprodsoporte == "" || row.idprodsoporte == undefined){
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idprodsoporte
+        };
+
+        openDialogData2("mantenimientos/nuevosoporte", parameters, 600);
+
+    };
+
+buscarSoporte   = function() {
+        var params = '['
+            + '["@tBusqueda", "0"],'
+            + '["@vDatoBus", "' +  $("#txtFactura").val() + '"],'
+            + '["@vDatoBusDos", "'+ $("#txtSerie").val()+'"]'
+            + ']';
+        parameters = {
+            "name": "tblPrSoporte",
+            "procedure": "almacen.Bus_ProdSoporte",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelPrSerie"
+            , "tblPrSoporte"
+            , optionPSM
+            , parameters
+            , null
+            , buttonsGridPSM
+        );
+    };
+
+//Funcion para regresar al la grilla naterior
+function Cancelar(){
+    closeDialog('jqDialog1');
+}
+$(function(){
+    buscarSoporte();
+    $("#btnCancelarSe").button(ICON_CANCEL).click(function () {
+        Cancelar('');
+    });
+    $("#btnGuardarSerie").button(ICON_SAVE).click(function(){
+        guardarSeries();
+    });
+
+
+    $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+    $("#div_titulo").html("Mantenimiento => Soporte");
+});
+
+
+
+</script>

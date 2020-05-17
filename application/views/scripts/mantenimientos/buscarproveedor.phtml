@@ -123,8 +123,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             'Nro Doc',
             'ctipper',
             'Distrito',
-            'Provucna',
-
+            'Provincia',
             'vPersContac',
             'vTelefContac',
             'vCelContac',
@@ -143,7 +142,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             {name: 'vPersContac', index:'vPersContac', hidden: true},
             {name: 'vTelefContac', index:'vTelefContac', hidden: true},
             {name: 'vCelContac', index:'vCelContac', hidden: true},
-            {name: 'vCorreoContac', index:'vCorreoContac', hidden: false},
+            {name: 'vCorreoContac', index:'vCorreoContac', hidden: false}
         ],
         caption: "&nbsp;&nbsp;&nbsp;Personas Registradas",
         ondblClickRow: function(id){
@@ -167,7 +166,6 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 jQuery("#tblListaPersona").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
                 jQuery("#tblListaPersona").jqGrid('setCell',rowid,'nestado','',{color:'red'});
 break;
-
 
         }
 

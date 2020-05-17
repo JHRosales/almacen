@@ -82,44 +82,50 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"));
 
                         <tr><td>
                                 <b>  Datos Producto / Servicio</b>
-                            </td>
-                        </tr>
+                            </td></tr>
+
+                        <table border="0" style="margin-left:45px;">
+                            <tr>
+                                <td>Titulo:
+
+                                </td>
 
 
+
+                            </tr>
+                            <tr class="rowdatospsm" id="rowdatospsm">
+
+
+                                <td style="text-align: left">
+                                    <select id="cbotitulo" name="cbotitulo" style="width:140px;">
+                                        <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idcotiz,'Cmb_titulo','@idCotiz'); ?>
+                                    </select>
+                                </td>
+
+                            </tr>
+
+                        </table>
                         <tr>
                             <td colspan="13" height="8px"></td>
                         </tr>
-                    </table>
-                    <table border="0" style="margin-left:45px;">
-                        <tr>
-                            <td>Titulo:
 
+                        <tr><td>
+                        <div id="dialogMensaje">
+                        </div>
+                        <div id="panelListaCotizacion" align="left" style="width: 99%;margin-left: 5px;">
+                            <table id="tblListaCotizacion"></table>
+                            <div id="ptblListaCotizacion"></div>
+                        </div>
+                        <br/>
                             </td>
                         </tr>
-                        <tr class="rowdatospsm" id="rowdatospsm">
-
-
-                            <td style="text-align: left">
-                                <select id="cbotitulo" name="cbotitulo" style="width:140px;">
-                                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idcotiz,'Cmb_titulo','@idCotiz'); ?>
-                                </select>
-                            </td>
-
-                        </tr>
-
                     </table>
                 </td>
             </tr>
 
         </table>
+
     </div>
-    <div id="dialogMensaje">
-    </div>
-    <div id="panelListaCotizacion" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
-        <table id="tblListaCotizacion"></table>
-        <div id="ptblListaCotizacion"></div>
-    </div>
-    <br/>
 </div>
 <script type="text/javascript">
     $("#cbo_bus").combobox({
@@ -165,7 +171,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"));
             'Editar',
             "Vendedor",
             "Borrar",
-            "Nuevo",
+            "Copia",
             "Imprimir"
         ],
         colModel: [
