@@ -137,8 +137,10 @@ class PDF1 extends TCPDF{
         $this->SetFont('times', 'B', 12);
         $this->SetXY($lw,$lh+20);
         $this->MultiCell(170,3,'LISTA DE PRECIOS HDCVI',0,'C');
-        $this->SetXY($lw+122,$lh+28);
-        $this->MultiCell(70,3,'Valido desde ENERO 2018',1,'C');
+
+        $this->SetXY($lw+122,$lh+27.4);
+        $this->MultiCell(70,3,'Valido desde JULIO 2018',1,'C');
+        $this->Image('../uploadDdocuments/imggg.png',$lw-2.5,$ln+32,194.6,36.4,'PNG');
 
     }
 }
@@ -161,6 +163,7 @@ vDescrip,nCosto,nStock,a.vEstado, Case when iadjunto='' then '1.jpg'
  inner join subCategoria b on a.idSubCat=b.idSubCat
  left join vw_orden_resol c on a.vResolucion= c.vresolucion
  where
+    a.vEstado=1 and
 	(vTecnologia='HDCVI' and 	vMarca='Dahua')
 	OR (b.vnombre = 'Monitores / Tv' and vmarca='Dahua')
 	OR (b.vnombre = 'Disco Duro' and vmarca='Western Digital')
@@ -227,7 +230,7 @@ $pdf->SetFont('dejavusans', '', 8);
 $lw=5;
 //$var1 = $pdf->GetY()+2.2;
 $var1 = $pdf->GetY();
-$pdf->SetXY($lw+2.5,$lh = $var1);
+$pdf->SetXY($lw+2.5,$lh = $var1+37);
 
 $kit =  utf8_encode($rowTipoP['subcateria']);
 $html= '<table border="1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; "width="689.5px" >
@@ -312,30 +315,33 @@ if($kit1!=$kit){
 
 
 
-    IF($N==3){
+    IF($N==2){
         $vDescrip=$vDescrip."<br><br><br><br><br><br>";
     }
 
-    IF($N==37){
+
+
+
+
+    IF($N==48){
         $vDescrip=$vDescrip."<br><br><br><br>";
     }
 
-    IF($N==66){
-        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br>";
+    IF($N==98){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br><br><br><br><br>";
     }
 
 
-
     IF($N==105){
-        $vDescrip=$vDescrip."<br>";
+        $vDescrip=$vDescrip."<br><br><br><br>";
     }
 
     IF($N==106){
         $vDescrip=$vDescrip."<br>";
     }
 
-    IF($N==128){
-        $vDescrip=$vDescrip."<br><br>";
+    IF($N==120){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br>";
     }
 
 

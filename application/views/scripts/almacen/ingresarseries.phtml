@@ -129,6 +129,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             'EstadoAlmacen',
             'Estado',
             ''
+            //'',
+            //'Nueva S.'
         ],
         colModel: [
             {name: 'idProdSeries', index:'idProdSeries', width:60,search:false},
@@ -136,6 +138,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             {name: 'vEstAlmacen', index:'vEstAlmacen', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
             {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
             {name: 'btndel', index: 'btndel', width: 40, align: 'center' ,formatter : btnEliminaSerie,search:false}
+           // {name: 'btndes', index: 'btndes', width: 40, align: 'center' ,formatter : btnAnulaSerie,search:false},
+            //{name: 'vNroSerieNu', index:'vNroSerieNu', width:250, editable:true,editoptions: {maxlength: 100}, hidden: true}
         ],
         editurl: "clientArray",
         caption: "&nbsp;&nbsp;&nbsp;Series",
@@ -171,6 +175,39 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     };
 
 
+
+    function btnAnulaSerie(cellvalue, options, rowObject){
+
+        return '<div align="center" class="ui-pg-button " ' +
+            'title="Borrar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+            'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+            'onclick="anularseriep(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            '<span class="ui-icon ui-icon-transferthick-e-w"></span></div></div>';
+    }
+
+    function anularseriep(rowId) {
+        var gr = jQuery("#tblPrSerie").jqGrid('getGridParam','selrow');
+        //jQuery("#tblPrSerie").jqGrid('delGrid');
+        $('#tblPrSerie').jqGrid('GridUnload');
+        console.log(mydata);
+        //mydata.splice(rowId-1,rowId); //Eliminado registro  splice(indexinicio,indexfin,[,campos que se agregan al aregllo])
+        //delete  mydata[rowId-1];
+        mydata.push({idProdSeries:"",vNroSerie:"",vEstAlmacen:"",vEstado:""});
+        actualizarGrid("tblPrSerie",optionPSM,null,buttonsGridPSM);
+        for(var i=0;i<=mydata.length;i++){
+            jQuery("#tblPrSerie").jqGrid('addRowData',i+1,mydata[i]);
+        }
+        var rows= jQuery("#tblPrSerie").jqGrid('getRowData');
+        if(cant>=rows.length){
+            jQuery("#tblPrSerie").jqGrid('hideCol',"btndel");
+            $("#mensaje").html("");
+        }else{
+            $("#mensaje").html(" Debe Eliminar "+(rows.length-cant)+ " SERIES de la grilla");
+        }
+    }
+
+
+
     // -----> Borrar============================================00
     function btnEliminaSerie(cellvalue, options, rowObject){
 
@@ -186,7 +223,6 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         $('#tblPrSerie').jqGrid('GridUnload');
         console.log(mydata);
         //mydata.splice(rowId-1,rowId); //Eliminado registro  splice(indexinicio,indexfin,[,campos que se agregan al aregllo])
-
         delete  mydata[rowId-1];
 
 
@@ -327,13 +363,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 
     };
     //Funcion para regresar al la grilla naterior
-    function Cancelar(){
+    function Cancelar1(){
         closeDialog('jqDialog1');
     }
     $(function(){
         buscarMatePrimeravez();
          $("#btnCancelarSe").button(ICON_CANCEL).click(function () {
-             Cancelar('');
+             Cancelar1('');
          });
          $("#btnGuardarSerie").button(ICON_SAVE).click(function(){
              guardarSeries();

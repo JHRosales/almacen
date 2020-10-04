@@ -187,7 +187,32 @@ class MantenimientosController extends Zend_Controller_Action {
         $func->PintarEvento($evt);
     }
 
+    public function seriesAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+        // $this->view->fechaini=date('d/m/Y', strtotime('yesterday'));
+        //$this->view->fechafin=date('d/m/Y');
+        $this->view->idcotiz="se";
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@p_identradaprod', '');
+        $copiarcot = $cn->executeAssocQuery('eliminar_entradaprod', $params);
 
+    }
+    public function soporteAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+        // $this->view->fechaini=date('d/m/Y', strtotime('yesterday'));
+        //$this->view->fechafin=date('d/m/Y');
+        $this->view->idcotiz="se";
+        $cn = new Model_DataAdapter ();
+        $params[] = array('@p_identradaprod', '');
+        $copiarcot = $cn->executeAssocQuery('eliminar_entradaprod', $params);
+
+    }
     public function guardarpersonaAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -213,22 +238,22 @@ class MantenimientosController extends Zend_Controller_Action {
             $idUbigeo = $this->_request->getPost('idUbigeo');
 
 
-            echo"<pre>";
+            //echo"<pre>";
             // print_r($txtdescrip);
 
 
             $texto2 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
-            print_r($texto2);
+           // print_r($texto2);
 
-            echo"</pre>";
+            //echo"</pre>";
 
 
             $params = null;
             $params[] = array('@p_idsigma', $idsigma);
            // $params[] = array('@p_vnombre', strtoupper($vnombre));
-            $params[] = array('@p_vnombre',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',strtoupper($texto2)))));
+            $params[] = array('@p_vnombre',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto2))));
 
             $params[] = array('@p_ctipper', $ctipper);
             $params[] = array('@p_vdirecc', strtoupper($vdirecc));
@@ -243,8 +268,9 @@ class MantenimientosController extends Zend_Controller_Action {
             $params[] = array('@p_host', $host);
 
             $person = $cn->ejec_store_procedura_sql('guardar_cliente', $params);
-            $cperson = count($person);
-            echo $person[0][0];
+            //$cperson = count($person);
+            echo json_encode($person);
+            //echo $person[0][0];
         }
     }
 
@@ -273,37 +299,40 @@ class MantenimientosController extends Zend_Controller_Action {
             $vtelmov = $this->_request->getPost('vtelmov');
             $idUbigeo = $this->_request->getPost('idUbigeo');
 
+            if($idsigma=='0000000000'){
+                $idsigma='';
+                $ttrans='1';
+            } else{
+                $ttrans='2';
+            }
 
             echo"<pre>";
             // print_r($txtdescrip);
-
-
             $texto2 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
-            print_r($texto2);
-
+            //print_r($texto2);
             echo"</pre>";
 
 
             $params = null;
-            $params[] = array('@p_idsigma', $idsigma);
+            $params[] = array('@ttrans', $ttrans);
+            $params[] = array('@idProveedor', $idsigma);
             // $params[] = array('@p_vnombre', strtoupper($vnombre));
-            $params[] = array('@p_vnombre',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',strtoupper($texto2)))));
+            $params[] = array('@vNombre',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto2))));
+            $params[] = array('@vTipPers', $ctipper);
+            $params[] = array('@vTipoDoc', $tipdoc);
+            $params[] = array('@vNroDoc ', $vnrodoc);
+            $params[] = array('@vDireccion', strtoupper($vdirecc));
+            $params[] = array('@idUbigeo ', $idUbigeo);
+            $params[] = array('@vPersContac', $personcont);
+            $params[] = array('@vTelefContac', $vtelfij);
+            $params[] = array('@vCelContac', $vtelfij);
+            $params[] = array('@vCorreoContac', $vcorreo);
+            $params[] = array('@vUsernm', $usuario);
+            $params[] = array('@vHostnm', $host);
 
-            $params[] = array('@p_ctipper', $ctipper);
-            $params[] = array('@p_vdirecc', strtoupper($vdirecc));
-            $params[] = array('@p_ctipdoc', $tipdoc);
-            $params[] = array('@p_vnrodoc', $vnrodoc);
-            $params[] = array('@p_vcorreo', $vcorreo);
-            $params[] = array('@p_personcont', $personcont);
-            $params[] = array('@p_ctelfij', $vtelfij);
-            $params[] = array('@p_ctelmov', $vtelmov);
-            $params[] = array('@p_ubigeo', $idUbigeo);
-            $params[] = array('@p_usuario', $usuario);
-            $params[] = array('@p_host', $host);
-
-            $person = $cn->ejec_store_procedura_sql('guardar_proveedor', $params);
+            $person = $cn->ejec_store_procedura_sql('InsUpd_proveedor', $params);
             $cperson = count($person);
             echo $person[0][0];
         }
@@ -348,6 +377,65 @@ class MantenimientosController extends Zend_Controller_Action {
             echo json_encode($prod);
         }
     }
+    public function anularservicioAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter ();
+
+            $idProducto = $this->_request->getPost('idServicio');
+
+            $params = null;
+            $params[] = array('@idServicio', $idProducto);
+
+            $prod = $cn->ejec_store_procedura_sql('anular_servicio', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($prod);
+        }
+    }
+
+
+    public function eliminarmaterialAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter ();
+
+            $idMaterial = $this->_request->getPost('idMaterial');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idMaterial);
+
+            $mat = $cn->ejec_store_procedura_sql('eliminar_material', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($mat);
+        }
+    }
+
+    public function eliminarclienteAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter ();
+
+            $idsigma = $this->_request->getPost('idsigma');
+
+            $params = null;
+            $params[] = array('@p_idcli', $idsigma);
+
+            $cli = $cn->ejec_store_procedura_sql('borrar_cliente', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($cli);
+        }
+    }
+
+
 
     public function usuarioAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -439,6 +527,7 @@ class MantenimientosController extends Zend_Controller_Action {
                 $this->view->cstock = '';
                 $this->view->img = '';
                 $this->view->doc = '';
+                $this->view->idTipoMoneda = '';
 
             } else {
                 $this->view->idcat = $datos[0]['idCat'];
@@ -454,6 +543,7 @@ class MantenimientosController extends Zend_Controller_Action {
                 $this->view->cstock = $datos[0]['nStock'];
                 $this->view->img = $datos[0]['iadjunto'];
                 $this->view->doc = $datos[0]['docadjunto'];
+                $this->view->idTipoMoneda = $datos[0]['idTipoMon'];
             }
         }
 
@@ -479,7 +569,8 @@ class MantenimientosController extends Zend_Controller_Action {
             $cbocsubcate = $this->_request->getPost('cbocsubcate');
             $marca = $this->_request->getPost('marca');
             $modelo = $this->_request->getPost('txtmodelo');
-            $txtresoluc = $this->_request->getPost('cboresolu');
+            //$txtresoluc = $this->_request->getPost('cboresolu');
+            $txtresoluc = $this->_request->getPost('resolucion');
             $txtcapacidad = $this->_request->getPost('txtcapacidad');
             //$txttecnologia = $this->_request->getPost('cboTecno');
             $txttecnologia = $this->_request->getPost('tecnologia');
@@ -488,6 +579,7 @@ class MantenimientosController extends Zend_Controller_Action {
             $txtdescrip = $this->_request->getPost('txdescrip');
             $estado = $this->_request->getPost('estado');
             $adjunto = $this->_request->getPost('adjunto');
+            $tipomon= $this->_request->getPost('cbotipomon');
 
             if($idsigma=='...'){
                 $idsigma='';
@@ -529,12 +621,14 @@ class MantenimientosController extends Zend_Controller_Action {
             $params[] = array('@vUsernm', $usuario);
             $params[] = array('@vHostnm', $host);
             $params[] = array('@iadjunto', $adjunto);
+            $params[] = array('@tipomon', $tipomon);
 
-            $person = $cn->ejec_store_procedura_sql('InsUpd_Producto', $params);
-            $cperson = count($person);
+            $producto = $cn->ejec_store_procedura_sql('InsUpd_Producto', $params);
+            $cproduct = count($producto);
             $ddatosuserlogA = new Zend_Session_Namespace('datosProducto');
-            $ddatosuserlogA->p_idprod =  $person[0][0];
-            echo $person[0][0];
+            $ddatosuserlogA->p_idprod =  $producto[0][0];
+            echo json_encode($producto);
+            //echo $producto[0][0];
 
         }
     }
@@ -690,6 +784,9 @@ if ($idsigma=='...'){
                 $this->view->vMarca = '';
                 $this->view->idUnidadMedida = '';
                 $this->view->idCategoria = '';
+                $this->view->idTipoMoneda = '';
+                $this->view->ccosto = '';
+                $this->view->nestado = '';
 
             } else {
                 $this->view->idmate = $datos[0]['idMaterial'];
@@ -698,6 +795,78 @@ if ($idsigma=='...'){
                 $this->view->vMarca = $datos[0]['vMarca'];
                 $this->view->idUnidadMedida = $datos[0]['idUnidadMed'];
                 $this->view->idCategoria = $datos[0]['idCategoria'];
+                $this->view->idTipoMoneda = $datos[0]['idTipoMon'];
+                $this->view->ccosto =$datos[0]['nCosto'];
+                $this->view->nestado =$datos[0]['vEstado'];
+            }
+        }
+    }
+
+
+    public function nuevosoportedesdeventaAction() {
+        $func = new Libreria_Pintar();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $this->view->idsigma = $idsigma;
+            if ($idsigma=='...'){
+                $idsigma='';}
+            $cn = new Model_DataAdapter ();
+            $parametros = null;
+            $parametros[] = array('@tBusqueda', '0');
+            $parametros[] = array('@vDatoBus', $idsigma);
+
+            $datos = $cn->executeAssocQuery(
+                'dbo.Bus_Soporte'
+                , $parametros
+            );
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->codigoprod = '';
+                $this->view->nombreprod = '';
+                $this->view->vNroSerie = '';;
+
+            } else {
+                $this->view->codigoprod = $datos[0]['idproducto'];
+                $this->view->nombreprod = $datos[0]['vNombre'];
+                $this->view->vNroSerie = $datos[0]['vNroSerie'];
+            }
+        }
+    }
+
+    public function nuevosoporteAction() {
+        $func = new Libreria_Pintar();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $this->view->idsigma = $idsigma;
+            if ($idsigma=='...'){
+                $idsigma='';}
+            $cn = new Model_DataAdapter ();
+            $parametros = null;
+            $parametros[] = array('@tBusqueda', '0');
+            $parametros[] = array('@vDatoBus', $idsigma);
+
+            $datos = $cn->executeAssocQuery(
+                'dbo.Bus_Soporte'
+                , $parametros
+            );
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->codigoprod = '';
+                $this->view->nombreprod = '';
+                $this->view->vNroSerie = '';;
+
+            } else {
+                $this->view->codigoprod = $datos[0]['idproducto'];
+                $this->view->nombreprod = $datos[0]['vNombre'];
+                $this->view->vNroSerie = $datos[0]['vNroSerie'];
             }
         }
     }
@@ -753,6 +922,8 @@ if ($idsigma=='...'){
             $idcotizacion = $this->_request->getParam('idcotizacion');
             $opcional = $this->_request->getParam('opcional');
             $descrip = $this->_request->getParam('Descripcion');
+            $iddetcotizacion = $this->_request->getParam('idDetCotizacion');
+
             if ($idsigma=='') {
                 $idsigma1='123412353452';
             }else{
@@ -770,7 +941,7 @@ if ($idsigma=='...'){
 
             $this->view->idsigma = $idsigma;
             $this->view->idcotizacion = $idcotizacion;
-
+            $this->view->iddetcotizacion = $iddetcotizacion;
             $cdatos = count($datos);
             if ($cdatos == 0) {
                 $this->view->vNombre = '';
@@ -804,12 +975,14 @@ if ($idsigma=='...'){
 
 
             $idsigma = $this->_request->getPost('txtidsigma');
-            $vnombre = $this->_request->getPost('txtvnombre');
-            $cbotipomat = $this->_request->getPost('cbotipomat');
+            $vnombre = $this->_request->getPost('txtvnombreMat');
+            $cbotipomat = $this->_request->getPost('cbotipomate');
             $vmarca = $this->_request->getPost('txtmarca');
             $cbounidamed = $this->_request->getPost('cboUnidadMed');
             $cbocatego = $this->_request->getPost('cbocatego');
             $estado = $this->_request->getPost('estado');
+            $tipomon= $this->_request->getPost('cbotipomon');
+            $txtcosto = $this->_request->getPost('txtcosto');
 
             if($idsigma=='...'){
                 $idsigma='';
@@ -817,33 +990,46 @@ if ($idsigma=='...'){
             } else{
                 $ttrans='2';
             }
+ if ($txtcosto==''){
+     $txtcosto=0;
+ }
 
-            echo"<pre>";
+
+            //echo"<pre>";
             // print_r($txtdescrip);
 
 
             $texto2 = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
-            print_r($texto2);
+            //print_r($texto2);
 
-            echo"</pre>";
+            //echo"</pre>";
 
             $params = null;
             $params[] = array('@ttrans', $ttrans);
             $params[] = array('@idMaterial', $idsigma);
             $params[] = array('@vNombreMat',utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto2))));
+        if ($cbotipomat!='9999999999'){
             $params[] = array('@idTipoMaterial', $cbotipomat);
+        }
             $params[] = array('@vMarca', $vmarca);
+
+        if ($cbounidamed!='9999999999'){
             $params[] = array('@idUnidadMed', $cbounidamed);
+        }
+
             $params[] = array('@vCatego', $cbocatego);
-            //$params[] = array('@p_estado', $estado);
+            $params[] = array('@nCosto', $txtcosto);
+            $params[] = array('@tipomon', $tipomon);
+            $params[] = array('@vEstado', $estado);
             $params[] = array('@vUsernm', $usuario);
             $params[] = array('@vHostnm', $host);
 
             $person = $cn->ejec_store_procedura_sql('almacen.InsUpd_material', $params);
-            $cperson = count($person);
-            echo $person[0][0];
+            echo json_encode($person);
+            //$cperson = count($person);
+            //echo $person[0][0];
         }
     }
     public function guardartasacambioAction() {
@@ -881,6 +1067,48 @@ if ($idsigma=='...'){
             echo $person[0][0];
         }
     }
+
+    public function guardarsoporteAction() {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $cn = new Model_DataAdapter ();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal= $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $idsigma = $this->_request->getPost('txtidsigma');
+            $codprod = $this->_request->getPost('codigoprod');
+            $serie = $this->_request->getPost('txtserie');
+            $estado = $this->_request->getPost('estado');
+            $idprodseries = $this->_request->getPost('codprodseries');
+
+            if($idsigma=='...' or $idsigma==''){
+                $idsigma='';
+                $ttrans='1';
+            } else{
+                $ttrans='2';
+            }
+
+            $params = null;
+            $params[] = array('@ttrans', $ttrans);
+            $params[] = array('@idsoporte', $idsigma);
+            $params[] = array('@idprodseries', $idprodseries);
+            $params[] = array('@codprod', $codprod);
+            $params[] = array('@serie', $serie);
+            $params[] = array('@estado', $estado);
+            $params[] = array('@usuario', $usuario);
+            $params[] = array('@host', $host);
+            //$params[] = array('@nestado', $estado);
+
+            $person = $cn->ejec_store_procedura_sql('almacen.insUpdSoporte', $params);
+            $cperson = count($person);
+            echo $person[0][0];
+        }
+    }
+
     public function guardarservicioAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -902,6 +1130,17 @@ if ($idsigma=='...'){
             $seleccion= $this->_request->getPost('seleccion');
             $txtdescrip = str_replace('#1', '&',  $txtdescrip);
 
+            $seleccionado= $this->_request->getParam('seleccionados2');
+            $decodeSeleccion = json_decode($seleccionado, true);
+            $cseleccion = count($decodeSeleccion);
+
+            //echo"<pre>";
+            // print_r($txtdescrip);
+            //print_r("JHIMI");
+            //print_r($seleccionado);
+            //print_r($decodeSeleccion);
+            //echo"</pre>";
+
             $params = null;
             $params[] = array('@idServicio',$idsigma );
             $detcot = $cn->executeAssocQuery('Limpiar_ServMaterial', $params);
@@ -916,19 +1155,19 @@ if ($idsigma=='...'){
 
             //$texto = htmlentities(utf8_decode($txtdescrip));
 
-            echo"<pre>";
+            //echo"<pre>";
            // print_r($txtdescrip);
             $texto = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $txtdescrip);
-            print_r($texto);
+            //print_r($texto);
 
-            $texto1 = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
+            $texto1 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
-            print_r($texto1);
+           // print_r($texto1);
 
-            echo"</pre>";
+            //echo"</pre>";
             $params = null;
             $params[] = array('@ttrans', $ttrans);
             $params[] = array('@idServicio', $idsigma);
@@ -945,20 +1184,23 @@ if ($idsigma=='...'){
                 $idsigma = $person[0][0];
             }
 
-            if(is_array($seleccion))
+            /*if(is_array($seleccion))
             {
-            while(list($key,$value) = each($seleccion)) {
+            while(list($key,$value) = each($seleccion)) {*/
+            if($cseleccion>0)
+            {
+                for ($j = 0; $j < $cseleccion; $j++) {
               // echo $key .'->'.$value;
                 $params = null;
                 $params[] = array('@idServicio',$idsigma );
-                $params[] = array('@idMaterial',$value);
+                $params[] = array('@idMaterial',$decodeSeleccion[$j]);
                 $params[] = array('@vUsernm', $usuario);
                 $params[] = array('@vHostnm', $host);
                 $detcot = $cn->executeAssocQuery('Ins_ServMaterial', $params);
             }
             }
 
-            echo $person[0][0];
+           // echo $person[0][0];
         }
     }
 
@@ -983,14 +1225,21 @@ if ($idsigma=='...'){
             $estado = $this->_request->getPost('estado');
             $seleccion= $this->_request->getPost('seleccion');
             $idcotiz= $this->_request->getPost('txtidcotizacion');
+            $idDetcotiz= $this->_request->getPost('txtidDetcotizacion');
             $idserv= $this->_request->getPost('txtidservi');
+            $tipomon= $this->_request->getPost('tipomon');
+
+            $seleccionado= $this->_request->getParam('selecccionados');
+            $decodeSeleccion = json_decode($seleccionado, true);
+            $cseleccion = count($decodeSeleccion);
+
             $txtdescrip = str_replace('#1', '&',  $txtdescrip);
 
-            $texto = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
+            $texto = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $txtdescrip);
 
-            $texto1 = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
+            $texto1 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
                     "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $vnombre);
 
@@ -1005,11 +1254,19 @@ if ($idsigma=='...'){
             $params[] = array('@idServicio',$idsigma );
             $params[] = array('@idCotiz',$idcotiz );
             $params[] = array('@opcional','0' );
+            $params[] = array('@descripcion',$texto );
+            $params[] = array('@idDetCotiz',$idDetcotiz );
             $detcot = $cn->executeAssocQuery('Desab_ServMaterialDetCotiz', $params);
 
-            if(is_array($seleccion))
+           // if(is_array($seleccion))
+            //{
+              //  while(list($key,$value) = each($seleccion)) {
+            //$params1[] = array('@idMaterial',$value);
+             //}
+            //}
+            if($cseleccion>0)
             {
-                while(list($key,$value) = each($seleccion)) {
+                    for ($j = 0; $j < $cseleccion; $j++) {
                     // echo $key .'->'.$value;
                     //Insertar los materiales en la tabla sevmaterial
                     /*$params1 = null;
@@ -1023,13 +1280,13 @@ if ($idsigma=='...'){
                     $params = null;
                     $params[] = array('@idcotiz',$idcotiz );
                     $params[] = array('@idServicio',$idsigma );
-                    $params[] = array('@idMaterial',$value);
+                    $params[] = array('@idMaterial',$decodeSeleccion[$j]);
                     $params[] = array('@vUsernm', $usuario);
                     $params[] = array('@vHostnm', $host);
                     $params[] = array('@vDescrip', $texto);
+                    $params[] = array('@idDetCotiz', $idDetcotiz);
+                    $params[] = array('@tipomon', $tipomon);
                     $detcot = $cn->executeAssocQuery('Ins_ServMaterialDetCot', $params);
-
-
                 }
             }
 
@@ -1038,11 +1295,14 @@ if ($idsigma=='...'){
             $params[] = array('@idServicio',$idsigma );
             $params[] = array('@idCotiz',$idcotiz );
             $params[] = array('@opcional','0' );
+            $params[] = array('@idDetCotiz',$idDetcotiz );
+
             $detcot = $cn->executeAssocQuery('Limpiar_ServMaterialDetCotiz', $params);
 
             //echo $detcot[0][0];
         }
     }
+
     public function agregarprodservopAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -1062,8 +1322,19 @@ if ($idsigma=='...'){
             $estado = $this->_request->getPost('estado');
             $seleccion= $this->_request->getPost('seleccion');
             $idcotiz= $this->_request->getPost('txtidcotizacion');
+            $idDetcotiz= $this->_request->getPost('txtidDetcotizacion');
             $idserv= $this->_request->getPost('txtidservi');
             $txtdescrip = str_replace('#1', '&',  $txtdescrip);
+
+            $seleccionado= $this->_request->getParam('seleccionados3');
+            $decodeSeleccion = json_decode($seleccionado, true);
+            $cseleccion = count($decodeSeleccion);
+
+            //echo"<pre>";
+            //print_r("JHIMI");
+            //print_r($seleccionado);
+            //print_r($decodeSeleccion);
+            //echo"</pre>";
 
             $texto = str_replace(array("á","é","í","ó","ú","ñ","�?","É","�?","Ó","Ú","Ñ"),
                 array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
@@ -1084,30 +1355,37 @@ if ($idsigma=='...'){
             $params[] = array('@idServicio',$idsigma );
             $params[] = array('@idCotiz',$idcotiz );
             $params[] = array('@opcional','1' );
+            $params[] = array('@descripcion',$texto );
+            $params[] = array('@idDetCotiz',$idDetcotiz );
             $detcot = $cn->executeAssocQuery('Desab_ServMaterialDetCotiz', $params);
 
 
+            /*
+                        if(is_array($seleccion))
+                        {
+                            while(list($key,$value) = each($seleccion)) {*/
 
-            if(is_array($seleccion))
+            if($cseleccion>0)
             {
-                while(list($key,$value) = each($seleccion)) {
+                for ($j = 0; $j < $cseleccion; $j++) {
                     // echo $key .'->'.$value;
                     //Insertar los materiales en la tabla sevmaterial
-                   /* $params1 = null;
-                    $params1[] = array('@idServicio',$idsigma );
-                    $params1[] = array('@idMaterial',$value);
-                    $params1[] = array('@vUsernm', $usuario);
-                    $params1[] = array('@vHostnm', $host);
-                    $detcot = $cn->executeAssocQuery('Ins_ServMaterial', $params1);*/
+                    /* $params1 = null;
+                     $params1[] = array('@idServicio',$idsigma );
+                     $params1[] = array('@idMaterial',$value);
+                     $params1[] = array('@vUsernm', $usuario);
+                     $params1[] = array('@vHostnm', $host);
+                     $detcot = $cn->executeAssocQuery('Ins_ServMaterial', $params1);*/
 
                     //Insertar los materiales en la tabla DetCotizacion
                     $params = null;
                     $params[] = array('@idcotiz',$idcotiz );
                     $params[] = array('@idServicio',$idsigma );
-                    $params[] = array('@idMaterial',$value);
+                    $params[] = array('@idMaterial',$decodeSeleccion[$j]);
                     $params[] = array('@vUsernm', $usuario);
                     $params[] = array('@vHostnm', $host);
                     $params[] = array('@vDescrip', $texto);
+                    $params[] = array('@idDetCotiz',$idDetcotiz );
                     $detcot = $cn->executeAssocQuery('Ins_ServMaterialDetCotOp', $params);
                 }
             }
@@ -1116,11 +1394,45 @@ if ($idsigma=='...'){
             $params[] = array('@idServicio',$idsigma );
             $params[] = array('@idCotiz',$idcotiz );
             $params[] = array('@opcional','1' );
+            $params[] = array('@idDetCotiz',$idDetcotiz );
             $detcot = $cn->executeAssocQuery('Limpiar_ServMaterialDetCotiz', $params);
 
             //echo $detcot[0][0];
         }
     }
+
+    public function guardarseriesAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pPSeries = $this->_request->getParam('objSeries');
+            $jProSeries = json_decode($pPSeries);
+
+            $dataSet = new Model_DataAdapter();
+
+            $_proc_gserie= 'almacen.reemplazo_series';
+            foreach ($jProSeries->lstSeries as $value) {
+                $params = null;
+                $params[] = array('@p_idprodser', $value->idProdSeries);  #p_idsigma
+                $params[] = array('@p_idProdSeriesNue',  $value->idProdSeriesNue);  #serie nueva
+                $params[] =  array('@p_vNroSerieNue',  $value->vNroSerie); #cantidad
+                $params[] =  array('@p_vDescripcion',  $value->vDescripcion); #Descripcion
+                // print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_gserie, $params);
+            }
+
+            print_r(json_encode($permiso[0]));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
+
+
     public function addmaterialAction() {
         $func = new Libreria_Pintar();
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -1236,6 +1548,63 @@ if ($idsigma=='...'){
             $cn = new Model_DataAdapter ();
             $categ = $this->_request->getPost('catego');
             $serv = $this->_request->getPost('serv');
+            $cbotipomat = $this->_request->getPost('cbotipomat');
+
+            $params = null;
+            $params[] = array('@idCatego', $categ);
+            $params[] = array('@idServicio', $serv);
+            if ($cbotipomat!='9999999999'){
+                $params[] = array('@idTipoMat', $cbotipomat);
+            }
+            //$params[] = array('@idTipoMat', $serv);
+
+            $detcot = $cn->ejec_store_procedura_sql('list_materiales', $params);
+            //$detcot = $cn->executeAssocQuery('Ins_ServMaterial', $params);
+            $contenhijos='';
+            $marcadoslist = array();
+            $mitad=1;
+            if(count($detcot)>1) {
+                $mitad=round(count($detcot)/2);
+            }
+            $contenhijos .="<table border=\"0\"><tr><td style=\"width: 45%;\">";
+            for ($i = 0; $i < count($detcot); $i++) {
+                $cod = $detcot[$i][0];
+                $nombre = $detcot[$i][1];
+                $marcado = $detcot[$i][2];
+                if($mitad==$i){
+                    $contenhijos .="</td><td width=\"10\">&nbsp;&nbsp;&nbsp;</td><td>";
+                }
+                    if($marcado>'0'){
+
+                        $marcadoslist[]= $cod;
+                    $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\" onclick=\"AgregarLista($cod);\"  checked id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                     $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
+
+                    }else{
+                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\" onclick=\"AgregarLista($cod);\" id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                        $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
+
+                    }
+            }
+            $contenhijos .="</td><tr></table>";
+            //echo $contenhijos;
+
+            echo json_encode(array("data" => $contenhijos, "Seleccionado"=> $marcadoslist ));
+        }
+
+    }
+
+    public function arreglocheckdetcotizAction(){
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $categ = $this->_request->getPost('catego');
+            $serv = $this->_request->getPost('serv');
+            $idcotiz = $this->_request->getPost('idcotiz');
+            $opcional = $this->_request->getPost('opcional');
+            $cbotipomat = $this->_request->getPost('cbotipomat');
 
             $seleccion= $this->_request->getParam('selecionados');
             $decodeSeleccion = json_decode($seleccion, true);
@@ -1244,16 +1613,26 @@ if ($idsigma=='...'){
             $params = null;
             $params[] = array('@idCatego', $categ);
             $params[] = array('@idServicio', $serv);
+            $params[] = array('@idcotiz', $idcotiz);
+            $params[] = array('@opcional', $opcional);
+            if ($cbotipomat!='9999999999'){
+            $params[] = array('@idTipoMat', $cbotipomat);
+        }
 
-            $detcot = $cn->ejec_store_procedura_sql('list_materiales', $params);
+            $detcot = $cn->ejec_store_procedura_sql('list_materialesdetcotiz', $params);
             //$detcot = $cn->executeAssocQuery('Ins_ServMaterial', $params);
             $contenhijos='';
+
+
+            $marcadoslist = array();
             $mitad=1;
             if(count($detcot)>1) {
                 $mitad=round(count($detcot)/2);
             }
 
-            $contenhijos .="<table border=\"0\"><tr><td>";
+            $contenhijos .="<table border=\"0\"><tr><td style=\"width: 45%;\">";
+
+
 
             if($cseleccion>0)
             {
@@ -1271,14 +1650,15 @@ if ($idsigma=='...'){
                         }
                     }
                     if($marcado==1){
-                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  checked id=\"seleccion\" value=\"".$cod."\">".$nombre."<br>";
+                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  onclick=\"AgregarLista($cod);\" checked id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                        $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
                     }else{
-                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  id=\"seleccion\" value=\"".$cod."\">".$nombre."<br>";
+                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\" onclick=\"AgregarLista($cod);\"  id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                        $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
                     }
                 }
 
             }else {
-
                 for ($i = 0; $i < count($detcot); $i++) {
                     $cod = $detcot[$i][0];
                     $nombre = $detcot[$i][1];
@@ -1287,20 +1667,60 @@ if ($idsigma=='...'){
                         $contenhijos .="</td><td width=\"10\">&nbsp;&nbsp;&nbsp;</td><td>";
                     }
                     if($marcado>'0'){
-                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  checked id=\"seleccion\" value=\"".$cod."\">".$nombre."<br>";
+                        $marcadoslist[]= $cod;
+
+                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\" onclick=\"AgregarLista($cod);\" checked id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                        $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
                     }else{
-                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  id=\"seleccion\" value=\"".$cod."\">".$nombre."<br>";
+                        $contenhijos .= "<input type=\"checkbox\" name=\"seleccion[]\"  onclick=\"AgregarLista($cod);\" id=\"seleccion\" value=\"".$cod."\">".$nombre;
+                        $contenhijos .= "<div class=\"btnElim\" style=\"text-align: center; cursor: pointer; display: none;\" onclick=\"eliminarMate($cod);\"><label style=\"text-align:center; cursor: pointer;\" class=\"ui-pg-div  ui-inline-edit\"><span class=\"ui-button-icon-primary ui-icon ui-icon-trash\"></span></label></div>"."<br>";
                     }
                 }
 
             }
 
-
             $contenhijos .="</td><tr></table>";
-          echo $contenhijos;
+            //echo $contenhijos;
+
+            echo json_encode(array("data" => $contenhijos, "Seleccionado"=> $marcadoslist ));
+            //echo json_encode($contenhijos);
         }
 
     }
+
+    public function cargarmarcadosAction(){
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter ();
+            $categ = $this->_request->getPost('catego');
+            $serv = $this->_request->getPost('serv');
+            $idcotiz = $this->_request->getPost('idcotiz');
+            $opcional = $this->_request->getPost('opcional');
+
+            $params = null;
+            $params[] = array('@idCatego', $categ);
+            $params[] = array('@idServicio', $serv);
+            $params[] = array('@idcotiz', $idcotiz);
+            $params[] = array('@opcional', $opcional);
+            $detcot = $cn->ejec_store_procedura_sql('list_materialesdetcotiz', $params);
+
+            $marcadoslist = array();
+            for ($i = 0; $i < count($detcot); $i++) {
+                    $cod = $detcot[$i][0];
+                    $nombre = $detcot[$i][1];
+                    $marcado = $detcot[$i][2];
+                    if($marcado>'0'){
+                        $marcadoslist[]= $cod;
+}
+                }
+
+            echo json_encode(array("Seleccionado"=> $marcadoslist ));
+        }
+
+    }
+
 
     public function forzardescargaAction() {
         $this->_helper->layout->disableLayout();
@@ -1744,6 +2164,31 @@ if ($idsigma=='...'){
             $parameters[] = array("@pctipdocu", $ctipdocu);
             $parameters[] = array("@pctipestrdocu", $ctipestrdocu);
             $parameters[] = array("@pnorden", $norden);
+            $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
+            echo json_encode($recordsDdocument);
+        }
+    }
+
+
+
+    public function cargarseriesAction() {
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $type = $this->_request->getParam('tBusqueda');
+            $configdoc = $this->_request->getParam('vDatoBus');
+            $ctipdocu = $this->_request->getParam('vDatoBusDos');
+            $cModelo = $this->_request->getParam('vModelo');
+            $cSerieN = $this->_request->getParam('vSerieN');
+            $cn = new Model_DataAdapter();
+            $procedure = 'almacen.Bus_ProdSeriesMant';
+            $parameters[] = array("@tBusqueda", $type);
+            $parameters[] = array("@vDatoBus", $configdoc);
+            $parameters[] = array("@vDatoBusDos", $ctipdocu);
+            $parameters[] = array("@vModelo", $cModelo);
+            $parameters[] = array("@vSerieN", $cSerieN);
             $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
             echo json_encode($recordsDdocument);
         }

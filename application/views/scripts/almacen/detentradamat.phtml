@@ -1,6 +1,6 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
+$TipoMoneda=array( array("2","Soles"),array("1","Dolares"));
 
 ?>
 
@@ -56,7 +56,7 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
                             <td width="10">&nbsp;</td>
                             <td width="230" style="text-align: left">Factura</td>
                             <td width="10">&nbsp;</td>
-
+                            <td width="230" style="text-align: left">Tipo Moneda</td>
                         </tr>
 
                         <tr class="rowbcoti" id="panelbcoti">
@@ -69,6 +69,14 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
 
                             <td>&nbsp;
                             </td>
+
+                            <td colspan="2">
+                                <select id="cbtipomon" name="cbtipomon" style="width:140px;">
+                                    <?php  echo $library->ContenidoCombo($TipoMoneda, $this->ctipmon,0); ?>
+                                </select>
+
+                            </td>
+
 
                         </tr>
 
@@ -181,7 +189,7 @@ function validarTipoCambio(tipo){
     switch(tipo){
         case '1' : // Dolares
             $(".soloSoles").hide();
-            ActualizarMontos();
+           // ActualizarMontos(); //No se cacula la cantidad
             //$("#tasacambio").val("0");
             break;
         case '2' : // Soles
@@ -196,7 +204,7 @@ validarTipoCambio($("#cbtipomon").val());
 $("#cbtipomon").combobox({
     selected: function(event, ui){
         //validarTipoCambio($("#cbtipomon").val())
-        ActualizarMontos();
+        //ActualizarMontos();  //No se calcula
     }
 });
 
@@ -418,7 +426,7 @@ function linkadjuntoOpen(rowId, cellvalue) {
 
 
 function ActualizarMontos() {
-
+//No se usa en el ingreso de Materiales no se calcula
     jQuery('#tblDetEntradaMat').jqGrid('saveRow',lastsel3);
     var tasa= $("#tasacambio").val();
     var tipomon= $("#cbtipomon").val();
@@ -542,9 +550,8 @@ function ActualizarMontos() {
             "igv":  $("#txtigv").val(),
             "total":  $("#txttotal").val(),
             "fecha": $("#fecdesde").val(),
-            "factura": $("#txtfactura").val()
-
-
+            "factura": $("#txtfactura").val(),
+            "tipoMoneda": $("#cbtipomon").val()
         };
         $.ajax({
             url: jQuery.scriptPath + "index.php/almacen/entradamatupdate",
@@ -561,6 +568,9 @@ function ActualizarMontos() {
         });
 
     };
+
+
+
     nuevaPSM = function(){
         parameters = {
             "idsigma": $("#identradamat").val()
@@ -767,7 +777,30 @@ actualizarcantdetalleCot();
 
 //Funcion para regresar al la grilla naterior
     function Cancelar(){
-        window.open(path + "almacen/entradamat", "_self");
+        parameters = {
+            "identradamat":$("#identradamat").val()
+        };
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/cancelareliminadosentradamat",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {},
+            success: function (requestData) {
+                // $("#result").html(requestData);
+                //  var datos=JSON.parse(requestData);
+                window.open(path + "almacen/entradamat", "_self");
+            },
+            error: function (requestData, strError, strTipoError) {
+                console.log("Error " + strTipoError + ': ' + strError);
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+
+            },
+            complete: function (requestData, exito) {   }
+        });
+
+
     }
 
 

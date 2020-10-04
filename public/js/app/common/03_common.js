@@ -9,6 +9,34 @@ var config = {
         ['UIColor']
     ]
 },
+    __gridConfigTecnico = {  //JHIMI 23062018
+        height: 300,
+        width: 700,
+        colNames: ['Codigo',
+            'Persona',
+            'Tipo Doc',
+            'Nro Doc',
+            'Estado',
+            'Usernm',
+            'Hostnm',
+            'FecReg'
+        ],
+        colModel: [
+            {name: 'idTecnico', index:'idTecnico', width:70},
+            {name: 'vNombre', index:'vNombre', width:360},
+            {name: 'vTipoDoc', index:'vTipoDoc', width:100, hidden: false},
+            {name: 'vNroDoc', index:'vNroDoc',width:100, hidden: false},
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
+            {name: 'vUsernm', index:'vUsernm', hidden: true},
+            {name: 'vHostnm', index:'vHostnm', hidden: true},
+            {name: 'dFecReg', index:'dFecReg', hidden: true}
+
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
+        onSelectRow: function() {},
+        ondblClickRow: function() {},
+        gridComplete: function() {}
+    },
  __gridConfigMaterial = {  //JHIMI 25022018
         height: 300,
         width: 1000,
@@ -37,6 +65,7 @@ var config = {
             {name: 'vCategoria', index:'vCategoria', width:150},
             {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
         ],
+        ignoreCase:true,
         caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
         onSelectRow: function() {},
         ondblClickRow: function() {},
@@ -52,7 +81,8 @@ var config = {
             'stock',
             'vNroSerie',
             'vEstAlmacen',
-            'Estado'
+            'Estado',
+            'idDetSalidaProd'
         ],
         colModel: [
             {name: 'idProdSeries', index:'idProdSeries', width:60},
@@ -62,8 +92,10 @@ var config = {
             {name: 'nStock', index:'nStock', width:60},
             {name: 'vNroSerie', index:'vNroSerie', width:250},
             {name: 'vEstAlmacen', index:'vEstAlmacen', width:80,hidden:true},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
+            {name: 'idDetSalidaProd', index:'idDetSalidaProd', width:80,hidden:true}
         ],
+        ignoreCase:true,
         caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
         onSelectRow: function() {},
         ondblClickRow: function() {},
@@ -78,6 +110,7 @@ __gridConfigContribuyente = {
         {name: 'crazsoc', index: 'crazsoc', width: 420},
         {name: 'direccf', index: 'direccf', width: 420}],
     caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
+    ignoreCase:true,
     onSelectRow: function() {},
     ondblClickRow: function() {},
     gridComplete: function() {}
@@ -146,6 +179,7 @@ __gridConfigViaPredio = {
         {name: 'vnrodoc', index: 'vnrodoc', width: 1, hidden: true},
         {name: 'cperiod', index: 'cperiod', width: 1, hidden: true}
     ],
+    ignoreCase:true,
     caption: "&nbsp;&nbsp;&nbsp;Predios Registrados",
     onSelectRow: function() {},
     ondblClickRow: function() {},
@@ -185,6 +219,7 @@ function procesarSeleccion(idPanel, idx, _options, parameters) {
     });
 }
 
+
 function procesarProcedimiento(idPanel, idx, _options, parameters, bindkeys, navGrid) {
     procesarConsultaSubProceso('registrar', parameters, function(requestData) {
         $("#" + idPanel).html(requestData);
@@ -200,6 +235,7 @@ function procesarJSON(idPanel, idx, _options, bindkeys, navGrid) {
     $("#" + idPanel).html(html);
     reloadJQGrid(idx, _options, bindkeys, navGrid);
 }
+
 
 function procesarProcedimientoJSON(idPanel, idx, _options, parameters, bindkeys, navGrid) {
     html = "<table id=" + idx + "></table>";
@@ -364,6 +400,9 @@ function openDialogData1(url, data, width, height, title) {
 
 function openDialogData2(url, data, width, height, title) {
     openDialogData(url, data, width, height, title, '#jqDialog2', null, null);
+}
+function openDialogData3(url, data, width, height, title) {
+    openDialogData(url, data, width, height, title, '#jqDialog3', null, null);
 }
 
 function openDialog1(url, width, height, title) {

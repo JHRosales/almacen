@@ -640,6 +640,11 @@ BuscadorPredio = {
 
     },
     buscarAjax: function(modo) {
+
+        function buttonsGridPServ(){
+            $("#tblResult").navGrid('#ptblResult', {edit:false,add:false,del:false,search:false,refresh:false});
+            $("#tblResult").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true});
+        }
         var
             parameters = {
                 "name": "tblResult",
@@ -656,7 +661,7 @@ BuscadorPredio = {
                         data: request,
                         datatype: "local"
                     });
-                inicializarGrid("tblResult", gridConfig, bindkeys);
+                inicializarGrid("tblResult", gridConfig, bindkeys,buttonsGridPServ);
                 if (records == 0) {
                     if (modo == BuscadorMaterial.MODO_CERO) {
                         if (!$("#btnBuscarNuevoPredio").hasClass("row-hide")) {
@@ -669,6 +674,154 @@ BuscadorPredio = {
                     $("#dialogMensaje").dialog("open");
                 }
                 BuscadorMaterial.configBeforeGrid(request);
+            };
+        procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
+    }
+};
+
+BuscadorTecnico = {
+    // Constantes Publicas
+    MODO_CERO: 0,
+    MODO_FULL: 1,
+    PROCEDIMIENTO_BUSCAR_PERSONA: "Bus_Tecnico",
+
+    // Propiedades Publicas
+    procedimientoBuscarPersona: "",
+    gridConfigPersona: __gridConfigTecnico,
+    titleDialog: "Buscador de Tecnico",
+
+    // Metodos
+    buscar: function() {
+        var valid = [false, false];
+
+        valid[0] = valid[0] || (trim($("#cbotipob").val()).length > 0);
+        valid[0] = valid[0] || (trim($("#c_textbusqueda").val()).length > 0);
+
+        if (valid[0]) {
+            BuscadorTecnico.buscarAjax(BuscadorTecnico.MODO_CERO);
+        }  else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    },
+
+    init: function (modo, modoAjax) {
+        $("#dialogMensaje").dialog({
+            title: "Almacen",
+            modal: true,
+            minHeight: 'auto',
+            width: 340,
+            position: ['center', 'center'],
+            resizable: false,
+            autoOpen: false,
+            closeOnEscape: true
+        });
+
+        $("#c_codigocontrib").numeric({
+            decimal: false,
+            negative: false
+        }, function() {
+            openDialogWarning("Solo Numeros Enteros Positivos.", 150, 90);
+            this.value = "";
+            this.focus();
+        });
+
+        inicializarGrid("tblResulttec", ( this.gridConfigPersona));
+
+        $("#panelBuscarContribuyente").on("keyup", "input", function(e) {
+            if (e.keyCode == 13) {
+                $("#btnbuscar").click();
+            }
+        });
+
+        $("#c_codigocontrib, #c_predial").on("focus", function() {
+            $("#panelBuscarContribuyente input.ui-text").val("");
+            $("#panelBuscarPredio input.ui-text").val("");
+        });
+
+        $(".pnl").on("focus", function() {
+            var name = $(this).attr("id");
+            if (name == 'c_apepatcontrib' || name == 'c_nombrecontrib' || name == 'c_viacontrib' || name == 'c_nroviacontrib' || name == 'c_mzacontrib' || name == 'c_lotecontrib') {
+                $("#panelBuscarContribuyente input.ui-text").val("");
+                $("#c_predial").val("");
+            } else {
+                $("#panelBuscarPredio input.ui-text").val("");
+                $("#c_codigocontrib").val("");
+            }
+        });
+
+        $("#btnbuscar").button({ icons: {primary: 'ui-icon-search'} }).click(this.buscar);
+
+        if(modoAjax == true) {
+            $("#btnBuscarNuevoPredio, #btnBuscarNuevoContribuyente, #btnBuscarAceptar").button();
+        }
+
+        $("#btnBuscarAceptar").click(function(){
+            $("#dialogMensaje").dialog("close");
+        });
+
+        this.procedimientoBuscarPersona = this.PROCEDIMIENTO_BUSCAR_PERSONA;
+        if (modo == this.MODO_FULL) {
+            this.titleDialog = "Buscador de Tecnico";
+            if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
+                $(".rowBuscarContribuyente").removeClass("row-hide");
+            }
+            if ($(".rowBuscarPredio").hasClass("row-hide")) {
+                $(".rowBuscarPredio").removeClass("row-hide");
+            }
+        }
+    },
+    bindkeysPersona: {"onEnter": function() {}},
+    configurarDialog: function() {
+        $("#dialogBuscarTecnico").dialog({
+            title: this.titleDialog,
+            modal: true,
+            minHeight: 'auto',
+            width: 730,
+            position: ['center', 'center'],
+            resizable: false,
+            autoOpen: false,
+            closeOnEscape: true
+        });
+    },
+    configBeforeGrid: function(request) {
+    },
+    obtenerParameterContribuyente: function() {
+        return '[' +
+            '["@tBusqueda", "' + $("#cbotipob").val() + '"],' +
+             '["@vTipDoc", ""],'+
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
+    },
+    buscarAjax: function(modo) {
+        var
+            parameters = {
+                "name": "tblResulttec",
+                "procedure": (this.procedimientoBuscarPersona ),
+                "print": "true",
+                "parameters": ( this.obtenerParameterContribuyente())
+            },
+            proceso = function(request) {
+                $("#panelResulttec").html('<table id="tblResulttec"></table><div id="ptblResulttec"></div><input type="hidden" id="ctblResulttec" name="ctblResulttec" value="" />');
+                var
+                    records = request.length,
+                    bindkeys = ( BuscadorTecnico.bindkeysPersona ),
+                    gridConfig = $.extend(( BuscadorTecnico.gridConfigPersona ), {
+                        data: request,
+                        datatype: "local"
+                    });
+                inicializarGrid("tblResulttec", gridConfig, bindkeys);
+                if (records == 0) {
+                    if (modo == BuscadorTecnico.MODO_CERO) {
+                        if (!$("#btnBuscarNuevoPredio").hasClass("row-hide")) {
+                            $("#btnBuscarNuevoPredio").addClass("row-hide");
+                        }
+                        if ($("#btnBuscarNuevoContribuyente").hasClass("row-hide")) {
+                            $("#btnBuscarNuevoContribuyente").removeClass("row-hide");
+                        }
+                    }
+                    $("#dialogMensaje").dialog("open");
+                }
+                BuscadorTecnico.configBeforeGrid(request);
             };
         procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
     }
@@ -804,6 +957,12 @@ BuscadorSeries = {
     },
     buscarAjax: function(modo) {
 
+
+        function buttonsGridPServ(){
+            $("#tblResult").navGrid('#ptblResult', {edit:false,add:false,del:false,search:false,refresh:false});
+            $("#tblResult").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true});
+        }
+
         var
             parameters = {
                 "name": "tblResult",
@@ -820,7 +979,7 @@ BuscadorSeries = {
                         data: request,
                         datatype: "local"
                     });
-                inicializarGrid("tblResult", gridConfig, bindkeys);
+                inicializarGrid("tblResult", gridConfig, bindkeys,buttonsGridPServ);
                 if (records == 0) {
                     if (modo == BuscadorSeries.MODO_CERO) {
                         if (!$("#btnBuscarNuevoPredio").hasClass("row-hide")) {
@@ -836,4 +995,5 @@ BuscadorSeries = {
             };
         procesarConsultaSubProceso('registrar', parameters, proceso, 'json');
     }
+
 };

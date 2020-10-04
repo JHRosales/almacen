@@ -117,12 +117,12 @@ break;
     eliminar=function(a){
         var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
         var row = $("#tblListaProducto").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
+        if(row.idServicio == "" || row.idServicio == undefined){
             openDialogWarning("Seleccione un registro para eliminar.");
             return;
         }
         parameters = {
-            "idsigma": row.cidpers
+            "idServicio": row.idServicio
         };
 
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
@@ -131,7 +131,7 @@ break;
            "si":function(){
                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
                $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarproducto",
+                   url: jQuery.scriptPath + "index.php/mantenimientos/anularservicio",
                    type: 'POST',
                    cache: false,
                    data: parameters,

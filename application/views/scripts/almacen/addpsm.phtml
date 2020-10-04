@@ -90,7 +90,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     });
 
     $('#txtPrecioUnit').on('keypress', function (e) {
-        // Backspace = 8, Enter = 13, ’0? = 48, ’9? = 57, ‘.’ = 46
+        // Backspace = 8, Enter = 13, ï¿½0? = 48, ï¿½9? = 57, ï¿½.ï¿½ = 46
 
         var field = $(this);
         key = e.keyCode ? e.keyCode : e.which;
@@ -116,7 +116,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         return false;
     });
     $('#txtCantidad').on('keypress', function (e) {
-        // Backspace = 8, Enter = 13, ’0? = 48, ’9? = 57, ‘.’ = 46
+        // Backspace = 8, Enter = 13, ï¿½0? = 48, ï¿½9? = 57, ï¿½.ï¿½ = 46
 
         var field = $(this);
         key = e.keyCode ? e.keyCode : e.which;
@@ -195,10 +195,10 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                 break;
                 case '0':
 
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                    jQuery("#tblListaMate").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    jQuery("#tblPSM").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
+                    jQuery("#tblPSM").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
+                    jQuery("#tblPSM").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
+                    jQuery("#tblPSM").jqGrid('setCell',rowid,'nestado','',{color:'red'});
                     break;
             }
         },
@@ -278,8 +278,8 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             "PrecioUnitario": $("#txtPrecioUnit").val()
         };
 
-        openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
-            "si":function(){
+       /* openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
+            "si":function(){*/
                 $.ajax({
                     url: jQuery.scriptPath + "index.php/almacen/detentradamatadd",
                     type: 'POST',
@@ -301,22 +301,23 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                     complete: function (requestData, exito) {
                     }
                 });
-            },
+          /*  },
             "no":function(){
                 closeDialog("jqDialogConfirmacion1");
             }
-        })
+        })*/
     };
 
     nuevaMaterial = function(){
         parameters = {
             "idsigma": '...'
         };
-        openDialogData2("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/material", parameters, 500);
     };
     verMaterial = function() {
-        var selr = $('#tblListaMate').jqGrid('getGridParam','selrow');
-        var row = $("#tblListaMate").jqGrid('getRowData', selr);
+        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
+        var row = $("#tblPSM").jqGrid('getRowData', selr);
+        console.log(row.idMaterial);
         if(row.idMaterial == "" || row.idMaterial == undefined){
             openDialogWarning("Seleccione un registro para editar.");
             return;
@@ -324,7 +325,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         parameters = {
             "idsigma": row.idMaterial
         };
-        openDialogData2("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/material", parameters, 500);
     };
 
     function buttonsGridPSM(){

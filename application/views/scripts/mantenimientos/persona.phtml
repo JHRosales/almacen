@@ -425,10 +425,16 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 +"&vtelmov="+vtelmov
                 +"&idUbigeo="+ubigeo,
             success: function(requestData){ 	//Llamada exitosa)
-                openDialogInfo("Registrado correctamente");
-               // $("#c_codigocontrib").val(requestData);
-                buscarPersona();
-                cerrarMantPersona();
+                var datos=JSON.parse(requestData);
+                console.log(datos);
+                if (datos[0][1]=="Err") {
+                    openDialogInfo(datos[0][2]);
+                }else{
+                    openDialogInfo("Registrado correctamente");
+                    // $("#c_codigocontrib").val(requestData);
+                    buscarPersona();
+                    cerrarMantPersona();
+                }
             },
             error: function(requestData, errNumber, errMessage){
                 if(errNumber == '') {

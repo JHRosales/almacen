@@ -1,0 +1,542 @@
+<style>
+    #tableSeries { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
+    #tableSeries th { border: 1px solid #ababab; padding: .5em 5px; text-align: Center; }
+    #tableSeries td { border: 1px solid #e3e3e3; padding: .1em 5px; text-align: left; }
+</style>
+<div id="panelMantenimientoEntradaProd" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
+        <label>MANTENIMIENTO SERIES</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio" style="margin-bottom: -30px">
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos del Series</div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6 text-left">
+                <label for="inputModelo">Factura</label>
+                <input type="text" class="form-control" id="txtFactura" name="txtFactura"  placeholder="Factura">
+            </div>
+            <div class="form-group col-md-6 text-left">
+                <label for="inputSerie">Modelo</label>
+                <input type="text" class="form-control" id="txtModelo" name="txtModelo"  placeholder="Modelo">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6 text-left">
+                <label for="inputSerie">Serie Antigua</label>
+                <input type="text" class="form-control" id="txtSerieAnt" name="txtSerieAnt"  placeholder="Serie">
+            </div>
+            <div class="form-group col-md-6 text-left">
+                <label for="inputSerie">Serie Nueva</label>
+                <input type="text" class="form-control" id="txtSerieN" name="txtSerieN"  placeholder="Serie Nueva">
+            </div>
+        </div>
+
+            <div class="form-group col-md-2 text-center" style="display: none">
+                <button id="btnbuscar" name="btnbuscar"  class="form-control" onclick="buscarSerie()">Buscar</button>
+            </div>
+        <div  class="form-group">&thinsp;
+        </div>
+        </div>
+
+    <div class="container" id="panelListaEntradaProd" align="center" style="width: 100%;margin-left:
+     15px; margin-right: 15px;">
+        <div id="panelPrSerie" align="left" style="width: 99%;margin-left: 5px;">
+            <table id="tblPrSerie"></table>
+            <div id="ptblPrSerie">
+            </div>
+        </div>
+    </div>
+
+    <div id="panelDatosConductor" align="center" class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;height: 100%;margin: 3px;">
+        <div class="ui-widget ui-state-default ui-corner-top ui-title">
+            <label>SERIES </label>
+        </div>
+
+        <div id="panelProce1" name="panelProce1" >
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<div id="dialogMensaje"  >
+</div>
+
+<script type="text/javascript">
+    themeComboBox();
+var val=0;
+    var cant=0;
+
+
+$("#txtFactura").keyup(function(e){
+    if($("#txtFactura").val().length>2 || e.keyCode==13 ){
+        //buscarSerie();
+        cargarserie();
+        $("#txtFactura").focus();
+    }
+});
+$("#txtModelo").keyup(function(e){
+    if($("#txtModelo").val().length>2 || e.keyCode==13 ){
+        //buscarSerie();
+        cargarserie();
+        $("#txtModelo").focus();
+    }
+});
+    $("#txtSerieAnt").keyup(function(e){
+        if($("#txtSerieAnt").val().length>2 || e.keyCode==13 ){
+            //buscarSerie();
+            cargarserie();
+            $("#txtSerieAnt").focus();
+        }
+    });
+    $("#txtSerieN").keyup(function(e){
+        if($("#txtSerieN").val().length>2 || e.keyCode==13 ){
+            //buscarSerie();
+            cargarserie();
+            $("#txtSerieN").focus();
+        }
+    });
+
+
+    $("#cbotipob").combobox({
+        selected: function(event, ui){
+            buscarSerie();
+        }
+    });
+
+
+
+
+
+
+$( "#txtnombre" ).keyup(function( event ) {
+    buscarPServ();
+    document.getElementById("txtnombre").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+
+    }
+});
+$( "#txtdescri" ).keyup(function( event ) {
+    buscarMate();
+    document.getElementById("txtdescri").focus();
+}).keydown(function( event ) {
+    if ( event.which == 13 ) {
+
+    }
+});
+
+$('#txtPrecioUnit').on('keypress', function (e) {
+    // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
+
+    var field = $(this);
+    key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 8) return true;
+    if (key > 47 && key < 58) {
+        if (field.val() === "") return true;
+        var existePto = (/[.]/).test(field.val());
+        if (existePto === false){
+            regexp = /.[0-9]{10}$/;
+        }
+        else {
+            regexp = /.[0-9]{2}$/;
+        }
+
+        return !(regexp.test(field.val()));
+    }
+    if (key == 46) {
+        if (field.val() === "") return false;
+        regexp = /^[0-9]+$/;
+        return regexp.test(field.val());
+    }
+    return false;
+});
+$('#txtCantidad').on('keypress', function (e) {
+    // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
+
+    var field = $(this);
+    key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 8) return true;
+    if (key > 47 && key < 58) {
+        if (field.val() === "") return true;
+        var existePto = (/[.]/).test(field.val());
+        if (existePto === false){
+            regexp = /.[0-9]{10}$/;
+        }
+        else {
+            regexp = /.[0-9]{2}$/;
+        }
+
+        return !(regexp.test(field.val()));
+    }
+    return false;
+});
+
+
+var lastselSerie;
+optionPSM = {
+    datatype: "local",
+    width: 930,
+    // keys: true,
+    height: 250,
+    colNames: [
+        'Codigo',
+        'idDetEntradaProd',
+        'idProducto',
+        'NroSerie',
+        '',
+        'IdProdSeriesNue',
+        'Nueva S.',
+        ''
+    ],
+    colModel: [
+        {name: 'idProdSeries', index:'idProdSeries', width:80,search:false},
+        {name: 'idDetEntradaProd', index:'idDetEntradaProd', width:80,search:false,hidden : false},
+        {name: 'idProducto', index:'idProducto', width:80,search:false,hidden : false},
+        {name: 'vNroSerie', index:'vNroSerie', width:300, editable:false,editoptions: {maxlength: 100}},
+        {name: 'btndes', index: 'btndes', width: 50, align: 'center' ,formatter : btnAnulaSerie,search:false},
+        {name: 'idProdSeriesNue', index:'idProdSeriesNue', width:250, editable:false,editoptions: {maxlength: 100}, hidden: false},
+        {name: 'vNroSerieNue', index:'vNroSerieNue', width:300, editable:true,editoptions: {maxlength: 100}, hidden: false},
+        {name: 'btndel', index: 'btndel', width: 50, align: 'center' ,formatter : btnEliminaSerie,search:false, hidden: false}
+    ],
+    editurl: "clientArray",
+    caption: "&nbsp;&nbsp;&nbsp;Series",
+    ondblClickRow: function(id){
+        var row = $(this).getRowData(id);
+
+    },
+
+    afterInsertRow:function(rowid,aData){
+        switch(
+            aData.nestado
+            ){case'1':
+            break;
+            case '0':
+
+                jQuery("#tblPrSerie").jqGrid('setCell',rowid,'idProdSeries','',{color:'red'});
+                jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vNroSerie','',{color:'red'});
+                jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vEstAlmacen','',{color:'red'});
+                jQuery("#tblPrSerie").jqGrid('setCell',rowid,'vEstado','',{color:'red'});
+                break;
+        }
+    },
+    onSelectRow: function(id) {
+        var row = $(this).getRowData(id);
+        // if(lastselSerie!=undefined)
+
+        if(id && id!==lastselSerie){
+            jQuery('#tblPrSerie').jqGrid('saveRow',lastselSerie);
+            lastselSerie=id;
+        }
+        jQuery('#tblPrSerie').jqGrid('editRow',id,true);
+        for(i=0;i<5;i++){
+           // jQuery('#tblPrSerie').jqGrid('editRow',i,true);
+           // jQuery("#tblPrSerie").jqGrid('hideCol',"vNroSerieNue");
+            //$('#tblPrSerie').jqGrid('setGridHeight',$(window).innerHeight()/0.5);
+        }
+
+    },
+    gridComplete: function(id){
+        habilitarColum()
+    }
+};
+
+
+
+    habilitarColum= function(){
+   if  (val==1) {
+       jQuery("#tblPrSerie").jqGrid('showCol',"vNroSerieNue");
+       jQuery("#tblPrSerie").jqGrid('showCol',"btndel"); //Para la grilla de opcional
+
+   }else{
+       jQuery("#tblPrSerie").jqGrid('hideCol',"vNroSerieNue");
+       jQuery("#tblPrSerie").jqGrid('hideCol',"btndel"); //Para la grilla de opcional
+
+   }
+
+
+    };
+
+
+
+function btnAnulaSerie(cellvalue, options, rowObject){
+
+    return '<div align="center" class="ui-pg-button " ' +
+        'title="Borrar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+        'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+        'onclick="anularseriep(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+        '<span class="ui-icon ui-icon-transferthick-e-w"></span></div></div>';
+}
+
+function anularseriep(rowId) {
+    var gr = jQuery("#tblPrSerie").jqGrid('getGridParam','selrow');
+    //jQuery("#tblPrSerie").jqGrid('delGrid');
+    //$('#tblPrSerie').jqGrid('GridUnload');
+    if  (val==1) {
+        val=0;
+    }else{
+        val=1;
+    }
+    habilitarColum();
+
+}
+
+
+
+// -----> Borrar============================================00
+function btnEliminaSerie(cellvalue, options, rowObject){
+
+    return '<div align="center" class="ui-pg-button " ' +
+        'title="Grabar" style="text-align:center;float: left; cursor: pointer; display: block;" ' +
+        'onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+        'onclick="guardarSeries(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+        '<span class="ui-icon ui-icon-disk"></span></div></div>';
+}
+
+
+guardarSeries=function(a){
+    // var selr = $('#tblPrSerie').jqGrid('getGridParam','selrow');
+    // var row = $("#tblPrSerie").jqGrid('getRowData', selr);
+
+    jQuery('#tblPrSerie').jqGrid('saveRow',lastselSerie);
+    var rows= jQuery("#tblPrSerie").jqGrid('getRowData');
+
+    var detSeries = {};
+    var Series = [];
+    //Datos generales
+    detSeries.idproducto = $("#txtidProducto").val();
+    detSeries.identradaProd = $("#txtiddetEntradaProd").val();
+
+    //Datos Series
+    if (rows.length > 0) {
+        for (var i=0;i<rows.length;i++) {
+            var aSerie = {};
+            var row=rows[i];
+
+            if (row.vNroSerieNue!='' ){
+            aSerie.idProdSeries= row.idProdSeries;
+            aSerie.idProdSeriesNue= row.idProdSeriesNue;
+            aSerie.vNroSerie= row.vNroSerieNue;
+            Series.push(aSerie);
+            }
+        }
+    }
+    detSeries.lstSeries=Series;
+    var parameters = {};
+    parameters.objSeries = JSON.stringify(detSeries);
+
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/mantenimientos/guardarseries",
+        type: 'POST',
+        cache: false,
+        data: parameters,
+        beforeSend: function (data) {   },
+        success: function (requestData) {
+            closeDialog('jqDialog1');
+        },
+        error: function (requestData, strError, strTipoError) {   },
+        complete: function (requestData, exito) {    }
+    });
+
+};
+
+
+function buttonsGridPSM(){
+    $("#tblPrSerie").navGrid('#ptblPrSerie', {edit:false,add:false,del:false,search:false,refresh:false})
+
+  }
+
+
+buscarSerie   = function() {
+        var params = '['
+            + '["@tBusqueda", "0"],'
+            + '["@vDatoBus", "' +  $("#txtFactura").val() + '"],'
+            + '["@vDatoBusDos", "'+ $("#txtSerie").val()+'"]'
+            + ']';
+        parameters = {
+            "name": "tblPrSerie",
+            "procedure": "almacen.Bus_ProdSeriesMant",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelPrSerie"
+            , "tblPrSerie"
+            , optionPSM
+            , parameters
+            , null
+            , buttonsGridPSM
+        );
+    };
+
+    cargarserie=function(a){
+        parameters = {
+            "tBusqueda":   "0",
+            "vDatoBus":  $("#txtFactura").val(),
+            "vDatoBusDos":$("#txtSerieAnt").val(),
+            "vModelo":$("#txtModelo").val(),
+            "vSerieN":$("#txtSerieN").val()
+        };
+
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/mantenimientos/cargarseries",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {
+            },
+            success: function (requestData) {
+               // $("#panelProce").html(requestData);
+                var datos=JSON.parse(requestData);
+                html = "<table id='tableSeries' border='1' class='ui-widget ui-widget-content'>";
+                html += "<thead><tr class='ui-widget-header'><th>Codigo Serie</th> <th>Modelo</th>  <th>Factura</th>   <th>Serie</th>  <th>Cambiar</th>    <th style='width:100px'>Nueva Serie</th><th style='width:280px'>Motivo</th> <th style='width:30px'></th>  </tr>   </thead>";
+                html += "<tbody>";
+                for (var i=0; i<datos.length;i++){
+
+                    var id =datos[i].idProdSeries;
+                    var idDetEntradaProd =datos[i].idDetEntradaProd;
+                    var idProducto =datos[i].idProducto;
+                    var vNroSerie =datos[i].vNroSerie;
+                    var idProdSeriesNue =datos[i].idProdSeriesNue;
+                    var vNroSerieNue =datos[i].vNroSerieNue;
+                    var vDescripcion =datos[i].vDescripcion;
+                    var vModelo =datos[i].vModelo;
+                    var nroFact =datos[i].nroFact;
+                    var display='';
+                    var estado='1';
+                    if (vNroSerieNue==''){
+                        display='none';
+
+                    }else{
+                        display='block';
+                        estado='0';
+                    }
+
+
+
+                    html += "<tr><td> <input value='"+ id + "' id='txtCodigoSerie'  name='txtCodigoSerie' class='ui-text-disable' disabled='disabled'  style='width:60px; text-align:center; ' >";
+                    html += "<input type='hidden' id='c" + id + "' name='c" + id + "' value='"+estado+"' /></td>";
+                    //html += " <td><input value='"+idDetEntradaProd+"'  id='txtCodigoSerie'  name='txtCodigoSerie' class='ui-text-disable' disabled='disabled'  style='width:80px; display:none'  ></td>";
+                    html += "<td><input class='ui-text-disable' style='width:130px; display:block'  id='txtModelo' name='txtModelo' disabled='disabled'   value='"+vModelo+"' /></td>";
+                    html += "<td><input class='ui-text-disable' style='width:100px; display:block'  id='txtNombreProd' name='xtNombreProd' disabled='disabled'   value='"+nroFact+"' />";
+                    html += "</td>";
+                    html += "<td> <input value='"+vNroSerie+"' id='txtStock'  name='txtStock' class='ui-text-disable' disabled='disabled'  style='width:120px' ></td>";
+                    html += "<td><button role='button' class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only' id='btnTestigoBuscarPersona' onclick='MostarOcultarObjetos(" + id + ");'><span class='ui-button-text'>Cambiar</span></button></td>";
+                    html += "<td><input value='"+idProdSeriesNue+"' id='txtCodSerieNuevo" + id + "'  name='txtSerie' class='ui-text-disable' disabled='disabled'  style='width:20px; display:none' >";
+                    html += "<input value='"+vNroSerieNue+"' id='txtSerieNuevo" + id + "'  name='txtSerie' class='ui-text-highlight'  style='width:120px; display:"+display+"' ></td>";
+                    html += "<td><textarea class='editable ui-text' style='width:260px; height:40px;max-width:260px; max-height:100px; display:"+display+"' id='txtvdescrip" + id + "' name='txtvdescrip' >"+vDescripcion+" </textarea></td>";
+                   html += "<td><div title='Guardar' id ='btnS" + id + "' style='float: left;  cursor: pointer; display: "+display+";' class='ui-pg-div ui-inline-edit'  onmouseover='jQuery(this).addClass(\"ui-state-hover\");' onmouseout='jQuery(this).removeClass(\"ui-state-hover\")' onclick='guardarSeriesNuevas(" + id + ");'><span class='ui-icon ui-icon-disk'></span></div></td>";
+
+
+                }
+                html += "</tbody></table>";
+                $("#panelProce1").html(html);
+
+            },
+            error: function (requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function (requestData, exito) {
+            }
+        });
+
+    };
+
+    guardarSeriesNuevas=function(id){
+        var idProd=id;
+        var txtCodSerieNueva=$("#txtCodSerieNuevo"+id).val();
+        var txtSerieNueva=$("#txtSerieNuevo"+id).val();
+        var txtvdescrip=  $("#txtvdescrip"+id).val();
+
+        var detSeries = {};
+        var Series = [];
+        //Datos generales
+        detSeries.idproducto = $("#txtidProducto").val();
+        var aSerie = {};
+
+        if (txtSerieNueva!='' ){
+            aSerie.idProdSeries= idProd;
+            aSerie.idProdSeriesNue= txtCodSerieNueva;
+            aSerie.vNroSerie= txtSerieNueva;
+            aSerie.vDescripcion= txtvdescrip;
+            Series.push(aSerie);
+        }
+
+
+        detSeries.lstSeries=Series;
+        var parameters = {};
+        parameters.objSeries = JSON.stringify(detSeries);
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/mantenimientos/guardarseries",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function (data) {   },
+            success: function (requestData) {
+                closeDialog('jqDialog1');
+            },
+            error: function (requestData, strError, strTipoError) {   },
+            complete: function (requestData, exito) {    }
+        });
+
+    };
+
+    function MostarOcultarObjetos(id){
+        //$("#btnS"+id).style.display = "none";
+        var tipo=$("#c"+id).val();
+        if(tipo==0){
+            //document.getElementById("txtCodSerieNuevo"+id).style.display = "none";
+            document.getElementById("txtSerieNuevo"+id).style.display = "none";
+            document.getElementById("txtvdescrip"+id).style.display = "none";
+            document.getElementById("btnS"+id).style.display = "none";
+            $("#c"+id).val("1");
+        }else{
+           // document.getElementById("txtCodSerieNuevo"+id).style.display = "block";
+            document.getElementById("txtSerieNuevo"+id).style.display = "block";
+            document.getElementById("txtvdescrip"+id).style.display = "block";
+            document.getElementById("btnS"+id).style.display = "block";
+            $("#c"+id).val("0");
+        }
+
+    }
+
+//Funcion para regresar al la grilla naterior
+function Cancelar(){
+    closeDialog('jqDialog1');
+}
+$(function(){
+    //buscarSerie();
+    cargarserie();
+    $("#btnCancelarSe").button(ICON_CANCEL).click(function () {
+        Cancelar('');
+    });
+    $("#btnGuardarSerie").button(ICON_SAVE).click(function(){
+        guardarSeries();
+    });
+
+
+    $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+    $("#div_titulo").html("Mantenimiento => Series");
+});
+
+
+
+</script>

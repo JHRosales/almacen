@@ -137,8 +137,11 @@ class PDF1 extends TCPDF{
         $this->SetFont('times', 'B', 12);
         $this->SetXY($lw,$lh+20);
         $this->MultiCell(170,3,'LISTA DE PRECIOS IP',0,'C');
-        $this->SetXY($lw+122,$lh+28);
-        $this->MultiCell(70,3,'Valido desde ENERO 2018',1,'C');
+
+
+        $this->SetXY($lw+122,$lh+27.4);
+        $this->MultiCell(70,3,'Valido desde JULIO 2018',1,'C');
+        $this->Image('../uploadDdocuments/imgg.png',$lw-2.5,$ln+32,194.6,36.4,'PNG');
 
     }
 }
@@ -162,6 +165,7 @@ vDescrip,nCosto,nStock,a.vEstado, Case when iadjunto='' then '1.jpg'
  inner join subCategoria b on a.idSubCat=b.idSubCat
  left join vw_orden_resol c on a.vResolucion= c.vresolucion
  where
+ a.vEstado=1 and
 	(vTecnologia in('IP','IP WIFI')and 	vMarca='Dahua')
 	OR (b.vnombre = 'Monitores / Tv' and vmarca='Dahua')
 	OR (b.vnombre = 'Disco Duro' and vmarca='Western Digital')
@@ -228,7 +232,7 @@ $pdf->SetFont('dejavusans', '', 8);
 $lw=5;
 //$var1 = $pdf->GetY()+2.2;
 $var1 = $pdf->GetY();
-$pdf->SetXY($lw+2.5,$lh = $var1);
+$pdf->SetXY($lw+2.5,$lh = $var1+37);
 
 $kit =  utf8_encode($rowTipoP['subcateria']);
 $html= '<table border="1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; "width="689.5px" >
@@ -311,6 +315,16 @@ if($kit1!=$kit){
 
 
 
+    IF($N==3){
+        $vDescrip=$vDescrip."<br><br>";
+    }
+
+    IF($N==20){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br><br><br><br><br>";
+    }
+
+
+
     IF($N==76){
         $vDescrip=$vDescrip."<br>";
     }
@@ -319,23 +333,46 @@ if($kit1!=$kit){
         $vDescrip=$vDescrip."<br><br><br><br>";
     }
 
-    IF($N==85){
+
+
+    IF($N==90){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
+    }
+
+
+    IF($N==95){
+        $vDescrip=$vDescrip."<br><br><br><br><br>";
+    }
+
+    IF($N==105){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br>";
+    }
+
+
+
+
+
+
+
+    IF($N==110){
+        $vDescrip=$vDescrip."<br><br><br><br>";
+    }
+
+
+
+
+    IF($N==123){
+        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
+    }
+
+    IF($N==142){
+        $vDescrip=$vDescrip."<br><br><br><br>";
+    }
+
+
+    IF($N==148){
         $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br><br><br><br>";
     }
-
-    IF($N==100){
-        $vDescrip=$vDescrip."<br>";
-    }
-
-
-
-
-
-    IF($N==119){
-        $vDescrip=$vDescrip."<br><br><br><br><br><br><br><br><br>";
-    }
-
-
 
 
 

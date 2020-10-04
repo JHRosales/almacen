@@ -190,9 +190,9 @@ $TipoBusqueda=array(array("0","GENERAL"),array("1","FECHA"));
             {name: 'idTecnico', index:'idTecnico', width:70},
             {name: 'vTecnico', index:'vTecnico', width:150},
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false, hidden: true},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: false},
             { name: 'btndocudevo', index: 'btndocudevo', width: 60, align: 'center' ,formatter : btnRetorno,search:false}
         ],
         caption: "&nbsp;&nbsp;&nbsp;Salida de Productos",
@@ -222,7 +222,7 @@ $TipoBusqueda=array(array("0","GENERAL"),array("1","FECHA"));
     // -----> Retorno ====================================================
     function btnRetorno(cellvalue, options, rowObject){
 
-        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+        return '<div align="center" class="ui-pg-button " title="Agregar Retorno" style="text-align:center;' +
             'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetorno(\''+options.rowId+'\');">' +
             '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
@@ -281,18 +281,18 @@ $TipoBusqueda=array(array("0","GENERAL"),array("1","FECHA"));
         return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
             'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
-            'onclick="accionborrarcotizacion(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            'onclick="accionborrarsalida(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
             '<span class="ui-icon ui-icon-trash"></span></div></div>';
     }
 
-    function accionborrarcotizacion(rowId){
+    function accionborrarsalida(rowId){
         var rowdat = jQuery("#tblListaSalidaProd").jqGrid('getRowData',rowId);
 
         var paramtrs ={ idSalidaProd :rowdat.idSalidaProd }
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function () {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/cotizacion/eliminarcotizacion",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarsalidaprod",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -358,7 +358,7 @@ $TipoBusqueda=array(array("0","GENERAL"),array("1","FECHA"));
     // -----> Imprimir ====================================================
     function btnImprimir(cellvalue, options, rowObject){
 
-        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+        return '<div align="center" class="ui-pg-button " title="Imprimir Salida Prod" style="text-align:center;' +
             'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\''+options.rowId+'\');">' +
             '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
@@ -368,7 +368,7 @@ $TipoBusqueda=array(array("0","GENERAL"),array("1","FECHA"));
         var rowdat = jQuery("#tblListaSalidaProd").jqGrid('getRowData',rowId);
         var paramtrs ={ idSalidaProd :rowdat.idSalidaProd }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptCotizacion.php?idSalidaProd="+ rowdat.idSalidaProd ,'_blank');
+        window.open(host+"rptSalidaProd.php?idSalida="+ rowdat.idSalidaProd ,'_blank');
     }
 
 

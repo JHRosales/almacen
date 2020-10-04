@@ -11,11 +11,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
-                          <tr><td>
+                          <tr  style="display: none;">
+                              <td>
                                 <b>  Datos Busqueda</b>
-                            </td></tr>
-                        <tr class="rowdatospsm" id="rowdatospsm">
-                            <td style="text-align: left">
+                            </td>
+                          </tr>
+                        <tr class="rowdatospsm" id="rowdatospsm"  style="display: none;">
+                            <td style="text-align: left;">
                                 <select id="cbotipob" name="cbotipob" style="width:140px;">
                                     <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
                                 </select>
@@ -25,6 +27,35 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                                 <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:100%" />
                             </TD>
                             <td> &nbsp;&nbsp;</td>
+                            <td>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarPersona()">Buscar</button>
+                            </td>
+                        </tr>
+
+                        <tr class="rowBuscarContribuyente">
+                            <input class="ui-text" id="idcotizacion" type="hidden" value="<?php echo $this->idsigma;?>" >
+                            <td width="100" style="text-align: left">C&oacute;digo:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="180" style="text-align: left">Apellidos y Nombre:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="100">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="100" colspan="3" style="text-align: left">Nro. Documento:</td>
+                            <td width="20">&nbsp;</td>
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td>
+                                <input class="ui-text" id="c_codigocontrib" onkeypress="if(event.keyCode==13){buscarPersona();}" maxlength="10" style="width:90px" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="3">
+                                <input class="ui-text pnl" id="c_nombrecontrib"   onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:100%" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="3" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_nrodoc"  onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:80%" />
+                            </td>
                             <td>
                                 <button id="btnbuscarC" name="btnbuscarC" onclick="buscarPersona()">Buscar</button>
                             </td>
@@ -217,25 +248,25 @@ $( "#c_nrodoc" ).keyup(function( event ) {
 
 
 
-    nuevaPersona = function(){
+    nuevoTecnico = function(){
         parameters = {
             "idsigma": '0000000000'
         };
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("almacen/tecnico", parameters, 460);
     };
 
-    verPersona = function() {
+    verTecnico = function() {
         var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
+        if(row.idTecnico == "" || row.idTecnico == undefined){
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
         parameters = {
-            "idsigma": row.cidpers
+            "idsigma": row.idTecnico
         };
 
-        openDialogData2("mantenimientos/persona", parameters, 460);
+        openDialogData2("almacen/tecnico", parameters, 460);
 
     };
 
@@ -255,15 +286,15 @@ $( "#c_nrodoc" ).keyup(function( event ) {
     };
 
 
-    function buttonsGridPerson(){
+    function buttonsGridTecnico(){
         $("#tblListaPersona")
             .navGrid('#ptblListaPersona', {edit:false,add:false,del:false,search:false,refresh:false})
-            /*
+
            .navButtonAdd('#ptblListaPersona',{
                 caption:"Agregar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-plus",
                 onClickButton: function(){
-                    nuevaPersona();
+                    nuevoTecnico();
                 },
                 position:"last"
             })
@@ -274,7 +305,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 caption:"Editar&nbsp;&nbsp;",
                 buttonicon:"ui-icon-pencil",
                 onClickButton: function(){
-                    verPersona();
+                    verTecnico();
                 },
                 position:"last"
             })
@@ -289,7 +320,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 position:"last"
             })
             .navSeparatorAdd()
-
+/*
             .navButtonAdd('#ptblListaPersona',{
                 caption:"Imprimir&nbsp;&nbsp;",
                 buttonicon:"ui-icon-pencil",
@@ -298,8 +329,8 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 },
                 position:"last"
             })
-            .navSeparatorAdd()*/
-        ;
+            .navSeparatorAdd()
+        ;*/
     }
 
 
@@ -312,9 +343,10 @@ $( "#c_nrodoc" ).keyup(function( event ) {
 
     buscarPersona = function() {
         var params = '['
-            + '["@tBusqueda", "' + $("#c_codigocontrib").val() + '"],'
-            + '["@vTipDoc", "' + $("#c_nombrecontrib").val() + '"],'
-			+ '["@vDatoBus", "' + $("#c_nrodoc").val() + '"]'
+            + '["@tBusqueda", "4"],'
+            + '["@p_nvar1", "' + $("#c_codigocontrib").val() + '"],'
+            + '["@p_nvar2", "' + $("#c_nombrecontrib").val()+ '"],'
+			+ '["@p_nvar4", "' +  $("#c_nrodoc").val() + '"]'
             + ']';
         parameters = {
             "name": "tblListaPersona",
@@ -329,7 +361,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             , optionPersona
             , parameters
             , null
-            , buttonsGridPerson
+            , buttonsGridTecnico
         );
     };
 

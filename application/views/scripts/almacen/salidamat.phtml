@@ -113,7 +113,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
             {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false, hidden: true},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: true},
+            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: false},
             { name: 'btndocudevo', index: 'btndocudevo', width: 60, align: 'center' ,formatter : btnRetorno,search:false}
         ],
         caption: "&nbsp;&nbsp;&nbsp;Salida de Materiales",
@@ -336,9 +336,9 @@ function accionbtnRetorno(rowId){
 
     function accionbtnImprimir(rowId){
         var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData',rowId);
-        var paramtrs ={ idCotiz :rowdat.idCotiz }
+        var paramtrs ={ idSalidaMat :rowdat.idSalidaMat }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptCotizacion.php?idCotiz="+ rowdat.idCotiz ,'_blank');
+        window.open(host+"rptSalidaMat.php?idSalida="+ rowdat.idSalidaMat ,'_blank');
     }
 
 
