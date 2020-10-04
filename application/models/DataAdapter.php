@@ -2,32 +2,30 @@
 
 require_once dirname(__FILE__) . '/../../library/Log4PHP/Logger.php';
 
-class Model_DataAdapter
-{
+class Model_DataAdapter {
 
     private static $instance;
-    private static $db = "dhlalmacen";
+    private static $db ="dhlalmacen";
 
     private $connection = null;
     private $logger = null;
 
-    private function initDB()
-    {
+    private function initDB() {
         $state = "Accediendo a la base de datos.";
         if ($this->connection == null) {
             try {
-                // CONFIGURACION DE BASE DE DATOS
+				// CONFIGURACION DE BASE DE DATOS
                 #$this->connection = mssql_connect("ALEX_LEON\APCV","sa","123456");
                 #$this->connection = mssql_connect("127.0.0.1","sa","123456");
-                //$this->connection = mssql_connect("ANDRESWIN8\SQLEXPRESS","sa","ucv");
-                //$this->connection = mssql_connect("MUNIRIMAC\aperez","sa","perezgarcia");
-
-                //$this->connection = mssql_connect("190.187.182.30,1433","sa","123456");
-                //$this->connection = mssql_connect("127.0.0.1,1433","sa","123456");
-                //$this->connection = mssql_connect("localhost","sa","ucv");
-                $this->connection = mssql_connect("Usuario-PC", "sa", "ucv");
-                //$this->connection = mssql_connect("127.0.0.1\SQLEXPRESS2008","sa","123456");
-                mssql_select_db(self::$db, $this->connection);
+				//$this->connection = mssql_connect("ANDRESWIN8\SQLEXPRESS","sa","ucv");
+				//$this->connection = mssql_connect("MUNIRIMAC\aperez","sa","perezgarcia");
+		
+				//$this->connection = mssql_connect("190.187.182.30,1433","sa","123456");
+				//$this->connection = mssql_connect("127.0.0.1,1433","sa","123456");
+				//$this->connection = mssql_connect("localhost","sa","ucv");
+                $this->connection = mssql_connect("192.168.1.28","sa","ucv");
+				//$this->connection = mssql_connect("127.0.0.1\SQLEXPRESS2008","sa","123456");
+				mssql_select_db(self::$db,$this->connection);
             } catch (Exception $e) {
                 $this->logger->error("initDB", $e);
             }
@@ -37,18 +35,15 @@ class Model_DataAdapter
         $this->logger->debug("initDB::" . $state);
     }
 
-    public function __clone()
-    {
+    public function __clone() {
         trigger_error("Error: No puedes clonar una instancia de " . get_class($this) . " class.", E_USER_ERROR);
     }
 
-    public function __wakeup()
-    {
+    public function __wakeup() {
         trigger_error("Error: No puedes deserializar una instancia de " . get_class($this) . " class.", E_USER_ERROR);
     }
 
-    public function __construct()
-    {
+    public function __construct() {
         date_default_timezone_set(DATE_ZONE);
         Logger::configure(LOG_ERROR);
 
@@ -57,36 +52,30 @@ class Model_DataAdapter
         $this->initDB();
     }
 
-    public static function getInstance()
-    {
+    public static function getInstance() {
         if (!self::$instance instanceof self) {
             self::$instance = new self;
         }
         return self::$instance;
     }
 
-    public static function getDriver()
-    {
+    public static function getDriver() {
         return self::$driver;
     }
 
-    public static function setDriver($driver)
-    {
+    public static function setDriver($driver) {
         self::$driver = $driver;
     }
 
-    public function getConnection()
-    {
+    public function getConnection() {
         return $this->connection;
     }
 
-    public function setConnection($connection)
-    {
+    public function setConnection($connection) {
         $this->connection = $connection;
     }
 
-    public function executeRowsToJSON($procedure, $parameters)
-    {
+    public function executeRowsToJSON($procedure, $parameters) {
         $result = null;
         $rows = $this->ejec_store_procedura_sql($procedure, $parameters);
 
@@ -97,106 +86,109 @@ class Model_DataAdapter
         return $result;
     }
 
-    public function executeAssocQuery($nombrestore, $arraydatos)
-    {
-        $this->initDB();
-        $_rows = null;
-
-        try {
-            $caddatos = '';
-            if ($arraydatos != '' || $arraydatos != null) {
-                if (count($arraydatos) > 0) {
-                    for ($i = 0; $i < count($arraydatos); $i++) {
-                        $nomvar = $arraydatos[$i][0];
-                        $valvar = $arraydatos[$i][1];
-                        $caddatos .= $nomvar . "='" . $valvar . "',";
-                    }
-                    $caddatos = substr($caddatos, 0, strlen($caddatos) - 1);
-                }
-            }
-            $_query = 'exec ' . $nombrestore . ' ' . $caddatos;
+    public function executeAssocQuery($nombrestore,$arraydatos){
+    	$this->initDB();
+    	$_rows = null;
+    
+    	try{
+    		$caddatos = '';
+    		if($arraydatos != '' || $arraydatos != null){
+    			if(count($arraydatos) > 0){
+    				for($i=0;$i<count($arraydatos);$i++){
+    					$nomvar = $arraydatos[$i][0];
+    					$valvar = $arraydatos[$i][1];
+    					$caddatos.= $nomvar."='".$valvar."',";
+    				}
+    				$caddatos = substr($caddatos,0,strlen($caddatos)-1);
+    			}
+    		}
+    		$_query = 'exec '.$nombrestore.' '.$caddatos;
             //print $_query;
             //echo "<script>console.log('".$_query."');</script>";
             //echo $_query;
-            $this->logger->info($_query);
-            $result = mssql_query($_query) or die(mssql_get_last_message());
-
-            $_rowCount = mssql_num_rows($result);
-            $_rows = array();
-            $i = 0;
-            while ($_row = @mssql_fetch_assoc($result)) {
-                $_rows[$i] = array_map('utf8_encode', $_row);
-                $i++;
-            }
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
-        }
-
-        mssql_close($this->connection);
-        $this->connection = null;
-        return $_rows;
+    		$this->logger->info($_query);
+    		$result=mssql_query($_query) or die(mssql_get_last_message());
+    		
+    		$_rowCount = mssql_num_rows($result);
+    		$_rows = array();
+    		$i=0;
+    		while ($_row = @mssql_fetch_assoc($result)) {
+    			$_rows[$i] = array_map('utf8_encode', $_row);
+    			$i++;
+    		}
+       	}
+    	catch (Exception $e) {
+    		$this->logger->error($e->getMessage());
+    	}
+    
+       	mssql_close($this->connection);
+    	$this->connection = null;
+    	return $_rows;
     }
 
-    public function ejec_store_procedura_sql($nombrestore, $arraydatos)
-    {
-        $this->initDB();
-        $datos = null;
+    public function ejec_store_procedura_sql($nombrestore,$arraydatos){
+    	$this->initDB();
+    	$datos = null;
 
-        try {
-            $caddatos = '';
+    	try{
+    		$caddatos = '';
             //echo "cadena". $arraydatos[0][0];
-            if ($arraydatos != '' || $arraydatos != null) {
-                if (count($arraydatos) > 0) {
-                    for ($i = 0; $i < count($arraydatos); $i++) {
-                        $nomvar = $arraydatos[$i][0];
-                        $valvar = $arraydatos[$i][1];
-                        $caddatos .= $nomvar . "='" . $valvar . "',";
-                    }
-                    $caddatos = substr($caddatos, 0, strlen($caddatos) - 1);
-                }
-            }
-            $cadins = 'exec ' . $nombrestore . ' ' . $caddatos;
+    		if($arraydatos != '' || $arraydatos != null){
+    			if(count($arraydatos) > 0){
+    				for($i=0;$i<count($arraydatos);$i++){
+    					$nomvar = $arraydatos[$i][0];
+    					$valvar = $arraydatos[$i][1];
+    					$caddatos.= $nomvar."='".$valvar."',";
 
-            $this->logger->info($cadins);
-            $result = mssql_query($cadins) or die(mssql_get_last_message());
+    				}
+    				$caddatos = substr($caddatos,0,strlen($caddatos)-1);
+    			}
+    		}
+    		$cadins = 'exec '.$nombrestore.' '.$caddatos;
 
-            $contador = 0;
+    		$this->logger->info($cadins);
+    		$result=mssql_query($cadins) or die(mssql_get_last_message());
 
-            while ($row = mssql_fetch_row($result)) {
-                $c = count($row);
-                for ($i = 0; $i < $c; $i++) {
-                    //$cadreplace = $row[$i];
-                    $cadreplace = htmlentities($row[$i]);
-                    $cadreplace = str_replace('&amp;', '&', $cadreplace);
-                    $cadreplace = str_replace("'", ' ', $cadreplace);
-                    $cadreplace = str_replace('"', ' ', $cadreplace);
-                    //$cadreplace = str_replace('|','',$cadreplace);
-                    $cadreplace = str_replace('�', '', $cadreplace);
-                    $cadreplace = str_replace('\\', '', $cadreplace);
-                    //$cadreplace = str_replace('&Ntilde;',htmlentities('�'),$cadreplace);
-                    $arraydata[$i] = $cadreplace;
-                }
-                $datos[$contador] = $arraydata;
-                $contador++;
-            }
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
-        }
-        mssql_close($this->connection);
-        $this->connection = null;
-        return $datos;
-    }
-    public function executeSelect($function, $parameters = null)
-    {
+    		$contador=0;
+    		
+    		while ($row = mssql_fetch_row($result)) {
+    			$c = count($row);
+    			for($i = 0 ; $i<$c;$i++){
+    				//$cadreplace = $row[$i];
+    				$cadreplace = htmlentities($row[$i]);
+    				$cadreplace = str_replace('&amp;','&',$cadreplace);
+    				$cadreplace = str_replace("'",' ',$cadreplace);
+    				$cadreplace = str_replace('"',' ',$cadreplace);
+    				//$cadreplace = str_replace('|','',$cadreplace);
+    				$cadreplace = str_replace('�','',$cadreplace);
+    				$cadreplace = str_replace('\\','',$cadreplace);
+    				//$cadreplace = str_replace('&Ntilde;',htmlentities('�'),$cadreplace);
+    				$arraydata[$i] = $cadreplace;
+    			}
+    			$datos[$contador] = $arraydata;
+    			$contador++;
+    		}	
+    	}
+    	catch (Exception $e) {
+    		$this->logger->error($e->getMessage());
+
+    	}
+    		mssql_close($this->connection);
+    		$this->connection = null;
+    		return $datos;
+    		
+    		
+    	}
+    public function executeSelect($function, $parameters = null) {
         $this->initDB();
         $_rows = null;
 
         try {
             $_parameters = '';
             if (count($parameters) > 0) {
-                for ($i = 0; $i < count($parameters); $i++) {
-                    $parameters[$i] = str_replace("'", "&#39", $parameters[$i]);
-                }
+            	for ($i = 0; $i < count($parameters); $i++) {
+            		$parameters[$i]= str_replace("'","&#39",$parameters[$i]);
+            	}
                 $_parameters = implode("','", $parameters);
                 $_parameters = "'" . $_parameters . "'";
             }
@@ -221,8 +213,7 @@ class Model_DataAdapter
         $this->connection = null;
         return $_rows;
     }
-    public function executeSelectScalar($function, $parameters = null)
-    {
+    public function executeSelectScalar($function, $parameters = null) {
         $this->initDB();
         $_rows = null;
 
@@ -230,7 +221,7 @@ class Model_DataAdapter
             $_parameters = '';
             if (count($parameters) > 0) {
                 for ($i = 0; $i < count($parameters); $i++) {
-                    $parameters[$i] = str_replace("'", "&#39", $parameters[$i]);
+                    $parameters[$i]= str_replace("'","&#39",$parameters[$i]);
                 }
                 $_parameters = implode("','", $parameters);
                 $_parameters = "'" . $_parameters . "'";
@@ -258,8 +249,7 @@ class Model_DataAdapter
         return $_rows;
     }
 
-    public function executeAssocSelect($function, $parameters = null)
-    {
+    public function executeAssocSelect($function, $parameters = null) {
         $this->initDB();
         $_rows = null;
 
@@ -289,19 +279,18 @@ class Model_DataAdapter
         return $_rows;
     }
 
-    public function saveQuery($name, $function, $parameters = null)
-    {
+    public function saveQuery($name, $function, $parameters = null) {
         $rows = $this->ejec_store_procedura_sql($function, $parameters);
         $dataSet = new Zend_Session_Namespace($name);
         $dataSet->data = $rows;
         return count($rows);
     }
 
-    public function saveSelect($name, $function, $parameters = null)
-    {
+    public function saveSelect($name, $function, $parameters = null) {
         $rows = $this->executeSelect($function, $parameters);
         $dataSet = new Zend_Session_Namespace($name);
         $dataSet->data = $rows;
         return count($rows);
     }
+
 }
