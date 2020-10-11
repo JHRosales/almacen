@@ -27,7 +27,7 @@
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="3">
-                                <input class="ui-text pnl" id="c_nombreprod"  onkeypress="if(event.keyCode==13){buscarServ();}" style="width:100%" />
+                                <input class="ui-text pnl" id="c_nombreprod" onkeypress="if(event.keyCode==13){buscarServ();}" style="width:100%" />
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="5" style="text-align: left;">
@@ -35,7 +35,7 @@
                             </td>
                             <td style="text-align: left">
                                 <select id="cbocategor" name="cbocategor" style="width:140px;">
-                                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->idcat,'Cmb_Categoria','@idCat'); ?>
+                                    <?php echo $this->util()->getComboContenedorOtro('1', $this->idcat, 'Cmb_Categoria', '@idCat'); ?>
                                 </select>
                             </td>
                             <td>
@@ -58,7 +58,7 @@
         <table id="tblListaProducto"></table>
         <div id="ptblListaProducto"></div>
     </div>
-    <br/>
+    <br />
 </div>
 <script type="text/javascript">
     optionPersona = {
@@ -73,35 +73,78 @@
             'Categoria',
             'Estado'
         ],
-        colModel: [
-            {name: 'idServicio', index:'idServicio', width:80},
-            {name: 'vNombre', index:'vNombre', width:300,editable: true},
-            {name: 'vDescrip', index:'vDescrip', width:200,editable: true, edittype:"text"},
-            {name: 'idCategoria', index:'idCategoria', hidden: true, width:80},
-            {name: 'vNomCat', index:'vNomCat', hidden: false, width:200},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        colModel: [{
+                name: 'idServicio',
+                index: 'idServicio',
+                width: 80
+            },
+            {
+                name: 'vNombre',
+                index: 'vNombre',
+                width: 300,
+                editable: true
+            },
+            {
+                name: 'vDescrip',
+                index: 'vDescrip',
+                width: 200,
+                editable: true,
+                edittype: "text"
+            },
+            {
+                name: 'idCategoria',
+                index: 'idCategoria',
+                hidden: true,
+                width: 80
+            },
+            {
+                name: 'vNomCat',
+                index: 'vNomCat',
+                hidden: false,
+                width: 200
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 50,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                },
+                formatter: 'checkbox'
+            }
         ],
         caption: "&nbsp;&nbsp;&nbsp;Servicios Registrados",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             verPersona();
         },
 
-        afterInsertRow:function(rowid,aData){
-        switch(
+        afterInsertRow: function(rowid, aData) {
+            switch (
                 aData.nestado
-            ){case'1':
-                break;
-            case '0':
+            ) {
+                case '1':
+                    break;
+                case '0':
 
-                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                jQuery("#tblListaProducto").jqGrid('setCell',rowid,'nestado','',{color:'red'});
-break;
+                    jQuery("#tblListaProducto").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaProducto").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaProducto").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaProducto").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
+                    break;
 
 
-        }
+            }
 
 
 
@@ -114,10 +157,10 @@ break;
 
 
 
-    eliminar=function(a){
-        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+    eliminar = function(a) {
+        var selr = $('#tblListaProducto').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaProducto").jqGrid('getRowData', selr);
-        if(row.idServicio == "" || row.idServicio == undefined){
+        if (row.idServicio == "" || row.idServicio == undefined) {
             openDialogWarning("Seleccione un registro para eliminar.");
             return;
         }
@@ -126,56 +169,55 @@ break;
         };
 
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
 
-           "si":function(){
-               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/anularservicio",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+            "si": function() {
+                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/anularservicio",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {
 
-                   },
-                   success: function (requestData) {
-                      // $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog2');
-                       $("#c_codigocontrib").val("");
-                       buscarServ();
-
-
-                   },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
+                    },
+                    success: function(requestData) {
+                        // $("#result").html(requestData);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog2');
+                        $("#c_codigocontrib").val("");
+                        buscarServ();
 
 
-               });
-           },
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
 
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
 
-           }
-       })
+                });
+            },
+
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        })
 
 
     };
 
-    nuevaPersona = function(){
+    nuevaPersona = function() {
         parameters = {
             "idsigma": ''
         };
         openDialogData2("mantenimientos/servicio", parameters, 460);
     };
     verPersona = function() {
-        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var selr = $('#tblListaProducto').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaProducto").jqGrid('getRowData', selr);
-        if(row.idServicio == "" || row.idServicio == undefined){
+        if (row.idServicio == "" || row.idServicio == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -187,9 +229,9 @@ break;
 
     };
     material = function() {
-        var selr = $('#tblListaProducto').jqGrid('getGridParam','selrow');
+        var selr = $('#tblListaProducto').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaProducto").jqGrid('getRowData', selr);
-        if(row.idServicio == "" || row.idServicio == undefined){
+        if (row.idServicio == "" || row.idServicio == undefined) {
             openDialogWarning("Seleccione un registro.");
             return;
         }
@@ -201,62 +243,67 @@ break;
 
     };
 
-    function buttonsGridPerson(){
+    function buttonsGridPerson() {
         $("#tblListaProducto")
-            .navGrid('#ptblListaProducto', {edit:false,add:false,del:false,search:false,refresh:false})
+            .navGrid('#ptblListaProducto', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-            .navButtonAdd('#ptblListaProducto',{
-                caption:"Agregar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaProducto', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaPersona();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
 
-            .navButtonAdd('#ptblListaProducto',{
-                caption:"Editar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaProducto', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     verPersona();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaProducto',{
-                caption:"Eliminar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaProducto', {
+                caption: "Eliminar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     eliminar();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaProducto',{
-                caption:"Add Material&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaProducto', {
+                caption: "Add Material&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     material();
                 },
-                position:"last"
+                position: "last"
             })
-            .navSeparatorAdd()
-        ;
+            .navSeparatorAdd();
     }
 
 
 
 
     buscarServ = function() {
-        var params = '['
-            + '["@idServicio", "' + $("#c_codigoprod").val() + '"],'
-            + '["@vNombre", "' + $("#c_nombreprod").val() + '"],'
-			+ '["@vDesc", "' + $("#c_desc").val() + '"]'
-            + ']';
+        var params = '[' +
+            '["@idServicio", "' + $("#c_codigoprod").val() + '"],' +
+            '["@vNombre", "' + $("#c_nombreprod").val() + '"],' +
+            '["@vDesc", "' + $("#c_desc").val() + '"]' +
+            ']';
         parameters = {
             "name": "tblListaProducto",
             "procedure": "List_Servicio",
@@ -265,17 +312,18 @@ break;
         };
 
         procesarProcedimientoJSON(
-            "panelListaProducto"
-            , "tblListaProducto"
-            , optionPersona
-            , parameters
-            , null
-            , buttonsGridPerson
+            "panelListaProducto", "tblListaProducto", optionPersona, parameters, null, buttonsGridPerson
         );
     };
 
-    $(function(){
+    $(function() {
         buscarServ();
         $("#btnbuscar").button();
+
+        $("#cbocategor").combobox({
+            selected: function(event, ui) {
+                buscarServ();
+            }
+        });
     });
 </script>

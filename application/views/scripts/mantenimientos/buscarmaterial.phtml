@@ -1,6 +1,6 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBRE"), array("3", "TIPOMATERIAL"), array("4", "MARCA"));
 ?>
 <div id="panelMantenimientoProducto" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
@@ -11,18 +11,20 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:45px;">
-                        <tr><td>
-                                <b>  Datos Busqueda</b>
-                            </td></tr>
+                        <tr>
+                            <td>
+                                <b> Datos Busqueda</b>
+                            </td>
+                        </tr>
                         <tr class="rowdatospsm" id="rowdatospsm">
                             <td style="text-align: left">
                                 <select id="cbotipob" name="cbotipob" style="width:140px;">
-                                    <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
+                                    <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
                                 </select>
                             </td>
                             <td>Texto de busqueda:</td>
                             <TD colspan="3">
-                                 <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
+                                <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
                             </TD>
                             <td> &nbsp;&nbsp;</td>
                             <td>
@@ -30,7 +32,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
                             </td>
                         </tr>
 
-                      <!--  <tr class="rowBuscarContribuyente">
+                        <!--  <tr class="rowBuscarContribuyente">
                             <td width="100" style="text-align: left">C&oacute;digo:</td>
                             <td width="10">&nbsp;</td>
                             <td width="230" style="text-align: left">Nombre:</td>
@@ -70,7 +72,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         <table id="tblListaMate"></table>
         <div id="ptblListaMate"></div>
     </div>
-    <br/>
+    <br />
 </div>
 <script type="text/javascript">
     optionPersona = {
@@ -89,38 +91,100 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             'Categoria',
             'Estado'
         ],
-        colModel: [
-            {name: 'idMaterial', index:'idMaterial', width:60},
-            {name: 'vNombre', index:'vNombre', width:150},
-            {name: 'idTipoMaterial', index:'idTipoMaterial', hidden:true},
-            {name: 'vTipoMaterial', index:'vTipoMaterial', width:120},
-            {name: 'vMarca', index:'vMarca', width:100},
-            {name: 'idUnidadMed', index:'idUnidadMed', width:80,hidden:true},
-            {name: 'vUnidadMed', index:'vUnidadMed', width:120},
-            {name: 'nStock', index:'nStock', width:70},
-            {name: 'idCategoria', index:'idCategoria', width:150,hidden:true},
-            {name: 'vCategoria', index:'vCategoria', width:150},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        colModel: [{
+                name: 'idMaterial',
+                index: 'idMaterial',
+                width: 60
+            },
+            {
+                name: 'vNombre',
+                index: 'vNombre',
+                width: 150
+            },
+            {
+                name: 'idTipoMaterial',
+                index: 'idTipoMaterial',
+                hidden: true
+            },
+            {
+                name: 'vTipoMaterial',
+                index: 'vTipoMaterial',
+                width: 120
+            },
+            {
+                name: 'vMarca',
+                index: 'vMarca',
+                width: 100
+            },
+            {
+                name: 'idUnidadMed',
+                index: 'idUnidadMed',
+                width: 80,
+                hidden: true
+            },
+            {
+                name: 'vUnidadMed',
+                index: 'vUnidadMed',
+                width: 120
+            },
+            {
+                name: 'nStock',
+                index: 'nStock',
+                width: 70
+            },
+            {
+                name: 'idCategoria',
+                index: 'idCategoria',
+                width: 150,
+                hidden: true,
+                search: true
+            },
+            {
+                name: 'vCategoria',
+                index: 'vCategoria',
+                width: 150
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 70,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                },
+                formatter: chkEliminar
+            },
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Materiales Registrados",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             verMaterial();
         },
 
-        afterInsertRow:function(rowid,aData){
-        switch(
+        afterInsertRow: function(rowid, aData) {
+            switch (
                 aData.nestado
-            ){case'1':
-                break;
-            case '0':
+            ) {
+                case '1':
+                    break;
+                case '0':
 
-                jQuery("#tblListaMate").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                jQuery("#tblListaMate").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                jQuery("#tblListaMate").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                jQuery("#tblListaMate").jqGrid('setCell',rowid,'nestado','',{color:'red'});
-                break;
-       }
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
@@ -128,11 +192,37 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     };
 
 
+    function chkEliminar(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changeEstadomaterial(' + options.rowId + ')" ' + (cellvalue == '0' ? '  ' : '') + '/>';
+    }
 
-    eliminar=function(a){
-        var selr = $('#tblListaMate').jqGrid('getGridParam','selrow');
+    function changeEstadomaterial(rowId) {
+
+        var row = jQuery("#tblListaMate").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Cambiar estado?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.idMaterial = row.idMaterial;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "mantenimientos/eliminarmaterial", parmter, updCheckconcluir, 'json');
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', true);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+
+    function updCheckconcluir(data) {
+        buscarMate();
+    }
+    eliminar = function(a) {
+        var selr = $('#tblListaMate').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaMate").jqGrid('getRowData', selr);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
+        if (row.idMaterial == "" || row.idMaterial == undefined) {
             openDialogWarning("Seleccione un registro para eliminar.");
             return;
         }
@@ -141,56 +231,71 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         };
 
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
 
-           "si":function(){
-               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarmaterial",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+            "si": function() {
+                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/borrarmaterial",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {
 
-                   },
-                   success: function (requestData) {
-                       $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog2');
-                       $("#c_codigocontrib").val("");
-                       buscarMate();
+                    },
+                    success: function(requestData) {
+                        var IS_JSON = true;
+                        try {
+                            var datos = $.parseJSON(requestData);
+                            //console.log(datos[0].msj);
+                            if (datos[0].msj == "ok") {
+                                openDialogWarning("Eliminado Correctamente");
+                                closeDialog("jqDialogConfirmacion1");
+                                closeDialog('jqDialog2');
+                                $("#c_codigocontrib").val("");
+                                buscarMate();
+                            } else {
+                                openDialogWarning("Error no se puede Eliminar el Material");
+                            }
+
+                        } catch (err) {
+                            IS_JSON = false;
+                            closeDialog("jqDialogConfirmacion1");
+                            $("#c_codigocontrib").val("");
+                            openDialogWarning("Error no se puede Eliminar el Material");
+                        }
 
 
-                   },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        openDialogWarning("Error.");
+                        //$("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
 
 
-               });
-           },
+                });
+            },
 
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
 
-           }
-       })
+            }
+        })
 
 
     };
 
-    nuevaMaterial = function(){
+    nuevaMaterial = function() {
         parameters = {
             "idsigma": '...'
         };
         openDialogData3("mantenimientos/material", parameters, 500);
     };
     verMaterial = function() {
-        var selr = $('#tblListaMate').jqGrid('getGridParam','selrow');
+        var selr = $('#tblListaMate').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaMate").jqGrid('getRowData', selr);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
+        if (row.idMaterial == "" || row.idMaterial == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -203,59 +308,71 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     };
 
 
-    function buttonsGridPerson(){
+    function buttonsGridPerson() {
         $("#tblListaMate")
-            .navGrid('#ptblListaMate', {edit:false,add:false,del:false,search:false,refresh:false})
+            .navGrid('#ptblListaMate', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-            .navButtonAdd('#ptblListaMate',{
-                caption:"Agregar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaMaterial();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
 
-            .navButtonAdd('#ptblListaMate',{
-                caption:"Editar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     verMaterial();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaMate',{
-                caption:"Eliminar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Eliminar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     eliminar();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
-            /*
-            .navButtonAdd('#ptblListaMate',{
-                caption:"Imprimir&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-                    imprimir();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()*/
+        /*
+        .navButtonAdd('#ptblListaMate',{
+            caption:"Imprimir&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+                imprimir();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()*/
         ;
+        $("#tblListaMate").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
 
     buscarMate = function() {
-        var params = '['
-            + '["@tBusqueda", "' + $("#cbotipob").val() + '"],'
-			+ '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]'
-            + ']';
+        var params = '[' +
+            '["@tBusqueda", "' + $("#cbotipob").val() + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
         parameters = {
             "name": "tblListaMate",
             "procedure": "almacen.Bus_Material",
@@ -264,17 +381,12 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         };
 
         procesarProcedimientoJSON(
-            "panelListaMate"
-            , "tblListaMate"
-            , optionPersona
-            , parameters
-            , null
-            , buttonsGridPerson
+            "panelListaMate", "tblListaMate", optionPersona, parameters, null, buttonsGridPerson
         );
     };
 
-    $(function(){
-       buscarMate();
+    $(function() {
+        buscarMate();
         $("#btnbuscar").button();
     });
 </script>
