@@ -2,23 +2,26 @@
 
 require_once 'Zend/Controller/Action.php';
 
-class CotizacionController extends Zend_Controller_Action {
+class CotizacionController extends Zend_Controller_Action
+{
 
-    public function init() {
+    public function init()
+    {
         $this->view->util()->registerScriptJSController($this->getRequest());
         $map = new Zend_Session_Namespace("map");
         $map->data = false;
     }
 
-    public function indexAction() {
-        
+    public function indexAction()
+    {
     }
 
-    public function listarusuarioAction() {
-        
+    public function listarusuarioAction()
+    {
     }
 
-    public function usuarioAction() {
+    public function usuarioAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -66,7 +69,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarusuarioAction() {
+    public function guardarusuarioAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -126,7 +130,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function buscarhijosmconten($padre, $depth, $arraydatos) {
+    public function buscarhijosmconten($padre, $depth, $arraydatos)
+    {
 
         $url = $this->view->util()->getPath();
 
@@ -157,7 +162,8 @@ class CotizacionController extends Zend_Controller_Action {
         return $array;
     }
 
-    public function pintararbolconten() {
+    public function pintararbolconten()
+    {
         $url = $this->view->util()->getPath();
 
         $mconten = new Zend_Session_Namespace('mcontendata');
@@ -166,7 +172,7 @@ class CotizacionController extends Zend_Controller_Action {
         $nombrestore = $mconten->schemaid . 'obt_mconten';
         $parametros[0] = array('@p_idsigma', '');
         $parametros[1] = array('@p_cidtabl', '');
-        $cn = new Model_DataAdapter ();
+        $cn = new Model_DataAdapter();
         $datos = $cn->ejec_store_procedura_sql($nombrestore, $parametros);
 
         $depth = 1;
@@ -187,7 +193,8 @@ class CotizacionController extends Zend_Controller_Action {
             if ($idsigma == $cidtabl && $hijos > 0) {
                 $arrayhijos = $this->buscarhijosmconten($idsigma, $depth, $datos);
                 $arrayprinc[] = array('text' => $vdescri, 'id' => $idsigma, 'depth' => $depth, 'leaf' => false, 'checked' => false, 'children' => $arrayhijos, 'enlace' => $idsigma, 'canthijos' => $hijos, 'icon' => (($nestado == 1) ? '' : $url . 'css/images/newdropx.png'));
-            }if ($idsigma == $cidtabl && $hijos == 0) {
+            }
+            if ($idsigma == $cidtabl && $hijos == 0) {
                 $arrayprinc[] = array('text' => $vdescri, 'id' => $idsigma, 'depth' => $depth, 'leaf' => true, 'checked' => false, 'children' => '', 'enlace' => $idsigma, 'canthijos' => $hijos, 'icon' => (($nestado == 1) ? '' : $url . 'css/images/newdropx.png')); //drop-no.gif
             }
         }
@@ -242,7 +249,8 @@ class CotizacionController extends Zend_Controller_Action {
         echo $cont;
     }
 
-    public function mcontenAction() {
+    public function mcontenAction()
+    {
         /* $this->pintararbolconten();
           $func = new Libreria_Pintar();
           $evt[] = array('btnnuevonodo', 'click', 'detallenodomconten(\'\',\'\')');
@@ -261,7 +269,8 @@ class CotizacionController extends Zend_Controller_Action {
         $this->view->schema = $mconten->schemaid;
     }
 
-    public function mcontenesquemaAction() {
+    public function mcontenesquemaAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -273,12 +282,13 @@ class CotizacionController extends Zend_Controller_Action {
             echo 'OK';
         }
     }
-    public function productdelAction() {
+    public function productdelAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             $idProducto = $this->_request->getPost('idProducto');
 
@@ -291,7 +301,8 @@ class CotizacionController extends Zend_Controller_Action {
             echo json_encode($prod);
         }
     }
-    public function mcontennodoAction() {
+    public function mcontennodoAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->getHelper('ajaxContext')->initContext();
 
@@ -301,7 +312,7 @@ class CotizacionController extends Zend_Controller_Action {
             $idpadre = $this->_request->getPost('idpadre');
 
             $func = new Libreria_Pintar();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             //$nombrestore = '"public".obt_mconten';
             $mconten = new Zend_Session_Namespace('mcontendata');
@@ -366,8 +377,8 @@ class CotizacionController extends Zend_Controller_Action {
                     if ($dcidtabl == $idsigma && $didsigma != $idsigma) {
                         $tienehijos = 1;
                         $contenhijos .= '<tr><td style="width: 90px;">' . $didsigma
-                                . '</td><td style="width: 246px">' . $dvdescri
-                                . '</td><td style="width: 42px" align="center"><button onclick="detallenodomconten(\'' . $didsigma . '\',\'\');" >Buscar</button></td></tr>';
+                            . '</td><td style="width: 246px">' . $dvdescri
+                            . '</td><td style="width: 42px" align="center"><button onclick="detallenodomconten(\'' . $didsigma . '\',\'\');" >Buscar</button></td></tr>';
                     }
                 }
                 if ($tienehijos == 0) {
@@ -397,7 +408,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarmcontennodoAction() {
+    public function guardarmcontennodoAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->getHelper('ajaxContext')->initContext();
 
@@ -415,7 +427,7 @@ class CotizacionController extends Zend_Controller_Action {
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
             $cidpers = $ddatosuserlog->cidpers;
 
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             /* @p_idsigma varchar(10)
               , @p_descripcion varchar(250)
@@ -429,16 +441,16 @@ class CotizacionController extends Zend_Controller_Action {
               , @p_user varchar(60) */
             $mconten = new Zend_Session_Namespace('mcontendata');
             $nombrestore = $mconten->schemaid . 'guardarmcontennodo';
-            $parametros [0] = array('@p_idsigma', $codigo);
-            $parametros [1] = array('@p_descripcion', $descripcion);
-            $parametros [2] = array('@p_padre', $padre);
-            $parametros [3] = array('@p_observ', $observ);
-            $parametros [4] = array('@p_long', $long);
-            $parametros [5] = array('@p_decimal', $decimal);
-            $parametros [6] = array('@p_defecto', $defecto);
-            $parametros [7] = array('@p_estado', $estado);
-            $parametros [8] = array('@p_host', '');
-            $parametros [9] = array('@p_user', $cidpers);
+            $parametros[0] = array('@p_idsigma', $codigo);
+            $parametros[1] = array('@p_descripcion', $descripcion);
+            $parametros[2] = array('@p_padre', $padre);
+            $parametros[3] = array('@p_observ', $observ);
+            $parametros[4] = array('@p_long', $long);
+            $parametros[5] = array('@p_decimal', $decimal);
+            $parametros[6] = array('@p_defecto', $defecto);
+            $parametros[7] = array('@p_estado', $estado);
+            $parametros[8] = array('@p_host', '');
+            $parametros[9] = array('@p_user', $cidpers);
 
             $datos = $cn->ejec_store_procedura_sql($nombrestore, $parametros);
 
@@ -450,7 +462,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function buscarpersonaAction() {
+    public function buscarpersonaAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
@@ -459,7 +472,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenercubigeoAction() {
+    public function obtenercubigeoAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->getHelper('ajaxContext')->initContext();
 
@@ -468,7 +482,8 @@ class CotizacionController extends Zend_Controller_Action {
         echo $this->view->util()->getComboContenedorUbigeo($cubigeo, '');
     }
 
-       public function personaAction() {
+    public function personaAction()
+    {
         $func = new Libreria_Pintar();
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -476,13 +491,13 @@ class CotizacionController extends Zend_Controller_Action {
 
             $idsigma = $this->_request->getPost('idsigma');
 
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $parametros = null;
             $parametros[] = array('@p_nvar1', $idsigma);
 
             $datos = $cn->executeAssocQuery(
-                    'buscar_persona'
-                    , $parametros
+                'buscar_persona',
+                $parametros
             );
 
             $this->view->idsigma = $idsigma;
@@ -501,7 +516,7 @@ class CotizacionController extends Zend_Controller_Action {
 
                 $this->view->vtelfij = "";
                 $this->view->vtelmov = "";
-                
+
                 // Ubigeo por defecto
                 $this->view->cpais = '0000000001';
                 $this->view->cdpto = '0000000002';
@@ -511,7 +526,7 @@ class CotizacionController extends Zend_Controller_Action {
                 $this->view->vpatern = $datos[0]['vpatern'];
                 $this->view->vmatern = $datos[0]['vmatern'];
                 $this->view->vnombre = $datos[0]['vnombre'];
-                    
+
                 $this->view->ctipper = $datos[0]['ctipper'];
                 $this->view->vdirecc = $datos[0]['vdirecc'];
                 $this->view->ctipdoc = $datos[0]['ctipdoc'];
@@ -533,7 +548,8 @@ class CotizacionController extends Zend_Controller_Action {
         $func->PintarEvento($evt);
     }
 
-    public function personavalidardocumentoAction() {
+    public function personavalidardocumentoAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -543,11 +559,12 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-   public function guardarpersonaAction() {
+    public function guardarpersonaAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             $idsigma = $this->_request->getPost('idsigma');
             $vpatern = $this->_request->getPost('vpatern');
@@ -561,7 +578,7 @@ class CotizacionController extends Zend_Controller_Action {
 
             $vtelfij = $this->_request->getPost('vtelfij');
             $vtelmov = $this->_request->getPost('vtelmov');
-            
+
             $vcpais = $this->_request->getPost('vcpais');
             $vcdpto = $this->_request->getPost('vcdpto');
             $vcprov = $this->_request->getPost('vcprov');
@@ -586,7 +603,7 @@ class CotizacionController extends Zend_Controller_Action {
             $params[] = array('@p_cdpto', $vcdpto);
             $params[] = array('@p_cprov', $vcprov);
             $params[] = array('@p_cdist', $vcdist);
-            
+
             $params[] = array('@p_ctelfij', $vtelfij);
             $params[] = array('@p_ctelmov', $vtelmov);
             $params[] = array('@p_estado', $estado1);
@@ -598,93 +615,93 @@ class CotizacionController extends Zend_Controller_Action {
     }
 
 
-    public function cotizacionAction() {
+    public function cotizacionAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
         }
         //$this->view->fechaini=date('d/m/Y');
         //$this->view->fechafin=date('d/m/Y');
-        $this->view->idcotiz="se";
-
+        $this->view->idcotiz = "se";
     }
-    public function detcotizacionAction() {
-        $this->view->tieneop=0;
-        $this->view->vMotivo="SISTEMA CCTV HDCVI - HD";
-        $this->view->vFormaPago="Al contado";
-        $this->view->nreferencial="Seleccione";
+    public function detcotizacionAction()
+    {
+        $this->view->tieneop = 0;
+        $this->view->vMotivo = "SISTEMA CCTV HDCVI - HD";
+        $this->view->vFormaPago = ""; //01112020
+        $this->view->nreferencial = "Seleccione";
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
             $idcotizacion = $this->_request->getParam('idcotizacion');
-            $this->view->idcotizacion =$idcotizacion;
-            $cn = new Model_DataAdapter ();
+            $this->view->idcotizacion = $idcotizacion;
+            $cn = new Model_DataAdapter();
             $params[] = array('@p7_idcoti', $idcotizacion);
             $datos = $cn->ejec_store_procedura_sql('buscar_cotizacion', $params);
 
             $cdatos = count($datos);
             if ($cdatos == 0) {
-                $this->view->vnrocot =$datos[0][1];
-                $this->view->dfeccot=$datos[0][2];
-                $this->view->idcliente=$datos[0][3];
-                $this->view->nombrec =$datos[0][4];
-                $this->view->vnrodoc=$datos[0][9];
-                $this->view->subtotal=$datos[0][5];
-                $this->view->igv=$datos[0][6];
-                $this->view->total=$datos[0][7];
-                $this->view->ctipmon=$datos[0][10];
-                $this->view->tasacambio=$datos[0][11];
-                $this->view->clientetec=$datos[0][12];
-                $this->view->tentrega=$datos[0][13];
-                $this->view->garantia=$datos[0][14];
-                $this->view->personal=$datos[0][15];
-                $this->view->vMotivo=$datos[0][16];
-                $this->view->vFormaPago=$datos[0][17];
-                $this->view->nreferencial=$datos[0][18];
-                $this->view->disco=$datos[0][19];
-                $this->view->tiempoo=$datos[0][21];
-            }else{
-            $this->view->vnrocot =$datos[0][1];
-            $this->view->dfeccot=$datos[0][2];
-            $this->view->idcliente=$datos[0][3];
-            $this->view->nombrec =$datos[0][4];
-            $this->view->vnrodoc=$datos[0][9];
-            $this->view->subtotal=$datos[0][5];
-            $this->view->igv=$datos[0][6];
-            $this->view->total=$datos[0][7];
-            $this->view->ctipmon=$datos[0][10];
-            $this->view->tasacambio=$datos[0][11];
-            $this->view->clientetec=$datos[0][12];
-            $this->view->tentrega=$datos[0][13];
-            $this->view->garantia=$datos[0][14];
-            $this->view->personal=$datos[0][15];
-            $this->view->vMotivo=$datos[0][16];
-            $this->view->vFormaPago=$datos[0][17];
-            $this->view->nreferencial=$datos[0][18];
-            $this->view->disco=$datos[0][19];
-            $this->view->tiempoo=$datos[0][21];
+                $this->view->vnrocot = $datos[0][1];
+                $this->view->dfeccot = $datos[0][2];
+                $this->view->idcliente = $datos[0][3];
+                $this->view->nombrec = $datos[0][4];
+                $this->view->vnrodoc = $datos[0][9];
+                $this->view->subtotal = $datos[0][5];
+                $this->view->igv = $datos[0][6];
+                $this->view->total = $datos[0][7];
+                $this->view->ctipmon = $datos[0][10];
+                $this->view->tasacambio = $datos[0][11];
+                $this->view->clientetec = $datos[0][12];
+                $this->view->tentrega = $datos[0][13];
+                $this->view->garantia = $datos[0][14];
+                $this->view->personal = $datos[0][15];
+                $this->view->vMotivo = $datos[0][16];
+                $this->view->vFormaPago = $datos[0][17];
+                $this->view->nreferencial = $datos[0][18];
+                $this->view->disco = $datos[0][19];
+                $this->view->tiempoo = $datos[0][21];
+            } else {
+                $this->view->vnrocot = $datos[0][1];
+                $this->view->dfeccot = $datos[0][2];
+                $this->view->idcliente = $datos[0][3];
+                $this->view->nombrec = $datos[0][4];
+                $this->view->vnrodoc = $datos[0][9];
+                $this->view->subtotal = $datos[0][5];
+                $this->view->igv = $datos[0][6];
+                $this->view->total = $datos[0][7];
+                $this->view->ctipmon = $datos[0][10];
+                $this->view->tasacambio = $datos[0][11];
+                $this->view->clientetec = $datos[0][12];
+                $this->view->tentrega = $datos[0][13];
+                $this->view->garantia = $datos[0][14];
+                $this->view->personal = $datos[0][15];
+                $this->view->vMotivo = $datos[0][16];
+                $this->view->vFormaPago = $datos[0][17];
+                $this->view->nreferencial = $datos[0][18];
+                $this->view->disco = $datos[0][19];
+                $this->view->tiempoo = $datos[0][21];
                 $paramsop[] = array('@p_idcoti', $idcotizacion);
                 $opcional = $cn->ejec_store_procedura_sql('buscar_detopcional', $paramsop);
                 $copcional = count($opcional);
-                if($copcional==0){
-                    $this->view->tieneop=0;
-                }else{
-                    $this->view->tieneop=1;
+                if ($copcional == 0) {
+                    $this->view->tieneop = 0;
+                } else {
+                    $this->view->tieneop = 1;
                 }
             }
-
-
         }
     }
 
-    public function cotizacionsaveAction() {
+    public function cotizacionsaveAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -692,7 +709,7 @@ class CotizacionController extends Zend_Controller_Action {
             $idcotiz = $this->_request->getPost('idcotizacion');
             $params = null;
             $params[] = array('@p_idcotiz', $idcotiz);
-            $params[] = array('@p_idclient',$idcliente);
+            $params[] = array('@p_idclient', $idcliente);
             $params[] = array('@p_idpersonal', $idpersonal);
             $params[] = array('@p_iduser', $usuario);
             $params[] = array('@p_idhost', $host);
@@ -704,7 +721,8 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function addpsmAction() {
+    public function addpsmAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
@@ -715,14 +733,15 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function detcotizacionaddAction() {
+    public function detcotizacionaddAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -738,7 +757,7 @@ class CotizacionController extends Zend_Controller_Action {
 
             $params = null;
             $params[] = array('@p_idcotiz', $idcotiz);
-            $params[] = array('@p_id',$id);
+            $params[] = array('@p_id', $id);
             $params[] = array('@p_nombre', $nombre);
             $params[] = array('@p_descri', $descri);
             $params[] = array('@p_pu', $pu);
@@ -753,14 +772,15 @@ class CotizacionController extends Zend_Controller_Action {
             echo json_encode($detcot);
         }
     }
-    public function detcotizacionupdateAction() {
+    public function detcotizacionupdateAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -769,28 +789,29 @@ class CotizacionController extends Zend_Controller_Action {
             $canti = $this->_request->getPost('nCantidad');
             $descu = $this->_request->getPost('nDescu');
             $ptotal = $this->_request->getPost('nPrecTotal');
-             if ($descu==''){
-                 $descu=0;
-             }
+            if ($descu == '') {
+                $descu = 0;
+            }
             $params = null;
             $params[] = array('@p_idDetCotiz', $iddcot);
-            $params[] = array('@p_nPrecUnit',$punit);
+            $params[] = array('@p_nPrecUnit', $punit);
             $params[] = array('@p_nCantidad', $canti);
             $params[] = array('@p_nPrecTota', $ptotal);
             $params[] = array('@p_nDescu', $descu);
             $detcot = $cn->ejec_store_procedura_sql('update_detcotizacion', $params);
-           //echo json_encode($detcot);
+            //echo json_encode($detcot);
         }
     }
 
-    public function cotizacionupdateAction() {
+    public function cotizacionupdateAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -809,35 +830,45 @@ class CotizacionController extends Zend_Controller_Action {
             $disco = $this->_request->getPost('Disco');
             $tiempo = $this->_request->getPost('Tiempo');
 
-            if ($tasaCambio==''){
-                $tasaCambio=0;
+            if ($tasaCambio == '') {
+                $tasaCambio = 0;
             }
 
-            echo"<pre>";
+            echo "<pre>";
             // print_r($txtdescrip);
-            $texto = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
-                array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
-                    "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $referencial);
+            $texto = str_replace(
+                array("á", "é", "í", "ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ"),
+                array(
+                    "&aacute;", "&eacute;", "&iacute;", "&oacute;", "&uacute;", "&ntilde;",
+                    "&Aacute;", "&Eacute;", "&Iacute;", "&Oacute;", "&Uacute;", "&Ntilde;"
+                ),
+                $referencial
+            );
             print_r($texto);
 
-            echo"</pre>";
+            echo "</pre>";
 
 
-            echo"<pre>";
+            echo "<pre>";
             // print_r($txtdescrip);
-            $texto2 = str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
-                array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
-                    "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $motivo);
+            $texto2 = str_replace(
+                array("á", "é", "í", "ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ"),
+                array(
+                    "&aacute;", "&eacute;", "&iacute;", "&oacute;", "&uacute;", "&ntilde;",
+                    "&Aacute;", "&Eacute;", "&Iacute;", "&Oacute;", "&Uacute;", "&Ntilde;"
+                ),
+                $motivo
+            );
             print_r($texto2);
 
-            echo"</pre>";
+            echo "</pre>";
 
 
 
 
             $params = null;
             $params[] = array('@p_idcotiz', $idcot);
-            $params[] = array('@p_subt',$subtot);
+            $params[] = array('@p_subt', $subtot);
             $params[] = array('@p_igv', $igv);
             $params[] = array('@p_tot', $total);
             $params[] = array('@p_tipoMon', $tipoMoneda);
@@ -845,27 +876,28 @@ class CotizacionController extends Zend_Controller_Action {
             $params[] = array('@p_Clientetec', $Clientetec);
             $params[] = array('@p_tiemEntrega', $tentrega);
             $params[] = array('@p_vgarantia', $garantia);
-            $params[] = array('@p_vmotivo', utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto2))));
+            $params[] = array('@p_vmotivo', utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto2))));
             $params[] = array('@p_vformapago', $formapago);
-            $params[] = array('@p_vreferencial', utf8_decode(str_replace('"','&quot;',str_replace( "•",'&bull;',$texto))));
+            $params[] = array('@p_vreferencial', utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto))));
             $params[] = array('@p_disco', $disco);
             $params[] = array('@p_tiempo', $tiempo);
 
             //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
             $detcot = $cn->ejec_store_procedura_sql('update_cotizacion', $params);
-           // echo json_encode($detcot);
+            // echo json_encode($detcot);
         }
     }
 
 
-    public function cotizacionopcionalapricipalAction() {
+    public function cotizacionopcionalapricipalAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -879,14 +911,15 @@ class CotizacionController extends Zend_Controller_Action {
             // echo json_encode($detcot);
         }
     }
-    public function cotizaciondelAction() {
+    public function cotizaciondelAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -897,18 +930,19 @@ class CotizacionController extends Zend_Controller_Action {
 
             //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
             $detcot = $cn->ejec_store_procedura_sql('delete_cotiz', $params);
-             //echo json_encode("Desabilitado.");
+            //echo json_encode("Desabilitado.");
         }
     }
 
-    public function cancelarcotizAction() {
+    public function cancelarcotizAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -923,14 +957,15 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function detcotizaciondelAction() {
+    public function detcotizaciondelAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -945,14 +980,15 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function copiarcotizAction() {
+    public function copiarcotizAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -965,14 +1001,15 @@ class CotizacionController extends Zend_Controller_Action {
             echo json_encode($copiarcot);
         }
     }
-    public function eliminarcotizacionAction() {
+    public function eliminarcotizacionAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
+            $idpersonal = $ddatosuserlog->cidusuario;
             $usuario = $ddatosuserlog->userlogin;
             $host = $ddatosuserlog->vhostnm;
 
@@ -986,14 +1023,11 @@ class CotizacionController extends Zend_Controller_Action {
         }
     }
 
-    public function visordocsAction() {
+    public function visordocsAction()
+    {
 
         $img = $this->_request->getParam('img', '');
         $this->_helper->layout->disableLayout();
         $this->view->img = $img;
     }
-
-
-
-    
 }

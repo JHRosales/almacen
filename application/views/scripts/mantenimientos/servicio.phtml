@@ -1,113 +1,95 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoDoc=array(array("1","DNI"), array("2","RUC"));
+$TipoDoc = array(array("1", "DNI"), array("2", "RUC"));
 
- ?>
+?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<div id="panelMantenimientoProductos"
-     align="center"
-     class="ui-widget ui-widget-content ui-corner-top"
-     style="width: 415px;margin: 3px;">
+<div id="panelMantenimientoProductos" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 415px;margin: 3px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
         <label>Mantenimiento de Servicios</label>
     </div>
-<form id="frmproduct" name="frmproduct" method="post">
-    <table border="0" class="ui-table-panelLayout">
-        <tr>
-            <td style="text-align: left">
-                C&oacute;digo
-            </td>
-            <td style="text-align: left">
-                <input class="editable ui-text"
-                       style="background-color: #e4e4e4;"
-                       type="text"
-                       id="txtidsigma"
-                       name="txtidsigma"
-                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: left">
-                Nombre
-            </td>
-            <td style="text-align: left">
-                <input class="editable ui-text"
-                       size="40"
-                       style=""
-                       type="text"
-                       id="txtvnombre"
-                       name="txtvnombre"
-                       value="<?php echo $this->vNombre; ?>"/>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: left">
-                Tipo Material
-            </td>
-            <td style="text-align: left">
-                <select id="cbotipomat" name="cbotipomat" style="width:140px;">
-                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idTipoMaterial,'Cmb_TipoMaterial','@idTipoMat'); ?>
-                </select>
-            </td>
-        </tr>
-        <tr  style="text-align: left; vertical-align: middle">
-            <td  style="text-align: left;">
-                Categoria
-            </td>
-            <td style="text-align: left; ">
-                <select id="cbocategoser" name="cbocategoser" style="width:120px;">
-                    <?php  echo $this->util()->getComboContenedorOtro( '',$this->idCategoria,'Cmb_Categoria','@idCat'); ?>
-                </select>
-          <button type="button" style="width:120px;" id="btnaddmaterial" name="btnaddmaterial" onclick="nuevoMaterial()">
-              Add Material
-          </button>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <div id="checks" align="center"></div>
-            </td>
-             </tr>
-        <tr>
-            <td style="text-align: left">
-                Descripci&oacute;n
-            </td>
-            <td style="text-align: left">
-                <textarea class="editable ui-text"
-                          style="width:260px; height:100px;max-width:260px; max-height:100px;"
-                          id="txtdescrip"
-                          name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
-            </td>
-        </tr>
+    <form id="frmproduct" name="frmproduct" method="post">
+        <table border="0" class="ui-table-panelLayout">
+            <tr>
+                <td style="text-align: left">
+                    C&oacute;digo
+                </td>
+                <td style="text-align: left">
+                    <input class="editable ui-text" style="background-color: #e4e4e4;" type="text" id="txtidsigma" name="txtidsigma" value="<?php echo $this->idsigma; ?>" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Nombre
+                </td>
+                <td style="text-align: left">
+                    <input class="editable ui-text" size="40" style="" type="text" id="txtvnombre" name="txtvnombre" value="<?php echo $this->vNombre; ?>" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Tipo Material
+                </td>
+                <td style="text-align: left">
+                    <select id="cbotipomat" name="cbotipomat" style="width:140px;">
+                        <?php echo $this->util()->getComboContenedorOtro('', $this->idTipoMaterial, 'Cmb_TipoMaterial', '@idTipoMat'); ?>
+                    </select>
+                </td>
+            </tr>
+            <tr style="text-align: left; vertical-align: middle">
+                <td style="text-align: left;">
+                    Categoria
+                </td>
+                <td style="text-align: left; ">
+                    <select id="cbocategoser" name="cbocategoser" style="width:120px;">
+                        <?php echo $this->util()->getComboContenedorOtro('', $this->idCategoria, 'Cmb_Categoria', '@idCat'); ?>
+                    </select>
+                    <button type="button" style="width:120px;" id="btnaddmaterial" name="btnaddmaterial" onclick="nuevoMaterial()">
+                        Add Material
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <div id="checks" align="center"></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Descripci&oacute;n
+                </td>
+                <td style="text-align: left">
+                    <textarea class="editable ui-text" style="width:260px; height:100px;max-width:260px; max-height:100px;" id="txtdescrip" name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
+                </td>
+            </tr>
 
 
 
-        <tr class="botonesServ">
-            <td colspan="2" style="text-align: center;">
-                <button type="button" style="width:120px;" id="btnguardarserv" name="btnguardarserv" onclick="guardarServicio()">
-                    Guardar
-                </button>
-                <button type="button" style="width:120px;" id="btncancelserv" name="btncancelserv" onclick="cerrarMantProdSer()">
-                    Cancelar
-                </button>
-                <button type="button" style="width:120px;" id="btneliminar2" name="btneliminar2" onclick="hablBtns()">
-                    Eliminar
-                </button>
-            </td>
-        </tr>
-    </table>
-</form>
+            <tr class="botonesServ">
+                <td colspan="2" style="text-align: center;">
+                    <button type="button" style="width:120px;" id="btnguardarserv" name="btnguardarserv" onclick="guardarServicio()">
+                        Guardar
+                    </button>
+                    <button type="button" style="width:120px;" id="btncancelserv" name="btncancelserv" onclick="cerrarMantProdSer()">
+                        Cancelar
+                    </button>
+                    <button type="button" style="width:120px;" id="btneliminar2" name="btneliminar2" onclick="hablBtns()">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 
 <script type="text/javascript">
-
     var seleccionadas = new Array();
-    var general =0;
-    var otros =0;
+    var general = 0;
+    var otros = 0;
 
     var catego = {
-        NATURAL : "1",
-        JURIDICA : "2"
+        NATURAL: "1",
+        JURIDICA: "2"
     };
 
     themeComboBox("#cbocategoser");
@@ -118,40 +100,46 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
 
 
     $("#btnguardarserv").button({
-        icons:{primary:'ui-icon-disk'},
-        text:true
+        icons: {
+            primary: 'ui-icon-disk'
+        },
+        text: true
     });
 
     $("#btncancelserv").button({
-        icons:{primary:'ui-icon-close'},
-        text:true
+        icons: {
+            primary: 'ui-icon-close'
+        },
+        text: true
     });
     $("#btnaddmaterial").button({
-        icons:{primary:'ui-icon-plus'},
-        text:true
+        icons: {
+            primary: 'ui-icon-plus'
+        },
+        text: true
     });
 
-    function hablBtns(){
+    function hablBtns() {
         //USADO PARA ELIMINAR ITEM POR ITEM MEDIANTE EL TACHITO
         var x = document.getElementsByClassName("btnElim");
         var i;
-        console.log( x.length);
+        //console.log(x.length);
         for (i = 0; i < x.length; i++) {
             // console.log( x[i]);
             x[i].style.display = "inline";
         }
     }
-    nuevoMaterial = function(){
+    nuevoMaterial = function() {
         var indice = 0;
-        $('#frmproduct input[type=checkbox]').each(function(){
+        $('#frmproduct input[type=checkbox]').each(function() {
             if (this.checked) {
-                seleccionadas[indice] =  $(this).val();
+                seleccionadas[indice] = $(this).val();
                 indice = indice + 1;
             }
         });
-        console.log(seleccionadas);
-        $.each( seleccionadas, function( key, value ) {
-            console.log( key + ": " + value);
+        //console.log(seleccionadas);
+        $.each(seleccionadas, function(key, value) {
+            //console.log(key + ": " + value);
         });
 
 
@@ -161,72 +149,72 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
         openDialogData3("mantenimientos/material", parameters, 480);
     };
 
-    buscarMate=function(){
+    buscarMate = function() {
         listckech();
-       // console.log(seleccionadas);
+        // console.log(seleccionadas);
     };
 
 
 
-    function cerrarMantProdSer(){
+    function cerrarMantProdSer() {
         closeDialog("jqDialog2");
     }
 
-    function guardarServicio(){
+    function guardarServicio() {
         var vnombre = $("#txtvnombre").val();
         var catego = $("#cbocategoser").val();
 
 
-       // var bEd = CKEDITOR.instances['txtdescrip'];
-       // var descrip1 = bEd.getData();
-       // var descrip = descrip1.replace(/&/gi, "#1");
-        var descrip='';
+        // var bEd = CKEDITOR.instances['txtdescrip'];
+        // var descrip1 = bEd.getData();
+        // var descrip = descrip1.replace(/&/gi, "#1");
+        var descrip = '';
 
-        var form= $("#frmproduct");
+        var form = $("#frmproduct");
 
-      /*  if(document.getElementById("estado").checked){
-            var nestado1=1;
-        }  else  {
-            var  nestado1=0;
-        }*/
+        /*  if(document.getElementById("estado").checked){
+              var nestado1=1;
+          }  else  {
+              var  nestado1=0;
+          }*/
 
-        if($.trim(vnombre) == ""){
+        if ($.trim(vnombre) == "") {
             openDialogError("Ingrese nombre", "250", "150", function() {
                 $("#txtvnombre").focus();
             });
             return;
         }
 
-        if($.trim(catego) == "9999999999"){
+        if ($.trim(catego) == "9999999999") {
             openDialogError("Seleccione Categoria", "250", "150", function() {
                 $("#txtvnrodoc").focus();
             });
             return;
         }
 
-        var selecccion =JSON.stringify(ArregloMateriales);
+        var selecccion = JSON.stringify(ArregloMateriales);
         $.ajax({
             dataType: "html",
             type: "POST",
             url: path + "mantenimientos/guardarservicio/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-            data:form.serialize()+"&txtdescrip1="+descrip +"&seleccionados2="+selecccion,
-            success: function(requestData){ 	//Llamada exitosa)
+            data: form.serialize() + "&txtdescrip1=" + descrip + "&seleccionados2=" + selecccion,
+            success: function(requestData) { //Llamada exitosa)
                 openDialogInfo("Registrado correctamente");
-               // $("#c_codigocontrib").val(requestData);
+                // $("#c_codigocontrib").val(requestData);
                 buscarServ();
                 cerrarMantProdSer();
             },
-            error: function(requestData, errNumber, errMessage){
-                if(errNumber == '') {
+            error: function(requestData, errNumber, errMessage) {
+                if (errNumber == '') {
                     openDialogError("No se puede determinar el error.");
                 } else {
-                    openDialogError(errNumber +': ' + errMessage);
+                    openDialogError(errNumber + ': ' + errMessage);
                 }
             }
         });
     }
 
-    function eliminarMate(a){
+    function eliminarMate(a) {
         //console.log(a);
 
         parameters = {
@@ -234,9 +222,9 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
         };
 
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
 
-            "si":function(){
+            "si": function() {
                 //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
 
                 $.ajax({
@@ -244,23 +232,23 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
                     type: 'POST',
                     cache: false,
                     data: parameters,
-                    beforeSend: function (data) {                },
-                    success: function (requestData) {
+                    beforeSend: function(data) {},
+                    success: function(requestData) {
                         $("#result").html(requestData);
                         closeDialog("jqDialogConfirmacion1");
                         $("#c_codigocontrib").val("");
                         listckech();
                     },
-                    error: function (requestData, strError, strTipoError) {
+                    error: function(requestData, strError, strTipoError) {
                         $("#result").html("Error " + strTipoError + ': ' + strError);
                     },
-                    complete: function (requestData, exito) {
-                    }                });
+                    complete: function(requestData, exito) {}
+                });
 
 
                 // eliminarMaterialesV();
             },
-            "no":function(){
+            "no": function() {
                 closeDialog("jqDialogConfirmacion1");
 
             }
@@ -270,83 +258,87 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
     };
 
     $("#cbocategoser").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             listckech();
         }
     });
-    function listckech(){
+
+    function listckech() {
         var catego = $("#cbocategoser").val();
         var serv = $("#txtidsigma").val();
         var tipom = $("#cbotipomat").val();
-        var selecccion =JSON.stringify(seleccionadas)
+        var selecccion = JSON.stringify(seleccionadas)
+
         $.ajax({
             dataType: "html",
             type: "POST",
+            async: false,
             url: path + "mantenimientos/arreglocheck/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-            data:"catego="+catego+"&serv="+serv+"&selecionados="+selecccion +"&cbotipomat="+tipom,
-            success: function(requestData){
-              //$("#checks").html(requestData);
-              var datos=JSON.parse(requestData);
+            data: "catego=" + catego + "&serv=" + serv + "&selecionados=" + selecccion + "&cbotipomat=" + tipom,
+            success: function(requestData) {
+                //$("#checks").html(requestData);
+                var datos = JSON.parse(requestData);
                 console.log(PARAMETRO_NIVEL_LLAMADA);
-              if (PARAMETRO_NIVEL_LLAMADA==2){
-                  $("#checks").html(datos);
-               // $("#checks").html(datos["data"]);
-                //console.log ("general=>" +general+" otros=>"+otros+ " TipoM=>"+tipom + " Datos=>"+ datos["Seleccionado"]);
-                for(var i = datos["Seleccionado"].length - 1; i >= 0; i--) {
-                    if((general==0 &&  tipom==1) ||  (otros==0 &&  tipom==2) ){
-                        //console.log (i+ "=>" + datos["Seleccionado"][i]);
-                        AgregarLista(parseInt(datos["Seleccionado"][i], 10));
+                if (PARAMETRO_NIVEL_LLAMADA < 3) {
+                    //$("#checks").html(datos);
+                    $("#checks").html(datos["data"]);
+                    //console.log("general=>" + general + " otros=>" + otros + " TipoM=>" + tipom + " Datos=>" + datos["Seleccionado"]);
+                    for (var i = datos["Seleccionado"].length - 1; i >= 0; i--) {
+                        if ((general == 0 && tipom == 1) || (otros == 0 && tipom == 2)) {
+                            //console.log (i+ "=>" + datos["Seleccionado"][i]);
+                            AgregarLista(parseInt(datos["Seleccionado"][i], 10));
+                        }
                     }
-                }
 
-                if (tipom==1 ){
-                    general=1;
-                }else{
-                    otros=1;
-                }
+                    if (tipom == 1) {
+                        general = 1;
+                    } else {
+                        otros = 1;
+                    }
 
-                deseleccionar_todo();
-                seleccionar_todo();
-              }else{
-                  $("#checks").html(datos["data"]);
+                    deseleccionar_todo();
+                    seleccionar_todo();
+                } else {
+                    // $("#checks").html(datos["data"]);
                 }
 
 
 
             },
-            error: function(requestData, errNumber, errMessage){
-                if(errNumber == '') {
+            error: function(requestData, errNumber, errMessage) {
+                if (errNumber == '') {
                     openDialogError("No se puede determinar el error.");
                 } else {
-                    openDialogError(errNumber +': ' + errMessage);
+                    openDialogError(errNumber + ': ' + errMessage);
                 }
             }
         });
 
     }
 
-    function seleccionar_todo(){
-        for (i=0;i<document.frmproduct.elements.length;i++)
-            ArregloMateriales.forEach(function (elemento, indice) {
+    function seleccionar_todo() {
+        for (i = 0; i < document.frmproduct.elements.length; i++)
+            ArregloMateriales.forEach(function(elemento, indice) {
 
-                if(document.frmproduct.elements[i].type == "checkbox" && document.frmproduct.elements[i].value==elemento)
-                // console.log(document.frmproduct.elements[i].value );
-                    document.frmproduct.elements[i].checked=1;
+                if (document.frmproduct.elements[i].type == "checkbox" && document.frmproduct.elements[i].value == elemento)
+                    // console.log(document.frmproduct.elements[i].value );
+                    document.frmproduct.elements[i].checked = 1;
                 //console.log( indice, elemento);
             });
 
-         for (indice in ArregloMateriales){
-         console.log (indice+ "=>" + ArregloMateriales[indice]);
-         }
+        /*for (indice in ArregloMateriales) {
+            console.log(indice + "=>" + ArregloMateriales[indice]);
+        }*/
     }
-    function deseleccionar_todo(){
-        for (i=0;i<document.frmproduct.elements.length;i++)
-            if(document.frmproduct.elements[i].type == "checkbox")
-                document.frmproduct.elements[i].checked=0
+
+    function deseleccionar_todo() {
+        for (i = 0; i < document.frmproduct.elements.length; i++)
+            if (document.frmproduct.elements[i].type == "checkbox")
+                document.frmproduct.elements[i].checked = 0
     }
 
     $("#cbotipomat").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             // buscarMate();
             listckech();
 
@@ -354,29 +346,32 @@ $TipoDoc=array(array("1","DNI"), array("2","RUC"));
     });
 
 
-    $( document ).ready(function() {
+    $(document).ready(function() {
+        ArregloMateriales = [];
         listckech();
         $("#btneliminar2").button({
-            icons:{primary:'ui-icon-close'},
-            text:true
+            icons: {
+                primary: 'ui-icon-close'
+            },
+            text: true
         });
         var isreadOnly = false;
         var config1 = {
-            skin: 'v2'
-            , toolbar: [
-                ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-'
-                    , 'HorizontalRule', '-', 'Blockquote',  '-', 'JustifyLeft',
-                    'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
+            skin: 'v2',
+            toolbar: [
+                ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'HorizontalRule', '-', 'Blockquote', '-', 'JustifyLeft',
+                    'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'
+                ],
                 ['UIColor']
-            ]
-            , readOnly: isreadOnly
-            , height : '90'
+            ],
+            readOnly: isreadOnly,
+            height: '90'
         };
-       // var hEd = CKEDITOR.instances['txtdescrip'];
-       // if (hEd) {
-       //     CKEDITOR.remove(hEd);
-       // }
-       // CKEDITOR.replace('txtdescrip', config1);
+        // var hEd = CKEDITOR.instances['txtdescrip'];
+        // if (hEd) {
+        //     CKEDITOR.remove(hEd);
+        // }
+        // CKEDITOR.replace('txtdescrip', config1);
 
 
     });

@@ -1405,6 +1405,7 @@ class MantenimientosController extends Zend_Controller_Action
             $idDetcotiz = $this->_request->getPost('txtidDetcotizacion');
             $idserv = $this->_request->getPost('txtidservi');
             $txtdescrip = str_replace('#1', '&',  $txtdescrip);
+            $tipomon = $this->_request->getPost('tipomon');
 
             $seleccionado = $this->_request->getParam('seleccionados3');
             $decodeSeleccion = json_decode($seleccionado, true);
@@ -1475,6 +1476,7 @@ class MantenimientosController extends Zend_Controller_Action
                     $params[] = array('@vHostnm', $host);
                     $params[] = array('@vDescrip', $texto);
                     $params[] = array('@idDetCotiz', $idDetcotiz);
+                    $params[] = array('@tipomon', $tipomon);
                     $detcot = $cn->executeAssocQuery('Ins_ServMaterialDetCotOp', $params);
                 }
             }
