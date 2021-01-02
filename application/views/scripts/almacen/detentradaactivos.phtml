@@ -7,9 +7,9 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
 <div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-verde ui-corner-top ui-title">
-        <label>Mantenimiento - Entrada Materiales</label>
+        <label>Mantenimiento - Entrada Activos</label>
     </div>
-    <input type="hidden" id="identradamat" name="identradamat" value="<?php echo $this->idEntradaMat; ?>">
+    <input type="hidden" id="idEntradaActivos" name="idEntradaActivos" value="<?php echo $this->idEntradaMat; ?>">
     <div id="dialogBuscarContribuyentePredio">
         <table class="ui-panelLayout-main">
             <tr>
@@ -121,7 +121,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             <tr>
                 <td><button id="btncancelardet" name="btncancelardet">Cancelar</button></td>
                 <td>
-                    <button id="btnguardar" name="btnguardar" onclick="GuardardetalleCot()">Guardar</button>
+                    <button id="btnguardar" name="btnguardar" onclick="GuardarDetalleActivos()">Guardar</button>
                 </td>
             </tr>
 
@@ -159,28 +159,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             }
 
         }
-
-        /*if(window.event && window.event.keyCode == 8){	// cuando el usuario presione el boton retroceso o borrar no regrese atras
-          window.status="Por favor, Haga Click en Cerrar Sesión Para Salir del Sistema de Auditoría de Servicios";
-            return false;
-        }*/
     }
-    //Al presionar la fecla de retroceso o de refresh del navegador se muestra un mensaje
-    /* window.onbeforeunload = function() {
-         return "¿Estás seguro que deseas salir de la actual página?"
-     }*/
-    /* window.onbeforeunload = function(e) {
-        return 'Texto de aviso';
-    };*/
-
-    /* var myEvent = window.attachEvent || window.addEventListener;
-     var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compitable
-
-     myEvent(chkevent, function(e) { // For >=IE7, Chrome, Firefox
-         var confirmationMessage = 'Are you sure to leave the page?';  // a space
-         (e || window.event).returnValue = confirmationMessage;
-         return confirmationMessage;
-     });*/
 </script>
 
 
@@ -205,8 +184,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
     $("#cbtipomon").combobox({
         selected: function(event, ui) {
-            //validarTipoCambio($("#cbtipomon").val())
-            //ActualizarMontos();  //No se calcula
+
         }
     });
 
@@ -222,8 +200,8 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
         colNames: [
             'Id Detalle',
             'Id Entrada',
-            'idMaterial',
-            'Material',
+            'idActivos',
+            'Activo',
             'Cantidad',
             'PU',
             'P. Total',
@@ -232,25 +210,25 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             ""
         ],
         colModel: [{
-                name: 'idDetEntradaMat',
-                index: 'idDetEntradaMat',
+                name: 'idDetEntradaActivos',
+                index: 'idDetEntradaActivos',
                 width: 80,
                 hidden: false
             },
             {
-                name: 'idEntradaMat',
-                index: 'idEntradaMat',
+                name: 'idEntradaActivos',
+                index: 'idEntradaActivos',
                 width: 80,
                 hidden: false
             },
             {
-                name: 'idMaterial',
-                index: 'idMaterial',
+                name: 'idActivos',
+                index: 'idActivos',
                 width: 80
             },
             {
-                name: 'material',
-                index: 'material',
+                name: 'activos',
+                index: 'activos',
                 width: 260
             },
             {
@@ -317,33 +295,30 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
                 formatter: btndelete,
                 search: false
             }
-            //{name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left', formatter: linkadjunto},
-            // {name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left',hidden:true},
+
         ],
         editurl: "clientArray",
-        caption: "&nbsp;&nbsp;&nbsp;Detalle de entrada material",
+        caption: "&nbsp;&nbsp;&nbsp;Detalle de entrada Activos",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             EditPSM();
-            //console.log(row);
-            //dobleclickPersona(row);
-            //  verCotizacion();
+
         },
         afterInsertRow: function(rowid, aData) {
             switch (aData.opcional) {
                 case '':
                     break;
                 case '1':
-                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idDetEntradaMat', '', {
+                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idDetEntradaActivos', '', {
                         background: '#ddeaa6'
                     });
-                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idEntradaMat', '', {
+                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idEntradaActivos', '', {
                         background: '#ddeaa6'
                     });
-                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idMaterial', '', {
+                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'idActivos', '', {
                         background: '#ddeaa6'
                     });
-                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'material', '', {
+                    jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'activos', '', {
                         background: '#ddeaa6'
                     });
                     jQuery("#tblDetEntradaMat").jqGrid('setCell', rowid, 'nCantidad', '', {
@@ -359,12 +334,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             }
         },
         onSelectRow: function(id) {
-            //var row = $(this).getRowData(id);
-            // console.log(lastsel3);
             if (lastsel3 != undefined)
-                //calcular();
-
-
                 if (id && id !== lastsel3) {
                     jQuery('#tblDetEntradaMat').jqGrid('saveRow', lastsel3);
                     lastsel3 = id;
@@ -443,8 +413,8 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
     buscarProveedor = function() {
         parameters = {
-            "idsigma": $("#identradamat").val(),
-            "pag": "1"
+            "idsigma": $("#idEntradaActivos").val(),
+            "pag": "3"
         };
         openDialogData1("almacen/buscarpersona", parameters, 660, 500);
         //   window.open(path + "mantenimientos/backup", "_self");
@@ -505,7 +475,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
 
     function ActualizarMontos() {
-        //No se usa en el ingreso de Materiales no se calcula
+        //No se usa en el ingreso de Activos no se calcula
         jQuery('#tblDetEntradaMat').jqGrid('saveRow', lastsel3);
         var tasa = $("#tasacambio").val();
         var tipomon = $("#cbtipomon").val();
@@ -599,38 +569,10 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
         return true;
     };
 
-    GuardardetalleCot = function() {
-        /*  jQuery('#tblDetEntradaMat').jqGrid('saveRow',lastsel3);
-          var rows= jQuery("#tblDetEntradaMat").jqGrid('getRowData');
-          if (rows.length > 0) {
-              var subtotal = 0;
-              for (var i=0;i<rows.length;i++) {
-                  var row=rows[i];
-                  parameters = {
-                      "idDetCotiz": row.idDetCotiz,
-                      "nPrecioUnit": row.nPrecioUnit,
-                      "nCantidad": row.nCantidad,
-                      "nPrecTotal": row.nPrecioTotal,
-                      "nDescu": row.nDesc
-                  };
-                  $.ajax({
-                      url: jQuery.scriptPath + "index.php/almacen/detcotizacionupdate",
-                      type: 'POST',
-                      cache: false,
-                      data: parameters,
-                      beforeSend: function (data) {   },
-                      success: function (requestData) {
-                      },
-                      error: function (requestData, strError, strTipoError) {   },
-                      complete: function (requestData, exito) {    }
-                  });
-              }
-          }*/
-
-
+    GuardarDetalleActivos = function() {
         var tieneDes = 0;
         parameters1 = {
-            "idsigma": $("#identradamat").val(),
+            "idsigma": $("#idEntradaActivos").val(),
             "idProveedor": $("#txtidProveedor").val(),
             "subtotal": $("#txtsubtotal").val(),
             "igv": $("#txtigv").val(),
@@ -640,14 +582,14 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             "tipoMoneda": $("#cbtipomon").val()
         };
         $.ajax({
-            url: jQuery.scriptPath + "index.php/almacen/entradamatupdate",
+            url: jQuery.scriptPath + "index.php/almacen/entradaactivosupdate",
             type: 'POST',
             cache: false,
             data: parameters1,
             beforeSend: function(data) {},
             success: function(requestData) {
                 //imprimir();
-                window.open(path + "almacen/entradamat", "_self");
+                window.open(path + "almacen/entradaactivos", "_self");
             },
             error: function(requestData, strError, strTipoError) {},
             complete: function(requestData, exito) {}
@@ -659,63 +601,29 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
     nuevaPSM = function() {
         parameters = {
-            "idsigma": $("#identradamat").val()
+            "idsigma": $("#idEntradaActivos").val()
         };
-        openDialogData1("almacen/addpsm", parameters, 560, 560);
+        openDialogData1("almacen/addactivos", parameters, 560, 560);
 
     };
     EditPSM = function() {
         var selr = $('#tblDetEntradaMat').jqGrid('getGridParam', 'selrow');
         var row = $("#tblDetEntradaMat").jqGrid('getRowData', selr);
-        if (row.idDetEntradaMat == "" || row.idDetEntradaMat == undefined) {
+        if (row.idDetEntradaActivos == "" || row.idDetEntradaActivos == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
         parameters = {
-            "idsigma": $("#identradamat").val(),
-            "iddetentrada": row.idDetEntradaMat,
-            "idMaterial": row.idMaterial,
+            "idsigma": $("#idEntradaActivos").val(),
+            "iddetentrada": row.idDetEntradaActivos,
+            "idActivos": row.idActivos,
             "nCantidad": row.nCantidad,
             "nPrecioUnit": row.nPrecioUnit
         };
-        openDialogData1("almacen/addpsm", parameters, 560, 560);
+        openDialogData1("almacen/addactivos", parameters, 560, 560);
 
     };
-    /*addopcional= function(){
-        parameters = {
-            "idsigma": $("#identradamat").val(),
-            "opcional": 1
-        };
-        openDialogData1("almacen/addpsm", parameters, 560,500);
-    };*/
 
-    crearmaterial = function() {
-        parameters = {
-            "idsigma": '...'
-        };
-
-        openDialogData2("mantenimientos/material", parameters, 460, 200);
-    };
-    addMaterial = function(a) {
-        var selr = $('#tblDetEntradaMat').jqGrid('getGridParam', 'selrow');
-        var row = $("#tblDetEntradaMat").jqGrid('getRowData', selr);
-        var tipo = row.tipoPS;
-        var nombre = row.vNombrePSM;
-        // console.log(row.tipoPS);
-        if (tipo == "" || tipo == undefined || tipo == '1' || nombre == 'Material' || nombre == 'MATERIAL' || nombre == 'MATERIALES') {
-            openDialogWarning("Seleccione un Servicio.");
-            return;
-        }
-        parameters = {
-            "idsigma": row.idProdServ,
-            "nombre": row.vNombrePSM,
-            "idcotizacion": $("#identradamat").val(),
-            "Descripcion": row.vDescrip
-        };
-
-        openDialogData1("mantenimientos/agregarmaterialserv", parameters, 460, 460);
-        // closeDialog("jqDialog2");
-    };
 
 
 
@@ -749,26 +657,8 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             })
             .navSeparatorAdd()
 
-        /*           .navButtonAdd('#ptblDetEntradaMat',{
-                caption:"Agregar Material&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
-                    addMaterial();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()
-*/
 
-        /*.navButtonAdd('#ptblDetEntradaMat',{
-            caption:"Opcional&nbsp;&nbsp;",
-            buttonicon:"ui-icon-pencil",
-            onClickButton: function(){
-                addopcional();
-            },
-            position:"last"
-        })
-        .navSeparatorAdd()*/
+
 
         ;
     }
@@ -779,7 +669,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
         var row = $("#tblDetEntradaMat").jqGrid('getRowData', selr);
 
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host + "rptCotizacion.php?idCotiz=" + $("#identradamat").val(), '_blank');
+        window.open(host + "rptCotizacion.php?idCotiz=" + $("#idEntradaActivos").val(), '_blank');
         //console.log(host);
 
     }
@@ -800,7 +690,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
         openDialogConfirm1("Eliminar Registro?", 350, {
             "Si": function() {
                 var parmter = {};
-                parmter.idDetEntradaMat = row.idDetEntradaMat;
+                parmter.idDetEntradaActivos = row.idDetEntradaActivos;
                 closeDialog("jqDialogConfirmacion1");
                 $.post(path + "almacen/detentradamatdel", parmter, updCheckdelete, 'json');
             },
@@ -813,15 +703,9 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
     }
 
     function updCheckdelete(data) {
-        //console.log(data);
-        /*{ "Aceptar": function() { closeDialog("jqDialogInfo"); }} */
         lastsel3 = undefined
         buscarDetEntradaMat();
-        /*openDialogInfo("Eliminado", "250", "150", null, function () {
-             lastsel3=undefined
-            buscarDetEntradaMat();
 
-        });*/
     }
 
 
@@ -847,12 +731,12 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
     buscarDetEntradaMat = function() {
         var params = '[' +
             '["@tBusqueda", "0"],' +
-            '["@vIdEntradaMat", "' + $("#identradamat").val() + '"],' +
+            '["@vIdEntradaActivos", "' + $("#idEntradaActivos").val() + '"],' +
             '["@vDatoBus", ""]' +
             ']';
         parameters = {
             "name": "tblDetEntradaMat",
-            "procedure": "almacen.Bus_DetEntradaMat",
+            "procedure": "almacen.Bus_DetEntradaActivos",
             "print": "true",
             "parameters": params
         };
@@ -867,11 +751,11 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
     //Funcion para regresar al la grilla naterior
     function Cancelar() {
         parameters = {
-            "identradamat": $("#identradamat").val()
+            "idEntradaActivos": $("#idEntradaActivos").val()
         };
 
         $.ajax({
-            url: jQuery.scriptPath + "index.php/almacen/cancelareliminadosentradamat",
+            url: jQuery.scriptPath + "index.php/almacen/cancelareliminadosentradaactivos",
             type: 'POST',
             cache: false,
             data: parameters,
@@ -879,7 +763,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             success: function(requestData) {
                 // $("#result").html(requestData);
                 //  var datos=JSON.parse(requestData);
-                window.open(path + "almacen/entradamat", "_self");
+                window.open(path + "almacen/entradaactivos", "_self");
             },
             error: function(requestData, strError, strTipoError) {
                 console.log("Error " + strTipoError + ': ' + strError);
@@ -938,13 +822,6 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             buttonImageOnly: true,
             dateFormat: "dd/mm/yy"
         });
-        /* var mydata = [
-             {idDetEntradaMat:"1",idEntradaMat:"1",idMaterial:"2",material:"sss",nCantidad:"1",nPrecioUnit:"200.00",nPrecioTotal:"10.00",vEstado:"0"},
-             {idDetEntradaMat:"2",idEntradaMat:"1",idMaterial:"2",material:"sss",nCantidad:"1",nPrecioUnit:"200.00",nPrecioTotal:"10.00",vEstado:"0"}
-         ];
-        inicializarGrid("tblDetEntradaMat",optionDetEntradaMat,null,buttonsGridDetcoti);
-          for(var i=0;i<=mydata.length;i++)
-           jQuery("#tblDetEntradaMat").jqGrid('addRowData',i+1,mydata[i]);*/
 
         buscarDetEntradaMat();
 
@@ -967,10 +844,6 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             Cancelar('');
         });
 
-
-        /* $("#btnbuscardocs").button({icons: {primary: "ui-icon-search"}}).click(function () {
-             ProcesoBuscarRuta('');
-         });*/
     });
 
     function reiniCombo(celement) {
@@ -982,9 +855,6 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
     }
 
     function visorarchivo(nom_archivo) {
-        /*openDialogDataFunction1("documentos/ddocumentomante", { type: "M", ddocument: row.idsigma,cidsigma :$('#cidsigma').val(),ctipjerar: $('#ctipjerar').val() }, "980", "630", "Modificar Documento " + row.dstipdocu, null, { 'Aceptar': function() { DdocumentoSave('M'); }, 'Cancelar': function() { closeDialog("jqDialog1"); } });*/
-        //http://localhost:81/titaniaSQL/public/uploadDdocuments/
-        //console.log(jQuery.scriptPath+'uploadDdocuments/'+nom_archivo);
         var page = '';
         arrarchivo = nom_archivo.split(".");
         extarchivo = arrarchivo[1];

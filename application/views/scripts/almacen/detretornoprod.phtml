@@ -1,41 +1,50 @@
 <?php
 $library = new Libreria_Pintar();
 //array("0","GENERAL"), array("1","ID"), array("2","SERIE"), array("3","PRODUCTO"), array("4","DETENTRADA"),
-$TipoBusqueda=array( array("5","ID SALIDA"));
+$TipoBusqueda = array(array("5", "ID SALIDA"));
 ?>
 <style>
-    #tableRetornoProd { margin :  0 2em 0em 0; border-collapse: collapse; width: 100%; }
-    #tableRetornoProd td, #tableRetornoProd th { border: 1px solid #eee; padding: .4em 5px; text-align: left; }
+    #tableRetornoProd {
+        margin: 0 2em 0em 0;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #tableRetornoProd td,
+    #tableRetornoProd th {
+        border: 1px solid #eee;
+        padding: .4em 5px;
+        text-align: left;
+    }
 </style>
 
-<div  id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+<div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-azul ui-corner-top ui-title">
         <label>Mantenimiento - Retorno Producto</label>
     </div>
-    <input type="hidden" id="idRetornoProd" name="idRetornoProd" value="<?php echo $this->idRetornoProd;?>">
-    <input type="hidden" id="idSalidaProd" name="idSalidaProd" value="<?php echo $this->idSalidaProd;?>">
+    <input type="hidden" id="idRetornoProd" name="idRetornoProd" value="<?php echo $this->idRetornoProd; ?>">
+    <input type="hidden" id="idSalidaProd" name="idSalidaProd" value="<?php echo $this->idSalidaProd; ?>">
 
-    <div id="panelPapeleta" align="center" class="ui-widget ui-widget-content ui-corner-all"
-         style="width: 99%;margin: 3px;padding-bottom: 5px;">
-        <table class="ui-panelLayout-main" >
+    <div id="panelPapeleta" align="center" class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;margin: 3px;padding-bottom: 5px;">
+        <table class="ui-panelLayout-main">
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:45px;">
 
                         <tr>
 
-                            <td  style="text-align: left" colspan="4">Obra:</td>
-                            </tr>
+                            <td style="text-align: left" colspan="4">Obra:</td>
+                        </tr>
 
                         <tr>
 
                             <td colspan="4">
-                                <input class="ui-text"   id="txtobra" value="<?php echo $this->obra;?>"  maxlength="100" style="width:100%" />
+                                <input class="ui-text" id="txtobra" value="<?php echo $this->obra; ?>" maxlength="100" style="width:100%" />
                             </td>
                         </tr>
-                <tr>
-                    <td><br></td>
-                </tr>
+                        <tr>
+                            <td><br></td>
+                        </tr>
                         <tr class="rowcoti">
 
                             <td width="100" style="text-align: left">Fecha Retorno:</td>
@@ -46,10 +55,10 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
                         <tr class="rowbcoti" id="panelbcoti">
 
                             <td>
-                                <input type="text" id="fecretorno" value="<?php echo $this->dFecRetorno;?>"  class="ui-text-disable " readonly style="text-align: left;width: 80px;"/>
+                                <input type="text" id="fecretorno" value="<?php echo $this->dFecRetorno; ?>" class="ui-text-disable " readonly style="text-align: left;width: 80px;" />
                             </td>
-                           <td>&nbsp; </td>
-                            <td class="soloSolesa">&nbsp;<input type="text" class="ui-text pnl" id="txtlugar"   value="<?php  echo $this->lugar; ?>"  style="width:96%" /></td>
+                            <td>&nbsp; </td>
+                            <td class="soloSolesa">&nbsp;<input type="text" class="ui-text pnl" id="txtlugar" value="<?php echo $this->lugar; ?>" style="width:96%" /></td>
 
                         </tr>
                         <tr>
@@ -67,14 +76,14 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
                         <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
 
                             <td colspan="3">
-                                <input class="ui-text-disable pnl" type="hidden" readonly id="codigoCliente"  value="<?php echo $this->idCliente;?>"  style="width:100%" />
-                                <input class="ui-text-disable pnl" readonly id="nombreCliente"  value="<?php echo $this->nomCliente;?>"  style="width:100%" />
+                                <input class="ui-text-disable pnl" type="hidden" readonly id="codigoCliente" value="<?php echo $this->idCliente; ?>" style="width:100%" />
+                                <input class="ui-text-disable pnl" readonly id="nombreCliente" value="<?php echo $this->nomCliente; ?>" style="width:100%" />
                             </td>
 
                             <td colspan="5" style="text-align: left;">
                             </td>
                             <td rowspan="1">
-                              <!--  <button id="btnbuscarClie" name="btnbuscarClie" onclick="buscarCli()">Buscar Cliente</button>-->
+                                <!--  <button id="btnbuscarClie" name="btnbuscarClie" onclick="buscarCli()">Buscar Cliente</button>-->
                             </td>
                         </tr>
 
@@ -89,12 +98,12 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
                         <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
 
                             <td colspan="3">
-                                <input class="ui-text-disable pnl" type="hidden" readonly id="txtidtecnico"  value="<?php echo $this->idtecnico;?>"  style="width:100%" />
-                                <input class="ui-text-disable pnl" readonly id="txtnombretecnico"  value="<?php echo $this->nomtecnico;?>"  style="width:100%" />
+                                <input class="ui-text-disable pnl" type="hidden" readonly id="txtidtecnico" value="<?php echo $this->idtecnico; ?>" style="width:100%" />
+                                <input class="ui-text-disable pnl" readonly id="txtnombretecnico" value="<?php echo $this->nomtecnico; ?>" style="width:100%" />
                             </td>
 
                             <td colspan="5" style="text-align: left;">
-                                <!-- <input class="ui-text-disable pnl" readonly id="nrodoc"   value="<?php echo $this->vnrodoprov;?>"  style="width:50%" /> -->
+                                <!-- <input class="ui-text-disable pnl" readonly id="nrodoc"   value="<?php echo $this->vnrodoprov; ?>"  style="width:50%" /> -->
                             </td>
                             <td rowspan="1">
                                 <button id="btnbuscartec" name="btnbuscartec" onclick="buscarTecni()">Buscar Tecnico</button>
@@ -107,89 +116,89 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
                 </td>
             </tr>
         </table>
-</div>
+    </div>
 
 
     <div id="panelDatosConductor" align="center" class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;height: 100%;margin: 3px;">
         <div class="ui-widget ui-state-default ui-corner-top ui-title">
             <label>Materiales </label>
         </div>
-        <div style="text-align: left" >
-            <button id="btnRegistroAgregar" >Agregar</button>
+        <div style="text-align: left">
+            <button id="btnRegistroAgregar">Agregar</button>
         </div>
         <table id="tableRetornoProd" border="1" class="ui-widget ui-widget-content">
             <thead>
-            <tr class="ui-widget-header">
-                <th>Codigo</th>
-                <th>Producto</th>
-                <th>Stock</th>
-                <th>Serie</th>
-                <th>Observacion</th>
-                <th>Buscar</th>
-                <th></th>
-            </tr>
+                <tr class="ui-widget-header">
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Stock</th>
+                    <th>Serie</th>
+                    <th>Observacion</th>
+                    <th>Buscar</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr style="display: none;">
-                <td>
-                    <input type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd"/>
-                    <input type="hidden" name="txtIdDetSalidaProd" id="txtIdDetSalidaProd" />
-                    <input id="txtProdSeries"  name="txtProdSeries" class="ui-text-disable" disabled="disabled"  style="width:80px" >
-                </td>
-                <td>
-                    <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto">&nbsp;</div>
-                </td>
-                <td>
-                    <input id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:70px" >
-                </td>
-                <td>
-                    <input id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:150px" >
-                </td>
-                <td>
-                    <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"></textarea>
-                </td>
-                <td>
-                    <button id="btnBuscarSerie">Buscar</button>
-                </td>
-                <td>
-                    <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
-                        <span class="ui-icon ui-icon-trash"></span>
-                    </div>
-                </td>
-            </tr>
-            <?php foreach ($this->detSeries as $value) { ?>
-
-                <tr>
+                <tr style="display: none;">
                     <td>
-                        <input value="<?php echo $value["idDetRetornoProd"]; ?>" type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd" />
-                        <input value="<?php echo $value["idDetSalidaProd"]; ?>" type="hidden" name="txtIdDetSalidaProd" id="txtIdDetSalidaProd" />
-                        <input value="<?php echo $value["idProdSeries"]; ?>" id="txtProdSeries"  name="txtProdSeries" class="ui-text-disable" disabled="disabled"  style="width:80px" >
+                        <input type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd" />
+                        <input type="hidden" name="txtIdDetSalidaProd" id="txtIdDetSalidaProd" />
+                        <input id="txtProdSeries" name="txtProdSeries" class="ui-text-disable" disabled="disabled" style="width:80px">
                     </td>
                     <td>
-                        <!--<input value="<?php echo $value["Producto"]; ?>" id="txtProducto"  name="txtProducto" class="ui-text-disable" disabled="disabled"  style="width:300px" >-->
-                        <div  class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto"><?php echo $value["Producto"]; ?></div>
-
+                        <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto">&nbsp;</div>
                     </td>
                     <td>
-                        <input value="<?php echo $value["nStock"]; ?>" id="txtStock"  name="txtStock" class="ui-text-disable" disabled="disabled"  style="width:70px" >
+                        <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:70px">
                     </td>
                     <td>
-                        <input value="<?php echo $value["Serie"]; ?>" id="txtSerie"  name="txtSerie" class="ui-text-disable" disabled="disabled"  style="width:150px" >
+                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:150px">
                     </td>
                     <td>
-                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"><?php echo $value["vObserv"]; ?></textarea>
+                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"></textarea>
                     </td>
                     <td>
-                        <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
+                        <button id="btnBuscarSerie">Buscar</button>
                     </td>
                     <td>
-                        <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                        <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
                             <span class="ui-icon ui-icon-trash"></span>
                         </div>
                     </td>
                 </tr>
+                <?php foreach ($this->detSeries as $value) { ?>
 
-            <?php } ?>
+                    <tr>
+                        <td>
+                            <input value="<?php echo $value["idDetRetornoProd"]; ?>" type="hidden" name="txtidDetRetornoProd" id="txtidDetRetornoProd" />
+                            <input value="<?php echo $value["idDetSalidaProd"]; ?>" type="hidden" name="txtIdDetSalidaProd" id="txtIdDetSalidaProd" />
+                            <input value="<?php echo $value["idProdSeries"]; ?>" id="txtProdSeries" name="txtProdSeries" class="ui-text-disable" disabled="disabled" style="width:80px">
+                        </td>
+                        <td>
+                            <!--<input value="<?php echo $value["Producto"]; ?>" id="txtProducto"  name="txtProducto" class="ui-text-disable" disabled="disabled"  style="width:300px" >-->
+                            <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:450px" id="txtProducto" name="txtProducto"><?php echo $value["Producto"]; ?></div>
+
+                        </td>
+                        <td>
+                            <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:70px">
+                        </td>
+                        <td>
+                            <input value="<?php echo $value["Serie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:150px">
+                        </td>
+                        <td>
+                            <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"><?php echo $value["vObserv"]; ?></textarea>
+                        </td>
+                        <td>
+                            <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
+                        </td>
+                        <td>
+                            <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                                <span class="ui-icon ui-icon-trash"></span>
+                            </div>
+                        </td>
+                    </tr>
+
+                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -199,7 +208,7 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
         <table align="left" style="width: 100%">
             <tr>
                 <td>
-                    <textarea name="txtObs" id="txtObs" rows="3" style="width: 600px; margin-left:3px " ><?php echo $this->obs;?> </textarea>
+                    <textarea name="txtObs" id="txtObs" rows="3" style="width: 600px; margin-left:3px "><?php echo $this->obs; ?> </textarea>
                 </td>
             </tr>
         </table>
@@ -208,37 +217,39 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
 
     <table>
 
-    <tr>
-        <td><button id="btncancelardet" name="btncancelardet">Cancelar</button></td>
-        <td>
-            <button id="btnguardar" name="btnguardar">Guardar</button>
-        </td>
-    </tr>
+        <tr>
+            <td><button id="btncancelardet" name="btncancelardet">Cancelar</button></td>
+            <td>
+                <button id="btnguardar" name="btnguardar">Guardar</button>
+            </td>
+        </tr>
 
-</table>
+    </table>
 </div>
 
 
 <div id="dialogBuscarSeries<?php echo $this->id; ?>">
     <table class="ui-panelLayout-main">
-        <tr><td style="vertical-align: top;">
+        <tr>
+            <td style="vertical-align: top;">
                 <table style="width: 100%;">
                     <tr>
                         <td>
                             <table>
                                 <tr class="rowBuscarContribuyente<?php echo $this->id; ?>">
                                     <td>
-                                        <b>  Datos Busqueda</b>
-                                    </td></tr>
+                                        <b> Datos Busqueda</b>
+                                    </td>
+                                </tr>
                                 <tr class="rowBuscarContribuyente<?php echo $this->id; ?>">
                                     <td style="text-align: left">
-                                        <select id="cbotipob" name="cbotipob"  style="width:140px;" >
-                                            <?php  echo $library->ContenidoCombo($TipoBusqueda, 5,0); ?>
+                                        <select id="cbotipob" name="cbotipob" style="width:140px;">
+                                            <?php echo $library->ContenidoCombo($TipoBusqueda, 5, 0); ?>
                                         </select>
                                     </td>
                                     <td>Texto de busqueda:</td>
                                     <TD colspan="3">
-                                        <input class="ui-text pnl" id="c_textbusqueda" value="<?php echo $this->idSalidaProd;?>" readonly onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
+                                        <input class="ui-text pnl" id="c_textbusqueda" value="<?php echo $this->idSalidaProd; ?>" readonly onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
                                     </TD>
                                     <td> &nbsp;&nbsp;</td>
                                 </tr>
@@ -250,7 +261,7 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
                     </tr>
                     <tr>
                         <td align="center" colspan="2">
-                            <br/>
+                            <br />
                             <div id="panelResult<?php echo $this->id; ?>">
                                 <table id="tblResult<?php echo $this->id; ?>"></table>
                                 <div id="ptblResult<?php echo $this->id; ?>"></div>
@@ -270,12 +281,14 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
 
 
 <script language="javascript">
-
-    $(document).on('mouseenter', function(e) { window.onbeforeunload = null; } );
-    $(document).on('mouseleave', function(e) { window.onbeforeunload = function()
-    { return "You work will be lost."; };
-    }
-    );
+    $(document).on('mouseenter', function(e) {
+        window.onbeforeunload = null;
+    });
+    $(document).on('mouseleave', function(e) {
+        window.onbeforeunload = function() {
+            return "You work will be lost.";
+        };
+    });
 
     //Una forma de Cancelar el boton de retroceso
     /*history.pushState(null, null, 'no-back-button');
@@ -289,24 +302,24 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
      window.onpopstate = function () {
      history.go(1);
      };*/
-    document.onkeydown = function(){
-     // a presonar el f5 se actuliza la misma pagina..
-     if(window.event && window.event.keyCode == 116) {
-     /*window.status="Por favor, Haga Click en Cerrar Sesión Para Salir del Sistema de Auditoría de Servicios";
-     if (confirm('¿Estás seguro que deseas salir de la actual página?')) {
-     alert("Pulsada la tecla F5");
-     }else{
-     return false;
-     }*/
+    document.onkeydown = function() {
+        // a presonar el f5 se actuliza la misma pagina..
+        if (window.event && window.event.keyCode == 116) {
+            /*window.status="Por favor, Haga Click en Cerrar Sesión Para Salir del Sistema de Auditoría de Servicios";
+            if (confirm('¿Estás seguro que deseas salir de la actual página?')) {
+            alert("Pulsada la tecla F5");
+            }else{
+            return false;
+            }*/
 
-        Cancelar('');
-     }
+            Cancelar('');
+        }
 
-    /*if(window.event && window.event.keyCode == 8){	// cuando el usuario presione el boton retroceso o borrar no regrese atras
-     window.status="Por favor, Haga Click en Cerrar Sesión Para Salir del Sistema de Auditoría de Servicios";
-     //alert("Pulsada la tecla retroceso");
-     return false;
-     }*/
+        /*if(window.event && window.event.keyCode == 8){	// cuando el usuario presione el boton retroceso o borrar no regrese atras
+         window.status="Por favor, Haga Click en Cerrar Sesión Para Salir del Sistema de Auditoría de Servicios";
+         //alert("Pulsada la tecla retroceso");
+         return false;
+         }*/
 
     };
 
@@ -315,78 +328,76 @@ $TipoBusqueda=array( array("5","ID SALIDA"));
     /*window.onbeforeunload = function() {
      return "¿Estás seguro que deseas salir de la actual página?"
      }*/
-
-
 </script>
 
 
 <script type="text/javascript">
-themeComboBox();
+    themeComboBox();
 
-buscarTecni = function(){
-    parameters = {
-        "idsigma":  $("#identradamat").val()
+    buscarTecni = function() {
+        parameters = {
+            "idsigma": $("#identradamat").val()
+        };
+        openDialogData1("almacen/buscartecnico", parameters, 660, 500);
+        //   window.open(path + "mantenimientos/backup", "_self");
+
     };
-    openDialogData1("almacen/buscartecnico", parameters, 660,500);
-    //   window.open(path + "mantenimientos/backup", "_self");
 
-};
+    $("#cbtitulo").combobox({
+        selected: function(event, ui) {
+            var select = document.getElementById('cbtitulo');
+            var selectedOption = this.options[select.selectedIndex];
+            console.log(selectedOption.value + ': ' + selectedOption.text);
+            $("#c_motivohd").val(selectedOption.text);
+            if ($("#cbtitulo").val() == '9') {
+                $(".titulotext").show();
+                $("#c_motivo").val("");
 
-$("#cbtitulo").combobox({
-    selected: function(event, ui){
-        var select = document.getElementById('cbtitulo');
-        var selectedOption = this.options[select.selectedIndex];
-        console.log(selectedOption.value + ': ' + selectedOption.text);
-        $("#c_motivohd").val( selectedOption.text);
-        if($("#cbtitulo").val()=='9'){
-            $(".titulotext").show();
-            $("#c_motivo").val("");
-
-        }else{
-            $(".titulotext").hide();
+            } else {
+                $(".titulotext").hide();
+            }
         }
-    }
-});
-$("#cbreferencial").combobox({
-    selected: function(event, ui){
-        var select = document.getElementById('cbreferencial');
-        var selectedOption = this.options[select.selectedIndex];
-        console.log(selectedOption.value + ': ' + selectedOption.text);
-        $("#referncialhd").val( selectedOption.text);
-        if($("#cbreferencial").val()=='9'){
-            $(".referencialtext").show();
-        }else{
-            $(".referencialtext").hide();
+    });
+    $("#cbreferencial").combobox({
+        selected: function(event, ui) {
+            var select = document.getElementById('cbreferencial');
+            var selectedOption = this.options[select.selectedIndex];
+            console.log(selectedOption.value + ': ' + selectedOption.text);
+            $("#referncialhd").val(selectedOption.text);
+            if ($("#cbreferencial").val() == '9') {
+                $(".referencialtext").show();
+            } else {
+                $(".referencialtext").hide();
+            }
         }
-    }
-});
+    });
 
-$("#cbformapago").combobox({
-    selected: function(event, ui){
-        var select = document.getElementById('cbformapago');
-        var selectedOption = this.options[select.selectedIndex];
-        console.log(selectedOption.value + ': ' + selectedOption.text);
-        $("#formapagohd").val( selectedOption.text);
-        if($("#cbformapago").val()=='9'){
-            $(".formapagotext").show();
-        }else{
-            $(".formapagotext").hide();
+    $("#cbformapago").combobox({
+        selected: function(event, ui) {
+            var select = document.getElementById('cbformapago');
+            var selectedOption = this.options[select.selectedIndex];
+            console.log(selectedOption.value + ': ' + selectedOption.text);
+            $("#formapagohd").val(selectedOption.text);
+            if ($("#cbformapago").val() == '9') {
+                $(".formapagotext").show();
+            } else {
+                $(".formapagotext").hide();
+            }
         }
-    }
-});
+    });
 
 
 
 
 
 
-    function imprimir(){
-        var selr = $('#tblDetEntradaMat').jqGrid('getGridParam','selrow');
+    function imprimir() {
+        var selr = $('#tblDetEntradaMat').jqGrid('getGridParam', 'selrow');
         var row = $("#tblDetEntradaMat").jqGrid('getRowData', selr);
 
         host = '<?php echo $this->util()->getPath(); ?>report/';
-         window.open(host+"rptCotizacion.php?idCotiz="+ $("#identradamat").val() ,'_blank');
-     //console.log(host);
+        window.open(host + "rptCotizacion.php?idCotiz=" + $("#identradamat").val(), '_blank');
+        //console.log(host);
 
     }
 
@@ -394,26 +405,26 @@ $("#cbformapago").combobox({
 
 
 
-//Funcion para regresar al la grilla naterior
-    function Cancelar(){
+    //Funcion para regresar al la grilla naterior
+    function Cancelar() {
         parameters = {
-            "idretornoprod":$("#idRetornoProd").val()
+            "idretornoprod": $("#idRetornoProd").val()
         };
         $.ajax({
             url: jQuery.scriptPath + "index.php/almacen/cancelareliminadosretornoprod",
             type: 'POST',
             cache: false,
             data: parameters,
-            beforeSend: function (data) { },
-            success: function (requestData) {
+            beforeSend: function(data) {},
+            success: function(requestData) {
                 // $("#result").html(requestData);
                 //  var datos=JSON.parse(requestData);
                 window.open(path + "almacen/salidaprod", "_self");
             },
-            error: function (requestData, strError, strTipoError) {
+            error: function(requestData, strError, strTipoError) {
                 $("#result").html("Error " + strTipoError + ': ' + strError);
             },
-            complete: function (requestData, exito) {    }
+            complete: function(requestData, exito) {}
         });
 
 
@@ -422,191 +433,215 @@ $("#cbformapago").combobox({
 
 
 
-var invocaBusPersona = 0;
+    var invocaBusPersona = 0;
 
 
-cargarCategoria = function () {
-    $("#txtLicenciaCategoria").val('');
-    contenidocomboContenedor('#cboLicenciaCategoria', $("#cboLicenciaClase").val())
+    cargarCategoria = function() {
+        $("#txtLicenciaCategoria").val('');
+        contenidocomboContenedor('#cboLicenciaCategoria', $("#cboLicenciaClase").val())
 
-}
-actualizarSerie=function(a){
-
-    if(a == "" || a == undefined){
-        openDialogWarning("Seleccione un registro.");
-        return;
     }
-    console.log(a);
-    parameters = {
-        "id": a
+    actualizarSerie = function(a) {
+
+        if (a == "" || a == undefined) {
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        console.log(a);
+        parameters = {
+            "id": a
+        };
+
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/actualizarserie",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {},
+            success: function(requestData) {
+                $("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                console.log(datos[0].ok);
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+    };
+
+    buscarSeriesSalida = function(d) {
+        __gridConfigSeries.data = [];
+        __gridConfigSeries.ondblClickRow = function(rowid) {
+            row = $("#tblResult").jqGrid('getRowData', rowid);
+
+            if (invocaBusPersona == 1) {
+                $(d).parent().parent().find("input[name=txtProdSeries]").val(row.idProdSeries);
+                $(d).parent().parent().find("input[name=txtStock]").val(parseInt(row.nStock) + 1);
+                $(d).parent().parent().find("div[name=txtProducto]").html(row.producto);
+                $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
+                $(d).parent().parent().find("input[name=txtIdDetSalidaProd]").val(row.idDetSalidaProd);
+            }
+            actualizarSerie(row.idProdSeries);
+            closeDialog("dialogBuscarSeries");
+
+        };
+        BuscadorSeries.bindkeysPersona = {
+            "onEnter": __gridConfigSeries.ondblClickRow
+        };
+        BuscadorSeries.buscar();
+        $("#tblResult").jqGrid("clearGridData");
+        if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
+            $(".rowBuscarContribuyente").removeClass("row-hide");
+        }
+        //$(".rowBuscarPredio").css({display: "none"});
+        $("#dialogBuscarSeries").dialog("open");
+        $("#c_codigocontrib").focus();
     };
 
 
+    var i = 1;
+
+    deleteFilaTable = function(d) {
+        var idProdSerie = $(d).parent().parent().find("input[name=txtProdSeries]").val();
+        var idDetSalidaProd = $(d).parent().parent().find("input[name=txtIdDetSalidaProd]").val();
+        var iddetRetornoProd = $(d).parent().parent().find("input[name=txtidDetRetornoProd]").val();
+
+        if (iddetRetornoProd == "" || iddetRetornoProd == undefined) {
+            $(d).parent().parent().remove();
+            parameters = {
+                "idProdSerie": idProdSerie,
+                "idDetsalida": 0,
+                "idDetRetorno": 0
+            };
             $.ajax({
-                url: jQuery.scriptPath + "index.php/almacen/actualizarserie",
+                url: jQuery.scriptPath + "index.php/almacen/regresaestadostockprodseries",
                 type: 'POST',
                 cache: false,
                 data: parameters,
-                beforeSend: function (data) {
-                },
-                success: function (requestData) {
-                    $("#result").html(requestData);
-                    var datos=JSON.parse(requestData);
-                    console.log(datos[0].ok);
-                },
-                error: function (requestData, strError, strTipoError) {
+                beforeSend: function(data) {},
+                success: function(requestData) {},
+                error: function(requestData, strError, strTipoError) {
                     $("#result").html("Error " + strTipoError + ': ' + strError);
                 },
-                complete: function (requestData, exito) {
-                }
+                complete: function(requestData, exito) {}
             });
-};
-
-buscarSeriesSalida = function (d) {
-    __gridConfigSeries.data = [];
-    __gridConfigSeries.ondblClickRow = function (rowid) {
-        row = $("#tblResult").jqGrid('getRowData', rowid);
-
-        if (invocaBusPersona == 1) {
-            $(d).parent().parent().find("input[name=txtProdSeries]").val(row.idProdSeries);
-            $(d).parent().parent().find("input[name=txtStock]").val(parseInt(row.nStock)+1);
-            $(d).parent().parent().find("div[name=txtProducto]").html(row.producto );
-            $(d).parent().parent().find("input[name=txtSerie]").val(row.vNroSerie);
-            $(d).parent().parent().find("input[name=txtIdDetSalidaProd]").val(row.idDetSalidaProd);
+            return;
         }
-        actualizarSerie(row.idProdSeries);
-        closeDialog("dialogBuscarSeries");
 
-    };
-    BuscadorSeries.bindkeysPersona = {"onEnter": __gridConfigSeries.ondblClickRow};
-    BuscadorSeries.buscar();
-    $("#tblResult").jqGrid("clearGridData");
-    if ($(".rowBuscarContribuyente").hasClass("row-hide")) {
-        $(".rowBuscarContribuyente").removeClass("row-hide");
-    }
-    //$(".rowBuscarPredio").css({display: "none"});
-    $("#dialogBuscarSeries").dialog("open");
-    $("#c_codigocontrib").focus();
-};
+        parameters = {
+            "idProdSerie": idProdSerie,
+            "idDetsalida": idDetSalidaProd,
+            "idDetRetorno": iddetRetornoProd
+        };
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/eliminarserieretornoprod",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {},
+            success: function(requestData) {
+                $("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                console.log(datos[0][1]);
+                console.log(datos[0][0]);
+                if (datos[0][0] == "ok") {
+                    $(d).parent().parent().remove();
+                } else {
+                    openDialogInfo(datos[0][1], "280", "150", null, function() {
+                        return;
+                    });
+                }
 
-
-var i = 1;
-
-deleteFilaTable = function (d) {
-    var idProdSerie = $(d).parent().parent().find("input[name=txtProdSeries]").val();
-    var idDetSalidaProd = $(d).parent().parent().find("input[name=txtIdDetSalidaProd]").val();
-    var iddetRetornoProd = $(d).parent().parent().find("input[name=txtidDetRetornoProd]").val();
-
-     if(iddetRetornoProd == "" || iddetRetornoProd == undefined){
-     $(d).parent().parent().remove();
-         parameters = {
-             "idProdSerie": idProdSerie,
-             "idDetsalida": 0,
-             "idDetRetorno": 0
-         };
-         $.ajax({
-             url: jQuery.scriptPath + "index.php/almacen/regresaestadostockprodseries",
-             type: 'POST',
-             cache: false,
-             data: parameters,
-             beforeSend: function (data) {},
-             success: function (requestData) {},
-             error: function (requestData, strError, strTipoError) {
-                 $("#result").html("Error " + strTipoError + ': ' + strError);
-             },
-             complete: function (requestData, exito) { }
-         });
-     return;
-     }
-
-     parameters = {
-     "idProdSerie": idProdSerie,
-      "idDetsalida": idDetSalidaProd,
-     "idDetRetorno": iddetRetornoProd
-     };
-     $.ajax({
-     url: jQuery.scriptPath + "index.php/almacen/eliminarserieretornoprod",
-     type: 'POST',
-     cache: false,
-     data: parameters,
-     beforeSend: function (data) {
-     },
-     success: function (requestData) {
-     $("#result").html(requestData);
-     var datos=JSON.parse(requestData);
-     console.log(datos[0][1]);
-     console.log(datos[0][0]);
-     if(datos[0][0]=="ok"){
-     $(d).parent().parent().remove();
-     }else{
-     openDialogInfo(datos[0][1], "280", "150", null, function () {
-     return;
-     });
-     }
-
-     },
-     error: function (requestData, strError, strTipoError) {
-     $("#result").html("Error " + strTipoError + ': ' + strError);
-     },
-     complete: function (requestData, exito) {
-     }
-     });
-
-}
-agregarFilaTable = function (id) {
-    var id_combobox = "";
-
-    $("#" + id + " tbody tr:first").clone().show().find("input,select,button").each(function () {
-        if ($(this).is("select")) {
-            id_combobox = this.id + '_' + id + "_" + i;
-        }
-        $(this).attr({
-            'id': this.id + '_' + id + "_" + i,
-            'value': ''
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
         });
-    }).end().appendTo("#" + id);
 
-    themeComboBox("#" + id_combobox);
-    $("#btnBuscarSerie_" + id + "_" + i).button().click(function () {
-        invocaBusPersona = 1;
-        buscarSeriesSalida(this);
+    }
+    agregarFilaTable = function(id) {
+        var id_combobox = "";
 
-    });
-    i++;
-}
+        $("#" + id + " tbody tr:first").clone().show().find("input,select,button").each(function() {
+            if ($(this).is("select")) {
+                id_combobox = this.id + '_' + id + "_" + i;
+            }
+            $(this).attr({
+                'id': this.id + '_' + id + "_" + i,
+                'value': ''
+            });
+        }).end().appendTo("#" + id);
 
-$(function () {
+        themeComboBox("#" + id_combobox);
+        $("#btnBuscarSerie_" + id + "_" + i).button().click(function() {
+            invocaBusPersona = 1;
+            buscarSeriesSalida(this);
 
-    $("#fecretorno").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-    $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-    $("#div_titulo").html("Almacen => Retorno Productos");
+        });
+        i++;
+    }
 
-    $("#btnbuscartec").button({icons: {primary: "ui-icon-search"}});
-    $("#btnguardar").button({icons: {primary: "ui-icon-disk"}}).click(function(){
-        guardar();
-    });
-    $("#btncancelardet").button({icons: {primary: "ui-icon-cancel"}}).click(function () {
-        Cancelar('');
-    });
+    $(function() {
 
-// clone inspector
+        $("#fecretorno").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fechasta").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#div_titulo").html("Almacen => Retorno Productos");
 
-    $("#btnBuscarMaterial").button("destroy");
-    agregarFilaTable("tableRetornoProd");
-    $("#btnRegistroAgregar").click(function () {
+        $("#btnbuscartec").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        });
+        $("#btnguardar").button({
+            icons: {
+                primary: "ui-icon-disk"
+            }
+        }).click(function() {
+            guardar();
+        });
+        $("#btncancelardet").button({
+            icons: {
+                primary: "ui-icon-cancel"
+            }
+        }).click(function() {
+            Cancelar('');
+        });
+
+        // clone inspector
+
+        $("#btnBuscarMaterial").button("destroy");
         agregarFilaTable("tableRetornoProd");
-    });
-    $("#btnRegistroAgregar").button({icons: {primary: "ui-icon-plus"}});
-//fin clone inspector
+        $("#btnRegistroAgregar").click(function() {
+            agregarFilaTable("tableRetornoProd");
+        });
+        $("#btnRegistroAgregar").button({
+            icons: {
+                primary: "ui-icon-plus"
+            }
+        });
+        //fin clone inspector
 
-    //--- Buscar persona
-    Persona.init(true);
-    BuscadorSeries.init(BuscadorSeries.MODO_CERO, true);
-    BuscadorSeries.configurarDialog();
-    //---- fin buscar persona
+        //--- Buscar persona
+        Persona.init(true);
+        BuscadorSeries.init(BuscadorSeries.MODO_CERO, true);
+        BuscadorSeries.configurarDialog();
+        //---- fin buscar persona
 
 
-  /*  dialogPersona = $("#dialogBuscarPersona").dialog({
+        /*  dialogPersona = $("#dialogBuscarPersona").dialog({
         autoOpen: false,
         height: 100,
         width: 100,
@@ -628,53 +663,54 @@ $(function () {
 
 
 
-    function guardar() {
+        function guardar() {
 
-        var detalleretorno = {};
-        var objSeries = [];
+            var detalleretorno = {};
+            var objSeries = [];
 
-        //Datos generales del salida de objSeries
-        detalleretorno.idRetornoProd = $("#idRetornoProd").val();
-        detalleretorno.idSalidaProd = $("#idSalidaProd").val();
-        detalleretorno.obra = $("#txtobra").val();
-        detalleretorno.lugar = $("#txtlugar").val();
-        detalleretorno.fecha = $("#fecretorno").val();
-        detalleretorno.idtecnico = $("#txtidtecnico").val();
+            //Datos generales del salida de objSeries
+            detalleretorno.idRetornoProd = $("#idRetornoProd").val();
+            detalleretorno.idSalidaProd = $("#idSalidaProd").val();
+            detalleretorno.obra = $("#txtobra").val();
+            detalleretorno.lugar = $("#txtlugar").val();
+            detalleretorno.fecha = $("#fecretorno").val();
+            detalleretorno.idtecnico = $("#txtidtecnico").val();
+            detalleretorno.observa = $("#txtObs").val();
 
-        //Datos del detalle
-        $('#tableRetornoProd > tbody  > tr').each(function () {
-            var detSeries = {};
-            if ($(this).find("[name=txtProdSeries]").val() != '' ) {
-                detSeries.idDetRetornoProd = $(this).find("[name=txtidDetRetornoProd]").val();
-                detSeries.idProdSeries = $(this).find("[name=txtProdSeries]").val();
-                detSeries.idDetSalidaProd = $(this).find("[name=txtIdDetSalidaProd]").val();
-                detSeries.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
-                detSeries.stock = $(this).find("[name=txtStock]").val();
-                objSeries.push(detSeries);
-            }
-        });
-        detalleretorno.objSeries = objSeries;
+            //Datos del detalle
+            $('#tableRetornoProd > tbody  > tr').each(function() {
+                var detSeries = {};
+                if ($(this).find("[name=txtProdSeries]").val() != '') {
+                    detSeries.idDetRetornoProd = $(this).find("[name=txtidDetRetornoProd]").val();
+                    detSeries.idProdSeries = $(this).find("[name=txtProdSeries]").val();
+                    detSeries.idDetSalidaProd = $(this).find("[name=txtIdDetSalidaProd]").val();
+                    detSeries.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
+                    detSeries.stock = $(this).find("[name=txtStock]").val();
+                    objSeries.push(detSeries);
+                }
+            });
+            detalleretorno.objSeries = objSeries;
 
-        var pRetornoMat = {};
-        pRetornoMat.objSalidaProd = JSON.stringify(detalleretorno);
-        //console.log(JSON.stringify(pPapeleta));
-        console.log("pRetornoMat");
-        console.log(pRetornoMat);
-        $.post(path + "almacen/guardarretornoprod", pRetornoMat, function (data) {
-            console.log(data);
-            console.log(data["idRetornoProd"]);
-            if (data["a"] == '0') {
-                openDialogInfo(data["b"], "280", "150", null, function () {
-                    return;
-                });
-            }else{
-              // $("#iframeUploadDocPapeleta").attr("src", path + "papeleta/uploadarchivo?mpapeleta=" + data.idsigma);
-              //  dialogUpload.dialog("open");
-                window.open(path + "almacen/salidaprod", "_self");
-            }
+            var pRetornoMat = {};
+            pRetornoMat.objSalidaProd = JSON.stringify(detalleretorno);
+            //console.log(JSON.stringify(pPapeleta));
+            console.log("pRetornoMat");
+            console.log(pRetornoMat);
+            $.post(path + "almacen/guardarretornoprod", pRetornoMat, function(data) {
+                console.log(data);
+                console.log(data["idRetornoProd"]);
+                if (data["a"] == '0') {
+                    openDialogInfo(data["b"], "280", "150", null, function() {
+                        return;
+                    });
+                } else {
+                    // $("#iframeUploadDocPapeleta").attr("src", path + "papeleta/uploadarchivo?mpapeleta=" + data.idsigma);
+                    //  dialogUpload.dialog("open");
+                    window.open(path + "almacen/salidaprod", "_self");
+                }
 
-//
-        }, 'json');
-    };
-})
+                //
+            }, 'json');
+        };
+    })
 </script>

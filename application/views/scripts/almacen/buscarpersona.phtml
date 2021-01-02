@@ -8,8 +8,8 @@
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
                         <tr class="rowBuscarContribuyente">
-                            <input class="ui-text" id="identrada" type="hidden" value="<?php echo $this->idsigma;?>" >
-                            <input class="ui-text" id="idpag" type="hidden" value="<?php echo $this->pag;?>" >
+                            <input class="ui-text" id="identrada" type="hidden" value="<?php echo $this->idsigma; ?>">
+                            <input class="ui-text" id="idpag" type="hidden" value="<?php echo $this->pag; ?>">
                             <td width="100" style="text-align: left">C&oacute;digo:</td>
                             <td width="10">&nbsp;</td>
                             <td width="180" style="text-align: left">Apellidos y Nombre:</td>
@@ -26,11 +26,11 @@
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="3">
-                                <input class="ui-text pnl" id="c_nombrecontrib"   onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:100%" />
+                                <input class="ui-text pnl" id="c_nombrecontrib" onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:100%" />
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="3" style="text-align: left;">
-                                <input class="ui-text pnl" id="c_nrodoc"  onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:80%" />
+                                <input class="ui-text pnl" id="c_nrodoc" onkeypress="if(event.keyCode==13){buscarPersona();}" style="width:80%" />
                             </td>
                             <td>
                                 <button id="btnbuscarC" name="btnbuscarC" onclick="buscarPersona()">Buscar</button>
@@ -53,25 +53,23 @@
     </div>
 </div>
 <script type="text/javascript">
-
-
-$( "#c_nombrecontrib" ).keyup(function( event ) {
-    buscarPersona();
-    document.getElementById("c_nombrecontrib").focus();
-}).keydown(function( event ) {
-    if ( event.which == 13 ) {
+    $("#c_nombrecontrib").keyup(function(event) {
         buscarPersona();
-    }
-});
+        document.getElementById("c_nombrecontrib").focus();
+    }).keydown(function(event) {
+        if (event.which == 13) {
+            buscarPersona();
+        }
+    });
 
-$( "#c_nrodoc" ).keyup(function( event ) {
-    buscarPersona();
-    document.getElementById("c_nrodoc").focus();
-}).keydown(function( event ) {
-    if ( event.which == 13 ) {
+    $("#c_nrodoc").keyup(function(event) {
         buscarPersona();
-    }
-});
+        document.getElementById("c_nrodoc").focus();
+    }).keydown(function(event) {
+        if (event.which == 13) {
+            buscarPersona();
+        }
+    });
 
 
     optionPersona = {
@@ -86,37 +84,78 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             "Persona Contacto",
             "Estado"
         ],
-        colModel: [
-            {name: 'idProveedor', index:'idProveedor', width:70},
-            {name: 'vNombre', index:'vNombre', width:250},
-            {name: 'vTipPers', index:'vTipPers', width:100, hidden: false},
-            {name: 'vTipoDoc', index:'vTipoDoc', hidden: true},
-            {name: 'vNroDoc', index:'vNroDoc', width:60, hidden: false},
-            {name: 'vPersContac', index:'vPersContac', width:100, hidden: false},
-            {name: 'vEstado', index:'vEstado', hidden: true}
+        colModel: [{
+                name: 'idProveedor',
+                index: 'idProveedor',
+                width: 70
+            },
+            {
+                name: 'vNombre',
+                index: 'vNombre',
+                width: 250
+            },
+            {
+                name: 'vTipPers',
+                index: 'vTipPers',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'vTipoDoc',
+                index: 'vTipoDoc',
+                hidden: true
+            },
+            {
+                name: 'vNroDoc',
+                index: 'vNroDoc',
+                width: 60,
+                hidden: false
+            },
+            {
+                name: 'vPersContac',
+                index: 'vPersContac',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                hidden: true
+            }
         ],
         caption: "&nbsp;&nbsp;&nbsp;Proveedores Registradas",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             //console.log(row);
-            if($("#idpag").val()=="1"){ //##detentradamat
+            if ($("#idpag").val() == "1") { //##detentradamat
                 addIngresoMat();
-            }else{                  //##detentradaprod
+            }
+            if ($("#idpag").val() == "3") { //##detentradaactivos
+                addIngresoActivos();
+            } else { //##detentradaprod
                 addIngresoProd();
             }
 
         },
-        afterInsertRow:function(rowid,aData){
-        switch(aData.nestado){
-            case'1':
-                break;
-            case '0':
-                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'idProveedor','',{color:'red'});
-                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'vNombre','',{color:'red'});
-                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'direccf','',{color:'red'});
-                jQuery("#tblListaPersona").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-            break;
-        }
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'idProveedor', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'vNombre', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'direccf', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
@@ -124,50 +163,87 @@ $( "#c_nrodoc" ).keyup(function( event ) {
     };
 
 
-    eliminar=function(a){
-        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+    eliminar = function(a) {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if(row.idProveedor == "" || row.idProveedor == undefined){
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
             openDialogWarning("Seleccione un registro para eliminar.");
             return;
         }
         parameters = {
             "idsigma": row.idProveedor
         };
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
-           "si":function(){
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
+            "si": function() {
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {
 
-                   },
-                   success: function (requestData) {
-                       $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog1');
-                   },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
-               });
-           },
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
-           }
-       })
+                    },
+                    success: function(requestData) {
+                        $("#result").html(requestData);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog1');
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
+                });
+            },
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
+            }
+        })
 
 
     };
 
-   addIngresoMat = function() {
-        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+    addIngresoActivos = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if(row.idProveedor == "" || row.idProveedor == undefined){
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idProveedor,
+            "idEntrada": $("#identrada").val()
+        };
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/entradaactivossave",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {
+
+            },
+            success: function(requestData) {
+                //$("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                closeDialog('jqDialog2');
+                closeDialog('jqDialog1');
+                $("#identradamat").val(datos[0].idEntrada);
+                $("#txtidProveedor").val(row.idProveedor);
+                $("#nombrecontrib").val(row.vNombre);
+                // buscarDetEntradaMat(); //22-12-2020
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+
+    };
+
+    addIngresoMat = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
             openDialogWarning("Seleccione un registro.");
             return;
         }
@@ -181,68 +257,66 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             type: 'POST',
             cache: false,
             data: parameters,
-            beforeSend: function (data) {
+            beforeSend: function(data) {
 
             },
-            success: function (requestData) {
+            success: function(requestData) {
                 //$("#result").html(requestData);
-                var datos=JSON.parse(requestData);
+                var datos = JSON.parse(requestData);
                 closeDialog('jqDialog2');
                 closeDialog('jqDialog1');
                 $("#identradamat").val(datos[0].idEntrada);
-                $("#codigocontrib").val(row.idProveedor);
+                $("#txtidProveedor").val(row.idProveedor);
                 $("#nombrecontrib").val(row.vNombre);
-                buscarDetEntradaMat();
+                // buscarDetEntradaMat(); //22-12-2020
             },
-            error: function (requestData, strError, strTipoError) {
+            error: function(requestData, strError, strTipoError) {
                 $("#result").html("Error " + strTipoError + ': ' + strError);
             },
-            complete: function (requestData, exito) {
-            }
+            complete: function(requestData, exito) {}
         });
 
     };
-addIngresoProd = function() {
-    var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
-    var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-    if(row.idProveedor == "" || row.idProveedor == undefined){
-        openDialogWarning("Seleccione un registro.");
-        return;
-    }
-    parameters = {
-        "idsigma": row.idProveedor,
-        "idEntrada": $("#identrada").val()
+    addIngresoProd = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
+            openDialogWarning("Seleccione un registro.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idProveedor,
+            "idEntrada": $("#identrada").val()
+        };
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/entradaprodsave",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {
+
+            },
+            success: function(requestData) {
+                //$("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                closeDialog('jqDialog2');
+                closeDialog('jqDialog1');
+                $("#identradaprod").val(datos[0].idEntrada);
+                $("#txtidProveedor").val(row.idProveedor);
+                $("#nombrecontrib").val(row.vNombre);
+                //buscarDetEntradaProd();  //22-12-2020
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+
     };
 
-    $.ajax({
-        url: jQuery.scriptPath + "index.php/almacen/entradaprodsave",
-        type: 'POST',
-        cache: false,
-        data: parameters,
-        beforeSend: function (data) {
 
-        },
-        success: function (requestData) {
-            //$("#result").html(requestData);
-            var datos=JSON.parse(requestData);
-            closeDialog('jqDialog2');
-            closeDialog('jqDialog1');
-            $("#identradaprod").val(datos[0].idEntrada);
-            $("#codigocontrib").val(row.idProveedor);
-            $("#nombrecontrib").val(row.vNombre);
-            buscarDetEntradaProd();
-        },
-        error: function (requestData, strError, strTipoError) {
-            $("#result").html("Error " + strTipoError + ': ' + strError);
-        },
-        complete: function (requestData, exito) {
-        }
-    });
-
-};
-
-
-    nuevaPersona = function(){
+    nuevaPersona = function() {
         parameters = {
             "idsigma": '0000000000'
         };
@@ -250,9 +324,9 @@ addIngresoProd = function() {
     };
 
     verPersona = function() {
-        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if(row.idProveedor == "" || row.idProveedor == undefined){
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -264,10 +338,10 @@ addIngresoProd = function() {
 
     };
 
-    estadoPersona = function(){
-        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+    estadoPersona = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if(row.idProveedor == "" || row.idProveedor == undefined){
+        if (row.idProveedor == "" || row.idProveedor == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -275,72 +349,80 @@ addIngresoProd = function() {
             "idsigma": row.idProveedor
         };
 
-        openDialogData1("mantenimientos/estados",{codigo:row.idProveedor},)
+        openDialogData1("mantenimientos/estados", {
+            codigo: row.idProveedor
+        }, )
 
     };
 
 
-    function buttonsGridPerson(){
+    function buttonsGridPerson() {
         $("#tblListaPersona")
-            .navGrid('#ptblListaPersona', {edit:false,add:false,del:false,search:false,refresh:false})
+            .navGrid('#ptblListaPersona', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-           .navButtonAdd('#ptblListaPersona',{
-                caption:"Agregar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaPersona', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaPersona();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
 
-            .navButtonAdd('#ptblListaPersona',{
-                caption:"Editar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaPersona', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     verPersona();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
-            /*
-            .navButtonAdd('#ptblListaPersona',{
-                caption:"Eliminar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-                    eliminar();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()
+        /*
+        .navButtonAdd('#ptblListaPersona',{
+            caption:"Eliminar&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+                eliminar();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaPersona',{
-                caption:"Imprimir&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-             imprimirperso();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()*/
+        .navButtonAdd('#ptblListaPersona',{
+            caption:"Imprimir&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+         imprimirperso();
+            },
+            position:"last"
+        })
+        .navSeparatorAdd()*/
         ;
     }
 
 
-    function imprimirperso(){
-        var selr = $('#tblListaPersona').jqGrid('getGridParam','selrow');
+    function imprimirperso() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-//console.log(row);
+        //console.log(row);
         //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.idProveedor );
     }
 
     buscarPersona = function() {
-        var params = '['
-            + '["@codigo", "' + $("#c_codigocontrib").val() + '"],'
-            + '["@nombres", "' + $("#c_nombrecontrib").val() + '"],'
-			+ '["@documento", "' + $("#c_nrodoc").val() + '"]'
-            + ']';
+        var params = '[' +
+            '["@codigo", "' + $("#c_codigocontrib").val() + '"],' +
+            '["@nombres", "' + $("#c_nombrecontrib").val() + '"],' +
+            '["@documento", "' + $("#c_nrodoc").val() + '"]' +
+            ']';
         parameters = {
             "name": "tblListaPersona",
             "procedure": "Bus_Proveedor",
@@ -349,17 +431,16 @@ addIngresoProd = function() {
         };
 
         procesarProcedimientoJSON(
-            "panelListaPersona"
-            , "tblListaPersona"
-            , optionPersona
-            , parameters
-            , null
-            , buttonsGridPerson
+            "panelListaPersona", "tblListaPersona", optionPersona, parameters, null, buttonsGridPerson
         );
     };
 
-    $(function(){
-       buscarPersona();
-        $("#btnbuscarC").button({icons: {primary: "ui-icon-search"}});
+    $(function() {
+        buscarPersona();
+        $("#btnbuscarC").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        });
     });
 </script>

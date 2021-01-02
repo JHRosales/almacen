@@ -1,6 +1,6 @@
 <div id="panelMantenimientoProductos" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 455px;margin: 3px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <label>Mantenimiento de Materiales</label>
+        <label>Mantenimiento de Activos</label>
     </div>
     <form id="frmmaterial" name="frmmaterial" method="post">
         <table border="0" class="ui-table-panelLayout">
@@ -22,12 +22,10 @@
             </tr>
             <tr>
                 <td style="text-align: left">
-                    Tipo Material
+                    Serie
                 </td>
                 <td style="text-align: left">
-                    <select id="cbotipomate" name="cbotipomate" style="width:140px;">
-                        <?php echo $this->util()->getComboContenedorOtro('', $this->idTipoMaterial, 'Cmb_TipoMaterial', '@idTipoMat'); ?>
-                    </select>
+                    <input class="editable ui-text" size="25" style="" maxlength="25" type="text" id="txtSerie" name="txtSerie" value="<?php echo $this->vSerie; ?>" />
                 </td>
             </tr>
             <tr>
@@ -40,52 +38,30 @@
             </tr>
             <tr>
                 <td style="text-align: left">
-                    Unidad de Medida
+                    Modelo
                 </td>
                 <td style="text-align: left">
-                    <select id="cboUnidadMed" name="cboUnidadMed" style="width:140px;">
-                        <?php echo $this->util()->getComboContenedorOtro('', $this->idUnidadMedida, 'Cmb_UnidadMedida', '@idUnidMed'); ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: left">
-                    Categoria <?php echo $this->idCategoria ?>
-                </td>
-                <td style="text-align: left">
-                    <select id="cbocatego" name="cbocatego" style="width:140px;">
-                        <?php echo $this->util()->getComboContenedorOtro('', $this->idCategoria, 'Cmb_Categoria', '@idCat'); ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: left">
-                    Tipo Moneda
-                </td>
-                <td style="text-align: left">
-                    <select id="cbotipomon" name="cbotipomon" style="width:140px;">
-                        <?php echo $this->util()->getComboContenedorOtro('', $this->idTipoMoneda, 'Cmb_TipoMoneda', '@idTipoMon'); ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: left">
-                    Costo USD
-                </td>
-                <td style="text-align: left">
-                    <input class="editable ui-text" style="" type="text" id="txtcosto" name="txtcosto" value="<?php echo $this->ccosto; ?>" />
+                    <input class="editable ui-text" size="50" style="" type="text" id="txtmodelo" name="txtmodelo" value="<?php echo $this->vMarca; ?>" />
                 </td>
             </tr>
 
-            <tr style="display: none">
+
+            <tr>
                 <td style="text-align: left">
                     Descripci&oacute;n
                 </td>
                 <td style="text-align: left">
-                    <textarea class="editable ui-text" style="width:260px; height:100px;max-width:260px; max-height:100px;" id="txtdescrip" name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
+                    <textarea class="editable ui-text" style="width:300px; height:100px;max-width:300px; max-height:100px;" id="txtdescrip" name="txtdescrip"><?php echo $this->vDescrip; ?></textarea>
                 </td>
             </tr>
-
+            <tr>
+                <td style="text-align: left">
+                    Stock
+                </td>
+                <td style="text-align: left">
+                    <input class="editable ui-text" size="20" style="" maxlength="6" type="number" id="txtStock" name="txtStock" value="<?php echo $this->nStock; ?>" />
+                </td>
+            </tr>
             <tr style="display: block">
                 <td style="text-align: left">
                     <input type="checkbox" name="estado" value="1" id="estado" class="ui-text" <?php if ($this->nestado != '') {
@@ -101,7 +77,7 @@
 
             <tr>
                 <td colspan="2" style="text-align: center;">
-                    <button type="button" style="width:120px;" id="btnguardarperson" name="btnguardarperson" onclick="guardarMaterial()">
+                    <button type="button" style="width:120px;" id="btnguardarperson" name="btnguardarperson" onclick="guardaractivos()">
                         Guardar
                     </button>
                     <button type="button" style="width:120px;" id="btncancelperson" name="btncancelperson" onclick="cerrarMantProd()">
@@ -126,21 +102,19 @@
         },
         text: true
     });
-    themeComboBox("#cbotipomate");
     themeComboBox("#cbocatego");
     themeComboBox("#cboUnidadMed");
-    themeComboBox("#cbotipomon");
-
 
     function cerrarMantProd() {
         closeDialog("jqDialog3");
     }
 
-    function guardarMaterial() {
+    function guardaractivos() {
         var vnombre = $("#txtvnombreMat").val();
+        var vSerie = $("#txtSerie").val();
         var form = $("#frmmaterial");
         var catego = $("#cbocatego").val();
-        var tipom = $("#cbotipomate").val();
+
         var unM = $("#cboUnidadMed").val();
 
         if (document.getElementById("estado").checked) {
@@ -161,25 +135,19 @@
             });
             return;
         }
-        /* if($.trim(tipom) == "9999999999"){
-             openDialogError("Seleccione Tipo Mat", "250", "150", function() {
-                 $("#txtvnrodoc").focus();
-             });
-             return;
-         }
 
-         if($.trim(unM) == "9999999999"){
-             openDialogError("Seleccione Unidad de Medida", "250", "150", function() {
-                 $("#txtvnrodoc").focus();
-             });
-             return;
-         }*/
+        if ($.trim(vSerie) == "") {
+            openDialogError("Ingrese la Serie", "250", "150", function() {
+                $("#txtSerie").focus();
+            });
+            return;
+        }
 
 
         $.ajax({
             dataType: "html",
             type: "POST",
-            url: path + "mantenimientos/guardarmaterial/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            url: path + "mantenimientos/guardaractivos/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
             data: form.serialize() + "&estado=" + nestado1,
             success: function(requestData) { //Llamada exitosa)
                 var datos = JSON.parse(requestData);
@@ -188,7 +156,7 @@
                 } else {
                     openDialogInfo("Registrado correctamente");
                     $("#c_codigocontrib").val(requestData);
-                    buscarMate();
+                    buscarActivos();
                     cerrarMantProd();
                 }
 

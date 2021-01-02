@@ -65,6 +65,13 @@ class MantenimientosController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
         }
     }
+    public function buscaractivosAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+    }
     public function buscartasacambioAction()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -449,12 +456,12 @@ class MantenimientosController extends Zend_Controller_Action
         if ($this->getRequest()->isXmlHttpRequest()) {
             $cn = new Model_DataAdapter();
 
-            $idMaterial = $this->_request->getPost('idMaterial');
+            $idActivos = $this->_request->getPost('idActivos');
 
             $params = null;
-            $params[] = array('@p_idmat', $idMaterial);
+            $params[] = array('@p_idact', $idActivos);
 
-            $mat = $cn->executeAssocQuery('borrar_material', $params);
+            $mat = $cn->executeAssocQuery('borrar_activo', $params);
             // $cperson = count($prod);
             //echo $prod;
             echo json_encode($mat);
@@ -842,7 +849,7 @@ class MantenimientosController extends Zend_Controller_Action
                 $this->view->idTipoMaterial = $datos[0]['idTipoMaterial'];
                 $this->view->vMarca = $datos[0]['vMarca'];
                 $this->view->idUnidadMedida = $datos[0]['idUnidadMed'];
-                $this->view->idCategoria = $datos[0]['idCategoria'];
+                $this->view->idCategoria = $datos[0]['idCatego'];
                 $this->view->idTipoMoneda = $datos[0]['idTipoMon'];
                 $this->view->ccosto = $datos[0]['nCosto'];
                 $this->view->nestado = $datos[0]['vEstado'];
@@ -850,6 +857,52 @@ class MantenimientosController extends Zend_Controller_Action
         }
     }
 
+    public function activosAction()
+    {
+        $func = new Libreria_Pintar();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $this->view->idsigma = $idsigma;
+            if ($idsigma == '...') {
+                $idsigma = '';
+            }
+            $cn = new Model_DataAdapter();
+            $parametros = null;
+            $parametros[] = array('@tBusqueda', '1');
+            $parametros[] = array('@vDatoBus', $idsigma);
+
+            $datos = $cn->executeAssocQuery(
+                'almacen.Bus_Activos',
+                $parametros
+            );
+
+
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->idActivos = '';
+                $this->view->vNombre = '';
+                $this->view->vSerie = '';
+                $this->view->vMarca = '';
+                $this->view->vModelo = '';
+                $this->view->vDescrip = '';
+                $this->view->nStock = '';
+                $this->view->nestado = '';
+            } else {
+                $this->view->idActivos = $datos[0]['idActivos'];
+                $this->view->vNombre = $datos[0]['vNombre'];
+                $this->view->vSerie = $datos[0]['vSerie'];
+                $this->view->vMarca = $datos[0]['vMarca'];
+                $this->view->vModelo = $datos[0]['vModelo'];
+                $this->view->vDescrip = $datos[0]['vDescripcion'];
+                $this->view->nStock = $datos[0]['nStock'];
+                $this->view->nestado = $datos[0]['vEstado'];
+            }
+        }
+    }
 
     public function nuevosoportedesdeventaAction()
     {
@@ -1089,6 +1142,63 @@ class MantenimientosController extends Zend_Controller_Action
             //echo $person[0][0];
         }
     }
+
+    public function guardaractivosAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $cn = new Model_DataAdapter();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal = $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+
+            $idsigma = $this->_request->getPost('txtidsigma');
+            $vnombre = $this->_request->getPost('txtvnombreMat');
+            $vserie = $this->_request->getPost('txtSerie');
+            $vmarca = $this->_request->getPost('txtmarca');
+            $vmodelo = $this->_request->getPost('txtmodelo');
+            $vdescrip = $this->_request->getPost('txtdescrip');
+            $nStock = $this->_request->getPost('txtStock');
+            $estado = $this->_request->getPost('estado');
+
+            if ($idsigma == '...') {
+                $idsigma = '';
+                $ttrans = '1';
+            } else {
+                $ttrans = '2';
+            }
+
+
+            $texto2 = str_replace(
+                array("á", "é", "í", "ó", "ú", "ñ", "�?", "É", "�?", "Ó", "Ú", "Ñ"),
+                array(
+                    "&aacute;", "&eacute;", "&iacute;", "&oacute;", "&uacute;", "&ntilde;",
+                    "&Aacute;", "&Eacute;", "&Iacute;", "&Oacute;", "&Uacute;", "&Ntilde;"
+                ),
+                $vnombre
+            );
+            $params = null;
+            $params[] = array('@ttrans', $ttrans);
+            $params[] = array('@idActivo', $idsigma);
+            $params[] = array('@vNombre', utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto2))));
+            $params[] = array('@vSerie', $vserie);
+            $params[] = array('@vMarca', $vmarca);
+            $params[] = array('@vModelo', $vmodelo);
+            $params[] = array('@vDescrip', $vdescrip);
+            $params[] = array('@nStock', $nStock);
+            $params[] = array('@vEstado', $estado);
+            $params[] = array('@vUsernm', $usuario);
+            $params[] = array('@vHostnm', $host);
+
+            $person = $cn->ejec_store_procedura_sql('almacen.InsUpd_Activos', $params);
+            echo json_encode($person);
+        }
+    }
+
     public function guardartasacambioAction()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -2287,6 +2397,7 @@ class MantenimientosController extends Zend_Controller_Action
             $ctipdocu = $this->_request->getParam('vDatoBusDos');
             $cModelo = $this->_request->getParam('vModelo');
             $cSerieN = $this->_request->getParam('vSerieN');
+            $npagina = $this->_request->getParam('npagina');
             $cn = new Model_DataAdapter();
             $procedure = 'almacen.Bus_ProdSeriesMant';
             $parameters[] = array("@tBusqueda", $type);
@@ -2294,6 +2405,7 @@ class MantenimientosController extends Zend_Controller_Action
             $parameters[] = array("@vDatoBusDos", $ctipdocu);
             $parameters[] = array("@vModelo", $cModelo);
             $parameters[] = array("@vSerieN", $cSerieN);
+            $parameters[] = array("@npagina", $npagina);
             $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
             echo json_encode($recordsDdocument);
         }

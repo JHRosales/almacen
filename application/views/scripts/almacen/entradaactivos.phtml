@@ -1,0 +1,628 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoTecnolo = array(array("1", "IP"), array("2", "HCVI"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVEEDOR"), array("3", "MARCA"), array("4", "FECHA"));
+
+?>
+<script type="text/javascript">
+    $("#cbotipob").combobox({
+        selected: function(event, ui) {
+            buscarEntradaMate();
+        }
+    });
+
+
+    optionEntradaMat = {
+        width: 1100,
+        height: 250,
+        colNames: [
+            'Codigo',
+            'idMaterial',
+            'Material',
+            'Marca',
+            'idTipoMaterial',
+            'Tipo Material',
+            'idUnidadMed',
+            'Unidadad Medidad',
+            'idProveedor',
+            'Proveedor',
+            'vFacturaComp',
+            "Sub Total",
+            "Igv",
+            "nPrecioTotal",
+            "idTipo Moneda",
+            "Tipo Moneda",
+            "dFecIngreso",
+            "vEstado",
+            "Borrar"
+            /*,"Nuevo"
+            ,"Imprimir"*/
+        ],
+        colModel: [{
+                name: 'idEntradaActivos',
+                index: 'idEntradaActivos',
+                width: 100
+            },
+            {
+                name: 'idMaterial',
+                index: 'idMaterial',
+                width: 100,
+                hidden: true
+            },
+            {
+                name: 'vNombreMat',
+                index: 'vNombreMat',
+                width: 90,
+                hidden: true
+            },
+            {
+                name: 'vMarca',
+                index: 'vMarca',
+                width: 100,
+                hidden: true
+            },
+            {
+                name: 'idTipoMaterial',
+                index: 'idTipoMaterial',
+                width: 200,
+                hidden: true
+            },
+            {
+                name: 'vTipoMaterial',
+                index: 'vTipoMaterial',
+                width: 100,
+                hidden: true
+            },
+            {
+                name: 'idUnidadMed',
+                index: 'idUnidadMed',
+                width: 80,
+                hidden: true
+            },
+            {
+                name: 'vUnidadMed',
+                index: 'vUnidadMed',
+                width: 80,
+                hidden: true
+            },
+            {
+                name: 'idProveedor',
+                index: 'idProveedor',
+                width: 150,
+                hidden: true
+            },
+            {
+                name: 'vProveedor',
+                index: 'vProveedor',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'vFacturaComp',
+                index: 'vFacturaComp',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'nSubtotal',
+                index: 'nSubtotal',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'nIgv',
+                index: 'nIgv',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'nPrecioTotal',
+                index: 'nPrecioTotal',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'nTipoMoneda',
+                index: 'nTipoMoneda',
+                width: 100,
+                hidden: true
+            },
+            {
+                name: 'TipoMoneda',
+                index: 'TipoMoneda',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'dFecIngreso',
+                index: 'dFecIngreso',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 50,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                }
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 40,
+                align: 'center',
+                formatter: btndocumtall,
+                search: false
+            }
+            /* ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
+             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Entrada Activos",
+        ondblClickRow: function(id) {
+            var row = $(this).getRowData(id);
+            //console.log(row);
+            //dobleclickPersona(row);
+            verCotizacion();
+        },
+        afterInsertRow: function(rowid, aData) {
+            switch (
+                aData.nestado
+            ) {
+                case '1':
+                    break;
+                case '0':
+
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell', rowid, 'idEntradaActivos', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell', rowid, 'idMaterial', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell', rowid, 'vNombreMat', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaMat").jqGrid('setCell', rowid, 'vMarca', '', {
+                        color: 'red'
+                    });
+                    break;
+
+
+            }
+
+
+
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+        }
+    };
+
+    /*
+     <div id="panelListaEntradaMat" align="center" style="width: 99%;margin: 3px;">
+     <table id="tblListaEntradaMat"></table>
+     <div id="ptblListaEntradaMat"></div>
+     </div>
+     */
+
+    eliminar = function(a) {
+        var selr = $('#tblListaEntradaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaEntradaMat").jqGrid('getRowData', selr);
+        if (row.cidpers == "" || row.cidpers == undefined) {
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
+
+            "si": function() {
+                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {},
+                    success: function(requestData) {
+                        $("#result").html(requestData);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog1');
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
+
+
+                });
+            },
+
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        })
+
+
+    };
+
+
+
+    function chkEliminar(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? '  ' : '') + '/>';
+    }
+
+    function changecheckboxcconcluirexp(rowId) {
+
+        var row = jQuery("#tblListaEntradaMat").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Cambiar estado?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.idEntradaActivos = row.idEntradaActivos;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "almacen/cotizaciondel", parmter, updCheckconcluir, 'json');
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', false);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+
+    function updCheckconcluir(data) {
+        buscarEntradaMate();
+    }
+
+
+
+
+
+    // -----> Borrar============================================00
+    function btndocumtall(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
+            'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
+            'onclick="accionborrarcotizacion(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            '<span class="ui-icon ui-icon-trash"></span></div></div>';
+    }
+
+    function accionborrarcotizacion(rowId) {
+        var rowdat = jQuery("#tblListaEntradaMat").jqGrid('getRowData', rowId);
+
+        var paramtrs = {
+            idEntradaActivos: rowdat.idEntradaActivos
+        }
+        openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
+            "Si": function() {
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarentradamat",
+                    type: 'POST',
+                    cache: false,
+                    data: paramtrs,
+                    beforeSend: function(data) {},
+                    success: function(requestData) {
+                        var datos = JSON.parse(requestData);
+
+
+                        console.log(datos);
+                        var parameters = {
+                            idcotizacion: datos[0].idEntradaActivos
+                        };
+                        buscarEntradaMate();
+                        closeDialog("jqDialogConfirmacion1");
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
+                });
+            },
+            "No": function() {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+
+
+    }
+    // -----> Nuevo ====================================================
+    function btnNuevo(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
+    }
+
+    function accionbtnNuevo(rowId) {
+        var rowdat = jQuery("#tblListaEntradaMat").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idEntradaActivos: rowdat.idEntradaActivos
+        }
+        console.log(paramtrs);
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/copiarcotiz",
+            type: 'POST',
+            cache: false,
+            data: paramtrs,
+            beforeSend: function(data) {
+
+            },
+            success: function(requestData) {
+                var datos = JSON.parse(requestData);
+                console.log(datos);
+                var parameters = {
+                    idcotizacion: datos[0].idEntradaActivos
+                }
+                var _post = $.post(path + "almacen/detcotizacion", parameters);
+                _post.success(function(request) {
+                    $("#panelMantenimientoCotizacion").html(request);
+                });
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+
+
+
+    }
+
+    // -----> Imprimir ====================================================
+    function btnImprimir(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\'' + options.rowId + '\');">' +
+            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
+    }
+
+    function accionbtnImprimir(rowId) {
+        var rowdat = jQuery("#tblListaEntradaMat").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idEntradaActivos: rowdat.idEntradaActivos
+        }
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        window.open(host + "rptCotizacion.php?idEntradaActivos=" + rowdat.idEntradaActivos, '_blank');
+    }
+
+
+
+
+
+
+    nuevaEntradaActivos = function() {
+        parameters = {
+            "idsigma": '0000000000'
+        };
+        window.open(path + "almacen/detentradaactivos", "_self");
+    };
+    verCotizacion = function() {
+        var selr = $('#tblListaEntradaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaEntradaMat").jqGrid('getRowData', selr);
+        if (row.idEntradaActivos == "" || row.idEntradaActivos == undefined) {
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idEntradaActivos": row.idEntradaActivos
+        };
+        var _post = $.post(path + "almacen/detentradaactivos", parameters);
+        _post.success(function(request) {
+            $("#panelMantenimientoCotizacion").html(request);
+        });
+
+
+    };
+
+    estadoPersona = function() {
+        var selr = $('#tblListaEntradaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaEntradaMat").jqGrid('getRowData', selr);
+        if (row.cidpers == "" || row.cidpers == undefined) {
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        openDialogData1("mantenimientos/estados", {
+            codigo: row.cidpers
+        }, 600)
+
+    };
+
+
+    function buttonsGridPerson() {
+        $("#tblListaEntradaMat")
+            .navGrid('#ptblListaEntradaMat', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
+
+            .navButtonAdd('#ptblListaEntradaMat', {
+                caption: "Crear&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
+                    nuevaEntradaActivos();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd()
+
+
+
+            .navButtonAdd('#ptblListaEntradaMat', {
+                caption: "Imprimir&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
+                    imprimir();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd();
+    }
+
+
+    function imprimir() {
+        var selr = $('#tblListaEntradaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaEntradaMat").jqGrid('getRowData', selr);
+        //console.log(row);
+        //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.idEntradaActivos );
+        if (row.idEntradaActivos == "" || row.idEntradaActivos == undefined) {
+            openDialogWarning("Seleccione cotizacion.");
+            return;
+        }
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        window.open(host + "rptCotizacion.php?idEntradaActivos=" + row.idEntradaActivos, '_blank');
+    }
+
+
+
+    buscarEntradaMate = function() {
+
+        var tipob = $("#cbotipob").val();
+        var params = '[' +
+            '["@tBusqueda", "' + tipob + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"],' +
+            '["@vFecIni", "' + $("#fecdesde").val() + '"],' +
+            '["@vFecFin", "' + $("#fechasta").val() + '"]' +
+            ']';
+        parameters = {
+            "name": "tblListaEntradaMat",
+            "procedure": "almacen.Bus_EntradaActivos",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaEntradaMat", "tblListaEntradaMat", optionEntradaMat, parameters, null, buttonsGridPerson
+        );
+    };
+
+    $(function() {
+        $("#fecdesde").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fechasta").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        buscarEntradaMate();
+        $("#btnbuscar").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        });
+        $("#div_titulo").html("Almacen => Entrada Activos");
+
+    });
+
+
+    //  themeComboBox("#cbo_bus");
+</script>
+<div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+    <div class="ui-widget ui-state-verde ui-corner-top ui-title">
+        <label>ENTRADA ACTIVOS</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:15px;">
+                        <tr>
+                            <td>
+                                <b> Datos Busqueda</b>
+                            </td>
+                        </tr>
+
+                        <tr class="rowdatospsm" id="rowdatospsm">
+                            <td style="text-align: left">
+                                <select id="cbotipob" name="cbotipob" style="width:140px;">
+                                    <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
+                                </select>
+                            </td>
+                            <td></td>
+                            <TD colspan="8">
+                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarEntradaMate();}" style="width:100%" />
+                            </TD>
+                            <td> &nbsp;&nbsp;</td>
+                            <td rowspan="3">
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarEntradaMate()">Buscar</button>
+                            </td>
+                        </tr>
+                        <tr class="rowcoti">
+
+                            <td width="100" style="text-align: left">Fecha Desde:</td>
+                            <td width="30">&nbsp;</td>
+                            <td width="200" style="text-align: left">Fecha Hasta:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="200" colspan="5" style="text-align: left; display: none;">Nro. Cotizacion:</td>
+
+                        </tr>
+                        <tr class="rowbcoti" id="panelbcoti">
+
+                            <td>
+                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="2">
+                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left; display: none;">
+                                <input class="ui-text pnl" id="c_nrocoti" onkeypress="if(event.keyCode==13){buscarEntradaMate();}" style="width:50%" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+
+                        <!--
+                        <tr><td>
+                                <b>  Datos Producto / Servicio</b>
+                            </td></tr>
+
+                         <table border="0" style="margin-left:45px;">
+                            <tr>
+                                <td>Titulo:
+                                </td>
+                            </tr>
+
+
+                        </table>-->
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+    <div id="panelListaEntradaMat" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
+        <table id="tblListaEntradaMat"></table>
+        <div id="ptblListaEntradaMat"></div>
+    </div>
+    <br />
+</div>

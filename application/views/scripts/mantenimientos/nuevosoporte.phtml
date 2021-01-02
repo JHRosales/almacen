@@ -1,115 +1,111 @@
-<div id="panelMantenimientoProductos"
-     align="center"
-     class="ui-widget ui-widget-content ui-corner-top"
-     style="width: 565px;margin: 3px;">
+<div id="panelMantenimientoProductos" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 565px;margin: 3px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
         <label>Mantenimiento de Productos de Soporte</label>
     </div>
-<form id="frmsoporte" name="frmsoporte" method="post">
-    <table border="0" class="ui-table-panelLayout">
-        <tr>
-            <td style="text-align: left">
-                C&oacute;digo
-            </td>
-            <td style="text-align: left">
-                <input class="editable ui-text"
-                       style="background-color: #e4e4e4;"
-                       type="text"
-                       id="txtidsigma"
-                       name="txtidsigma"
-                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
-            </td>
-        </tr>
+    <form id="frmsoporte" name="frmsoporte" method="post">
+        <table border="0" class="ui-table-panelLayout">
+            <tr>
+                <td style="text-align: left">
+                    C&oacute;digo
+                </td>
+                <td style="text-align: left">
+                    <input class="editable ui-text" style="background-color: #e4e4e4;" type="text" id="txtidsigma" name="txtidsigma" value="<?php echo $this->idsigma; ?>" readonly="readonly" />
+                </td>
+            </tr>
 
-        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+            <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
 
 
-            <td>
-                 Producto
-                <input class="ui-text-disable" type="hidden" readonly  name="codigoprod" id="codigoprod" value="<?php echo $this->codigoprod;?>"  maxlength="10" style="width:90px" />
-            </td>
-            <td colspan="3">
-                <label class="ui-text-disable pnl"  id="nombreprod" readonly style="margin: 0px; width: 409px; height: 43px;"><?php echo $this->nombreprod;?> </label>
+                <td>
+                    Producto
+                    <input class="ui-text-disable" type="hidden" readonly name="codigoprod" id="codigoprod" value="<?php echo $this->codigoprod; ?>" maxlength="10" style="width:90px" />
+                </td>
+                <td colspan="3">
+                    <label class="ui-text-disable pnl" id="nombreprod" readonly style="margin: 0px; width: 409px; height: 43px;"><?php echo $this->nombreprod; ?> </label>
 
-            </td>
-            <td rowspan="1">
-                <button id="btnbuscarp" name="btnbuscarp" onclick="buscarProducto()">Prod</button>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: left">
-                Nro Serie
-            </td>
-            <td style="text-align: left">
-                <input class="editable ui-text"
-                       size="55"
-                       style=""
-                       type="text"
-                       id="txtserie"
-                       name="txtserie"
-                       value="<?php echo $this->vNroSerie; ?>"/>
-            </td>
-        </tr>
+                </td>
+                <td rowspan="1">
+                    <button id="btnbuscarp" name="btnbuscarp" onclick="buscarProducto()">Prod</button>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Nro Serie
+                </td>
+                <td style="text-align: left">
+                    <input class="editable ui-text" size="55" style="" type="text" id="txtserie" name="txtserie" value="<?php echo $this->vNroSerie; ?>" />
+                </td>
+            </tr>
 
 
-        <tr style="display: none">
-            <td style="text-align: left">
-                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
-            </td>
+            <tr style="display: none">
+                <td style="text-align: left">
+                    <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado != '') {
+                                                                                                                if ($this->nestado == 1) {
+                                                                                                                    echo 'checked';
+                                                                                                                }
+                                                                                                            } else {
+                                                                                                                echo 'checked';
+                                                                                                            } ?>> Estado
+                </td>
 
-        </tr>
+            </tr>
 
-        <tr>
-            <td colspan="2" style="text-align: center;">
-                <button type="button" style="width:120px;" id="btnguardarsopor" name="btnguardarsopor" onclick="guardarMaterial()">
-                    Guardar
-                </button>
-                <button type="button" style="width:120px;" id="btncancelsopor" name="btncancelsopor" onclick="cerrarMantProd()">
-                    Cancelar
-                </button>
-            </td>
-        </tr>
-    </table>
-</form>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button type="button" style="width:120px;" id="btnguardarsopor" name="btnguardarsopor" onclick="guardarMaterial()">
+                        Guardar
+                    </button>
+                    <button type="button" style="width:120px;" id="btncancelsopor" name="btncancelsopor" onclick="cerrarMantProd()">
+                        Cancelar
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 <script type="text/javascript">
     $("#btnguardarsopor").button({
-        icons:{primary:'ui-icon-disk'},
-        text:true
+        icons: {
+            primary: 'ui-icon-disk'
+        },
+        text: true
     });
 
     $("#btncancelsopor").button({
-        icons:{primary:'ui-icon-close'},
-        text:true
+        icons: {
+            primary: 'ui-icon-close'
+        },
+        text: true
     });
     themeComboBox("#cbotipomat");
     themeComboBox("#cbocatego");
     themeComboBox("#cboUnidadMed");
 
-    buscarProducto = function(){
+    buscarProducto = function() {
         parameters = {
-            "idsigma":  $("#codigoprod").val(),
-            "pag":"2"
+            "idsigma": $("#codigoprod").val(),
+            "pag": "2"
         };
-        openDialogData1("almacen/addproducto", parameters, 660,500);
+        openDialogData1("almacen/addproducto", parameters, 660, 500);
     };
 
-    function cerrarMantProd(){
-        closeDialog("jqDialog2");
+    function cerrarMantProd() {
+        closeDialog("jqDialog3");
     }
 
-    function guardarMaterial(){
+    function guardarMaterial() {
         var form = $("#frmsoporte");
         var codprod = $("#codigoprod").val();
         var vserie = $("#txtserie").val();
 
-        if($.trim(codprod) == ""){
+        if ($.trim(codprod) == "") {
             openDialogError("Seleccione Producto", "250", "150", function() {
                 $("#txtvnombre").focus();
             });
             return;
         }
-        if($.trim(vserie) == ""){
+        if ($.trim(vserie) == "") {
             openDialogError("Ingrese Serie", "250", "150", function() {
                 $("#txtvnombre").focus();
             });
@@ -121,18 +117,18 @@
             dataType: "html",
             type: "POST",
             url: path + "mantenimientos/guardarsoporte/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-            data:form.serialize() ,
-            success: function(requestData){ 	//Llamada exitosa)
+            data: form.serialize(),
+            success: function(requestData) { //Llamada exitosa)
                 openDialogInfo("Registrado correctamente");
                 $("#c_codigocontrib").val(requestData);
-                buscarSoporte ();
+                buscarSoporte();
                 cerrarMantProd();
             },
-            error: function(requestData, errNumber, errMessage){
-                if(errNumber == '') {
+            error: function(requestData, errNumber, errMessage) {
+                if (errNumber == '') {
                     openDialogError("No se puede determinar el error.");
                 } else {
-                    openDialogError(errNumber +': ' + errMessage);
+                    openDialogError(errNumber + ': ' + errMessage);
                 }
             }
         });
@@ -141,7 +137,7 @@
 
 
 
-    $( document ).ready(function() {
+    $(document).ready(function() {
         $("#btnbuscarp").button(ICON_SEARCH);
 
 

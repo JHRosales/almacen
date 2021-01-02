@@ -1,6 +1,6 @@
 <div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 100%;margin: 3px; height:95%;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <label>Buscador de personas</label>
+        <label>Buscador de Cotizacion</label>
     </div>
     <div id="dialogBuscarContribuyentePredio">
         <table class="ui-panelLayout-main">
@@ -9,19 +9,19 @@
                     <table border="0" style="margin-left:15px;">
                         <tr class="rowBuscarContribuyente">
                             <input class="ui-text" id="idcotizacion" type="hidden" value="<?php echo $this->idsigma; ?>">
-                            <td width="100" style="text-align: left">C&oacute;digo:</td>
+                            <td width="100" style="text-align: left">Nro Cotizacion:</td>
                             <td width="10">&nbsp;</td>
-                            <td width="180" style="text-align: left">Apellidos y Nombre:</td>
+                            <td width="180" style="text-align: left">Apellidos y Nombre Cliente:</td>
                             <td width="10">&nbsp;</td>
                             <td width="100">&nbsp;</td>
                             <td width="10">&nbsp;</td>
-                            <td width="100" colspan="3" style="text-align: left">Nro. Documento:</td>
+                            <td width="100" colspan="3" style="text-align: left">Nro. Documento Cliente:</td>
                             <td width="20">&nbsp;</td>
                         </tr>
                         <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
 
                             <td>
-                                <input class="ui-text" id="c_codigocontrib" onkeypress="if(event.keyCode==13){buscarPersona();}" maxlength="10" style="width:90px" />
+                                <input class="ui-text" id="c_nroCotizacion" onkeypress="if(event.keyCode==13){buscarPersona();}" maxlength="10" style="width:90px" />
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="3">
@@ -75,101 +75,67 @@
         width: 620,
         height: 250,
         colNames: [
-            'Codigo',
-            'Persona',
-            'Direccion',
-            'vtipdoc',
-            'Nro Doc',
-            'Tippers',
-            'idUbigeo',
-            'vperscontact',
-            'telefcontact',
-            'celcontact',
-            'correo'
+            'ID',
+            'Nro Cotizacion',
+            'idCliente',
+            'vNombre',
+            'vNroDoc',
+            'dfecCot',
+            'nTotal',
+            'Estado'
         ],
         colModel: [{
-                name: 'cidpers',
-                index: 'cidpers',
-                width: 70
+                name: 'idCotiz',
+                index: 'idCotiz',
+                width: 50
+            },
+            {
+                name: 'vnroCot',
+                index: 'vnroCot',
+                width: 90
+            },
+            {
+                name: 'idCliente',
+                index: 'idCliente',
+                width: 200,
+                hidden: true
             },
             {
                 name: 'vNombre',
                 index: 'vNombre',
-                width: 250
-            },
-            {
-                name: 'direccf',
-                index: 'direccf',
-                width: 200,
+                width: 260,
                 hidden: false
             },
             {
-                name: 'vtipdoc',
-                index: 'vtipdoc',
-                hidden: true
-            },
-            {
-                name: 'vnrodoc',
-                index: 'vnrodoc',
+                name: 'vNroDoc',
+                index: 'vNroDoc',
                 width: 100,
                 hidden: false
             },
             {
-                name: 'vTipPers',
-                index: 'vTipPers',
+                name: 'dfecCot',
+                index: 'dfecCot',
+                width: 85,
+                hidden: false
+            },
+            {
+                name: 'nTotal',
+                index: 'nTotal',
                 hidden: true
             },
             {
-                name: 'idUbigeo',
-                index: 'idUbigeo',
-                hidden: true
-            },
-            {
-                name: 'vPersContac',
-                index: 'vPersContac',
-                hidden: true
-            },
-            {
-                name: 'vTelefContac',
-                index: 'vTelefContac',
-                hidden: true
-            },
-            {
-                name: 'vCelContac',
-                index: 'vCelContac',
-                hidden: true
-            },
-            {
-                name: 'vCorreoContac',
-                index: 'vCorreoContac',
+                name: 'Estado',
+                index: 'Estado',
                 hidden: true
             }
         ],
         caption: "&nbsp;&nbsp;&nbsp;Personas Registradas",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
-            //console.log(row);
             addCotizacion();
         },
         afterInsertRow: function(rowid, aData) {
-            switch (aData.nestado) {
-                case '1':
-                    break;
-                case '0':
-                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'cidpers', '', {
-                        color: 'red'
-                    });
-                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'vNombre', '', {
-                        color: 'red'
-                    });
-                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'direccf', '', {
-                        color: 'red'
-                    });
-                    jQuery("#tblListaPersona").jqGrid('setCell', rowid, 'vnrodoc', '', {
-                        color: 'red'
-                    });
-                    break;
-            }
+
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
@@ -219,16 +185,20 @@
     addCotizacion = function() {
         var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        if (row.cidpers == "" || row.cidpers == undefined) {
+        if (row.idCotiz == "" || row.idCotiz == undefined) {
             openDialogWarning("Seleccione un registro.");
             return;
         }
         parameters = {
-            "idsigma": row.cidpers,
+            "idsigma": row.idCotiz,
             "idcotizacion": $("#idcotizacion").val()
         };
-        $("#codigoCliente").val(row.cidpers);
+
+        $("#idCotizacion").val(row.idCotiz);
+        $("#nroCotizacion").val(row.vnroCot);
+        $("#codigoCliente").val(row.idCliente);
         $("#nombreCliente").val(row.vNombre);
+
         closeDialog('jqDialog2');
         closeDialog('jqDialog1');
     };
@@ -305,26 +275,7 @@
                 position: "last"
             })
             .navSeparatorAdd()
-        /*
-        .navButtonAdd('#ptblListaPersona',{
-            caption:"Eliminar&nbsp;&nbsp;",
-            buttonicon:"ui-icon-pencil",
-            onClickButton: function(){
-                eliminar();
-            },
-            position:"last"
-        })
-        .navSeparatorAdd()
 
-        .navButtonAdd('#ptblListaPersona',{
-            caption:"Imprimir&nbsp;&nbsp;",
-            buttonicon:"ui-icon-pencil",
-            onClickButton: function(){
-         imprimirperso();
-            },
-            position:"last"
-        })
-        .navSeparatorAdd()*/
         ;
     }
 
@@ -332,19 +283,17 @@
     function imprimirperso() {
         var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaPersona").jqGrid('getRowData', selr);
-        //console.log(row);
-        //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.cidpers );
     }
 
     buscarPersona = function() {
         var params = '[' +
-            '["@p_nvar1", "' + $("#c_codigocontrib").val() + '"],' +
+            '["@p_nvar1", "' + $("#c_nroCotizacion").val() + '"],' +
             '["@p_nvar2", "' + $("#c_nombrecontrib").val() + '"],' +
-            '["@p_nvar4", "' + $("#c_nrodoc").val() + '"]' +
+            '["@p_nvar3", "' + $("#c_nrodoc").val() + '"]' +
             ']';
         parameters = {
             "name": "tblListaPersona",
-            "procedure": "buscar_cliente",
+            "procedure": "buscar_cotizacion_salida",
             "print": "true",
             "parameters": params
         };

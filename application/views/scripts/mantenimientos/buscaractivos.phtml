@@ -1,0 +1,324 @@
+<?php
+$library = new Libreria_Pintar();
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBRE"), array("3", "SERIE"), array("4", "MARCA"));
+?>
+<div id="panelMantenimientoProducto" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento Activos</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+                        <tr>
+                            <td>
+                                <b> Datos Busqueda</b>
+                            </td>
+                        </tr>
+                        <tr class="rowdatospsm" id="rowdatospsm">
+                            <td style="text-align: left">
+                                <select id="cbotipob" name="cbotipob" style="width:140px;">
+                                    <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
+                                </select>
+                            </td>
+                            <td>Texto de busqueda:</td>
+                            <TD colspan="3">
+                                <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarActivos();}" style="width:100%" />
+                            </TD>
+                            <td> &nbsp;&nbsp;</td>
+                            <td>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarActivos()">Buscar</button>
+                            </td>
+                        </tr>
+
+
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+
+    <div id="panelListaMate" align="left" style="width: 99%;margin: 20px;">
+        <table id="tblListaMate"></table>
+        <div id="ptblListaMate"></div>
+    </div>
+    <br />
+</div>
+<script type="text/javascript">
+    optionPersona = {
+        width: 900,
+        height: 250,
+        colNames: [
+            'Codigo',
+            'Nombre',
+            'vSerie',
+            'Marca',
+            'Stock',
+            'Estado'
+        ],
+        colModel: [{
+                name: 'idActivos',
+                index: 'idActivos',
+                width: 60
+            },
+            {
+                name: 'vNombre',
+                index: 'vNombre',
+                width: 300
+            },
+            {
+                name: 'vSerie',
+                index: 'vSerie',
+                hidden: false
+            },
+            {
+                name: 'vMarca',
+                index: 'vMarca',
+                width: 150
+            },
+            {
+                name: 'nStock',
+                index: 'nStock',
+                width: 100
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 70,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                }
+                //,formatter: chkEliminar
+            },
+        ],
+        ignoreCase: true,
+        caption: "&nbsp;&nbsp;&nbsp;Activos Registrados",
+        ondblClickRow: function(id) {
+            var row = $(this).getRowData(id);
+            verMaterial();
+        },
+
+        afterInsertRow: function(rowid, aData) {
+            switch (
+                aData.nestado
+            ) {
+                case '1':
+                    break;
+                case '0':
+
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaMate").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+        }
+    };
+
+
+    function chkEliminar(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changeEstadoActivos(' + options.rowId + ')" ' + (cellvalue == '0' ? '  ' : '') + '/>';
+    }
+
+    function changeEstadoActivos(rowId) {
+
+        var row = jQuery("#tblListaMate").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Cambiar estado?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.idActivos = row.idActivos;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "mantenimientos/eliminarmaterial", parmter, updCheckconcluir, 'json');
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', true);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+
+    function updCheckconcluir(data) {
+        buscarActivos();
+    }
+    eliminar = function(a) {
+        var selr = $('#tblListaMate').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaMate").jqGrid('getRowData', selr);
+        if (row.idActivos == "" || row.idActivos == undefined) {
+            openDialogWarning("Seleccione un registro para eliminar.");
+            return;
+        }
+        parameters = {
+            "idActivos": row.idActivos
+        };
+
+        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
+
+            "si": function() {
+                //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/borrarmaterial",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {
+
+                    },
+                    success: function(requestData) {
+                        var IS_JSON = true;
+                        try {
+                            var datos = $.parseJSON(requestData);
+                            //console.log(datos[0].msj);
+                            if (datos[0].msj == "ok") {
+                                openDialogWarning("Eliminado Correctamente");
+                                closeDialog("jqDialogConfirmacion1");
+                                closeDialog('jqDialog2');
+                                $("#c_codigocontrib").val("");
+                                buscarActivos();
+                            } else {
+                                openDialogWarning("Error no se puede Eliminar el Material");
+                            }
+
+                        } catch (err) {
+                            IS_JSON = false;
+                            closeDialog("jqDialogConfirmacion1");
+                            $("#c_codigocontrib").val("");
+                            openDialogWarning("Error no se puede Eliminar el Material");
+                        }
+
+
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        openDialogWarning("Error.");
+                        //$("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
+
+
+                });
+            },
+
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        })
+
+
+    };
+
+    NuevoActivo = function() {
+        parameters = {
+            "idsigma": '...'
+        };
+        openDialogData3("mantenimientos/activos", parameters, 500);
+    };
+    verMaterial = function() {
+        var selr = $('#tblListaMate').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaMate").jqGrid('getRowData', selr);
+        if (row.idActivos == "" || row.idActivos == undefined) {
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.idActivos
+        };
+
+        openDialogData3("mantenimientos/activos", parameters, 500);
+
+    };
+
+
+    function buttonsGridPerson() {
+        $("#tblListaMate")
+            .navGrid('#ptblListaMate', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
+
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
+                    NuevoActivo();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd()
+
+
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
+                    verMaterial();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd()
+
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Eliminar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
+                    eliminar();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd()
+
+        ;
+        $("#tblListaMate").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
+    }
+
+
+    buscarActivos = function() {
+        var params = '[' +
+            '["@tBusqueda", "' + $("#cbotipob").val() + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
+        parameters = {
+            "name": "tblListaMate",
+            "procedure": "almacen.Bus_Activos",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaMate", "tblListaMate", optionPersona, parameters, null, buttonsGridPerson
+        );
+    };
+
+    $(function() {
+        buscarActivos();
+        $("#btnbuscar").button();
+    });
+</script>
