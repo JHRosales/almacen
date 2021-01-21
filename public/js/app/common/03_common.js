@@ -1,5 +1,5 @@
 $.validity.setup({
-    outputMode:"summary"
+    outputMode: "summary"
 });
 
 var config = {
@@ -22,22 +22,22 @@ var config = {
             'FecReg'
         ],
         colModel: [
-            {name: 'idTecnico', index:'idTecnico', width:70},
-            {name: 'vNombre', index:'vNombre', width:360},
-            {name: 'vTipoDoc', index:'vTipoDoc', width:100, hidden: false},
-            {name: 'vNroDoc', index:'vNroDoc',width:100, hidden: false},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
-            {name: 'vUsernm', index:'vUsernm', hidden: true},
-            {name: 'vHostnm', index:'vHostnm', hidden: true},
-            {name: 'dFecReg', index:'dFecReg', hidden: true}
+            { name: 'idTecnico', index: 'idTecnico', width: 70 },
+            { name: 'vNombre', index: 'vNombre', width: 360 },
+            { name: 'vTipoDoc', index: 'vTipoDoc', width: 100, hidden: false },
+            { name: 'vNroDoc', index: 'vNroDoc', width: 100, hidden: false },
+            { name: 'vEstado', index: 'vEstado', width: 50, hidden: true, editOptions: { value: "1:0", defaultvalue: "1" }, formatter: 'checkbox' },
+            { name: 'vUsernm', index: 'vUsernm', hidden: true },
+            { name: 'vHostnm', index: 'vHostnm', hidden: true },
+            { name: 'dFecReg', index: 'dFecReg', hidden: true }
 
         ],
         caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
-        onSelectRow: function() {},
-        ondblClickRow: function() {},
-        gridComplete: function() {}
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
     },
- __gridConfigMaterial = {  //JHIMI 25022018
+    __gridConfigMaterial = {  //JHIMI 25022018
         height: 300,
         width: 1000,
         colNames: ['Codigo',
@@ -53,23 +53,23 @@ var config = {
             'Estado'
         ],
         colModel: [
-            {name: 'idMaterial', index:'idMaterial', width:60},
-            {name: 'vNombre', index:'vNombre', width:150},
-            {name: 'idTipoMaterial', index:'idTipoMaterial', hidden:true},
-            {name: 'vTipoMaterial', index:'vTipoMaterial', width:120},
-            {name: 'vMarca', index:'vMarca', width:100},
-            {name: 'idUnidadMed', index:'idUnidadMed', width:80,hidden:true},
-            {name: 'vUnidadMed', index:'vUnidadMed', width:120},
-            {name: 'nStock', index:'nStock', width:70},
-            {name: 'idCategoria', index:'idCategoria', width:150,hidden:true},
-            {name: 'vCategoria', index:'vCategoria', width:150},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+            { name: 'idMaterial', index: 'idMaterial', width: 60 },
+            { name: 'vNombre', index: 'vNombre', width: 150 },
+            { name: 'idTipoMaterial', index: 'idTipoMaterial', hidden: true },
+            { name: 'vTipoMaterial', index: 'vTipoMaterial', width: 120 },
+            { name: 'vMarca', index: 'vMarca', width: 100 },
+            { name: 'idUnidadMed', index: 'idUnidadMed', width: 80, hidden: true },
+            { name: 'vUnidadMed', index: 'vUnidadMed', width: 120 },
+            { name: 'nStock', index: 'nStock', width: 70 },
+            { name: 'idCategoria', index: 'idCategoria', width: 150, hidden: true },
+            { name: 'vCategoria', index: 'vCategoria', width: 150 },
+            { name: 'vEstado', index: 'vEstado', width: 50, hidden: true, editOptions: { value: "1:0", defaultvalue: "1" }, formatter: 'checkbox' }
         ],
-        ignoreCase:true,
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
-        onSelectRow: function() {},
-        ondblClickRow: function() {},
-        gridComplete: function() {}
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
     },
     __gridConfigSeries = {  //JHIMI 01042018
         height: 300,
@@ -78,6 +78,7 @@ var config = {
             'idDetEntradaProd',
             'idProducto',
             'producto',
+            'Modelo',
             'stock',
             'vNroSerie',
             'vEstAlmacen',
@@ -85,115 +86,116 @@ var config = {
             'idDetSalidaProd'
         ],
         colModel: [
-            {name: 'idProdSeries', index:'idProdSeries', width:60},
-            {name: 'idDetEntradaProd', index:'idDetEntradaProd', width:80},
-            {name: 'idProducto', index:'idProducto', hidden:true},
-            {name: 'producto', index:'producto', width:450},
-            {name: 'nStock', index:'nStock', width:60},
-            {name: 'vNroSerie', index:'vNroSerie', width:250},
-            {name: 'vEstAlmacen', index:'vEstAlmacen', width:80,hidden:true},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
-            {name: 'idDetSalidaProd', index:'idDetSalidaProd', width:80,hidden:true}
+            { name: 'idProdSeries', index: 'idProdSeries', width: 60 },
+            { name: 'idDetEntradaProd', index: 'idDetEntradaProd', width: 80 },
+            { name: 'idProducto', index: 'idProducto', hidden: true },
+            { name: 'producto', index: 'producto', width: 350 },
+            { name: 'vModelo', index: 'vModelo', width: 200 },
+            { name: 'nStock', index: 'nStock', width: 60 },
+            { name: 'vNroSerie', index: 'vNroSerie', width: 200 },
+            { name: 'vEstAlmacen', index: 'vEstAlmacen', width: 80, hidden: true },
+            { name: 'vEstado', index: 'vEstado', width: 50, hidden: true, editOptions: { value: "1:0", defaultvalue: "1" }, formatter: 'checkbox' },
+            { name: 'idDetSalidaProd', index: 'idDetSalidaProd', width: 80, hidden: true }
         ],
-        ignoreCase:true,
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
-        onSelectRow: function() {},
-        ondblClickRow: function() {},
-        gridComplete: function() {}
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
     },
-__gridConfigContribuyente = {
-    height: 300,
-    width: 1000,
-    colNames: ["C\u00F3digo", "Administrado", "Direcci\u00F3n Fiscal"],
-    colModel: [
-        {name: 'cidpers', index: 'cidpers', width: 80, align: 'center'},
-        {name: 'crazsoc', index: 'crazsoc', width: 420},
-        {name: 'direccf', index: 'direccf', width: 420}],
-    caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
-    ignoreCase:true,
-    onSelectRow: function() {},
-    ondblClickRow: function() {},
-    gridComplete: function() {}
-},
-__gridConfigViaPredio = {
-    height: 300,
-    width: 1000,
-    colNames: [
-        'idsigma', 'C\u00F3d. Predio', 'Direcci\u00F3n', 'mviadis', 'dnumero',
-        'dmanzan', 'dnlotes', 'ddepart', 'dinteri', 'drefere',
-        'dletras', 'destaci', 'ddeposi', 'ccatast', 'cplanos',
-        'ctipmer', 'dnummer', 'cdiscat', 'czoncat', 'cmzacat',
-        'cseccat', 'cltecat', 'cundcat', 'dbloque', 'dseccio',
-        'dunidad', 'mpoblad', 'nestado', 'ctippre', 'idanexo',
-        'ccodcuc', 'vhostnm', 'vusernm', 'ddatetm', 'nlatitu',
-        'nlongit', 'nzoom', 'tnomvia', 'C\u00F3digo', 'Propietario',
-        'direccf', 'vtipdoc', 'pnrodoc', 'vtippro', 'mhresum',
-        'vnrodoc', 'cperiod'
-    ],
-    colModel: [
-        {name: 'idsigma', index: 'idsigma', width: 1, hidden: true},
-        {name: 'ccodpre', index: 'ccodpre', width: 70, align: 'center'},
-        {name: 'vdirpre', index: 'vdirpre', width: 440},
-        {name: 'mviadis', index: 'mviadis', width: 1, hidden: true},
-        {name: 'dnumero', index: 'dnumero', width: 1, hidden: true},
-        {name: 'dmanzan', index: 'dmanzan', width: 1, hidden: true},
-        {name: 'dnlotes', index: 'dnlotes', width: 1, hidden: true},
-        {name: 'ddepart', index: 'ddepart', width: 1, hidden: true},
-        {name: 'dinteri', index: 'dinteri', width: 1, hidden: true},
-        {name: 'drefere', index: 'drefere', width: 1, hidden: true},
-        {name: 'dletras', index: 'dletras', width: 1, hidden: true},
-        {name: 'destaci', index: 'destaci', width: 1, hidden: true},
-        {name: 'ddeposi', index: 'ddeposi', width: 1, hidden: true},
-        {name: 'ccatast', index: 'ccatast', width: 1, hidden: true},
-        {name: 'cplanos', index: 'cplanos', width: 1, hidden: true},
-        {name: 'ctipmer', index: 'ctipmer', width: 1, hidden: true},
-        {name: 'dnummer', index: 'dnummer', width: 1, hidden: true},
-        {name: 'cdiscat', index: 'cdiscat', width: 1, hidden: true},
-        {name: 'czoncat', index: 'czoncat', width: 1, hidden: true},
-        {name: 'cmzacat', index: 'cmzacat', width: 1, hidden: true},
-        {name: 'cseccat', index: 'cseccat', width: 1, hidden: true},
-        {name: 'cltecat', index: 'cltecat', width: 1, hidden: true},
-        {name: 'cundcat', index: 'cundcat', width: 1, hidden: true},
-        {name: 'dbloque', index: 'dbloque', width: 1, hidden: true},
-        {name: 'dseccio', index: 'dseccio', width: 1, hidden: true},
-        {name: 'dunidad', index: 'dunidad', width: 1, hidden: true},
-        {name: 'mpoblad', index: 'mpoblad', width: 1, hidden: true},
-        {name: 'nestado', index: 'nestado', width: 1, hidden: true},
-        {name: 'ctippre', index: 'ctippre', width: 1, hidden: true},
-        {name: 'idanexo', index: 'idanexo', width: 1, hidden: true},
-        {name: 'ccodcuc', index: 'ccodcuc', width: 1, hidden: true},
-        {name: 'vhostnm', index: 'vhostnm', width: 1, hidden: true},
-        {name: 'vusernm', index: 'vusernm', width: 1, hidden: true},
-        {name: 'ddatetm', index: 'ddatetm', width: 1, hidden: true},
-        {name: 'nlatitu', index: 'nlatitu', width: 1, hidden: true},
-        {name: 'nlongit', index: 'nlongit', width: 1, hidden: true},
-        {name: 'nzoom', index: 'nzoom', width: 1, hidden: true},
-        {name: 'tnomvia', index: 'tnomvia', width: 1, hidden: true},
-        {name: 'cidpers', index: 'cidpers', width: 80, align: 'center'},
-        {name: 'crazsoc', index: 'crazsoc', width: 390},
-        {name: 'direccf', index: 'direccf', width: 1, hidden: true},
-        {name: 'vtipdoc', index: 'vtipdoc', width: 1, hidden: true},
-        {name: 'pnrodoc', index: 'pnrodoc', width: 1, hidden: true},
-        {name: 'vtippro', index: 'vtippro', width: 1, hidden: true},
-        {name: 'mhresum', index: 'mhresum', width: 1, hidden: true},
-        {name: 'vnrodoc', index: 'vnrodoc', width: 1, hidden: true},
-        {name: 'cperiod', index: 'cperiod', width: 1, hidden: true}
-    ],
-    ignoreCase:true,
-    caption: "&nbsp;&nbsp;&nbsp;Predios Registrados",
-    onSelectRow: function() {},
-    ondblClickRow: function() {},
-    gridComplete: function() {}
-},
-imageFormat = function(cellvalue, options, rowdata) {
-    return '<img src="' + pathImage + cellvalue + '" />';
-};
+    __gridConfigContribuyente = {
+        height: 300,
+        width: 1000,
+        colNames: ["C\u00F3digo", "Administrado", "Direcci\u00F3n Fiscal"],
+        colModel: [
+            { name: 'cidpers', index: 'cidpers', width: 80, align: 'center' },
+            { name: 'crazsoc', index: 'crazsoc', width: 420 },
+            { name: 'direccf', index: 'direccf', width: 420 }],
+        caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
+        ignoreCase: true,
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
+    },
+    __gridConfigViaPredio = {
+        height: 300,
+        width: 1000,
+        colNames: [
+            'idsigma', 'C\u00F3d. Predio', 'Direcci\u00F3n', 'mviadis', 'dnumero',
+            'dmanzan', 'dnlotes', 'ddepart', 'dinteri', 'drefere',
+            'dletras', 'destaci', 'ddeposi', 'ccatast', 'cplanos',
+            'ctipmer', 'dnummer', 'cdiscat', 'czoncat', 'cmzacat',
+            'cseccat', 'cltecat', 'cundcat', 'dbloque', 'dseccio',
+            'dunidad', 'mpoblad', 'nestado', 'ctippre', 'idanexo',
+            'ccodcuc', 'vhostnm', 'vusernm', 'ddatetm', 'nlatitu',
+            'nlongit', 'nzoom', 'tnomvia', 'C\u00F3digo', 'Propietario',
+            'direccf', 'vtipdoc', 'pnrodoc', 'vtippro', 'mhresum',
+            'vnrodoc', 'cperiod'
+        ],
+        colModel: [
+            { name: 'idsigma', index: 'idsigma', width: 1, hidden: true },
+            { name: 'ccodpre', index: 'ccodpre', width: 70, align: 'center' },
+            { name: 'vdirpre', index: 'vdirpre', width: 440 },
+            { name: 'mviadis', index: 'mviadis', width: 1, hidden: true },
+            { name: 'dnumero', index: 'dnumero', width: 1, hidden: true },
+            { name: 'dmanzan', index: 'dmanzan', width: 1, hidden: true },
+            { name: 'dnlotes', index: 'dnlotes', width: 1, hidden: true },
+            { name: 'ddepart', index: 'ddepart', width: 1, hidden: true },
+            { name: 'dinteri', index: 'dinteri', width: 1, hidden: true },
+            { name: 'drefere', index: 'drefere', width: 1, hidden: true },
+            { name: 'dletras', index: 'dletras', width: 1, hidden: true },
+            { name: 'destaci', index: 'destaci', width: 1, hidden: true },
+            { name: 'ddeposi', index: 'ddeposi', width: 1, hidden: true },
+            { name: 'ccatast', index: 'ccatast', width: 1, hidden: true },
+            { name: 'cplanos', index: 'cplanos', width: 1, hidden: true },
+            { name: 'ctipmer', index: 'ctipmer', width: 1, hidden: true },
+            { name: 'dnummer', index: 'dnummer', width: 1, hidden: true },
+            { name: 'cdiscat', index: 'cdiscat', width: 1, hidden: true },
+            { name: 'czoncat', index: 'czoncat', width: 1, hidden: true },
+            { name: 'cmzacat', index: 'cmzacat', width: 1, hidden: true },
+            { name: 'cseccat', index: 'cseccat', width: 1, hidden: true },
+            { name: 'cltecat', index: 'cltecat', width: 1, hidden: true },
+            { name: 'cundcat', index: 'cundcat', width: 1, hidden: true },
+            { name: 'dbloque', index: 'dbloque', width: 1, hidden: true },
+            { name: 'dseccio', index: 'dseccio', width: 1, hidden: true },
+            { name: 'dunidad', index: 'dunidad', width: 1, hidden: true },
+            { name: 'mpoblad', index: 'mpoblad', width: 1, hidden: true },
+            { name: 'nestado', index: 'nestado', width: 1, hidden: true },
+            { name: 'ctippre', index: 'ctippre', width: 1, hidden: true },
+            { name: 'idanexo', index: 'idanexo', width: 1, hidden: true },
+            { name: 'ccodcuc', index: 'ccodcuc', width: 1, hidden: true },
+            { name: 'vhostnm', index: 'vhostnm', width: 1, hidden: true },
+            { name: 'vusernm', index: 'vusernm', width: 1, hidden: true },
+            { name: 'ddatetm', index: 'ddatetm', width: 1, hidden: true },
+            { name: 'nlatitu', index: 'nlatitu', width: 1, hidden: true },
+            { name: 'nlongit', index: 'nlongit', width: 1, hidden: true },
+            { name: 'nzoom', index: 'nzoom', width: 1, hidden: true },
+            { name: 'tnomvia', index: 'tnomvia', width: 1, hidden: true },
+            { name: 'cidpers', index: 'cidpers', width: 80, align: 'center' },
+            { name: 'crazsoc', index: 'crazsoc', width: 390 },
+            { name: 'direccf', index: 'direccf', width: 1, hidden: true },
+            { name: 'vtipdoc', index: 'vtipdoc', width: 1, hidden: true },
+            { name: 'pnrodoc', index: 'pnrodoc', width: 1, hidden: true },
+            { name: 'vtippro', index: 'vtippro', width: 1, hidden: true },
+            { name: 'mhresum', index: 'mhresum', width: 1, hidden: true },
+            { name: 'vnrodoc', index: 'vnrodoc', width: 1, hidden: true },
+            { name: 'cperiod', index: 'cperiod', width: 1, hidden: true }
+        ],
+        ignoreCase: true,
+        caption: "&nbsp;&nbsp;&nbsp;Predios Registrados",
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
+    },
+    imageFormat = function (cellvalue, options, rowdata) {
+        return '<img src="' + pathImage + cellvalue + '" />';
+    };
 
-imageUnFormat = function(cellvalue, options) {
+imageUnFormat = function (cellvalue, options) {
     return $('img', cellvalue).attr('src');
 };
 
-postError = function(requestData, errMessage, errNumber) {
+postError = function (requestData, errMessage, errNumber) {
     if (errNumber == '') {
         openDialogError("No se puede determinar el error.");
     } else {
@@ -203,7 +205,7 @@ postError = function(requestData, errMessage, errNumber) {
 
 function procesarConsultaSubProceso(source, parameters, fnc, dataType) {
     if (dataType != null || dataType != undefined) {
-        _post = $.post(path + "jqgrid/" + source, parameters, function(request) {
+        _post = $.post(path + "jqgrid/" + source, parameters, function (request) {
         }, dataType);
     }
     else {
@@ -213,7 +215,7 @@ function procesarConsultaSubProceso(source, parameters, fnc, dataType) {
 }
 
 function procesarSeleccion(idPanel, idx, _options, parameters) {
-    procesarConsultaSubProceso('seleccionar', parameters, function(requestData) {
+    procesarConsultaSubProceso('seleccionar', parameters, function (requestData) {
         $("#" + idPanel).html(requestData);
         actualizarGrid(idx, _options);
     });
@@ -221,7 +223,7 @@ function procesarSeleccion(idPanel, idx, _options, parameters) {
 
 
 function procesarProcedimiento(idPanel, idx, _options, parameters, bindkeys, navGrid) {
-    procesarConsultaSubProceso('registrar', parameters, function(requestData) {
+    procesarConsultaSubProceso('registrar', parameters, function (requestData) {
         $("#" + idPanel).html(requestData);
         actualizarGrid(idx, _options, bindkeys, navGrid);
     });
@@ -243,7 +245,7 @@ function procesarProcedimientoJSON(idPanel, idx, _options, parameters, bindkeys,
     html += "<input type='hidden' id='c" + idx + "' name='c" + idx + "' value='' />";
 
     $("#" + idPanel).html(html);
-    procesarConsultaSubProceso('registrar', parameters, function(requestData) {
+    procesarConsultaSubProceso('registrar', parameters, function (requestData) {
         $("#c" + idx).val(requestData.length);
         _options = $.extend(_options, {
             datatype: "local",
@@ -303,8 +305,8 @@ function contenidocomboContenedorjqGrid(selector, idsigma) {
     optionsjq.value = "9999999999:Seleccionar";
     optionsjq.defaultValue = "9999999999";
 
-    _post = $.post(path + "util/combocontenedor", {"idsigma": idsigma}, function(request) {
-        $.each(request, function(i, columns) {
+    _post = $.post(path + "util/combocontenedor", { "idsigma": idsigma }, function (request) {
+        $.each(request, function (i, columns) {
             var value = columns[0];
             var label = columns[1];
             optionsjq.value += ';' + value + ':' + label;
@@ -314,14 +316,14 @@ function contenidocomboContenedorjqGrid(selector, idsigma) {
 }
 
 function contenidocomboContenedor(selectId, idsigma) {
-    _post = $.post(path + "util/combocontenedor", {"idsigma": idsigma}, function(request) {
+    _post = $.post(path + "util/combocontenedor", { "idsigma": idsigma }, function (request) {
         $(selectId).html(contenidocombo(request));
     }, 'json');
 }
 
 function contenidocombo(data) {
     var options = '<option value="9999999999">SELECCIONAR</option>';
-    $.each(data, function(i, columns) {
+    $.each(data, function (i, columns) {
         var value = columns[0];
         var label = columns[1];
         options += '<option value="' + value + '">' + label + '</option>';
@@ -347,11 +349,11 @@ function closeDialog(id) {
     $('#' + id).dialog('close');
 }
 
-var openDialogData = function(url, data, width, height, title, id, fnc, buttons) {
+var openDialogData = function (url, data, width, height, title, id, fnc, buttons) {
     var _post;
     if (url != undefined) {
         _post = $.post(path + url, data);
-        _post.success(function(requestData) {
+        _post.success(function (requestData) {
             $(id).html(requestData);
 
             if (width != undefined || width != null)
@@ -360,13 +362,13 @@ var openDialogData = function(url, data, width, height, title, id, fnc, buttons)
                 $(id).dialog('option', 'title', title);
             if (height != undefined || height != null)
                 $(id).dialog('option', 'height', height);
-            if (buttons != undefined || buttons != null){
+            if (buttons != undefined || buttons != null) {
                 $(id).dialog('option', 'buttons', buttons);
-            }else{
+            } else {
                 $(id).dialog('option', 'buttons', null);
             }
-            $(id).dialog('option', 'close', function(){
-            	$(id).html('');
+            $(id).dialog('option', 'close', function () {
+                $(id).html('');
             });
 
             $(id).dialog('open');
@@ -431,7 +433,7 @@ function openDialogConfirm2(contenido, width, buttons) {
     $('#jqDialogConfirmacion2').dialog('open');
 }
 
-function openDialogError(contenido, width, height,close) {
+function openDialogError(contenido, width, height, close) {
     $('#jqError').html(contenido);
     if (width != undefined)
         $('#jqDialogError').dialog('option', 'width', width);
@@ -440,7 +442,7 @@ function openDialogError(contenido, width, height,close) {
     $('#jqDialogError').dialog('open');
 }
 
-function openDialogWarning(contenido, width,close) {
+function openDialogWarning(contenido, width, close) {
     $('#jqWarning').html(contenido);
     if (width != undefined)
         $('#jqDialogWarning').dialog('option', 'width', width);
@@ -463,7 +465,7 @@ function openDialogInfo(contenido, width, height, buttons, close) {
 function mouseHover(idTable) {
     idTable = '#' + idTable + " tbody";
 
-    $(idTable).delegate('tr', 'hover', function() {
+    $(idTable).delegate('tr', 'hover', function () {
         $(this).toggleClass("ui-state-highlight").next().stop(true, true);
     });
 }
@@ -476,12 +478,12 @@ function themeTextBox(selector) {
     if (selector == undefined || selector == null) {
         selector = ".ui-text";
     }
-    $(selector).on("blur", function() {
+    $(selector).on("blur", function () {
         if ($(this).hasClass("ui-text-highlight")) {
             $(this).removeClass("ui-text-highlight");
         }
     });
-    $(selector).on("focus", function() {
+    $(selector).on("focus", function () {
         if (!$(this).hasClass("ui-text-highlight")) {
             $(this).addClass("ui-text-highlight");
         }
@@ -495,14 +497,14 @@ function themeComboBox(selector) {
 
     _selector = $(selector);
     _selector.combobox();
-    _selector.each(function() {
+    _selector.each(function () {
         var id = $(this).attr("id").replace('cbo', '#txt');
-        $(id).bind("focus", function() {
+        $(id).bind("focus", function () {
             if (!$(this).hasClass("ui-combobox-input-highlight")) {
                 $(this).addClass("ui-combobox-input-highlight");
             }
         });
-        $(id).bind("blur", function() {
+        $(id).bind("blur", function () {
             if ($(this).hasClass("ui-combobox-input-highlight")) {
                 $(this).removeClass("ui-combobox-input-highlight");
             }
@@ -510,7 +512,7 @@ function themeComboBox(selector) {
     });
 }
 
-_FsFiltrarCombo = function(_datos, _datbus, _indexbus, _indexcod, _indexdes, _excep) {
+_FsFiltrarCombo = function (_datos, _datbus, _indexbus, _indexcod, _indexdes, _excep) {
     _options = '';
     _datbus = _datbus.toUpperCase();
     _cadena = '';
@@ -525,11 +527,11 @@ _FsFiltrarCombo = function(_datos, _datbus, _indexbus, _indexcod, _indexdes, _ex
     return _options;
 };
 
-(function($) {
-    $.fn.getCheckboxValues = function() {
+(function ($) {
+    $.fn.getCheckboxValues = function () {
         var values = [];
         var i = 0;
-        this.each(function() {
+        this.each(function () {
             values[i++] = $(this).val();
         });
         return values;
@@ -537,7 +539,7 @@ _FsFiltrarCombo = function(_datos, _datbus, _indexbus, _indexcod, _indexdes, _ex
 })(jQuery);
 
 
-Number.prototype.decimal = function(num) {
+Number.prototype.decimal = function (num) {
     pot = Math.pow(10, num);
     return parseInt(this * pot) / pot;
 };
@@ -546,18 +548,18 @@ function NumberFormat(num, numDec, decSep, thousandSep) {
     var arg;
     var Dec;
     Dec = Math.pow(10, numDec);
-    if (typeof(num) == 'undefined')
+    if (typeof (num) == 'undefined')
         return;
-    if (typeof(decSep) == 'undefined')
+    if (typeof (decSep) == 'undefined')
         decSep = ',';
-    if (typeof(thousandSep) == 'undefined')
+    if (typeof (thousandSep) == 'undefined')
         thousandSep = '.';
     if (thousandSep == '.')
         arg = /./g;
     else
-    if (thousandSep == ',')
-        arg = /,/g;
-    if (typeof(arg) != 'undefined')
+        if (thousandSep == ',')
+            arg = /,/g;
+    if (typeof (arg) != 'undefined')
         num = num.toString().replace(arg, '');
     num = num.toString().replace(/,/g, '.');
     if (isNaN(num))
@@ -580,7 +582,7 @@ function openventcambiarpsswd() {
     openDialogData1("logeo/cambiarpasswd", "", "260", "180", "Cambiar Contrase\u00f1a");
 }
 
-$(function() {
+$(function () {
     $("#itemMenu1").menuBar({
         content: $("#itemMenu1").next().html(),
         showSpeed: 1,
@@ -641,31 +643,28 @@ function getInternetExplorerVersion()
 //Returns the version of Windows Internet Explorer or a -1
 //(indicating the use of another browser).
 {
-var rv = -1; // Return value assumes failure.
-if (navigator.appName == 'Microsoft Internet Explorer')
-{
-   var ua = navigator.userAgent;
-   var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-   if (re.exec(ua) != null)
-      rv = parseFloat( RegExp.$1 );
-}
-return rv;
+    var rv = -1; // Return value assumes failure.
+    if (navigator.appName == 'Microsoft Internet Explorer') {
+        var ua = navigator.userAgent;
+        var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+        if (re.exec(ua) != null)
+            rv = parseFloat(RegExp.$1);
+    }
+    return rv;
 }
 
-function checkIEVersion()
-{
-var msg = "You're not using Windows Internet Explorer.";
-var ver = getInternetExplorerVersion();
-if ( ver> -1 )
-{
-   if ( ver>= 8.0 )
-      msg = "You're using Windows Internet Explorer 8.";
-   else if ( ver == 7.0 )
- 	  msg = "You're using Windows Internet Explorer 7.";
-   else if ( ver == 6.0 )
- 	  msg = "You're using Windows Internet Explorer 6.";
-   else
- 	  msg = "You should upgrade your copy of Windows Internet Explorer";
- }
-alert( msg );
+function checkIEVersion() {
+    var msg = "You're not using Windows Internet Explorer.";
+    var ver = getInternetExplorerVersion();
+    if (ver > -1) {
+        if (ver >= 8.0)
+            msg = "You're using Windows Internet Explorer 8.";
+        else if (ver == 7.0)
+            msg = "You're using Windows Internet Explorer 7.";
+        else if (ver == 6.0)
+            msg = "You're using Windows Internet Explorer 6.";
+        else
+            msg = "You should upgrade your copy of Windows Internet Explorer";
+    }
+    alert(msg);
 }

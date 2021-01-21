@@ -447,7 +447,25 @@ class MantenimientosController extends Zend_Controller_Action
             echo json_encode($mat);
         }
     }
+    public function anularmaterialAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter();
 
+            $idMaterial = $this->_request->getPost('idMaterial');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idMaterial);
+
+            $mat = $cn->ejec_store_procedura_sql('anular_material', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($mat);
+        }
+    }
     public function borrarmaterialAction()
     {
         $this->_helper->layout->disableLayout();
@@ -456,12 +474,12 @@ class MantenimientosController extends Zend_Controller_Action
         if ($this->getRequest()->isXmlHttpRequest()) {
             $cn = new Model_DataAdapter();
 
-            $idActivos = $this->_request->getPost('idActivos');
+            $idMaterial = $this->_request->getPost('idMaterial');
 
             $params = null;
-            $params[] = array('@p_idact', $idActivos);
+            $params[] = array('@p_idmat', $idMaterial);
 
-            $mat = $cn->executeAssocQuery('borrar_activo', $params);
+            $mat = $cn->executeAssocQuery('borrar_material', $params);
             // $cperson = count($prod);
             //echo $prod;
             echo json_encode($mat);
@@ -1184,7 +1202,7 @@ class MantenimientosController extends Zend_Controller_Action
             $params = null;
             $params[] = array('@ttrans', $ttrans);
             $params[] = array('@idActivo', $idsigma);
-            $params[] = array('@vNombre', utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto2))));
+            $params[] = array('@vNombre',  utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto2))));
             $params[] = array('@vSerie', $vserie);
             $params[] = array('@vMarca', $vmarca);
             $params[] = array('@vModelo', $vmodelo);

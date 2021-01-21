@@ -299,7 +299,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 console.log(datos[0].ok);
                 closeDialog("jqDialogConfirmacion1");
                 closeDialog('jqDialog1');
-                buscarDetEntradaMat();
+                buscarDetEntradaActivos();
             },
             error: function(requestData, strError, strTipoError) {
                 $("#result").html("Error " + strTipoError + ': ' + strError);
@@ -309,13 +309,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
     };
 
-    nuevaMaterial = function() {
+    nuevoActivo = function() {
         parameters = {
             "idsigma": '...'
         };
-        openDialogData3("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/activos", parameters, 500);
     };
-    verMaterial = function() {
+    verActivos = function() {
         var selr = $('#tblPSM').jqGrid('getGridParam', 'selrow');
         var row = $("#tblPSM").jqGrid('getRowData', selr);
         console.log(row.idActivos);
@@ -326,7 +326,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         parameters = {
             "idsigma": row.idActivos
         };
-        openDialogData3("mantenimientos/material", parameters, 500);
+        openDialogData3("mantenimientos/activos", parameters, 500);
     };
 
     function buttonsGridPSM() {
@@ -342,7 +342,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 caption: "Agregar&nbsp;&nbsp;",
                 buttonicon: "ui-icon-plus",
                 onClickButton: function() {
-                    nuevaMaterial();
+                    nuevoActivo();
                 },
                 position: "last"
             })
@@ -350,7 +350,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 caption: "Editar&nbsp;&nbsp;",
                 buttonicon: "ui-icon-pencil",
                 onClickButton: function() {
-                    verMaterial();
+                    verActivos();
                 },
                 position: "last"
             });
@@ -372,7 +372,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             ']';
         parameters = {
             "name": "tblListaMate",
-            "procedure": "almacen.Bus_Material",
+            "procedure": "almacen.Bus_Activos",
             "print": "true",
             "parameters": params
         };

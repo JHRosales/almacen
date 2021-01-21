@@ -292,11 +292,11 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
         return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
             'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
-            'onclick="accionborrarcotizacion(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            'onclick="actionborrarentradaactivos(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
             '<span class="ui-icon ui-icon-trash"></span></div></div>';
     }
 
-    function accionborrarcotizacion(rowId) {
+    function actionborrarentradaactivos(rowId) {
         var rowdat = jQuery("#tblListaEntradaMat").jqGrid('getRowData', rowId);
 
         var paramtrs = {
@@ -305,7 +305,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function() {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/eliminarentradamat",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarentradaactivos",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -462,16 +462,16 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
             .navSeparatorAdd()
 
 
-
-            .navButtonAdd('#ptblListaEntradaMat', {
-                caption: "Imprimir&nbsp;&nbsp;",
-                buttonicon: "ui-icon-pencil",
-                onClickButton: function() {
-                    imprimir();
-                },
-                position: "last"
-            })
-            .navSeparatorAdd();
+        /*
+                    .navButtonAdd('#ptblListaEntradaMat', {
+                        caption: "Imprimir&nbsp;&nbsp;",
+                        buttonicon: "ui-icon-pencil",
+                        onClickButton: function() {
+                            imprimir();
+                        },
+                        position: "last"
+                    })
+                    .navSeparatorAdd();*/
     }
 
 

@@ -1,70 +1,19 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array("3", "NRO COTIZACION"), array("4", "CLIENTE"));
 
 ?>
 
-<div id="panelSalidaProducto" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
+<div id="panelSalidaActivos" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-rojo ui-corner-top ui-title">
-        <label>SALIDA DE PRODUCTOS</label>
+        <label>SALIDA DE ACTIVOS</label>
     </div>
-    <div id="dialogBuscarSalidaProducto" style="margin-bottom: -20px">
-
-        <div class="col-sm-12 text-left ui-title text-nowrap bg-danger">Datos del Producto</div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6 text-left">
-                <label for="inputModelo">Modelo</label>
-                <input type="text" class="form-control" id="txtModelo" name="txtModelo" placeholder="Modelo">
-            </div>
-            <div class="form-group col-md-6 text-left">
-                <label for="inputSerie">Serie</label>
-                <input type="text" class="form-control" id="txtSerie" name="txtSerie" placeholder="Serie">
-            </div>
-        </div>
-
-        <div class="col-sm-12 text-left ui-title text-nowrap bg-danger">Datos del Proveedor</div>
-        <div class="form-row">
-            <div class="form-group col-md-6 text-left">
-                <label for="inputRazonS">Razon Social</label>
-                <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial" placeholder="Razon social">
-            </div>
-            <div class="form-group col-md-6 text-left">
-                <label for="inputNroCotizacion">Nro Cotizacion</label>
-                <input type="text" class="form-control" id="txtNroCotizacion" name="txtNroCotizacion" placeholder="Nro Cotizacion">
-            </div>
-        </div>
-
-        <div class="col-sm-12 text-left text-nowrap bg-danger"></div>
-
-
-        <div class="form-group col-md-6 text-left">
-            <label for="inputCity">Fecha Desde </label>
-            <input type="text" id="fecdesde" maxlength="10" class="form-control col-md-12" onkeypress="if(event.keyCode==13){buscarSalidaProd();}" value="<?php echo $this->fechaini; ?>" />
-        </div>
-        <div class="form-group col-md-6 text-left">
-            <label for="inputState">Fecha Hasta</label>
-            <input type="text" id="fechasta" maxlength="10" class="form-control col-md-12" onkeypress="if(event.keyCode==13){buscarSalidaProd();}" value="<?php echo $this->fechafin; ?>" />
-        </div>
-
-
-        <div class="form-group col-md-2 text-center" style="display: none;">
-            <button id="btnbuscar" name="btnbuscar" class="form-control" onclick="buscarEntradaProd()">Buscar</button>
-        </div>
-        <div class="form-group">&thinsp;
-        </div>
-
-
-
-
-
-
-
-
-        <table class="ui-panelLayout-main" style="display: none;">
+    <div id="dialogBuscarSalidaMaterial">
+        <table class="ui-panelLayout-main">
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
+
                         <tr>
                             <td>
                                 <b> Datos Busqueda</b>
@@ -79,11 +28,11 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                             </td>
                             <td></td>
                             <TD colspan="8">
-                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarSalidaProd();}" style="width:100%" />
+                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarSalidaMate();}" style="width:100%" />
                             </TD>
                             <td> &nbsp;&nbsp;</td>
                             <td rowspan="3">
-                                <button id="btnbuscar" name="btnbuscar" onclick="buscarSalidaProd()">Buscar</button>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarSalidaMate()">Buscar</button>
                             </td>
                         </tr>
                         <tr class="rowcoti">
@@ -93,7 +42,6 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                             <td width="200" style="text-align: left">Fecha Hasta:</td>
                             <td width="10">&nbsp;</td>
                             <td width="10">&nbsp;</td>
-
 
                         </tr>
                         <tr class="rowbcoti" id="panelbcoti">
@@ -113,7 +61,6 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                             <td colspan="13" height="8px"></td>
                         </tr>
 
-
                         <tr>
                             <td colspan="13" height="8px"></td>
                         </tr>
@@ -125,68 +72,43 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
     </div>
     <div id="dialogMensaje">
     </div>
-    <div id="panelListaSalidaProd" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
-        <table id="tblListaSalidaProd"></table>
-        <div id="ptblListaSalidaProd"></div>
+    <div id="panelListaSalidaMat" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
+        <table id="tblListaSalidaMat"></table>
+        <div id="ptblListaSalidaMat"></div>
     </div>
     <br />
 </div>
 <script type="text/javascript">
-    $("#txtModelo").keyup(function(e) {
-        if ($("#txtModelo").val().length > 2 || e.keyCode == 13) {
-            buscarSalidaProd();
-            $("#txtModelo").focus();
-        }
-    });
-    $("#txtSerie").keyup(function(e) {
-        if ($("#txtSerie").val().length > 2 || e.keyCode == 13) {
-            buscarSalidaProd();
-            $("#txtSerie").focus();
-        }
-    });
-    $("#txtRazonSocial").keyup(function(e) {
-        if ($("#txtRazonSocial").val().length > 2 || e.keyCode == 13) {
-            buscarSalidaProd();
-            $("#txtRazonSocial").focus();
-        }
-    });
-    $("#txtNroCotizacion").keyup(function(e) {
-        if ($("#txtNroCotizacion").val().length > 2 || e.keyCode == 13) {
-            buscarSalidaProd();
-            $("#txtNroCotizacion").focus();
-        }
-    });
-
     $("#cbotipob").combobox({
         selected: function(event, ui) {
-            buscarSalidaProd();
+            buscarSalidaMate();
         }
     });
 
 
-    optionSalidaProd = {
+    optionSalidaMat = {
         width: 1100,
         height: 250,
         colNames: [
-            'ID',
-            'Fecha Salida',
-            'Fecha Retorno',
-            'Obra',
-            'Lugar',
-            'NroCotizacion',
-            "cliente",
+            'idSalidaActivos',
+            'FecSalida',
+            'FecRetorno',
+            'vObra',
+            'vLugar',
+            'Cliente',
+            'Nro Cotizacion',
             'idTecnico',
-            'Tecnico',
-            "Estado",
+            'vTecnico',
+            "vEstado",
             "Borrar",
             "Nuevo",
             "Imprimir",
             "Retorno"
         ],
         colModel: [{
-                name: 'idSalidaProd',
-                index: 'idSalidaProd',
-                width: 80
+                name: 'idSalidaActivo',
+                index: 'idSalidaActivo',
+                width: 90
             },
             {
                 name: 'dFecSalida',
@@ -196,7 +118,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
             {
                 name: 'dFecRetorno',
                 index: 'dFecRetorno',
-                width: 80
+                width: 80,
+                hidden: true
             },
             {
                 name: 'vObra',
@@ -210,17 +133,18 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                 hidden: false
             },
             {
-                name: 'vnroCot',
-                index: 'vnroCot',
-                width: 70,
-                hidden: false
-            },
-            {
                 name: 'cliente',
                 index: 'cliente',
                 width: 150,
                 hidden: false
             },
+            {
+                name: 'vnroCot',
+                index: 'vnroCot',
+                width: 80,
+                hidden: false
+            },
+
             {
                 name: 'idTecnico',
                 index: 'idTecnico',
@@ -237,7 +161,6 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                 index: 'vEstado',
                 width: 50,
                 hidden: false,
-                search: false,
                 editOptions: {
                     value: "1:0",
                     defaultvalue: "1"
@@ -280,27 +203,27 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                 search: false
             }
         ],
-        ignoreCase: true,
-        caption: "&nbsp;&nbsp;&nbsp;Salida de Productos",
+        caption: "&nbsp;&nbsp;&nbsp;Salida de Activos",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
-            verSalidaProd();
+            verSalidaMat();
         },
         afterInsertRow: function(rowid, aData) {
             switch (aData.nestado) {
                 case '1':
                     break;
                 case '0':
-                    jQuery("#tblListaSalidaProd").jqGrid('setCell', rowid, 'cidpers', '', {
+
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'cidpers', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaProd").jqGrid('setCell', rowid, 'crazsoc', '', {
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'crazsoc', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaProd").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'vnrodoc', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaProd").jqGrid('setCell', rowid, 'nestado', '', {
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'nestado', '', {
                         color: 'red'
                     });
                     break;
@@ -312,84 +235,26 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
     };
 
 
-
-    // -----> Retorno ====================================================
-    function btnRetorno(cellvalue, options, rowObject) {
-
-        return '<div align="center" class="ui-pg-button " title="Agregar Retorno" style="text-align:center;' +
-            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
-            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetorno(\'' + options.rowId + '\');">' +
-            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
-    }
-
-    function accionbtnRetorno(rowId) {
-        var row = $("#tblListaSalidaProd").jqGrid('getRowData', rowId);
-        if (row.idSalidaProd == "" || row.idSalidaProd == undefined) {
-            openDialogWarning("Seleccione un Registro");
-            return;
-        }
-        parameters = {
-            "idSalidaProd": row.idSalidaProd
-        };
-
-        var _post = $.post(path + "almacen/detretornoprod", parameters);
-        _post.success(function(request) {
-            $("#panelSalidaProducto").html(request);
-        });
-    }
-
-
-
-    function chkEliminar(cellvalue, options, rowObject) {
-        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
-            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? '  ' : '') + '/>';
-    }
-
-    function changecheckboxcconcluirexp(rowId) {
-
-        var row = jQuery("#tblListaSalidaProd").jqGrid('getRowData', rowId);
-        openDialogConfirm1("Cambiar estado?", 350, {
-            "Si": function() {
-                var parmter = {};
-                parmter.idSalidaProd = row.idSalidaProd;
-                closeDialog("jqDialogConfirmacion1");
-                $.post(path + "cotizacion/cotizaciondel", parmter, updCheckconcluir, 'json');
-            },
-            "No": function() {
-                //ProcesoBuscarRuta(''); chkrecep_5
-                $("#chkconcluirexp_" + rowId).attr('checked', false);
-                closeDialog("jqDialogConfirmacion1");
-
-            }
-        });
-    }
-
-    function updCheckconcluir(data) {
-        buscarSalidaProd();
-    }
-
-
-
     // -----> Borrar============================================00
     function btndocumtall(cellvalue, options, rowObject) {
 
         return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
             'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
-            'onclick="accionborrarsalida(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            'onclick="accionborrarcotizacion(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
             '<span class="ui-icon ui-icon-trash"></span></div></div>';
     }
 
-    function accionborrarsalida(rowId) {
-        var rowdat = jQuery("#tblListaSalidaProd").jqGrid('getRowData', rowId);
+    function accionborrarcotizacion(rowId) {
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
 
         var paramtrs = {
-            idSalidaProd: rowdat.idSalidaProd
+            idSalidaActivo: rowdat.idSalidaActivo
         }
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
             "Si": function() {
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/eliminarsalidaprod",
+                    url: jQuery.scriptPath + "index.php/almacen/eliminarsalidamat",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
@@ -398,9 +263,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                         var datos = JSON.parse(requestData);
                         console.log(datos);
                         var parameters = {
-                            idSalidaProd: datos[0].idSalidaProd
+                            idcotizacion: datos[0].idSalidaActivo
                         };
-                        buscarSalidaProd();
+                        buscarSalidaMate();
                         closeDialog("jqDialogConfirmacion1");
                     },
                     error: function(requestData, strError, strTipoError) {
@@ -424,26 +289,28 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
     }
 
     function accionbtnNuevo(rowId) {
-        var rowdat = jQuery("#tblListaSalidaProd").jqGrid('getRowData', rowId);
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
         var paramtrs = {
-            idSalidaProd: rowdat.idSalidaProd
-        };
+            idCotiz: rowdat.idCotiz
+        }
         console.log(paramtrs);
         $.ajax({
             url: jQuery.scriptPath + "index.php/cotizacion/copiarcotiz",
             type: 'POST',
             cache: false,
             data: paramtrs,
-            beforeSend: function(data) {},
+            beforeSend: function(data) {
+
+            },
             success: function(requestData) {
                 var datos = JSON.parse(requestData);
                 console.log(datos);
                 var parameters = {
-                    idSalidaProd: datos[0].idSalidaProd
+                    idcotizacion: datos[0].idcotiz
                 }
                 var _post = $.post(path + "cotizacion/detcotizacion", parameters);
                 _post.success(function(request) {
-                    $("#panelSalidaProducto").html(request);
+                    $("#panelSalidaActivos").html(request);
                 });
             },
             error: function(requestData, strError, strTipoError) {
@@ -453,57 +320,87 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
         });
 
 
+
     }
 
-    // -----> Imprimir ====================================================
+
+    // -----> Retorno ====================================================
+    function btnRetorno(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetorno(\'' + options.rowId + '\');">' +
+            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
+    }
+
+    function accionbtnRetorno(rowId) {
+        var row = $("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        if (row.idSalidaActivo == "" || row.idSalidaActivo == undefined) {
+            openDialogWarning("Seleccione un Registro");
+            return;
+        }
+        parameters = {
+            "idSalidaActivo": row.idSalidaActivo
+        };
+
+        var _post = $.post(path + "almacen/detretornomat", parameters);
+        _post.success(function(request) {
+            $("#panelSalidaActivos").html(request);
+        });
+    }
+
+    // -----> Imprimir PDF ====================================================
     function btnImprimir(cellvalue, options, rowObject) {
 
-        return '<div align="center" class="ui-pg-button " title="Imprimir Salida Prod" style="text-align:center;' +
+        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
             'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\'' + options.rowId + '\');">' +
             '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
     }
 
     function accionbtnImprimir(rowId) {
-        var rowdat = jQuery("#tblListaSalidaProd").jqGrid('getRowData', rowId);
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
         var paramtrs = {
-            idSalidaProd: rowdat.idSalidaProd
+            idSalidaActivo: rowdat.idSalidaActivo
         }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host + "rptSalidaProd.php?idSalida=" + rowdat.idSalidaProd, '_blank');
+        window.open(host + "rptSalidaMat.php?idSalida=" + rowdat.idSalidaActivo, '_blank');
     }
 
 
 
-    nuevaSalidaProd = function() {
+
+
+
+    nuevaSalidaMat = function() {
         parameters = {
             "idsigma": '0000000000'
         };
-        window.open(path + "almacen/detsalidaprod", "_self");
+        window.open(path + "almacen/detsalidaactivos", "_self");
     };
-    verSalidaProd = function() {
-        var selr = $('#tblListaSalidaProd').jqGrid('getGridParam', 'selrow');
-        var row = $("#tblListaSalidaProd").jqGrid('getRowData', selr);
-        if (row.idSalidaProd == "" || row.idSalidaProd == undefined) {
+    verSalidaMat = function() {
+        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
+        if (row.idSalidaActivo == "" || row.idSalidaActivo == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
         parameters = {
-            "idSalidaProd": row.idSalidaProd
+            "idSalidaActivo": row.idSalidaActivo
         };
 
-        var _post = $.post(path + "almacen/detsalidaprod", parameters);
+        var _post = $.post(path + "almacen/detsalidaactivos", parameters);
         _post.success(function(request) {
-            $("#panelSalidaProducto").html(request);
+            $("#panelSalidaActivos").html(request);
         });
 
 
     };
 
 
-    function buttonsGridSalidaProd() {
-        $("#tblListaSalidaProd")
-            .navGrid('#ptblListaSalidaProd', {
+    function buttonsGridPerson() {
+        $("#tblListaSalidaMat")
+            .navGrid('#ptblListaSalidaMat', {
                 edit: false,
                 add: false,
                 del: false,
@@ -511,17 +408,17 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                 refresh: false
             })
 
-            .navButtonAdd('#ptblListaSalidaProd', {
+            .navButtonAdd('#ptblListaSalidaMat', {
                 caption: "Crear&nbsp;&nbsp;",
                 buttonicon: "ui-icon-plus",
                 onClickButton: function() {
-                    nuevaSalidaProd();
+                    nuevaSalidaMat();
                 },
                 position: "last"
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaSalidaProd', {
+            .navButtonAdd('#ptblListaSalidaMat', {
                 caption: "Imprimir&nbsp;&nbsp;",
                 buttonicon: "ui-icon-pencil",
                 onClickButton: function() {
@@ -530,57 +427,42 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
                 position: "last"
             })
             .navSeparatorAdd();
-
-        $("#tblListaSalidaProd").jqGrid('filterToolbar', {
-            stringResult: true,
-            searchOnEnter: false,
-            defaultSearch: 'cn',
-            ignoreCase: true
-        });
     }
 
 
     function imprimir() {
-        var selr = $('#tblListaSalidaProd').jqGrid('getGridParam', 'selrow');
-        var row = $("#tblListaSalidaProd").jqGrid('getRowData', selr);
+        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
 
-        if (row.idSalidaProd == "" || row.idSalidaProd == undefined) {
+        if (row.idCotiz == "" || row.idCotiz == undefined) {
             openDialogWarning("Seleccione cotizacion.");
             return;
         }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host + "rptCotizacion.php?idSalidaProd=" + row.idSalidaProd, '_blank');
+        window.open(host + "rptCotizacion.php?idCotiz=" + row.idCotiz, '_blank');
     }
 
 
 
-    buscarSalidaProd = function() {
-        var fecdes = $("#fecdesde").val();
-        var fechast = $("#fechasta").val();
-        var modelo = $("#txtModelo").val();
-        var serie = $("#txtSerie").val();
-        var razsoc = $("#txtRazonSocial").val();
-        var NroCotizacion = $("#txtNroCotizacion").val();
-        var tipob = '0';
+    buscarSalidaMate = function() {
+
+        var tipob = $("#cbotipob").val();
 
         var params = '[' +
             '["@tBusqueda", "' + tipob + '"],' +
-            '["@vModelo", "' + modelo + '"],' +
-            '["@vSerie", "' + serie + '"],' +
-            '["@vRazonSoc", "' + razsoc + '"],' +
-            '["@vNroCotizacion", "' + NroCotizacion + '"],' +
-            '["@vFecIni", "' + fecdes + '"],' +
-            '["@vFecFin", "' + fechast + '"]' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"],' +
+            '["@vFecIni", "' + $("#fecdesde").val() + '"],' +
+            '["@vFecFin", "' + $("#fechasta").val() + '"]' +
             ']';
         parameters = {
-            "name": "tblListaSalidaProd",
-            "procedure": "almacen.List_SalidaProd",
+            "name": "tblListaSalidaMat",
+            "procedure": "almacen.List_SalidaActivos",
             "print": "true",
             "parameters": params
         };
 
         procesarProcedimientoJSON(
-            "panelListaSalidaProd", "tblListaSalidaProd", optionSalidaProd, parameters, null, buttonsGridSalidaProd
+            "panelListaSalidaMat", "tblListaSalidaMat", optionSalidaMat, parameters, null, buttonsGridPerson
         );
     };
 
@@ -597,11 +479,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
             buttonImageOnly: true,
             dateFormat: "dd/mm/yy"
         });
-        buscarSalidaProd();
+        buscarSalidaMate();
         $("#btnbuscar").button(ICON_SEARCH);
-        $("#div_titulo").html("Almacen => Salida Productos");
+        $("#div_titulo").html("Almacen => Salidas Activos");
     });
-
-
-    //  themeComboBox("#cbo_bus");
 </script>

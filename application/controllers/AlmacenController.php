@@ -1872,6 +1872,182 @@ class AlmacenController extends Zend_Controller_Action
             // print_r(json_encode($resultDescta[0]["b"]));
         }
     }
+
+    public function detentradaactivosdelAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal = $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $iddentrada = $this->_request->getPost('idDetEntradaActivos');
+
+            $params = null;
+            $params[] = array('@p_iddentradaact', $iddentrada);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $detcot = $cn->ejec_store_procedura_sql('delete_dentradaactivos', $params);
+            echo json_encode($detcot);
+        }
+    }
+
+    public function eliminarentradaactivosAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal = $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $identradaacti = $this->_request->getPost('idEntradaActivos');
+            $params = null;
+            $params[] = array('@p_identradaact', $identradaacti);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $copiarcot = $cn->executeAssocQuery('eliminar_entradaactivos', $params);
+            echo json_encode($copiarcot);
+        }
+    }
+
+
+    /**
+     * Salida Activos
+     */
+    public function salidaactivosAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+        //$this->view->fechaini=date('d/m/Y');
+        //$this->view->fechafin=date('d/m/Y');
+        $this->view->idcotiz = "se";
+    }
+    public function detsalidaactivosAction()
+    {
+        $this->view->tieneop = 0;
+        $this->view->dFecSalida = date('d/m/Y');
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $idsalidaactivo = $this->_request->getParam('idSalidaActivo');
+            $this->view->idsalidaactivo = $idsalidaactivo;
+            $cn = new Model_DataAdapter();
+            $params[] = array('@tBusqueda', "2");
+            $params[] = array('@vDatoBus', $idsalidaactivo);
+            $params[] = array('@vFecIni', "");
+            $params[] = array('@vFecFin', "");
+            $datos = $cn->ejec_store_procedura_sql('almacen.List_SalidaActivos', $params);
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->idSalidaActivo = $datos[0][0];
+                $this->view->dFecSalida = $datos[0][1];
+                $this->view->obra = $datos[0][2];
+                $this->view->lugar = $datos[0][3];
+                $this->view->idtecnico = $datos[0][4];
+                $this->view->nomtecnico = $datos[0][5];
+                $this->view->idCliente = $datos[0][6];
+                $this->view->nomCliente = $datos[0][7];
+                $this->view->obs = $datos[0][9];
+                $this->view->idCotiz = $datos[0][10];
+                $this->view->vnroCot = $datos[0][11];
+            } else {
+                $this->view->idSalidaActivo = $datos[0][0];
+                $this->view->dFecSalida = $datos[0][1];
+                $this->view->obra = $datos[0][2];
+                $this->view->lugar = $datos[0][3];
+                $this->view->idtecnico = $datos[0][4];
+                $this->view->nomtecnico = $datos[0][5];
+                $this->view->idCliente = $datos[0][6];
+                $this->view->nomCliente = $datos[0][7];
+                $this->view->obs = $datos[0][9];
+                $this->view->idCotiz = $datos[0][10];
+                $this->view->vnroCot = $datos[0][11];
+            }
+            $arrDetMateriales = array();
+            $params_mat[] = array('@tBusqueda', "0");
+            $params_mat[] = array('@vIdSalidaActivo', $idsalidaactivo);
+            $params_mat[] = array('@vDatoBus', "");
+            $params_mat[] = array('@vFecIni', "");
+            $params_mat[] = array('@vFecFin', "");
+            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetSalidaActivo", $params_mat);
+            if (count($dtbdtestigo) > 0) {
+                $arrDetMateriales = $dtbdtestigo;
+            }
+
+            $this->view->detSalidaMat = $arrDetMateriales;
+        }
+    }
+
+    public function guardarsalidaactivosAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pPapeleta = $this->_request->getParam('objSalidaMat');
+            $jPapeleta = json_decode($pPapeleta);
+
+            $dataSet = new Model_DataAdapter();
+            if ($jPapeleta->idSalidaMat == "") {
+                $trans = "1";
+            } else {
+                $trans = "2";
+            }
+            $_procedure = 'almacen.InsUpd_salidaActivos';
+            $params[] = array('@ttrans', $trans);
+            $params[] = array('@p_idsalidaActivos', $jPapeleta->idSalidaMat);
+            $params[] = array('@p_obra', $jPapeleta->obra);
+            $params[] = array('@p_lugar', $jPapeleta->lugar);
+            $params[] = array('@p_fecha', $jPapeleta->fecha);
+            $params[] = array('@p_idtecnico', $jPapeleta->idtecnico);
+            $params[] = array('@p_idcliente', $jPapeleta->idcliente);
+            $params[] = array('@p_idcotizacion', $jPapeleta->idcotizacion);
+            $params[] = array('@p_obs', $jPapeleta->obs);
+            $params[] = array('@vUsernm', $userlogin);
+            $params[] = array('@vHostnm', 'local');
+
+            $resultPapeleta = $dataSet->executeAssocQuery($_procedure, $params);
+
+
+
+            //Se pasa a estado Desabilitado los que estan eliminado temporalmente (5= Eliminado Temporal, 4= Desabilitado)
+            $_proc_okEliminado = 'almacen.salida_OKActivopasaAeliminado';
+            $params1[] = array('@p_idSalidaActivo', $resultPapeleta[0]["idSalidaActivo"]); // $jPapeleta->idSalidaMat);
+            $resultEok = $dataSet->executeAssocQuery($_proc_okEliminado, $params1);
+
+
+            $_proc_dtestigo = 'add_detsalidaActivos';
+
+            foreach ($jPapeleta->materiales as $value) {
+                $params = null;
+                $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
+                $params[] = array('@p_idsalidamat', $resultPapeleta[0]["idSalidaMat"]);   #p_mpapeleta
+                $params[] = array('@p_iddetsalidamat',  $value->idDetSalidaMat);  #p_mperson
+                $params[] =  array('@p_cantidad',  $value->Cantidad); #cantidad
+                $params[] =  array('@p_nstocksalida',  $value->stock); #cantidad
+                //print_r($params);
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($resultPapeleta[0]));
+        }
+    }
+
     /*
     public function cotizacionopcionalapricipalAction() {
         if ($this->getRequest()->isXmlHttpRequest()) {

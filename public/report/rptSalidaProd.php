@@ -295,7 +295,7 @@ $Rs_tipoPer->Poner_MSQL("select  a.vobra,a.vlugar,m.idProducto,m.vNombre nProduc
 c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
 1 cantidad
 ,coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
-			select top 2 de.nPrecioUnit  from almacen.detEntradaProd de
+			select top 1 de.nPrecioUnit  from almacen.detEntradaProd de
 			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
 			 where de.idProducto=m.idProducto
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
@@ -303,7 +303,7 @@ c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
   )abc ),0) precUnit,
 
 coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
-			select top 2 de.nPrecioUnit  from almacen.detEntradaProd de
+			select top 1 de.nPrecioUnit  from almacen.detEntradaProd de
 			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
 			 where de.idProducto=m.idProducto
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)

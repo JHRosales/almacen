@@ -205,7 +205,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 var parmter = {};
                 parmter.idMaterial = row.idMaterial;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "mantenimientos/eliminarmaterial", parmter, updCheckconcluir, 'json');
+                $.post(path + "mantenimientos/anularmaterial", parmter, updCheckconcluir, 'json');
             },
             "No": function() {
                 //ProcesoBuscarRuta(''); chkrecep_5

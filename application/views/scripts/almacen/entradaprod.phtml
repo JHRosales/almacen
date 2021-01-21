@@ -1,7 +1,7 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoTecnolo=array(array("1","IP"), array("2","HCVI"));
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"), array("3","MARCA"), array("4","FECHA"));
+$TipoTecnolo = array(array("1", "IP"), array("2", "HCVI"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVEEDOR"), array("3", "MARCA"), array("4", "FECHA"));
 
 ?>
 
@@ -10,38 +10,38 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         <label>ENTRADA DE PRODUCTOS</label>
     </div>
     <div id="dialogBuscarContribuyentePredio" style="margin-bottom: -30px">
-        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos del Producto</div>
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success">Datos del Producto</div>
 
         <div class="form-row">
             <div class="form-group col-md-6 text-left">
                 <label for="inputModelo">Modelo</label>
-                <input type="text" class="form-control" id="txtModelo" name="txtModelo"  placeholder="Modelo">
+                <input type="text" class="form-control" id="txtModelo" name="txtModelo" placeholder="Modelo">
             </div>
             <div class="form-group col-md-6 text-left">
                 <label for="inputSerie">Serie</label>
-                <input type="text" class="form-control" id="txtSerie" name="txtSerie"  placeholder="Serie">
+                <input type="text" class="form-control" id="txtSerie" name="txtSerie" placeholder="Serie">
             </div>
         </div>
 
-        <div class="col-sm-12 text-left ui-title text-nowrap bg-success" >Datos del Proveedor</div>
+        <div class="col-sm-12 text-left ui-title text-nowrap bg-success">Datos del Proveedor</div>
         <div class="form-row">
             <div class="form-group col-md-6 text-left">
-                <label for="inputRazonS" >Razon Social</label>
-                <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial"  placeholder="Razon social">
+                <label for="inputRazonS">Razon Social</label>
+                <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial" placeholder="Razon social">
             </div>
             <div class="form-group col-md-6 text-left">
                 <label for="inputRUC">Nro Factura</label>
-                <input type="text" class="form-control" id="txtNFactura" name="txtNFactura"  placeholder="Nro Factura">
+                <input type="text" class="form-control" id="txtNFactura" name="txtNFactura" placeholder="Nro Factura">
             </div>
         </div>
 
 
-        <div class="col-sm-12 text-left text-nowrap bg-success" ></div>
+        <div class="col-sm-12 text-left text-nowrap bg-success"></div>
 
-      <!--  <div class="form-group col-md-6 text-left">
+        <!--  <div class="form-group col-md-6 text-left">
             <label for="inputZip">Tipo Busqueda</label>
             <select id="cbotipob" name="cbotipob"   class="form-control col-md-12">
-                <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
+                <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
             </select>
         </div>
 
@@ -51,7 +51,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         </div>-->
 
         <div class="form-group col-md-6 text-left">
-            <label for="inputCity">Fecha Desde   </label>
+            <label for="inputCity">Fecha Desde </label>
             <input type="text" id="fecdesde" maxlength="10" class="form-control col-md-12" onkeypress="if(event.keyCode==13){buscarEntradaProd();}" value="<?php echo $this->fechaini; ?>" />
         </div>
         <div class="form-group col-md-6 text-left">
@@ -61,12 +61,12 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
 
 
 
-            <div class="form-group col-md-2 text-center" style="display: none">
-                <button id="btnbuscar" name="btnbuscar"  class="form-control" onclick="buscarEntradaProd()">Buscar</button>
-            </div>
-        <div  class="form-group">&thinsp;
+        <div class="form-group col-md-2 text-center" style="display: none">
+            <button id="btnbuscar" name="btnbuscar" class="form-control" onclick="buscarEntradaProd()">Buscar</button>
         </div>
+        <div class="form-group">&thinsp;
         </div>
+    </div>
 
     <div class="container" id="panelListaEntradaProd" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
         <table id="tblListaEntradaProd"></table>
@@ -81,11 +81,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
 
 
 
-<div id="dialogMensaje"  >
+<div id="dialogMensaje">
 </div>
 
 <script type="text/javascript">
-/*    $("#cbo_bus").combobox({
+    /*    $("#cbo_bus").combobox({
         selected: function(event, ui){
             if($("#cbo_bus").val()=='1'){
                 $(".clprod").show();
@@ -100,34 +100,39 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
         }
     });
 */
-$("#txtModelo").keyup(function(e){
-    if($("#txtModelo").val().length>2 || e.keyCode==13 ){
-        buscarEntradaProd();
-        $("#txtModelo").focus();
-    }
-});
-$("#txtSerie").keyup(function(e){
-    if($("#txtSerie").val().length>2 || e.keyCode==13 ){
-        buscarEntradaProd();
-        $("#txtSerie").focus();
-    }
-});
-$("#txtRazonSocial").keyup(function(e){
-    if($("#txtRazonSocial").val().length>2 || e.keyCode==13 ){
-        buscarEntradaProd();
-        $("#txtRazonSocial").focus();
-    }
-});
-$("#txtNFactura").keyup(function(e){
-    if($("#txtNFactura").val().length>2 || e.keyCode==13 ){
-        buscarEntradaProd();
-        $("#txtNFactura").focus();
-    }
-});
+    $("#txtModelo").keyup(function(e) {
+        /* if($("#txtModelo").val().length>2 || e.keyCode==13 ){*/
+        if (e.keyCode == 13) {
+            buscarEntradaProd();
+            $("#txtModelo").focus();
+        }
+    });
+    $("#txtSerie").keyup(function(e) {
+        /*if($("#txtSerie").val().length>2 || e.keyCode==13 ){*/
+        if (e.keyCode == 13) {
+            buscarEntradaProd();
+            $("#txtSerie").focus();
+        }
+    });
+
+    $("#txtRazonSocial").keyup(function(e) {
+        /* if ($("#txtRazonSocial").val().length > 2 || e.keyCode == 13) {*/
+        if (e.keyCode == 13) {
+            buscarEntradaProd();
+            $("#txtRazonSocial").focus();
+        }
+    });
+    $("#txtNFactura").keyup(function(e) {
+        /*if ($("#txtNFactura").val().length > 2 || e.keyCode == 13) {*/
+        if (e.keyCode == 13) {
+            buscarEntradaProd();
+            $("#txtNFactura").focus();
+        }
+    });
 
 
     $("#cbotipob").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             buscarEntradaProd();
         }
     });
@@ -152,44 +157,117 @@ $("#txtNFactura").keyup(function(e){
             /*,"Nuevo"
             ,"Imprimir"*/
         ],
-        colModel: [
-            {name: 'idEntradaProd', index:'idEntradaProd', width:80},
-            {name: 'idProveedor', index:'idProveedor', width:80, hidden: false},
-            {name: 'vProveedor', index:'vProveedor',width:250, hidden: false},
-            {name: 'vFacturaComp', index:'vFacturaComp', width:120, hidden: false},
-            {name: 'nSubtotal', index:'nSubtotal', width:80, hidden: false},
-            {name: 'nIgv', index:'nIgv', width:80, hidden: false},
-            {name: 'nPrecioTotal', index:'nPrecioTotal', width:80, hidden: false},
-            {name: 'nTipoMoneda', index:'nTipoMoneda', width:100, hidden: true},
-            {name: 'TipoMoneda', index:'TipoMoneda', width:100, hidden: false},
-            {name: 'dFecIngreso', index:'dFecIngreso', width:90, hidden: false},
-            {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnborrarentradaprod,search:false}
+        colModel: [{
+                name: 'idEntradaProd',
+                index: 'idEntradaProd',
+                width: 80
+            },
+            {
+                name: 'idProveedor',
+                index: 'idProveedor',
+                width: 80,
+                hidden: false
+            },
+            {
+                name: 'vProveedor',
+                index: 'vProveedor',
+                width: 250,
+                hidden: false
+            },
+            {
+                name: 'vFacturaComp',
+                index: 'vFacturaComp',
+                width: 120,
+                hidden: false
+            },
+            {
+                name: 'nSubtotal',
+                index: 'nSubtotal',
+                width: 80,
+                hidden: false
+            },
+            {
+                name: 'nIgv',
+                index: 'nIgv',
+                width: 80,
+                hidden: false
+            },
+            {
+                name: 'nPrecioTotal',
+                index: 'nPrecioTotal',
+                width: 80,
+                hidden: false
+            },
+            {
+                name: 'nTipoMoneda',
+                index: 'nTipoMoneda',
+                width: 100,
+                hidden: true
+            },
+            {
+                name: 'TipoMoneda',
+                index: 'TipoMoneda',
+                width: 100,
+                hidden: false
+            },
+            {
+                name: 'dFecIngreso',
+                index: 'dFecIngreso',
+                width: 90,
+                hidden: false
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 50,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                }
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 40,
+                align: 'center',
+                formatter: btnborrarentradaprod,
+                search: false
+            }
             /*,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false}
             ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
         ],
         caption: "&nbsp;&nbsp;&nbsp;Entrada de Productos",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             //console.log(row);
             //dobleclickPersona(row);
             verEntradaProd();
         },
-        afterInsertRow:function(rowid,aData){
-        switch(
+        afterInsertRow: function(rowid, aData) {
+            switch (
                 aData.nestado
-            ){case'1':
-                break;
-            case '0':
+            ) {
+                case '1':
+                    break;
+                case '0':
 
-                jQuery("#tblListaEntradaProd").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                jQuery("#tblListaEntradaProd").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                jQuery("#tblListaEntradaProd").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                jQuery("#tblListaEntradaProd").jqGrid('setCell',rowid,'nestado','',{color:'red'});
-break;
+                    jQuery("#tblListaEntradaProd").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaProd").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaProd").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaEntradaProd").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
+                    break;
 
 
-        }
+            }
 
 
 
@@ -206,134 +284,134 @@ break;
      </div>
     */
 
-  /*  eliminar=function(a){
-        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
-        var row = $("#tblListaEntradaProd").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
-            openDialogWarning("Seleccione un registro para eliminar.");
-            return;
+    /*  eliminar=function(a){
+          var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
+          var row = $("#tblListaEntradaProd").jqGrid('getRowData', selr);
+          if(row.cidpers == "" || row.cidpers == undefined){
+              openDialogWarning("Seleccione un registro para eliminar.");
+              return;
+          }
+          parameters = {
+              "idsigma": row.cidpers
+          };
+
+          //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+         openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+
+             "si":function(){
+                 //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
+                 $.ajax({
+                     url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                     type: 'POST',
+                     cache: false,
+                     data: parameters,
+                     beforeSend: function (data) {
+
+                     },
+                     success: function (requestData) {
+                         $("#result").html(requestData);
+                         closeDialog("jqDialogConfirmacion1");
+                         closeDialog('jqDialog1');
+
+
+
+                     },
+                     error: function (requestData, strError, strTipoError) {
+                         $("#result").html("Error " + strTipoError + ': ' + strError);
+                     },
+                     complete: function (requestData, exito) {
+                     }
+
+
+                 });
+             },
+
+             "no":function(){
+                 closeDialog("jqDialogConfirmacion1");
+
+             }
+         })
+
+
+      };*/
+
+
+    /*
+        function chkEliminar(cellvalue, options, rowObject) {
+            return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+                'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? '  ' : '') + '/>';
         }
-        parameters = {
-            "idsigma": row.cidpers
-        };
 
-        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+        function changecheckboxcconcluirexp(rowId) {
 
-           "si":function(){
-               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+            var row = jQuery("#tblListaEntradaProd").jqGrid('getRowData', rowId);
+            openDialogConfirm1("Cambiar estado?", 350, {
+                "Si": function () {
+                    var parmter = {};
+                    parmter.idCotiz = row.idCotiz;
+                    closeDialog("jqDialogConfirmacion1");
+                    $.post(path + "almacen/cotizaciondel", parmter, updCheckconcluir, 'json');
+                },
+                "No": function () {
+                    //ProcesoBuscarRuta(''); chkrecep_5
+                    $("#chkconcluirexp_" + rowId).attr('checked', false);
+                    closeDialog("jqDialogConfirmacion1");
 
-                   },
-                   success: function (requestData) {
-                       $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog1');
+                }
+            });
+        }
+        function updCheckconcluir(data) {
 
+            buscarEntradaProd();
 
-
-                   },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
-
-
-               });
-           },
-
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
-
-           }
-       })
-
-
-    };*/
-
-
-/*
-    function chkEliminar(cellvalue, options, rowObject) {
-        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
-            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? '  ' : '') + '/>';
-    }
-
-    function changecheckboxcconcluirexp(rowId) {
-
-        var row = jQuery("#tblListaEntradaProd").jqGrid('getRowData', rowId);
-        openDialogConfirm1("Cambiar estado?", 350, {
-            "Si": function () {
-                var parmter = {};
-                parmter.idCotiz = row.idCotiz;
-                closeDialog("jqDialogConfirmacion1");
-                $.post(path + "almacen/cotizaciondel", parmter, updCheckconcluir, 'json');
-            },
-            "No": function () {
-                //ProcesoBuscarRuta(''); chkrecep_5
-                $("#chkconcluirexp_" + rowId).attr('checked', false);
-                closeDialog("jqDialogConfirmacion1");
-
-            }
-        });
-    }
-    function updCheckconcluir(data) {
-
-        buscarEntradaProd();
-
-    }*/
+        }*/
 
 
 
 
 
     // -----> Borrar============================================00
-    function btnborrarentradaprod(cellvalue, options, rowObject){
+    function btnborrarentradaprod(cellvalue, options, rowObject) {
 
         return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
             'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
-            'onclick="accionborrarentradaprod(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            'onclick="accionborrarentradaprod(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
             '<span class="ui-icon ui-icon-trash"></span></div></div>';
     }
 
-    function accionborrarentradaprod(rowId){
-        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData',rowId);
+    function accionborrarentradaprod(rowId) {
+        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData', rowId);
 
-        var paramtrs ={ identradaProd :rowdat.idEntradaProd }
+        var paramtrs = {
+            identradaProd: rowdat.idEntradaProd
+        }
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
-            "Si": function () {
+            "Si": function() {
                 $.ajax({
                     url: jQuery.scriptPath + "index.php/almacen/eliminarentradaprod",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
-                    beforeSend: function (data) {
-                    },
-                    success: function (requestData) {
-                        var datos=JSON.parse(requestData);
+                    beforeSend: function(data) {},
+                    success: function(requestData) {
+                        var datos = JSON.parse(requestData);
                         console.log(datos[0].std);
-                        if(datos[0].std=="ERR"){
+                        if (datos[0].std == "ERR") {
                             openDialogWarning(datos[0].msg);
-                        }else{
-                        //var parameters ={ identradaprod :datos[0].identradaprod };
-                        buscarEntradaProd();
+                        } else {
+                            //var parameters ={ identradaprod :datos[0].identradaprod };
+                            buscarEntradaProd();
                         }
                         closeDialog("jqDialogConfirmacion1");
                     },
-                    error: function (requestData, strError, strTipoError) {
+                    error: function(requestData, strError, strTipoError) {
                         $("#result").html("Error " + strTipoError + ': ' + strError);
                     },
-                    complete: function (requestData, exito) {
-                    }
+                    complete: function(requestData, exito) {}
                 });
             },
-            "No": function () {
+            "No": function() {
                 closeDialog("jqDialogConfirmacion1");
 
             }
@@ -342,57 +420,62 @@ break;
 
     }
     // -----> Nuevo ====================================================
-    function btnNuevo(cellvalue, options, rowObject){
+    function btnNuevo(cellvalue, options, rowObject) {
 
-        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
+        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
     }
 
-    function accionbtnNuevo(rowId){
-        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData',rowId);
-        var paramtrs ={ idCotiz :rowdat.idCotiz }
+    function accionbtnNuevo(rowId) {
+        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idCotiz: rowdat.idCotiz
+        }
         console.log(paramtrs);
         $.ajax({
             url: jQuery.scriptPath + "index.php/almacen/copiarcotiz",
             type: 'POST',
             cache: false,
             data: paramtrs,
-            beforeSend: function (data) {
+            beforeSend: function(data) {
 
             },
-            success: function (requestData) {
-                var datos=JSON.parse(requestData);
-              console.log(datos);
-                var parameters ={ idcotizacion :datos[0].idcotiz }
+            success: function(requestData) {
+                var datos = JSON.parse(requestData);
+                console.log(datos);
+                var parameters = {
+                    idcotizacion: datos[0].idcotiz
+                }
                 var _post = $.post(path + "almacen/detcotizacion", parameters);
                 _post.success(function(request) {
                     $("#panelMantenimientoEntradaProd").html(request);
                 });
             },
-            error: function (requestData, strError, strTipoError) {
+            error: function(requestData, strError, strTipoError) {
                 $("#result").html("Error " + strTipoError + ': ' + strError);
             },
-            complete: function (requestData, exito) {
-            }
-       });
+            complete: function(requestData, exito) {}
+        });
 
 
 
     }
 
     // -----> Imprimir ====================================================
-    function btnImprimir(cellvalue, options, rowObject){
+    function btnImprimir(cellvalue, options, rowObject) {
 
         return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
             'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
-            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\''+options.rowId+'\');">' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\'' + options.rowId + '\');">' +
             '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
     }
 
-    function accionbtnImprimir(rowId){
-        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData',rowId);
-        var paramtrs ={ idCotiz :rowdat.idCotiz }
+    function accionbtnImprimir(rowId) {
+        var rowdat = jQuery("#tblListaEntradaProd").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idCotiz: rowdat.idCotiz
+        }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptCotizacion.php?idCotiz="+ rowdat.idCotiz ,'_blank');
+        window.open(host + "rptCotizacion.php?idCotiz=" + rowdat.idCotiz, '_blank');
     }
 
 
@@ -400,16 +483,16 @@ break;
 
 
 
-nuevaEntradaProd = function(){
+    nuevaEntradaProd = function() {
         parameters = {
             "idsigma": '0000000000'
         };
-       window.open(path + "almacen/detentradaprod", "_self");
+        window.open(path + "almacen/detentradaprod", "_self");
     };
     verEntradaProd = function() {
-        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
+        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaEntradaProd").jqGrid('getRowData', selr);
-        if(row.idEntradaProd == "" || row.idEntradaProd == undefined){
+        if (row.idEntradaProd == "" || row.idEntradaProd == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -418,7 +501,7 @@ nuevaEntradaProd = function(){
         };
 
         //openDialogData2("cotizacion/detcotizacion", parameters, 660);
-       // $.post(path + "cotizacion/detcotizacion", parameters, null, 'json');
+        // $.post(path + "cotizacion/detcotizacion", parameters, null, 'json');
         var _post = $.post(path + "almacen/detentradaprod", parameters);
         _post.success(function(request) {
             $("#panelMantenimientoEntradaProd").html(request);
@@ -427,10 +510,10 @@ nuevaEntradaProd = function(){
 
     };
 
-    estadoPersona = function(){
-        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
+    estadoPersona = function() {
+        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaEntradaProd").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
+        if (row.cidpers == "" || row.cidpers == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -438,100 +521,107 @@ nuevaEntradaProd = function(){
             "idsigma": row.cidpers
         };
 
-        openDialogData1("mantenimientos/estados",{codigo:row.cidpers},)
+        openDialogData1("mantenimientos/estados", {
+            codigo: row.cidpers
+        }, )
 
     };
 
 
-    function buttonsGridPerson(){
+    function buttonsGridPerson() {
         $("#tblListaEntradaProd")
-            .navGrid('#ptblListaEntradaProd', {edit:false,add:false,del:false,search:false,refresh:false})
+            .navGrid('#ptblListaEntradaProd', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-            .navButtonAdd('#ptblListaEntradaProd',{
-                caption:"Crear&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaEntradaProd', {
+                caption: "Crear&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaEntradaProd();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
-        /*
-            .navButtonAdd('#ptblListaEntradaProd',{
-                caption:"Editar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-         verEntradaProd();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()
+            /*
+                .navButtonAdd('#ptblListaEntradaProd',{
+                    caption:"Editar&nbsp;&nbsp;",
+                    buttonicon:"ui-icon-pencil",
+                    onClickButton: function(){
+             verEntradaProd();
+                    },
+                    position:"last"
+                })
+                .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaEntradaProd',{
-                caption:"Eliminar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-                    eliminar();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()*/
+                .navButtonAdd('#ptblListaEntradaProd',{
+                    caption:"Eliminar&nbsp;&nbsp;",
+                    buttonicon:"ui-icon-pencil",
+                    onClickButton: function(){
+                        eliminar();
+                    },
+                    position:"last"
+                })
+                .navSeparatorAdd()*/
 
-            .navButtonAdd('#ptblListaEntradaProd',{
-                caption:"Imprimir&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaEntradaProd', {
+                caption: "Imprimir&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     imprimir();
                 },
-                position:"last"
+                position: "last"
             })
-            .navSeparatorAdd()
-        ;
+            .navSeparatorAdd();
     }
 
 
-    function imprimir(){
-        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam','selrow');
+    function imprimir() {
+        var selr = $('#tblListaEntradaProd').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaEntradaProd").jqGrid('getRowData', selr);
-//console.log(row);
+        //console.log(row);
         //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.idCotiz );
-        if(row.idCotiz == "" || row.idCotiz == undefined){
+        if (row.idCotiz == "" || row.idCotiz == undefined) {
             openDialogWarning("Seleccione cotizacion.");
             return;
         }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptCotizacion.php?idCotiz="+ row.idCotiz ,'_blank');
+        window.open(host + "rptCotizacion.php?idCotiz=" + row.idCotiz, '_blank');
     }
 
 
 
     buscarEntradaProd = function() {
-      var fecdes=$("#fecdesde").val();
-      var fechast =$("#fechasta").val();
-      var modelo=$("#txtModelo").val();
-      var serie=$("#txtSerie").val();
-      var razsoc=$("#txtRazonSocial").val();
-      var factura=$("#txtNFactura").val();
+        var fecdes = $("#fecdesde").val();
+        var fechast = $("#fechasta").val();
+        var modelo = $("#txtModelo").val();
+        var serie = $("#txtSerie").val();
+        var razsoc = $("#txtRazonSocial").val();
+        var factura = $("#txtNFactura").val();
 
         console.log(modelo);
-       /* if(fecdes<fechast){
-            console.log(fd>fa);
-            openDialogWarning("La fecha desde debe ser menor que la fecha hasta");
-            return;
-        }*/
+        /* if(fecdes<fechast){
+             console.log(fd>fa);
+             openDialogWarning("La fecha desde debe ser menor que la fecha hasta");
+             return;
+         }*/
 
-        var tipob='0';
+        var tipob = '0';
 
-        var params = '['
-            + '["@tBusqueda", "' +tipob + '"],'
-            + '["@vModelo", "' + modelo + '"],'
-            + '["@vSerie", "' + serie + '"],'
-            + '["@vRazonSoc", "' + razsoc + '"],'
-            + '["@vFactura", "' + factura + '"],'
-            + '["@vFecIni", "' + fecdes + '"],'
-            + '["@vFecFin", "' + fechast + '"]'
-            + ']';
+        var params = '[' +
+            '["@tBusqueda", "' + tipob + '"],' +
+            '["@vModelo", "' + modelo + '"],' +
+            '["@vSerie", "' + serie + '"],' +
+            '["@vRazonSoc", "' + razsoc + '"],' +
+            '["@vFactura", "' + factura + '"],' +
+            '["@vFecIni", "' + fecdes + '"],' +
+            '["@vFecFin", "' + fechast + '"]' +
+            ']';
         parameters = {
             "name": "tblListaEntradaProd",
             "procedure": "almacen.List_EntradaProd",
@@ -540,24 +630,32 @@ nuevaEntradaProd = function(){
         };
 
         procesarProcedimientoJSON(
-            "panelListaEntradaProd"
-            , "tblListaEntradaProd"
-            , optionEntradaProd
-            , parameters
-            , null
-            , buttonsGridPerson
+            "panelListaEntradaProd", "tblListaEntradaProd", optionEntradaProd, parameters, null, buttonsGridPerson
         );
     };
 
-    $(function(){
-        $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-        $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-         buscarEntradaProd();
-        $("#btnbuscar").button({icons: {primary: "ui-icon-search"}});
+    $(function() {
+        $("#fecdesde").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fechasta").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        buscarEntradaProd();
+        $("#btnbuscar").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        });
         $("#div_titulo").html("Almacen => Entrada Productos");
     });
 
 
-  //  themeComboBox("#cbo_bus");
-
+    //  themeComboBox("#cbo_bus");
 </script>

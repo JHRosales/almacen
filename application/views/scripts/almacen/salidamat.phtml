@@ -1,6 +1,6 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE MATERIAL"), array("3", "NRO COTIZACION"), array("4", "CLIENTE"));
 
 ?>
 
@@ -9,24 +9,26 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
         <label>SALIDA DE MATERIALES</label>
     </div>
     <div id="dialogBuscarSalidaMaterial">
-        <table class="ui-panelLayout-main" >
+        <table class="ui-panelLayout-main">
             <tr>
                 <td style="vertical-align: top;">
                     <table border="0" style="margin-left:15px;">
 
-                        <tr><td>
-                                <b>  Datos Busqueda</b>
-                            </td></tr>
+                        <tr>
+                            <td>
+                                <b> Datos Busqueda</b>
+                            </td>
+                        </tr>
 
                         <tr class="rowdatospsm" id="rowdatospsm">
                             <td style="text-align: left">
                                 <select id="cbotipob" name="cbotipob" style="width:140px;">
-                                    <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
+                                    <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
                                 </select>
                             </td>
                             <td></td>
                             <TD colspan="8">
-                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarSalidaMate();}" style="width:100%" />
+                                Texto de busqueda: <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarSalidaMate();}" style="width:100%" />
                             </TD>
                             <td> &nbsp;&nbsp;</td>
                             <td rowspan="3">
@@ -45,11 +47,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
                         <tr class="rowbcoti" id="panelbcoti">
 
                             <td>
-                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;"/>
+                                <input type="text" id="fecdesde" class="ui-text" value="<?php echo $this->fechaini; ?>" style="text-align: left;width: 80px;" />
                             </td>
                             <td>&nbsp;</td>
                             <td colspan="2">
-                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;"/>
+                                <input type="text" id="fechasta" class="ui-text" value="<?php echo $this->fechafin; ?>" style="text-align: left;width: 100px;" />
                             </td>
                             <td>&nbsp;</td>
 
@@ -74,12 +76,11 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
         <table id="tblListaSalidaMat"></table>
         <div id="ptblListaSalidaMat"></div>
     </div>
-    <br/>
+    <br />
 </div>
 <script type="text/javascript">
-
     $("#cbotipob").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             buscarSalidaMate();
         }
     });
@@ -90,10 +91,12 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
         height: 250,
         colNames: [
             'idSalidaMat',
-            'dFecSalida',
-            'dFecRetorno',
+            'FecSalida',
+            'FecRetorno',
             'vObra',
             'vLugar',
+            'Cliente',
+            'Nro Cotizacion',
             'idTecnico',
             'vTecnico',
             "vEstado",
@@ -102,36 +105,127 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
             "Imprimir",
             "Retorno"
         ],
-        colModel: [
-            {name: 'idSalidaMat', index:'idSalidaMat', width:90},
-            {name: 'dFecSalida', index:'dFecSalida', width:90},
-            {name: 'dFecRetorno', index:'dFecRetorno', width:90},
-            {name: 'vObra', index:'vObra', width:200},
-            {name: 'vLugar', index:'vLugar', width:200, hidden: false},
-            {name: 'idTecnico', index:'idTecnico', width:70},
-            {name: 'vTecnico', index:'vTecnico', width:150},
-            {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false, hidden: false},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false, hidden: true},
-            { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false, hidden: false},
-            { name: 'btndocudevo', index: 'btndocudevo', width: 60, align: 'center' ,formatter : btnRetorno,search:false}
+        colModel: [{
+                name: 'idSalidaMat',
+                index: 'idSalidaMat',
+                width: 90
+            },
+            {
+                name: 'dFecSalida',
+                index: 'dFecSalida',
+                width: 80
+            },
+            {
+                name: 'dFecRetorno',
+                index: 'dFecRetorno',
+                width: 80
+            },
+            {
+                name: 'vObra',
+                index: 'vObra',
+                width: 150
+            },
+            {
+                name: 'vLugar',
+                index: 'vLugar',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'cliente',
+                index: 'cliente',
+                width: 150,
+                hidden: false
+            },
+            {
+                name: 'vnroCot',
+                index: 'vnroCot',
+                width: 80,
+                hidden: false
+            },
+
+            {
+                name: 'idTecnico',
+                index: 'idTecnico',
+                width: 70,
+                hidden: true
+            },
+            {
+                name: 'vTecnico',
+                index: 'vTecnico',
+                width: 150
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 50,
+                hidden: false,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                },
+                formatter: 'checkbox'
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 40,
+                align: 'center',
+                formatter: btndocumtall,
+                search: false,
+                hidden: false
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 40,
+                align: 'center',
+                formatter: btnNuevo,
+                search: false,
+                hidden: true
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 40,
+                align: 'center',
+                formatter: btnImprimir,
+                search: false,
+                hidden: false
+            },
+            {
+                name: 'btndocudevo',
+                index: 'btndocudevo',
+                width: 60,
+                align: 'center',
+                formatter: btnRetorno,
+                search: false
+            }
         ],
         caption: "&nbsp;&nbsp;&nbsp;Salida de Materiales",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             verSalidaMat();
         },
-        afterInsertRow:function(rowid,aData){
-            switch(aData.nestado){
-                case'1':
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
                     break;
                 case '0':
 
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell',rowid,'nestado','',{color:'red'});
-                break;
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
+                    break;
             }
         },
         onSelectRow: function(id) {
@@ -189,13 +283,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
 
         var row = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
         openDialogConfirm1("Cambiar estado?", 350, {
-            "Si": function () {
+            "Si": function() {
                 var parmter = {};
                 parmter.idCotiz = row.idCotiz;
                 closeDialog("jqDialogConfirmacion1");
                 $.post(path + "cotizacion/cotizaciondel", parmter, updCheckconcluir, 'json');
             },
-            "No": function () {
+            "No": function() {
                 //ProcesoBuscarRuta(''); chkrecep_5
                 $("#chkconcluirexp_" + rowId).attr('checked', false);
                 closeDialog("jqDialogConfirmacion1");
@@ -203,6 +297,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
             }
         });
     }
+
     function updCheckconcluir(data) {
         //console.log(data);
         /*{ "Aceptar": function() { closeDialog("jqDialogInfo"); }} */
@@ -217,43 +312,45 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
 
 
     // -----> Borrar============================================00
-    function btndocumtall(cellvalue, options, rowObject){
+    function btndocumtall(cellvalue, options, rowObject) {
 
         return '<div align="center" class="ui-pg-button " title="Borrar" style="text-align:center;float: left; ' +
             'cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
             'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" ' +
-            'onclick="accionborrarcotizacion(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" >' +
+            'onclick="accionborrarcotizacion(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" >' +
             '<span class="ui-icon ui-icon-trash"></span></div></div>';
     }
 
-    function accionborrarcotizacion(rowId){
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData',rowId);
+    function accionborrarcotizacion(rowId) {
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
 
-        var paramtrs ={ idSalidaMat :rowdat.idSalidaMat }
+        var paramtrs = {
+            idSalidaMat: rowdat.idSalidaMat
+        }
         openDialogConfirm1("Seguro que desea eliminar el registro?", 350, {
-            "Si": function () {
+            "Si": function() {
                 $.ajax({
                     url: jQuery.scriptPath + "index.php/almacen/eliminarsalidamat",
                     type: 'POST',
                     cache: false,
                     data: paramtrs,
-                    beforeSend: function (data) {
-                    },
-                    success: function (requestData) {
-                        var datos=JSON.parse(requestData);
-                         console.log(datos);
-                        var parameters ={ idcotizacion :datos[0].idSalidaMat };
+                    beforeSend: function(data) {},
+                    success: function(requestData) {
+                        var datos = JSON.parse(requestData);
+                        console.log(datos);
+                        var parameters = {
+                            idcotizacion: datos[0].idSalidaMat
+                        };
                         buscarSalidaMate();
                         closeDialog("jqDialogConfirmacion1");
                     },
-                    error: function (requestData, strError, strTipoError) {
+                    error: function(requestData, strError, strTipoError) {
                         $("#result").html("Error " + strTipoError + ': ' + strError);
                     },
-                    complete: function (requestData, exito) {
-                    }
+                    complete: function(requestData, exito) {}
                 });
             },
-            "No": function () {
+            "No": function() {
                 closeDialog("jqDialogConfirmacion1");
 
             }
@@ -262,83 +359,88 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","FECHA"));
 
     }
     // -----> Nuevo ====================================================
-    function btnNuevo(cellvalue, options, rowObject){
+    function btnNuevo(cellvalue, options, rowObject) {
 
-        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
+        return '<div align="center" class="ui-pg-button " title="Nuevo a partir de esta cotizacion" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnNuevo(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document"></span></div></div>';
     }
 
-    function accionbtnNuevo(rowId){
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData',rowId);
-        var paramtrs ={ idCotiz :rowdat.idCotiz }
+    function accionbtnNuevo(rowId) {
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idCotiz: rowdat.idCotiz
+        }
         console.log(paramtrs);
         $.ajax({
             url: jQuery.scriptPath + "index.php/cotizacion/copiarcotiz",
             type: 'POST',
             cache: false,
             data: paramtrs,
-            beforeSend: function (data) {
+            beforeSend: function(data) {
 
             },
-            success: function (requestData) {
-                var datos=JSON.parse(requestData);
-              console.log(datos);
-                var parameters ={ idcotizacion :datos[0].idcotiz }
+            success: function(requestData) {
+                var datos = JSON.parse(requestData);
+                console.log(datos);
+                var parameters = {
+                    idcotizacion: datos[0].idcotiz
+                }
                 var _post = $.post(path + "cotizacion/detcotizacion", parameters);
                 _post.success(function(request) {
                     $("#panelSalidaMaterial").html(request);
                 });
             },
-            error: function (requestData, strError, strTipoError) {
+            error: function(requestData, strError, strTipoError) {
                 $("#result").html("Error " + strTipoError + ': ' + strError);
             },
-            complete: function (requestData, exito) {
-            }
-       });
+            complete: function(requestData, exito) {}
+        });
 
 
 
     }
 
 
-// -----> Retorno ====================================================
-function btnRetorno(cellvalue, options, rowObject){
-
- return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
-        'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
-        'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetorno(\''+options.rowId+'\');">' +
-        '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
-}
-
-function accionbtnRetorno(rowId){
-    var row = $("#tblListaSalidaMat").jqGrid('getRowData', rowId);
-    if(row.idSalidaMat == "" || row.idSalidaMat == undefined){
-        openDialogWarning("Seleccione un Registro");
-        return;
-    }
-    parameters = {
-        "idSalidaMat": row.idSalidaMat
-    };
-
-    var _post = $.post(path + "almacen/detretornomat", parameters);
-    _post.success(function(request) {
-        $("#panelSalidaMaterial").html(request);
-    });
-}
-
-    // -----> Imprimir PDF ====================================================
-    function btnImprimir(cellvalue, options, rowObject){
+    // -----> Retorno ====================================================
+    function btnRetorno(cellvalue, options, rowObject) {
 
         return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
             'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
-            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\''+options.rowId+'\');">' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnRetorno(\'' + options.rowId + '\');">' +
+            '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span></div></div>';
+    }
+
+    function accionbtnRetorno(rowId) {
+        var row = $("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        if (row.idSalidaMat == "" || row.idSalidaMat == undefined) {
+            openDialogWarning("Seleccione un Registro");
+            return;
+        }
+        parameters = {
+            "idSalidaMat": row.idSalidaMat
+        };
+
+        var _post = $.post(path + "almacen/detretornomat", parameters);
+        _post.success(function(request) {
+            $("#panelSalidaMaterial").html(request);
+        });
+    }
+
+    // -----> Imprimir PDF ====================================================
+    function btnImprimir(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Imprimir cotizacion" style="text-align:center;' +
+            'float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" ' +
+            'onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnImprimir(\'' + options.rowId + '\');">' +
             '<div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
     }
 
-    function accionbtnImprimir(rowId){
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData',rowId);
-        var paramtrs ={ idSalidaMat :rowdat.idSalidaMat }
+    function accionbtnImprimir(rowId) {
+        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            idSalidaMat: rowdat.idSalidaMat
+        }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptSalidaMat.php?idSalida="+ rowdat.idSalidaMat ,'_blank');
+        window.open(host + "rptSalidaMat.php?idSalida=" + rowdat.idSalidaMat, '_blank');
     }
 
 
@@ -346,16 +448,16 @@ function accionbtnRetorno(rowId){
 
 
 
-    nuevaSalidaMat = function(){
+    nuevaSalidaMat = function() {
         parameters = {
             "idsigma": '0000000000'
         };
-       window.open(path + "almacen/detsalidamat", "_self");
+        window.open(path + "almacen/detsalidamat", "_self");
     };
-verSalidaMat = function() {
-        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam','selrow');
+    verSalidaMat = function() {
+        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
-        if(row.idSalidaMat == "" || row.idSalidaMat == undefined){
+        if (row.idSalidaMat == "" || row.idSalidaMat == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -364,7 +466,7 @@ verSalidaMat = function() {
         };
 
         //openDialogData2("cotizacion/detcotizacion", parameters, 660);
-       // $.post(path + "cotizacion/detcotizacion", parameters, null, 'json');
+        // $.post(path + "cotizacion/detcotizacion", parameters, null, 'json');
         var _post = $.post(path + "almacen/detsalidamat", parameters);
         _post.success(function(request) {
             $("#panelSalidaMaterial").html(request);
@@ -389,58 +491,63 @@ verSalidaMat = function() {
     };*/
 
 
-    function buttonsGridPerson(){
+    function buttonsGridPerson() {
         $("#tblListaSalidaMat")
-            .navGrid('#ptblListaSalidaMat', {edit:false,add:false,del:false,search:false,refresh:false})
+            .navGrid('#ptblListaSalidaMat', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-            .navButtonAdd('#ptblListaSalidaMat',{
-                caption:"Crear&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaSalidaMat', {
+                caption: "Crear&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaSalidaMat();
                 },
-                position:"last"
+                position: "last"
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaSalidaMat',{
-                caption:"Imprimir&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblListaSalidaMat', {
+                caption: "Imprimir&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     imprimir();
                 },
-                position:"last"
+                position: "last"
             })
-            .navSeparatorAdd()
-        ;
+            .navSeparatorAdd();
     }
 
 
-    function imprimir(){
-        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam','selrow');
+    function imprimir() {
+        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
         var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
-//console.log(row);
+        //console.log(row);
         //window.open(pathRpt+"tipo=pdf&nombrereporte=imprimir&param=codidopersona^"+row.idCotiz );
-        if(row.idCotiz == "" || row.idCotiz == undefined){
+        if (row.idCotiz == "" || row.idCotiz == undefined) {
             openDialogWarning("Seleccione cotizacion.");
             return;
         }
         host = '<?php echo $this->util()->getPath(); ?>report/';
-        window.open(host+"rptCotizacion.php?idCotiz="+ row.idCotiz ,'_blank');
+        window.open(host + "rptCotizacion.php?idCotiz=" + row.idCotiz, '_blank');
     }
 
 
 
     buscarSalidaMate = function() {
 
-        var tipob=$("#cbotipob").val();
+        var tipob = $("#cbotipob").val();
 
-        var params = '['
-            + '["@tBusqueda", "' +tipob + '"],'
-            + '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"],'
-            + '["@vFecIni", "' + $("#fecdesde").val() + '"],'
-            + '["@vFecFin", "' + $("#fechasta").val() + '"]'
-            + ']';
+        var params = '[' +
+            '["@tBusqueda", "' + tipob + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"],' +
+            '["@vFecIni", "' + $("#fecdesde").val() + '"],' +
+            '["@vFecFin", "' + $("#fechasta").val() + '"]' +
+            ']';
         parameters = {
             "name": "tblListaSalidaMat",
             "procedure": "almacen.List_SalidaMat",
@@ -449,21 +556,25 @@ verSalidaMat = function() {
         };
 
         procesarProcedimientoJSON(
-            "panelListaSalidaMat"
-            , "tblListaSalidaMat"
-            , optionSalidaMat
-            , parameters
-            , null
-            , buttonsGridPerson
+            "panelListaSalidaMat", "tblListaSalidaMat", optionSalidaMat, parameters, null, buttonsGridPerson
         );
     };
 
-    $(function(){
-        $("#fecdesde").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-        $("#fechasta").datepicker({showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $(function() {
+        $("#fecdesde").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fechasta").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
         buscarSalidaMate();
         $("#btnbuscar").button(ICON_SEARCH);
         $("#div_titulo").html("Almacen => Salidas Materiales");
     });
-
 </script>

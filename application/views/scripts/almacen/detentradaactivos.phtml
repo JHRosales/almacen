@@ -692,7 +692,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
                 var parmter = {};
                 parmter.idDetEntradaActivos = row.idDetEntradaActivos;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "almacen/detentradamatdel", parmter, updCheckdelete, 'json');
+                $.post(path + "almacen/detentradaactivosdel", parmter, updCheckdelete, 'json');
             },
             "No": function() {
                 //ProcesoBuscarRuta(''); chkrecep_5
@@ -704,7 +704,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
 
     function updCheckdelete(data) {
         lastsel3 = undefined
-        buscarDetEntradaMat();
+        buscarDetEntradaActivos();
 
     }
 
@@ -728,7 +728,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
     }
 
 
-    buscarDetEntradaMat = function() {
+    buscarDetEntradaActivos = function() {
         var params = '[' +
             '["@tBusqueda", "0"],' +
             '["@vIdEntradaActivos", "' + $("#idEntradaActivos").val() + '"],' +
@@ -823,7 +823,7 @@ $TipoMoneda = array(array("2", "Soles"), array("1", "Dolares"));
             dateFormat: "dd/mm/yy"
         });
 
-        buscarDetEntradaMat();
+        buscarDetEntradaActivos();
 
 
         $("#btnbuscar").button({
