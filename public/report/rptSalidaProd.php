@@ -309,7 +309,8 @@ coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
 			 order by ent.dFecIngreso  desc
   )abc  ),0)  total
-  ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal
+  ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, case m.idTipoMon when 1 then 'S/'
+  when 2 then '$' else ''end tipomoneda
  from almacen.salidaProd a inner join
 		almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
 		inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
@@ -409,7 +410,7 @@ $migv = $rowTipoP['nIgv'];
 $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="30px"><b>ITEM</b></td><td width="142px"><b>Nro Serie</b></td><td width="35px"><b>CANT</b>
-</td><td width="355px"><b>Producto</b></td><td width="63.5px"><b> PU ' . $vTipoMoneda . '</b></td><td width="64px"><b> PT ' . $vTipoMoneda . '</b></td>
+</td><td width="300px"><b>Producto</b></td><td width="55px"><b>TIpo Moneda</b></td><td width="63.5px"><b> PU </b></td><td width="64px"><b> PT</b></td>
 </tr>';
 
 $N = 0;
@@ -460,7 +461,8 @@ while ($N < $numRows) {
 	<td width="30px" >' . ($N + 1) . '</td>
 	<td width="142px" style="font-size: 9px;" ><b>' . $nserie . '</b>' . '</td>
 	<td width="35px">' . $cant . '</td>
-	<td  align="left" width="355px">' . $nMate . '</td>
+	<td  align="left" width="300px">' . $nMate . '</td>
+	<td width="55px" > ' . $vTipoMoneda . '</td>
 	<td width="63.5px" >' . $pu . '</td>
 	<td width="64px" >' . $mtotal . '</td>';
 
@@ -489,7 +491,7 @@ $html .= '
 
 
 <tr>
-	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
+	<td COLSPAN="6" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
 <b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal1 . '</span></b>
@@ -498,22 +500,92 @@ $html .= '
 </table>
 ';
 
-//Resumen de los totales
-$html .= '<br><br><table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
+//Cotizacion
+
+$Rs_tipoPer->Poner_MSQL("select detcot.vDescrip,m.vModelo,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
+when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
+from almacen.salidaProd  a inner join
+almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
+inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
+inner join producto m on ps.idProducto=m.idProducto
+inner join compras.cotizacion coti on a.idCotiz=coti.idCotiz
+inner join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and m.idProducto=detcot.idProdServ and detcot.tipoPS=1
+where a.vEstado =1 and b.vEstado=1
+and a.idSalidaProd=$idsalida");
+$Rs_tipoPer->executeMSQL();
+$rowTipoP = $Rs_tipoPer->pg_Get_Row();
+$nroCotiz = $rowTipoP['vnroCot'];
+
+
+$html .= '
+<h3>Cotizacion Nro: ' . $nroCotiz . ' </h3>
+';
+
+
+
+$html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
+<tr align="center" style="background-color: #ffda07; font-family: sans-serif">
+<td width="100px"><b>Modelo</b></td><td width="300px"><b>MATERIAL</b></td><td width="55px"><b>CANT</b>
+</td><td width="55px"><b>Tipo Moneda</b>
+</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>
+</tr>';
+
+$N = 0;
+$numsaltos = 0;
+$mtotal2 = 0;
+$numRows = $Rs_tipoPer->pg_Num_Rows();
+while ($N < $numRows) {
+
+	$row = $Rs_tipoPer->pg_Get_Row();
+	$cant = $row['nCantidad'];
+	$mtotal = $row['nPrecTotal'];
+	$pu = $row['nPrecUnit'];
+	$mtotal2 = $mtotal2 + $mtotal;
+
+	$det = $row['vDescrip'];
+	$det = str_replace("<p>", '', $det);
+	$det = str_replace("</p>", '', $det);
+
+	$det = str_replace("<ul>", '', $det);
+	$det = str_replace("</ul>", '', $det);
+	$det = str_replace("<li>", ' &#x27A2;', $det);
+	$det = str_replace("</li>", '', $det);
+	$det = str_replace("-", '&#x27A2;', $det);
+	$det = str_replace("*", '&#x27A2;', $det);
+	$nMate = utf8_encode($det);
+
+
+	$modelo = $row['Modelo'];
+	$pt = $row['nPrecTotal'];
+	$ptipoMoneda = $row['tipomoneda'];
+	$vModelo = $row['vModelo'];
+
+	$x = "";
+
+	$html .= '
+	<tr nobr="true" style="text-align: center; vertical-align: 10%">
+	<td width="100px" >' . $vModelo . '</td>
+	<td  align="left" width="300px"><b>' . $nMate . '</b></td>
+	<td width="55px">' . $cant . '</td>	
+	<td width="55px">' . $ptipoMoneda . '</td>	
+	<td width="63.5px" >' . $pu . '</td>
+	<td width="64px" >' . $mtotal . '</td>';
+
+	$html .= '	</tr>';
+
+
+	$Rs_tipoPer->pg_Move_Next();
+	$N++;
+}
+
+$html .= '
 <tr>
-	<td align="right" style="font-family:  Times, serif; font-size: 11px" >
-		<b>Total Cotizacion</b>
-	</td>
-	<td align="center" style="font-family:sans-serif; font-size: 10px;">
-		<b>' .  $vCotizacionTotal . '</b>
-	</td>
-	<td align="right" style="font-family:  Times, serif; font-size: 11px" >
-		<b>Total Salida</b>
-	</td>
-	<td align="center" style="font-family:sans-serif; font-size: 10px;">
-		<b> ' . $vTipoMoneda . ' ' . $mtotal1 . '</b>
-	</td>
-</tr>
+	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
+<b>TOTAL</b>
+</td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
+<b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal2 . '</span></b>
+</td></tr>';
+$html .= '
 </table>
 ';
 

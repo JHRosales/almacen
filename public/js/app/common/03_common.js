@@ -71,6 +71,34 @@ var config = {
         ondblClickRow: function () { },
         gridComplete: function () { }
     },
+    __gridConfigActivos = {  //JHIMI 21012021
+        height: 300,
+        width: 1000,
+        colNames: ['Codigo',
+            'Nombre',
+            'Serie',
+            'Marca',
+            'Modelo',
+            'Descripcion',
+            'Stock',
+            'Estado'
+        ],
+        colModel: [
+            { name: 'idActivos', index: 'idActivos', width: 60 },
+            { name: 'vNombre', index: 'vNombre', width: 250 },
+            { name: 'vSerie', index: 'vSerie', width: 120 },
+            { name: 'vMarca', index: 'vMarca', width: 100 },
+            { name: 'vModelo', index: 'vModelo', width: 100 },
+            { name: 'vDescripcion', index: 'vDescripcion', width: 200 },
+            { name: 'nStock', index: 'nStock', width: 150 },
+            { name: 'vEstado', index: 'vEstado', width: 50, hidden: true, editOptions: { value: "1:0", defaultvalue: "1" }, formatter: 'checkbox' }
+        ],
+        ignoreCase: true,
+        caption: "&nbsp;&nbsp;&nbsp;Resultados de la busqueda",
+        onSelectRow: function () { },
+        ondblClickRow: function () { },
+        gridComplete: function () { }
+    },
     __gridConfigSeries = {  //JHIMI 01042018
         height: 300,
         width: 1000,

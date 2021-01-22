@@ -1985,7 +1985,7 @@ class AlmacenController extends Zend_Controller_Action
                 $arrDetMateriales = $dtbdtestigo;
             }
 
-            $this->view->detSalidaMat = $arrDetMateriales;
+            $this->view->detSalidaActivos = $arrDetMateriales;
         }
     }
 
@@ -1999,18 +1999,18 @@ class AlmacenController extends Zend_Controller_Action
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
             $userlogin = $ddatosuserlog->userlogin;
 
-            $pPapeleta = $this->_request->getParam('objSalidaMat');
-            $jPapeleta = json_decode($pPapeleta);
+            $pObjetoDetalle = $this->_request->getParam('objSalidaActivos');
+            $jPapeleta = json_decode($pObjetoDetalle);
 
             $dataSet = new Model_DataAdapter();
-            if ($jPapeleta->idSalidaMat == "") {
+            if ($jPapeleta->idSalidaActivo == "") {
                 $trans = "1";
             } else {
                 $trans = "2";
             }
             $_procedure = 'almacen.InsUpd_salidaActivos';
             $params[] = array('@ttrans', $trans);
-            $params[] = array('@p_idsalidaActivos', $jPapeleta->idSalidaMat);
+            $params[] = array('@p_idsalidaActivos', $jPapeleta->idSalidaActivo);
             $params[] = array('@p_obra', $jPapeleta->obra);
             $params[] = array('@p_lugar', $jPapeleta->lugar);
             $params[] = array('@p_fecha', $jPapeleta->fecha);
@@ -2035,9 +2035,9 @@ class AlmacenController extends Zend_Controller_Action
 
             foreach ($jPapeleta->materiales as $value) {
                 $params = null;
-                $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
-                $params[] = array('@p_idsalidamat', $resultPapeleta[0]["idSalidaMat"]);   #p_mpapeleta
-                $params[] = array('@p_iddetsalidamat',  $value->idDetSalidaMat);  #p_mperson
+                $params[] = array('@p_idActivo', $value->idActivos);  #p_idsigma
+                $params[] = array('@p_idsalidaActivo', $resultPapeleta[0]["idSalidaActivo"]);   #p_mpapeleta
+                $params[] = array('@p_iddetsalidaActivo',  $value->idDetSalidaActivos);  #p_mperson
                 $params[] =  array('@p_cantidad',  $value->Cantidad); #cantidad
                 $params[] =  array('@p_nstocksalida',  $value->stock); #cantidad
                 //print_r($params);
@@ -2045,6 +2045,53 @@ class AlmacenController extends Zend_Controller_Action
             }
 
             print_r(json_encode($resultPapeleta[0]));
+        }
+    }
+
+    public function eliminaractivossalidaactivosAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidprodserie = $this->_request->getParam('id');
+            $piddetsalida = $this->_request->getParam('idDetsalida');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_stockstadoACTIVOSeliminar';
+
+            $params = null;
+            $params[] = array('@p_idmaterial',  $pidprodserie);  #prodserie
+            $params[] =  array('@p_idDetSalida', $piddetsalida); #iddetsalidaprod
+            $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+        }
+    }
+    public function eliminarsalidaactivosAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal = $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+            $idsalida = $this->_request->getPost('idSalidaActivo');
+            $params = null;
+            $params[] = array('@p_idsalida', $idsalida);
+
+            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
+            $copiarcot = $cn->executeAssocQuery('eliminar_salidaActivos', $params);
+            echo json_encode($copiarcot);
         }
     }
 
