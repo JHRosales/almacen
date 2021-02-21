@@ -30,3 +30,4 @@ extras/documentation
 .idea/workspace.xml
 application/models/DataAdapter.php
 .idea/vcs.xml
+application/models/DataAdapter.php
