@@ -72,9 +72,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
     </div>
     <div id="dialogMensaje">
     </div>
-    <div id="panelListaSalidaMat" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
-        <table id="tblListaSalidaMat"></table>
-        <div id="ptblListaSalidaMat"></div>
+    <div id="panelListaSalidaActivos" align="left" style="width: 100%;margin-left: 15px; margin-right: 15px;">
+        <table id="tblListaSalidaActivos"></table>
+        <div id="ptblListaSalidaActivos"></div>
     </div>
     <br />
 </div>
@@ -201,7 +201,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                 align: 'center',
                 formatter: btnRetorno,
                 search: false,
-                hidden: true
+                hidden: false
             }
         ],
         caption: "&nbsp;&nbsp;&nbsp;Salida de Activos",
@@ -215,16 +215,16 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                     break;
                 case '0':
 
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'cidpers', '', {
+                    jQuery("#tblListaSalidaActivos").jqGrid('setCell', rowid, 'cidpers', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'crazsoc', '', {
+                    jQuery("#tblListaSalidaActivos").jqGrid('setCell', rowid, 'crazsoc', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                    jQuery("#tblListaSalidaActivos").jqGrid('setCell', rowid, 'vnrodoc', '', {
                         color: 'red'
                     });
-                    jQuery("#tblListaSalidaMat").jqGrid('setCell', rowid, 'nestado', '', {
+                    jQuery("#tblListaSalidaActivos").jqGrid('setCell', rowid, 'nestado', '', {
                         color: 'red'
                     });
                     break;
@@ -247,7 +247,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
     }
 
     function accionborrarsalida(rowId) {
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var rowdat = jQuery("#tblListaSalidaActivos").jqGrid('getRowData', rowId);
 
         var paramtrs = {
             idSalidaActivo: rowdat.idSalidaActivo
@@ -290,7 +290,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
     }
 
     function accionbtnNuevo(rowId) {
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var rowdat = jQuery("#tblListaSalidaActivos").jqGrid('getRowData', rowId);
         var paramtrs = {
             idCotiz: rowdat.idCotiz
         }
@@ -335,7 +335,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
     }
 
     function accionbtnRetorno(rowId) {
-        var row = $("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var row = $("#tblListaSalidaActivos").jqGrid('getRowData', rowId);
         if (row.idSalidaActivo == "" || row.idSalidaActivo == undefined) {
             openDialogWarning("Seleccione un Registro");
             return;
@@ -344,7 +344,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
             "idSalidaActivo": row.idSalidaActivo
         };
 
-        var _post = $.post(path + "almacen/detretornomat", parameters);
+        var _post = $.post(path + "almacen/detretornoactivos", parameters);
         _post.success(function(request) {
             $("#panelSalidaActivos").html(request);
         });
@@ -360,7 +360,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
     }
 
     function accionbtnImprimir(rowId) {
-        var rowdat = jQuery("#tblListaSalidaMat").jqGrid('getRowData', rowId);
+        var rowdat = jQuery("#tblListaSalidaActivos").jqGrid('getRowData', rowId);
         var paramtrs = {
             idSalidaActivo: rowdat.idSalidaActivo
         }
@@ -380,8 +380,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
         window.open(path + "almacen/detsalidaactivos", "_self");
     };
     verSalidaMat = function() {
-        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
-        var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
+        var selr = $('#tblListaSalidaActivos').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaSalidaActivos").jqGrid('getRowData', selr);
         if (row.idSalidaActivo == "" || row.idSalidaActivo == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
@@ -400,8 +400,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
 
 
     function buttonsGridPerson() {
-        $("#tblListaSalidaMat")
-            .navGrid('#ptblListaSalidaMat', {
+        $("#tblListaSalidaActivos")
+            .navGrid('#ptblListaSalidaActivos', {
                 edit: false,
                 add: false,
                 del: false,
@@ -409,7 +409,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                 refresh: false
             })
 
-            .navButtonAdd('#ptblListaSalidaMat', {
+            .navButtonAdd('#ptblListaSalidaActivos', {
                 caption: "Crear&nbsp;&nbsp;",
                 buttonicon: "ui-icon-plus",
                 onClickButton: function() {
@@ -419,7 +419,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
             })
             .navSeparatorAdd()
         /*
-                    .navButtonAdd('#ptblListaSalidaMat', {
+                    .navButtonAdd('#ptblListaSalidaActivos', {
                         caption: "Imprimir&nbsp;&nbsp;",
                         buttonicon: "ui-icon-pencil",
                         onClickButton: function() {
@@ -432,8 +432,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
 
 
     function imprimir() {
-        var selr = $('#tblListaSalidaMat').jqGrid('getGridParam', 'selrow');
-        var row = $("#tblListaSalidaMat").jqGrid('getRowData', selr);
+        var selr = $('#tblListaSalidaActivos').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaSalidaActivos").jqGrid('getRowData', selr);
 
         if (row.idSalidaActivo == "" || row.idSalidaActivo == undefined) {
             openDialogWarning("Seleccione Salida.");
@@ -456,14 +456,14 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
             '["@vFecFin", "' + $("#fechasta").val() + '"]' +
             ']';
         parameters = {
-            "name": "tblListaSalidaMat",
+            "name": "tblListaSalidaActivos",
             "procedure": "almacen.List_SalidaActivos",
             "print": "true",
             "parameters": params
         };
 
         procesarProcedimientoJSON(
-            "panelListaSalidaMat", "tblListaSalidaMat", optionSalidaMat, parameters, null, buttonsGridPerson
+            "panelListaSalidaActivos", "tblListaSalidaActivos", optionSalidaMat, parameters, null, buttonsGridPerson
         );
     };
 

@@ -133,25 +133,29 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "FECHA"));
 </div>
 <script type="text/javascript">
     $("#txtModelo").keyup(function(e) {
-        if ($("#txtModelo").val().length > 2 || e.keyCode == 13) {
+      /* if($("#txtModelo").val().length>2 || e.keyCode==13 ){*/
+        if (e.keyCode == 13) {
             buscarSalidaProd();
             $("#txtModelo").focus();
         }
     });
     $("#txtSerie").keyup(function(e) {
-        if ($("#txtSerie").val().length > 2 || e.keyCode == 13) {
+        // if ($("#txtSerie").val().length > 2 || e.keyCode == 13) {
+    if (e.keyCode == 13) {   
             buscarSalidaProd();
             $("#txtSerie").focus();
         }
     });
     $("#txtRazonSocial").keyup(function(e) {
-        if ($("#txtRazonSocial").val().length > 2 || e.keyCode == 13) {
+        /* if ($("#txtRazonSocial").val().length > 2 || e.keyCode == 13) { */
+        if (e.keyCode == 13) {
             buscarSalidaProd();
             $("#txtRazonSocial").focus();
         }
     });
     $("#txtNroCotizacion").keyup(function(e) {
-        if ($("#txtNroCotizacion").val().length > 2 || e.keyCode == 13) {
+        /* if ($("#txtNroCotizacion").val().length > 2 || e.keyCode == 13) { */
+        if (e.keyCode == 13) {
             buscarSalidaProd();
             $("#txtNroCotizacion").focus();
         }

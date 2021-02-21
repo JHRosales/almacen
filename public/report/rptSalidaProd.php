@@ -299,7 +299,7 @@ c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
 			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
 			 where de.idProducto=m.idProducto
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
-			 order by ent.dFecIngreso  desc
+			 order by ent.dFecIngreso  desc, ent.dFecReg desc
   )abc ),0) precUnit,
 
 coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
@@ -307,7 +307,7 @@ coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
 			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
 			 where de.idProducto=m.idProducto
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
-			 order by ent.dFecIngreso  desc
+			 order by ent.dFecIngreso  desc, ent.dFecReg desc
   )abc  ),0)  total
   ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, case m.idTipoMon when 1 then 'S/'
   when 2 then '$' else ''end tipomoneda

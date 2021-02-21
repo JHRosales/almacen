@@ -160,6 +160,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE MATERIAL"), arra
                 index: 'vEstado',
                 width: 50,
                 hidden: false,
+                search: false,
                 editOptions: {
                     value: "1:0",
                     defaultvalue: "1"
@@ -202,6 +203,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE MATERIAL"), arra
                 search: false
             }
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Salida de Materiales",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
@@ -520,6 +522,12 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE MATERIAL"), arra
                 position: "last"
             })
             .navSeparatorAdd();
+            $("#tblListaSalidaMat").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
 

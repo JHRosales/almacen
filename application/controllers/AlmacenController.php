@@ -1674,8 +1674,8 @@ class AlmacenController extends Zend_Controller_Action
         $this->view->idcotiz = "se";
 
         $cn = new Model_DataAdapter();
-        $params[] = array('@p_identradamat', '');
-        // $copiarcot = $cn->executeAssocQuery('eliminar_entradamat', $params);
+        $params[] = array('@p_identradaact', '');
+        $copiarcot = $cn->executeAssocQuery('eliminar_entradaactivos', $params);
     }
     public function detentradaactivosAction()
     {
@@ -1788,12 +1788,38 @@ class AlmacenController extends Zend_Controller_Action
             $detcot = $cn->ejec_store_procedura_sql('almacen.InsUpd_entradaActivos', $params);
 
             //Se pasa a estado Desabilitado los que estan eliminado temporalmente (5= Eliminado Temporal, 4= Desabilitado)
-            $_proc_okEliminado = 'almacen.Entrada_OKmatpasaAeliminado';
-            $params1[] = array('@p_idEntrada', $idEntActivos); // $jPapeleta->idSalidaMat);
+            $_proc_okEliminado = 'almacen.Entrada_OKActivospasaAeliminado';
+            $params1[] = array('@p_idEntradaAct', $idEntActivos); // $jPapeleta->idSalidaMat);
             $resultEok = $cn->executeAssocQuery($_proc_okEliminado, $params1);
 
 
             echo json_encode($detcot);
+        }
+    }
+
+    public function cancelareliminadossalidaactivoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidsalidamat = $this->_request->getParam('idSalidaActivo');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_NOActivosRegresaeliminado';
+
+            $params = null;
+            $params[] =  array('@p_idSalidaActivos', $pidsalidamat);
+            //print_r($params);
+            $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+            // print_r(json_encode($resultDescta[0]["b"]));
         }
     }
 
@@ -2095,78 +2121,125 @@ class AlmacenController extends Zend_Controller_Action
         }
     }
 
-    /*
-    public function cotizacionopcionalapricipalAction() {
+    /* 
+ -------------------- Retorno de Activos--------------------------------------------
+     */
+    public function retornoactivosAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
-            $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
-            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
-            $usuario = $ddatosuserlog->userlogin;
-            $host = $ddatosuserlog->vhostnm;
-
-            $idcot = $this->_request->getPost('idDetCotiz');
-
-            $params = null;
-            $params[] = array('@p_iddcotiz', $idcot);
-
-            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
-            $detcot = $cn->ejec_store_procedura_sql('update_cotiz_opcprin1', $params);
-            // echo json_encode($detcot);
-        }
-    }
-    public function cotizaciondelAction() {
-        if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
-            $this->_helper->getHelper('ajaxContext')->initContext();
-            $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
-            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
-            $usuario = $ddatosuserlog->userlogin;
-            $host = $ddatosuserlog->vhostnm;
-
-            $idcot = $this->_request->getPost('idCotiz');
-
-            $params = null;
-            $params[] = array('@p_idcotiz', $idcot);
-
-            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
-            $detcot = $cn->ejec_store_procedura_sql('delete_cotiz1', $params);
-             //echo json_encode("Desabilitado.");
         }
+        $this->view->idcotiz = "se";
     }
 
-
-
-    public function copiarcotizAction() {
+    public function detretornoactivosAction()
+    {
+        $this->view->tieneop = 0;
+        $this->view->dFecSalida = date('d/m/Y');
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
-            $this->_helper->viewRenderer->setNoRender();
-            $cn = new Model_DataAdapter ();
-            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            $idpersonal= $ddatosuserlog->cidusuario;
-            $usuario = $ddatosuserlog->userlogin;
-            $host = $ddatosuserlog->vhostnm;
+            $this->_helper->layout->disableLayout();
+            $idsalidaActivos = $this->_request->getParam('idSalidaActivo');
+            $this->view->idSalidaActivos = $idsalidaActivos;
+            $cn = new Model_DataAdapter();
+            $params[] = array('@tBusqueda', "3");
+            $params[] = array('@vDatoBus', $idsalidaActivos);
+            $params[] = array('@vFecIni', "");
+            $params[] = array('@vFecFin', "");
+            $datos = $cn->ejec_store_procedura_sql('almacen.List_RetornoActivos', $params);
 
-            $idcotiz = $this->_request->getPost('idCotiz');
-            $params = null;
-            $params[] = array('@p_idcotiz', $idcotiz);
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->idRetornoActivos = $datos[0][0];
+                $this->view->idSalidaActivos = $datos[0][1];
+                $this->view->dFecSalida = $datos[0][2];
+                $this->view->dFecRetorno = $datos[0][3];
+                $this->view->obra = $datos[0][4];
+                $this->view->lugar = $datos[0][5];
+                $this->view->idtecnico = $datos[0][6];
+                $this->view->nomtecnico = $datos[0][7];
+                $this->view->idCliente = $datos[0][8];
+                $this->view->nomCliente = $datos[0][9];
+                $this->view->obs = $datos[0][11];
+            } else {
+                $this->view->idRetornoActivos = $datos[0][0];
+                $this->view->idSalidaActivos = $datos[0][1];
+                $this->view->dFecSalida = $datos[0][2];
+                $this->view->dFecRetorno = $datos[0][3];
+                $this->view->obra = $datos[0][4];
+                $this->view->lugar = $datos[0][5];
+                $this->view->idtecnico = $datos[0][6];
+                $this->view->nomtecnico = $datos[0][7];
+                $this->view->idCliente = $datos[0][8];
+                $this->view->nomCliente = $datos[0][9];
+                $this->view->obs = $datos[0][11];
+            }
 
-            //$person = $cn->ejec_store_procedura_sql('guardar_cotizacion', $params);
-            $copiarcot = $cn->executeAssocQuery('copiar_cotizacion1', $params);
-            echo json_encode($copiarcot);
+            $arrDetActivos = array();
+            $params_mat[] = array('@tBusqueda', "0"); #tipo de busqueda
+            $params_mat[] = array('@vIdSalida', $idsalidaActivos); #id salida activo
+            $params_mat[] = array('@vDatoBus', ""); #dato de busqueda
+            $params_mat[] = array('@vFecIni', ""); #fechainicio
+            $params_mat[] = array('@vFecFin', ""); #fechafin
+            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetRetornoActivos", $params_mat);
+            if (count($dtbdtestigo) > 0) {
+                $arrDetActivos = $dtbdtestigo;
+            }
+
+            $this->view->detActivos = $arrDetActivos;
         }
     }
 
-
-    public function visordocsAction() {
-
-        $img = $this->_request->getParam('img', '');
+    public function guardarretornoactivosAction()
+    {
         $this->_helper->layout->disableLayout();
-        $this->view->img = $img;
-    }*/
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pPapeleta = $this->_request->getParam('objSalidaActivos');
+            $jPapeleta = json_decode($pPapeleta);
+
+            $dataSet = new Model_DataAdapter();
+            if ($jPapeleta->idRetornoActivos == "") {
+                $trans = "1";
+            } else {
+                $trans = "2";
+            }
+            $_procedure = 'almacen.InsUpd_retornoActivos';
+            $params[] = array('@ttrans', $trans);
+            $params[] = array('@p_idretornoActivos', $jPapeleta->idRetornoActivos);
+            $params[] = array('@p_idsalidaActivos', $jPapeleta->idSalidaActivos);
+            $params[] = array('@p_obra', $jPapeleta->obra);
+            $params[] = array('@p_lugar', $jPapeleta->lugar);
+            $params[] = array('@p_fecha', $jPapeleta->fecha);
+            $params[] = array('@p_idtecnico', $jPapeleta->idtecnico);
+            $params[] = array('@p_observa', $jPapeleta->observa);
+            $params[] = array('@vUsernm', $userlogin);
+            $params[] = array('@vHostnm', 'local');
+
+            $resultPapeleta = $dataSet->executeAssocQuery($_procedure, $params);
+
+            $_proc_dtestigo = 'add_detretornoactivos';
+
+            foreach ($jPapeleta->materiales as $value) {
+                $params = null;
+                $params[] = array('@p_idActivos', $value->idActivos);  #idActivos
+                $params[] = array('@p_idretornoactivos', $resultPapeleta[0]["idRetornoActivos"]);   #id retorno activos
+                $params[] = array('@p_iddetretornoactivos',  $value->idDetRetornoActivos);  #id det retorno activos
+                $params[] = array('@p_iddetsalidaactivos',  $value->idDetSalidaActivos);  #id det salida activos
+                $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #Cantidad
+                $params[] =  array('@p_observ',  $value->observacion); #Observacion
+                $params[] =  array('@p_stock',  $value->stock); #Stock
+                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            print_r(json_encode($resultPapeleta[0]));
+        }
+    }
+
 }

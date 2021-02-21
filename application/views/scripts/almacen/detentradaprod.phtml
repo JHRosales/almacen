@@ -182,32 +182,6 @@ $TipoMoneda=array(array("1","Dolares"), array("2","Soles"));
 
 <script type="text/javascript">
 themeComboBox();
-/*
-function validarTipoCambio(tipo){
-    switch(tipo){
-        case '1' : // Dolares
-            $(".soloSoles").hide();
-            ActualizarMontos();
-            //$("#tasacambio").val("0");
-            break;
-        case '2' : // Soles
-            $(".soloSoles").show();
-            break;
-        default:
-            break;
-    }
-}
-validarTipoCambio($("#cbtipomon").val());
-
-$("#cbtipomon").combobox({
-    selected: function(event, ui){
-        //validarTipoCambio($("#cbtipomon").val())
-        ActualizarMontos();
-    }
-});
-*/
-
-
     var lastsel3;
     optionDetEntradaProd = {
         datatype: "local",
@@ -219,6 +193,7 @@ $("#cbtipomon").combobox({
             'Id Entrada Prod',
             'IdProducto',
             'Producto',
+            "Modelo",
             'Cantidad',
             'PU',
             'P. Total',
@@ -231,7 +206,8 @@ $("#cbtipomon").combobox({
             {name: 'idDetEntradaProd', index:'idDetEntradaProd', width:80,hidden: false},
             {name: 'idEntradaProd', index:'idEntradaProd', width:80,hidden: false},
             {name: 'idProducto', index:'idProducto', width:80},
-            {name: 'producto', index:'producto', width:260},
+            {name: 'producto', index:'producto', width:250},
+            {name: 'vModelo', index:'vModelo', width:90},
             {name: 'nCantidad', index:'nCantidad', width:80,editable: true,editoptions: { dataInit: function (elem) {
                 setTimeout(function(){
                     $(elem).numeric();
@@ -252,19 +228,14 @@ $("#cbtipomon").combobox({
             },
             {name: 'vEstado', index:'vEstado', width:100, hidden: true,editable: false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btncalcular,search:false},
-            { name: 'btndocumall', index: 'btndocumall', width: 60, align: 'center' ,formatter : btnAgregarserie,search:false,hidden:false},
+            { name: 'btnserie', index: 'btnserie', width: 50, align: 'center' ,formatter : btnAgregarserie,search:false,hidden:false},
             { name: 'btndocumall1', index: 'btndocumall1', width: 40, align: 'center' ,formatter : btndelete,search:false}
-            //{name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left', formatter: linkadjunto},
-            // {name: 'docadjunto', index: 'docadjunto', width: 250, align: 'left',hidden:true},
         ],
         editurl: "clientArray",
         caption: "&nbsp;&nbsp;&nbsp;Detalle de entrada Productos",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
             EditProducto();
-            //console.log(row);
-            //dobleclickPersona(row);
-          //  verCotizacion();
         },
         afterInsertRow:function(rowid,aData){
             switch( aData.vEstado){
@@ -321,28 +292,20 @@ $("#cbtipomon").combobox({
             $("tr.jqgrow", this).contextMenu('myMenu1', {
                 bindings: {
                     'edit': function(trigger) {
-                        // trigger is the DOM element ("tr.jqgrow") which are triggered
                         EditProducto();
-                        //jQuery('#tblDetEntradaProd').editGridRow(trigger.id, "");
                     },
                     'add': function() {
                         nuevoProducto();
-                        //jQuery('#tblDetEntradaProd').editGridRow("new", "");
                     },
                     'del': function(trigger) {
                         if ($('#del').hasClass('ui-state-disabled') === false) {
-                            // disabled item can do be choosed
-                           // jQuery('#tblDetEntradaProd').delGridRow(trigger.id, "");
                             var selr = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
-                            //var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
                             eliminardetentradama(trigger.id);
                         }
                     }
                 },
                 onContextMenu: function(event, menu) {
                     var rowId = $(event.target).closest("tr.jqgrow").attr("id");
-                    //grid.setSelection(rowId);
-                    // disable menu for rows with even rowids
                     $('#del').attr("disabled",Number(rowId)%2 === 0);
                     if (Number(rowId)%2 === 0) {
                         $('#del').attr("disabled","disabled").addClass('ui-state-disabled');
@@ -364,7 +327,6 @@ $("#cbtipomon").combobox({
             "pag":"2"
         };
         openDialogData1("almacen/buscarpersona", parameters, 660,500);
-        //   window.open(path + "mantenimientos/backup", "_self");
 
     };
     eliminar=function(a){
@@ -378,11 +340,9 @@ $("#cbtipomon").combobox({
             "idsigma": row.cidpers
         };
 
-        //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
 
            "si":function(){
-               //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
                $.ajax({
                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
                    type: 'POST',
@@ -417,7 +377,6 @@ function linkadjunto(cellvalue, options, rowObject) {
 }
 function linkadjuntoOpen(rowId, cellvalue) {
     var row = jQuery("#tblResultDocAdjunto").jqGrid('getRowData', rowId);
-//console.log(row);
     window.open(path + "mantenimientos/forzardescarga?file=" +  cellvalue);
 }
 
@@ -441,57 +400,6 @@ function Calculaentradaprod(rowId) {
     actualizarcantdetalleCot();
 }
 
-/*
-function ActualizarMontos() {
-
-    jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
-    var tasa= $("#tasacambio").val();
-    var tipomon= $("#cbtipomon").val();
-
-    if(tasa == 0 || tasa == undefined || tasa == ""){
-        openDialogWarning("Ingrese la tasa de cambio.");
-        return;
-    }
-    var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
-    if (rows.length > 0) {
-        var subtotal = 0;
-        for (var i=0;i<rows.length;i++) {
-            var row=rows[i];
-            var subt=parseFloat(row.nPrecioUnit);
-            if(tipomon=='1'){  //Si es dolares divide el subtotal entre la tasa de cambio
-                subtotal= subt/tasa;
-            }else{ //Si es soles multiplica el subtotal por la tasa de cambio
-                subtotal= subt*tasa;
-            }
-            var total=subtotal*(row.nCantidad);
-
-            var total1=total;
-            console.log(total1);
-            $("#tblDetEntradaProd").setRowData(i+1,{nPrecioUnit:parseFloat(Math.round(subtotal* 100) / 100).toFixed(2)} );
-            $("#tblDetEntradaProd").setRowData(i+1,{nPrecioTotal:parseFloat(Math.round(total1* 100) / 100).toFixed(2)} );
-        }
-    }
-
-    var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
-    if (rows.length > 0) {
-        var subtotal = 0;
-        for (var i=0;i<rows.length;i++) {
-            var row=rows[i];
-            var subt=parseFloat(row.nPrecioTotal);
-            subtotal= subtotal +subt;
-        }
-
-        var txtotal= subtotal;
-        var txsubtotal= (txtotal/1.18);
-        var txigv=txtotal-txsubtotal;
-        $("#txtsubtotal").val(parseFloat(Math.round(txsubtotal * 100) / 100).toFixed(2));
-        $("#txtigv").val(parseFloat(Math.round(txigv * 100) / 100).toFixed(2));
-        $("#txttotal").val(parseFloat(Math.round(txtotal * 100) / 100).toFixed(2));
-
-    }
-    return true;
-};*/
-
     function calcular() {
         var rows= jQuery("#tblDetEntradaProd").jqGrid('getRowData');
         if (rows.length >0) {
@@ -502,7 +410,6 @@ function ActualizarMontos() {
             lastsel3=1;}
        jQuery('#tblDetEntradaProd').jqGrid('saveRow',lastsel3);
         gsrr = jQuery("#tblDetEntradaProd").jqGrid('getRowData');
-      //var nrowid = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
        var subtot=(gsrr[lastsel3-1].nPrecioUnit)*(gsrr[lastsel3-1].nCantidad);
 
         var total1=subtot;
@@ -573,7 +480,6 @@ GuardardetalleEProd = function(){
             data: parameters1,
             beforeSend: function (data) {   },
             success: function (requestData) {
-                //imprimir();
                 window.open(path + "almacen/entradaprod", "_self");
             },
             error: function (requestData, strError, strTipoError) {   },
@@ -605,43 +511,6 @@ GuardardetalleEProd = function(){
         openDialogData1("almacen/addproducto", parameters, 650,560);
 
     };
-/*addopcional= function(){
-    parameters = {
-        "idsigma": $("#identradaprod").val(),
-        "opcional": 1
-    };
-    openDialogData1("almacen/addpsm", parameters, 560,500);
-};
-    crearmaterial = function(){
-        parameters = {
-            "idsigma": '...'
-        };
-
-        openDialogData2("mantenimientos/material", parameters, 460,200);
-    };
-
-addMaterial=function(a){
-    var selr = $('#tblDetEntradaProd').jqGrid('getGridParam','selrow');
-    var row = $("#tblDetEntradaProd").jqGrid('getRowData', selr);
-    var tipo = row.tipoPS;
-    var nombre = row.vNombrePSM;
-   // console.log(row.tipoPS);
-    if(tipo == "" || tipo == undefined || tipo=='1' || nombre=='Material' || nombre=='MATERIAL' || nombre=='MATERIALES'){
-        openDialogWarning("Seleccione un Servicio.");
-        return;
-    }
-    parameters = {
-        "idsigma": row.idProdServ,
-        "nombre": row.vNombrePSM,
-        "idcotizacion":  $("#identradaprod").val(),
-        "Descripcion":  row.vDescrip
-    };
-
-    openDialogData1("mantenimientos/agregarmaterialserv", parameters, 460,460);
-    // closeDialog("jqDialog2");
-};
- */
-
 
     function buttonsGridDetcoti(){
         $("#tblDetEntradaProd")
@@ -665,30 +534,7 @@ addMaterial=function(a){
                 },
                 position:"last"
             })
-            .navSeparatorAdd()
-
- /*           .navButtonAdd('#ptblDetEntradaProd',{
-                caption:"Agregar Material&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
-                    addMaterial();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()
-*/
-
-            /*.navButtonAdd('#ptblDetEntradaProd',{
-                caption:"Opcional&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-                    addopcional();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()*/
-
-        ;
+            .navSeparatorAdd();
     }
 
 
@@ -698,8 +544,6 @@ addMaterial=function(a){
 
         host = '<?php echo $this->util()->getPath(); ?>report/';
          window.open(host+"rptCotizacion.php?idCotiz="+ $("#identradaprod").val() ,'_blank');
-     //console.log(host);
-
     }
 
 // -----> Borrar============================================00
@@ -722,15 +566,12 @@ function eliminardetentradama(rowId) {
             $.post(path + "almacen/detentradaproddel", parmter, updCheckdelete, 'json');
         },
         "No": function () {
-            //ProcesoBuscarRuta(''); chkrecep_5
             closeDialog("jqDialogConfirmacion1");
 
         }
     });
 }
 function updCheckdelete(data) {
-//console.log(data[0][1])
-//console.log(data[0][0])
     if (data[0][1]=="ERR"){
         openDialogWarning(data[0][0]);
     }else{
@@ -804,8 +645,6 @@ calcular();
             data: parameters,
             beforeSend: function (data) { },
             success: function (requestData) {
-                // $("#result").html(requestData);
-                //  var datos=JSON.parse(requestData);
                 window.open(path + "almacen/entradaprod", "_self");
             },
             error: function (requestData, strError, strTipoError) {
@@ -860,92 +699,12 @@ actualizarcantdetalleCot = function(){
         $("#btncancelardet").button(ICON_CANCEL).click(function () {
             Cancelar('');
         });
-
-
-       /* $("#btnbuscardocs").button({icons: {primary: "ui-icon-search"}}).click(function () {
-            ProcesoBuscarRuta('');
-        });*/
     });
 function reiniCombo(celement){
     var xelem = $("#" + celement);
     xelem.combobox("destroy");
     $("option:selected",xelem).removeAttr("selected");
     $("option[value='9999999999']",xelem).attr("selected", "selected");
-    //xelem.combobox();
 }
-/*
-function visorarchivo(nom_archivo) {
-    var page = '';
-    arrarchivo = nom_archivo.split(".");
-    extarchivo = arrarchivo[1];
-
-    if (extarchivo == 'png' || extarchivo == 'jpg' || extarchivo == 'gif') {
-
-        if (navigator.appName == 'Microsoft Internet Explorer')
-        {
-
-            var ver = getInternetExplorerVersion();
-            if (ver > -1)
-            {
-                // alert(ver);
-                if (ver <= 9.0)
-                {
-                    page = jQuery.scriptPath + 'FichaTecnica/' + nom_archivo;
-                    var $dialog = $('<div></div>')
-                        .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
-                        .dialog({
-                            autoOpen: false,
-                            modal: true,
-                            height: 700,
-                            width: 800,
-                            title: "Visor de Archivos"
-                        });
-                    $dialog.dialog('open');
-
-                }
-            } else {
-                page = path + "mantenimientos/visordocs?img=" + nom_archivo;
-                var $dialog = $('<div></div>')
-                    .load(page)
-                    .dialog({
-                        autoOpen: false,
-                        modal: true,
-                        height: 650,
-                        width: 800,
-                        title: "Visor de Archivos"
-                    });
-                $dialog.dialog('open');
-
-
-            }
-        } else {
-
-            page = path + "mantenimientos/visordocs?img=" + nom_archivo;
-            var $dialog = $('<div></div>')
-                .load(page)
-                .dialog({
-                    autoOpen: false,
-                    modal: true,
-                    height: 650,
-                    width: 800,
-                    title: "Visor de Archivos"
-                });
-            $dialog.dialog('open');
-
-        }
-    } else {
-        page = jQuery.scriptPath + 'FichaTecnica/' + nom_archivo;
-        var $dialog = $('<div></div>')
-            .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
-            .dialog({
-                autoOpen: false,
-                modal: true,
-                height: 700,
-                width: 800,
-                title: "Visor de Archivos"
-            });
-        $dialog.dialog('open');
-    }
-}*/
 
 </script>

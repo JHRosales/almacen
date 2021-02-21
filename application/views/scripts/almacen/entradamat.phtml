@@ -1,7 +1,7 @@
 <?php
 $library = new Libreria_Pintar();
 $TipoTecnolo=array(array("1","IP"), array("2","HCVI"));
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"), array("3","MARCA"), array("4","FECHA"));
+$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"), array("3","MARCA"), array("4","NOM. MATERIAL"), array("5", "NRO FACTURA"));
 
 ?>
 <script type="text/javascript">
@@ -77,6 +77,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
            /* ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Entrada Materiales",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
@@ -392,8 +393,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","PROVEEDOR"
                 },
                 position:"last"
             })
-            .navSeparatorAdd()
-        ;
+            .navSeparatorAdd();
+        $("#tblListaEntradaMat").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
 
