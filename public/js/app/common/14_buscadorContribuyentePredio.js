@@ -530,7 +530,7 @@ BuscadorMaterial = {
     // Constantes Publicas
     MODO_CERO: 0,
     MODO_FULL: 1,
-    PROCEDIMIENTO_BUSCAR_PERSONA: "almacen.Bus_Material",
+    PROCEDIMIENTO_BUSCAR_PERSONA: "almacen.Bus_MaterialAlmacen",
 
     // Propiedades Publicas
     procedimientoBuscarPersona: "",

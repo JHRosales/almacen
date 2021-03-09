@@ -127,7 +127,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 <tr class="ui-widget-header">
                     <th>Codigo</th>
                     <th>Material</th>
-                    <!-- <th>Unidad de Medida</th> -->
+                    <th>Serie</th>
                     <th>Stock</th>
                     <th>Cantidad Salida</th>
                     <th>Cantidad Retorno</th>
@@ -146,9 +146,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     <td>
                         <input id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:300px">
                     </td>
-                    <!-- <td>
-                        <input id="txtUnidadMedida" name="txtUnidadMedida" class="ui-text-disable" disabled="disabled" style="width:100px">
-                    </td> -->
+                    <td>
+                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:100px">
+                    </td>
                     <td>
                         <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
                     </td>
@@ -159,7 +159,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <input id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:90px">
                     </td>
                     <td>
-                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"></textarea>
+                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"></textarea>
                     </td>
                     <td>
                         <div title="Eliminar" style="float: left; cursor: pointer; display: none;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -178,9 +178,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <td>
                             <input value="<?php echo $value["activos"]; ?>" id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:300px">
                         </td>
-                        <!-- <td>
-                            <input value="<?php echo $value["unidadMedida"]; ?>" id="txtUnidadMedida" name="txtUnidadMedida" class="ui-text-disable" disabled="disabled" style="width:100px">
-                        </td> -->
+                        <td>
+                            <input value="<?php echo $value["vSerie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:100px">
+                        </td>
                         <td>
                             <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
                         </td>
@@ -191,7 +191,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                             <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:90px">
                         </td>
                         <td>
-                            <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="50"><?php echo $value["vObserv"]; ?></textarea>
+                            <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"><?php echo $value["vObserv"]; ?></textarea>
                         </td>
                         <td>
                             <div title="Eliminar" style="float: left; cursor: pointer; display: none;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">

@@ -48,6 +48,7 @@ var config = {
             'idUnidadMed',
             'Unidad de Medida',
             'Stock',
+            'nStockMinimo',
             'idCategoria',
             'Categoria',
             'Estado'
@@ -61,8 +62,9 @@ var config = {
             { name: 'idUnidadMed', index: 'idUnidadMed', width: 80, hidden: true },
             { name: 'vUnidadMed', index: 'vUnidadMed', width: 120 },
             { name: 'nStock', index: 'nStock', width: 70 },
+            { name: 'nStockMinimo', index: 'nStockMinimo', width: 70 },
             { name: 'idCategoria', index: 'idCategoria', width: 150, hidden: true },
-            { name: 'vCategoria', index: 'vCategoria', width: 150 },
+            { name: 'vCategoria', index: 'vCategoria', width: 150 , hidden: true},
             { name: 'vEstado', index: 'vEstado', width: 50, hidden: true, editOptions: { value: "1:0", defaultvalue: "1" }, formatter: 'checkbox' }
         ],
         ignoreCase: true,

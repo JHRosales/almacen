@@ -785,6 +785,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] = array('@p_iddetsalidamat',  $value->idDetSalidaMat);  #p_mperson
                 $params[] =  array('@p_cantidad',  $value->Cantidad); #cantidad
                 $params[] =  array('@p_nstocksalida',  $value->stock); #cantidad
+                $params[] =  array('@p_fecsalidamaterial',  $value->fecsalidaMaterial); #fechasalida
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
@@ -2066,6 +2067,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] = array('@p_iddetsalidaActivo',  $value->idDetSalidaActivos);  #p_mperson
                 $params[] =  array('@p_cantidad',  $value->Cantidad); #cantidad
                 $params[] =  array('@p_nstocksalida',  $value->stock); #cantidad
+                $params[] =  array('@p_fecsalidaactivos',  $value->fecsalidaActivos); #fechasalida
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }

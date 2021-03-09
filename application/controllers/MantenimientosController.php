@@ -2586,4 +2586,172 @@ class MantenimientosController extends Zend_Controller_Action
             echo json_encode($result);
         }
     }
+
+
+/* 
+    ----  Material Almacen
+*/
+
+public function buscarmaterialalmacenAction()
+{
+    if ($this->getRequest()->isXmlHttpRequest()) {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+    }
+}
+public function materialalmacenAction()
+    {
+        $func = new Libreria_Pintar();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $this->view->idsigma = $idsigma;
+            if ($idsigma == '...') {
+                $idsigma = '';
+            }
+            $cn = new Model_DataAdapter();
+            $parametros = null;
+            $parametros[] = array('@tBusqueda', '1');
+            $parametros[] = array('@vDatoBus', $idsigma);
+
+            $datos = $cn->executeAssocQuery(
+                'almacen.Bus_MaterialAlmacen',
+                $parametros
+            );
+
+            $cdatos = count($datos);
+            if ($cdatos == 0) {
+                $this->view->idmate = '';
+                $this->view->vNombre = '';
+                $this->view->idTipoMaterial = '';
+                $this->view->vMarca = '';
+                $this->view->idUnidadMedida = '';
+                $this->view->nStockMinimo = '';
+                $this->view->idTipoMoneda = '';
+                $this->view->ccompra = '';
+                $this->view->nestado = '';
+            } else {
+                $this->view->idmate = $datos[0]['idMaterial'];
+                $this->view->vNombre = $datos[0]['vNombre'];
+                $this->view->idTipoMaterial = $datos[0]['idTipoMaterial'];
+                $this->view->vMarca = $datos[0]['vMarca'];
+                $this->view->idUnidadMedida = $datos[0]['idUnidadMed'];
+                $this->view->nStockMinimo = $datos[0]['nStockMinimo'];
+                $this->view->idTipoMoneda = $datos[0]['idTipoMon'];
+                $this->view->ccompra = $datos[0]['cCompra'];
+                $this->view->nestado = $datos[0]['vEstado'];
+            }
+        }
+    }
+
+    public function borrarmaterialalmacenAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter();
+
+            $idMaterial = $this->_request->getPost('idMaterial');
+
+            $params = null;
+            $params[] = array('@p_idmat', $idMaterial);
+
+            $mat = $cn->executeAssocQuery('borrar_materialAlmacen', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($mat);
+        }
+    }
+
+    public function guardarmaterialalmacenAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $cn = new Model_DataAdapter();
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $idpersonal = $ddatosuserlog->cidusuario;
+            $usuario = $ddatosuserlog->userlogin;
+            $host = $ddatosuserlog->vhostnm;
+
+
+            $idsigma = $this->_request->getPost('txtidsigma');
+            $vnombre = $this->_request->getPost('txtvnombreMat');
+            $cbotipomat = $this->_request->getPost('cbotipomate');
+            $vmarca = $this->_request->getPost('txtmarca');
+            $cbounidamed = $this->_request->getPost('cboUnidadMed');
+            $stockMinimo = $this->_request->getPost('txtStockMinimo');
+            $estado = $this->_request->getPost('estado');
+            $tipomon = $this->_request->getPost('cbotipomon');
+            $txtcosto = $this->_request->getPost('txtcosto');
+
+            if ($idsigma == '...') {
+                $idsigma = '';
+                $ttrans = '1';
+            } else {
+                $ttrans = '2';
+            }
+            if ($txtcosto == '') {
+                $txtcosto = 0;
+            }
+
+
+            $texto2 = str_replace(
+                array("á", "é", "í", "ó", "ú", "ñ", "�?", "É", "�?", "Ó", "Ú", "Ñ"),
+                array(
+                    "&aacute;", "&eacute;", "&iacute;", "&oacute;", "&uacute;", "&ntilde;",
+                    "&Aacute;", "&Eacute;", "&Iacute;", "&Oacute;", "&Uacute;", "&Ntilde;"
+                ),
+                $vnombre
+            );
+
+            $params = null;
+            $params[] = array('@ttrans', $ttrans);
+            $params[] = array('@idMaterial', $idsigma);
+            $params[] = array('@vNombreMat', utf8_decode(str_replace('"', '&quot;', str_replace("•", '&bull;', $texto2))));
+            if ($cbotipomat != '9999999999') {
+                $params[] = array('@idTipoMaterial', $cbotipomat);
+            }
+            $params[] = array('@vMarca', $vmarca);
+
+            if ($cbounidamed != '9999999999') {
+                $params[] = array('@idUnidadMed', $cbounidamed);
+            }
+
+            $params[] = array('@stockMinimo', $stockMinimo);
+            $params[] = array('@nCosto', $txtcosto);
+            $params[] = array('@tipomon', $tipomon);
+            $params[] = array('@vEstado', $estado);
+            $params[] = array('@vUsernm', $usuario);
+            $params[] = array('@vHostnm', $host);
+
+            $person = $cn->ejec_store_procedura_sql('almacen.InsUpd_materialAlmacen', $params);
+            echo json_encode($person);
+        }
+    }
+
+    public function anularmaterialalmacenAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $cn = new Model_DataAdapter();
+
+            $idMaterial = $this->_request->getPost('idMaterial');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idMaterial);
+
+            $mat = $cn->ejec_store_procedura_sql('anular_materialAlmacen', $params);
+            // $cperson = count($prod);
+            //echo $prod;
+            echo json_encode($mat);
+        }
+    }
+
 }

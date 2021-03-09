@@ -263,9 +263,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                     success: function(requestData) {
                         var datos = JSON.parse(requestData);
                         console.log(datos);
-                        var parameters = {
-                            idcotizacion: datos[0].idSalidaActivo
-                        };
+                        // var parameters = {
+                        //     idcotizacion: datos[0].idSalidaActivo
+                        // };
                         buscarSalidaActivos();
                         closeDialog("jqDialogConfirmacion1");
                     },
