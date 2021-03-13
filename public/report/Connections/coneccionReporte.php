@@ -1,8 +1,8 @@
 <?php
-$db ="dhlalmacen";
+$db = "dhlalmacen";
 
-$ConeccionRatania = mssql_connect("localhost","sa","ucv")or die('La conexion fall�. Error: ' . mssql_get_last_message());
-mssql_select_db($db,$ConeccionRatania);
+$ConeccionRatania = mssql_connect("Usuario-PC", "sa", "ucv") or die('La conexion fall�. Error: ' . mssql_get_last_message());
+mssql_select_db($db, $ConeccionRatania);
 /*if(@!mssql_connect("127.0.0.1","sa","ucv")){
 	//$this->connection = pg_connect(self::$driver2);
 	//$ConeccionRatania = pg_connect($cnString2) or die('La conexion fall�. Error: ' . pg_last_error());

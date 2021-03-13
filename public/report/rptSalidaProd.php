@@ -291,7 +291,7 @@ class PDF1 extends TCPDF
 $idsalida = $_GET['idSalida'];
 
 $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
-$Rs_tipoPer->Poner_MSQL("select  a.vobra,a.vlugar,m.idProducto,m.vNombre nProducto,ps.vNroSerie,c.idcliente,c.vnombre as client,
+$Rs_tipoPer->Poner_MSQL("select  a.vobra,a.vlugar,m.idProducto,m.vNombre nProducto,ps.vNroSerie,vModelo,c.idcliente,c.vnombre as client,
 c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
 1 cantidad
 ,coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
@@ -309,8 +309,16 @@ coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
 			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
 			 order by ent.dFecIngreso  desc, ent.dFecReg desc
   )abc  ),0)  total
-  ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, case m.idTipoMon when 1 then 'S/'
-  when 2 then '$' else ''end tipomoneda
+  ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, 
+  case 
+	  (SELECT EP.nTipoMoneda 
+		FROM almacen.detSalidaProd DSP
+		LEFT JOIN almacen.prodSeries PS ON DSP.idProdSeries=ps.idProdSeries
+		LEFT JOIN almacen.detEntradaProd DEP ON ps.idDetEntradaProd=DEP.idDetEntradaProd
+		LEFT JOIN almacen.entradaProd EP ON DEP.idEntradaProd=EP.idEntradaProd
+		WHERE DSP.idDetSalidaProd=B.idDetSalidaProd)
+   when 1 then '$'
+  when 2 then 'S/' else ''end tipomoneda
  from almacen.salidaProd a inner join
 		almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
 		inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
@@ -318,11 +326,11 @@ coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
 		left join cliente c on a.idCliente=c.idCliente
 		inner join tecnico t on a.idTecnico=t.idTecnico
 		where a.vEstado =1 and b.vEstado=1
-		and a.idSalidaProd=$idsalida
+		and a.idSalidaProd=$idsalida 
 		and b.idDetSalidaProd not in (
 			  select detretp.idDetSalidaProd from almacen.RetornoProd retP
 			  inner join almacen.detRetornoProd detretp on retP.idRetornoProd=detretp.idRetornoProd
-			  where retP.idSalidaProd=$idsalida  and detretp.vEstado=1)");
+			  where retP.idSalidaProd=$idsalida   and detretp.vEstado=1)");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
 $Rs_tipoPer->executeMSQL();
@@ -409,8 +417,8 @@ $migv = $rowTipoP['nIgv'];
 
 $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
-<td width="30px"><b>ITEM</b></td><td width="142px"><b>Nro Serie</b></td><td width="35px"><b>CANT</b>
-</td><td width="300px"><b>Producto</b></td><td width="55px"><b>TIpo Moneda</b></td><td width="63.5px"><b> PU </b></td><td width="64px"><b> PT</b></td>
+<td width="30px"><b>ITEM</b></td><td width="100px"><b>Nro Serie</b></td> <td width="90px"><b>Modelo</b></td>  <td width="35px"><b>CANT</b>
+</td><td width="260px"><b>Producto</b></td><td width="55px"><b>TIpo Moneda</b></td><td width="63.5px"><b> PU </b></td><td width="64px"><b> PT</b></td>
 </tr>';
 
 $N = 0;
@@ -441,9 +449,10 @@ while ($N < $numRows) {
 	$mtotal = $row['total'];
 	$pu = $row['precUnit'];
 	$nserie = $row['vNroSerie'];
+	$modelo = $row['vModelo'];
+	$vTipoMoneda = $row['tipomoneda'];
 	$mtotal1 = $mtotal1 + $mtotal;
 
-	$modelo = $row['Modelo'];
 	$pt = $row['nPrecTotal'];
 	$img = $row['img'];
 
@@ -459,9 +468,10 @@ while ($N < $numRows) {
 		$html .= '
 	<tr nobr="true" style="text-align: center; vertical-align: 10%">
 	<td width="30px" >' . ($N + 1) . '</td>
-	<td width="142px" style="font-size: 9px;" ><b>' . $nserie . '</b>' . '</td>
+	<td width="100px" style="font-size: 9px;" ><b>' . $nserie . '</b>' . '</td>
+	<td width="90px" style="font-size: 9px;" >' . $modelo . '</td>
 	<td width="35px">' . $cant . '</td>
-	<td  align="left" width="300px">' . $nMate . '</td>
+	<td  align="left" width="260px">' . $nMate . '</td>
 	<td width="55px" > ' . $vTipoMoneda . '</td>
 	<td width="63.5px" >' . $pu . '</td>
 	<td width="64px" >' . $mtotal . '</td>';
@@ -491,10 +501,10 @@ $html .= '
 
 
 <tr>
-	<td COLSPAN="6" align="right" style="font-family:  Times, serif; font-size: 10px" >
+	<td COLSPAN="7" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal1 . '</span></b>
+<b><span style="color: red"> ' . $mtotal1 . '</span></b>
 </td></tr>';
 $html .= '
 </table>
@@ -502,7 +512,7 @@ $html .= '
 
 //Cotizacion
 
-$Rs_tipoPer->Poner_MSQL("select detcot.vDescrip,m.vModelo,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
+$Rs_tipoPer->Poner_MSQL("select m.vNombre,m.vModelo,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
 when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
 from almacen.salidaProd  a inner join
 almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
@@ -525,7 +535,7 @@ $html .= '
 
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
-<td width="100px"><b>Modelo</b></td><td width="300px"><b>MATERIAL</b></td><td width="55px"><b>CANT</b>
+<td width="100px"><b>Modelo</b></td><td width="300px"><b>PRODUCTOS</b></td><td width="55px"><b>CANT</b>
 </td><td width="55px"><b>Tipo Moneda</b>
 </td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>
 </tr>';
@@ -542,7 +552,7 @@ while ($N < $numRows) {
 	$pu = $row['nPrecUnit'];
 	$mtotal2 = $mtotal2 + $mtotal;
 
-	$det = $row['vDescrip'];
+	$det = $row['vNombre'];
 	$det = str_replace("<p>", '', $det);
 	$det = str_replace("</p>", '', $det);
 
@@ -583,7 +593,7 @@ $html .= '
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal2 . '</span></b>
+<b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
 </td></tr>';
 $html .= '
 </table>

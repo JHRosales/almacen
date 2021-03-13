@@ -278,7 +278,16 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
  ),0) total,
 
  CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida
- ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, case m.idTipoMon when 1 then 'S/'
+ ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, 
+ case 
+	(SELECT TOP 1 EM.nTipoMoneda
+	FROM almacen.detSalidaMat DSM
+	left join almacen.SalidaMat SM ON DSM.idSalidaMat=SM.idSalidaMat
+	LEFT JOIN almacen.detEntradaMat DEM ON DSM.idMaterial=DEM.idMaterial
+	LEFT JOIN almacen.entradaMat EM ON DEM.idEntradaMat=EM.idEntradaMat
+	WHERE DSM.idDetSalidaMat=B.idDetSalidaMat AND EM.dFecIngreso<=SM.dFecSalida
+	ORDER BY EM.dFecIngreso DESC)
+ when 1 then 'S/'
  when 2 then '$' else ''end tipomoneda
  from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
@@ -404,9 +413,7 @@ while ($N < $numRows) {
 	$det = str_replace("*", '&#x27A2;', $det);
 	//$det = iconv('utf-8', 'cp1252', $det);
 	$nMate = utf8_encode($det);
-
-
-	$modelo = $row['Modelo'];
+	$vTipoMoneda = $row['tipomoneda'];
 	$pt = $row['nPrecTotal'];
 
 
@@ -434,7 +441,7 @@ $html .= '
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal1 . '</span></b>
+<b><span style="color: red"> ' . $mtotal1 . '</span></b>
 </td></tr>';
 $html .= '
 </table>
@@ -494,8 +501,6 @@ while ($N < $numRows) {
 	$det = str_replace("*", '&#x27A2;', $det);
 	$nMate = utf8_encode($det);
 
-
-	$modelo = $row['Modelo'];
 	$pt = $row['nPrecTotal'];
 	$ptipoMoneda = $row['tipomoneda'];
 
@@ -523,7 +528,7 @@ $html .= '
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $vTipoMoneda . ' ' . $mtotal2 . '</span></b>
+<b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
 </td></tr>';
 $html .= '
 </table>
