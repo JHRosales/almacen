@@ -197,6 +197,7 @@ class PDF1 extends TCPDF
 		global $idsalida;
 		global $vobra;
 		global $cliente;
+		global $finalobra;
 		global $Lugar;
 
 
@@ -234,12 +235,21 @@ class PDF1 extends TCPDF
 		$this->SetXY($lw + 15, $lh + 22);
 		$this->MultiCell(180, 5, $cliente, 0, 'L');
 
+
+		$this->SetFont('times', '', 11);
+		$this->SetXY($lw, $lh + 28);
+		$this->MultiCell(20, 5, "Final Obra: ", 0, 'J');
+
+		$this->SetFont('times', '', 11);
+		$this->SetXY($lw + 20, $lh + 28);
+		$this->MultiCell(180, 5,fechaATexto($finalobra)  , 0, 'L');
+
 		$this->SetFont('times', 'B', 11);
-		$this->SetXY($lw, $lh + 27);
+		$this->SetXY($lw, $lh + 32);
 		$this->MultiCell(190, 5, "Reporte Inversion Materiales", 0, 'C');
 
 		$this->SetFont('times', '', 10);
-		$this->SetXY($lw, $lh + 40);
+		$this->SetXY($lw, $lh + 45);
 	}
 }
 
@@ -249,7 +259,10 @@ class PDF1 extends TCPDF
 $idsalida = $_GET['idSalida'];
 
 $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
-$Rs_tipoPer->Poner_MSQL("select  a.vobra,a.vlugar,m.idmaterial,m.vNombre nMaterial
+$Rs_tipoPer->Poner_MSQL("select  a.vobra,vlugar,a.idmaterial,a.nMaterial,SUM(nCantidad) nCantidad 
+,idcliente,clie,vtipodoc,vdireccion,precUnit, SUM (total) total,dFecSalida,cotizacionTotal,tipomoneda
+,a.fechaRetorno from(
+select  a.vobra,a.vlugar,m.idmaterial,m.vNombre nMaterial
 ,b.nCantidad - coalesce( (select TOP 1 dretmat.nCantidad from  almacen.RetornoMat dretm
  inner join almacen.detRetornoMat dretmat on dretm.idRetornoMat=dretmat.idRetornoMat
  where dretm.idSalidaMat=a.idSalidaMat
@@ -289,13 +302,19 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
 	ORDER BY EM.dFecIngreso DESC)
  when 1 then 'S/'
  when 2 then '$' else ''end tipomoneda
+ , coalesce( (select TOP 1 CONVERT(VARCHAR(10), dretm.dFecRetorno,103) as dFecRetorno from  almacen.RetornoMat dretm
+ where dretm.idSalidaMat=a.idSalidaMat
+ and dretm.vEstado=1),null) fechaRetorno
  from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
 inner join material m on b.idMaterial=m.idMaterial
 inner join cliente c on a.idCliente=c.idCliente
 inner join tecnico t on a.idTecnico=t.idTecnico
 where a.vEstado =1 and b.vEstado=1
-and a.idSalidaMat=$idsalida");
+and a.idSalidaMat=$idsalida
+) a
+group by a.vObra,vLugar,a.idMaterial,a.nMaterial,idCliente,clie,vTipoDoc
+,vDireccion,precUnit,dFecSalida,cotizacionTotal,tipomoneda,a.fechaRetorno");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
 $Rs_tipoPer->executeMSQL();
@@ -304,6 +323,7 @@ $rowTipoP = $Rs_tipoPer->pg_Get_Row();
 $vobra = $rowTipoP['vobra'];
 $Lugar = $rowTipoP['vlugar'];
 $cliente = $rowTipoP['clie'];
+$finalobra=$rowTipoP['fechaRetorno'];
 $fecha = $rowTipoP['dFecSalida'];
 $vPersContac = "Reporte inversion Materiales"; //$rowTipoP['vPersContac'];
 $vTipoMoneda = $rowTipoP['tipomoneda'];
@@ -472,10 +492,14 @@ $html .= '
 
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
-<td width="50px"><b>ITEM</b></td><td width="350px"><b>MATERIAL</b></td><td width="55px"><b>CANT</b>
-</td><td width="55px"><b>Tipo Moneda</b>
-</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>
+
 </tr>';
+// $html .= '
+// <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
+// <td width="50px"><b>ITEM</b></td><td width="350px"><b>MATERIAL</b></td><td width="55px"><b>CANT</b>
+// </td><td width="55px"><b>Tipo Moneda</b>
+// </td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>
+// </tr>';
 
 $N = 0;
 $numsaltos = 0;
@@ -507,16 +531,16 @@ while ($N < $numRows) {
 
 	$x = "";
 
-	$html .= '
-	<tr nobr="true" style="text-align: center; vertical-align: 10%">
-	<td width="50px" >' . ($N + 1) . '</td>
-	<td  align="left" width="350px"><b>' . $nMate . '</b></td>
-	<td width="55px">' . $cant . '</td>	
-	<td width="55px">' . $ptipoMoneda . '</td>	
-	<td width="63.5px" >' . $pu . '</td>
-	<td width="64px" >' . $mtotal . '</td>';
+	// $html .= '
+	// <tr nobr="true" style="text-align: center; vertical-align: 10%">
+	// <td width="50px" >' . ($N + 1) . '</td>
+	// <td  align="left" width="350px"><b>' . $nMate . '</b></td>
+	// <td width="55px">' . $cant . '</td>	
+	// <td width="55px">' . $ptipoMoneda . '</td>	
+	// <td width="63.5px" >' . $pu . '</td>
+	// <td width="64px" >' . $mtotal . '</td>';
 
-	$html .= '	</tr>';
+	// $html .= '	</tr>';
 
 
 	$Rs_tipoPer->pg_Move_Next();
@@ -525,7 +549,7 @@ while ($N < $numRows) {
 
 $html .= '
 <tr>
-	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
+	<td COLSPAN="4" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
 <b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>

@@ -17,16 +17,14 @@ class Model_DataAdapter
         if ($this->connection == null) {
             try {
                 // CONFIGURACION DE BASE DE DATOS
-                #$this->connection = mssql_connect("ALEX_LEON\APCV","sa","123456");
-                #$this->connection = mssql_connect("127.0.0.1","sa","123456");
                 //$this->connection = mssql_connect("ANDRESWIN8\SQLEXPRESS","sa","ucv");
                 //$this->connection = mssql_connect("MUNIRIMAC\aperez","sa","perezgarcia");
 
                 //$this->connection = mssql_connect("190.187.182.30,1433","sa","123456");
                 //$this->connection = mssql_connect("127.0.0.1,1433","sa","123456");
                 //$this->connection = mssql_connect("localhost","sa","ucv");
-                $this->connection = mssql_connect("Usuario-PC", "sa", "ucv");
-                //$this->connection = mssql_connect("127.0.0.1\SQLEXPRESS2008","sa","123456");
+                //$this->connection = mssql_connect("Usuario-PC", "sa", "ucv");
+                $this->connection = mssql_connect("DESKTOP-29DNGV2\SQLEXPRESS","sa","123456");
                 mssql_select_db(self::$db, $this->connection);
             } catch (Exception $e) {
                 $this->logger->error("initDB", $e);

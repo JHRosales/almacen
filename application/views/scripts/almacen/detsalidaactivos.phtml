@@ -147,6 +147,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 <tr class="ui-widget-header">
                     <th>Codigo</th>
                     <th>Activo</th>
+                    <th>Serie</th>
                     <th>Stock</th>
                     <th>Buscar</th>
                     <th>Cantidad</th>
@@ -161,11 +162,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <input id="txtIdActivos" name="txtIdActivos" class="ui-text-disable" disabled="disabled" style="width:90px">
                     </td>
                     <td>
-                        <input id="txtNombreActivos" name="txtNombreActivos" class="ui-text-disable" disabled="disabled" style="width:400px">
+                        <input id="txtNombreActivos" name="txtNombreActivos" class="ui-text-disable" disabled="disabled" style="width:350px">
                     </td>
-
                     <td>
-                        <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:80px">
+                            <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:80px">
+                    </td>
+                    <td>
+                        <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:70px">
                     </td>
                     <td>
                         <button id="btnTestigoBuscarPersona">Buscar</button>
@@ -173,7 +176,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     <td>
                         <input id="txtCantidad" name="txtCantidad" type="number" class="ui-text" style="width:100px">
                     </td>
-
+                    <td>
+                                <input type="text" id="fecsalidaMaterial" name="fecsalidaMaterial" class="ui-text-disable " readonly style="text-align: left;width: 80px;" />
+                      </td>
 
 
                     <td>
@@ -182,7 +187,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         </div>
                     </td>
                 </tr>
-                <?php foreach ($this->detSalidaActivos as $value) { ?>
+                <?php $cont=0; foreach ($this->detSalidaActivos as $value) { $cont++  ?>
 
                     <tr>
                         <td>
@@ -190,11 +195,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                             <input value="<?php echo $value["idActivos"]; ?>" id="txtIdActivos" name="txtIdActivos" class="ui-text-disable" disabled="disabled" style="width:90px">
                         </td>
                         <td>
-                            <input value="<?php echo $value["activos"]; ?>" id="txtNombreActivos" name="txtNombreActivos" class="ui-text-disable" disabled="disabled" style="width:400px">
+                            <input value="<?php echo $value["activos"]; ?>" id="txtNombreActivos" name="txtNombreActivos" class="ui-text-disable" disabled="disabled" style="width:350px">
                         </td>
-
                         <td>
-                            <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:80px">
+                            <input value="<?php echo $value["vSerie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:80px">
+                        </td>
+                        <td>
+                            <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:70px">
                         </td>
                         <td>
                             <button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" id="btnTestigoBuscarPersona"><span class="ui-button-text">Buscar</span></button>
@@ -202,7 +209,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <td>
                             <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad" type="number" name="txtCantidad" class="ui-text" style="width:100px">
                         </td>
-
+                        <td>
+                                <input type="text" id="fecsalidaMaterial<?php echo $cont ?>" name="fecsalidaMaterial" value="<?php echo $value["dfecSalidaActivos"]; ?>" class="ui-text-disable inputdatepicker" readonly style="text-align: left;width: 80px;" />
+                            </td>
 
                         <td>
                             <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -444,8 +453,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             if (invocaBusPersona == 1) {
                 $(d).parent().parent().find("input[name=txtIdActivos]").val(row.idActivos);
                 $(d).parent().parent().find("input[name=txtNombreActivos]").val(row.vNombre);
-                //$(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
+                $(d).parent().parent().find("input[name=txtSerie]").val(row.vSerie);
                 $(d).parent().parent().find("input[name=txtStock]").val(row.nStock);
+                $(d).parent().parent().find("input[name=txtCantidad]").val(1);
+                
 
             }
             closeDialog("dialogBuscarContribuyentePredio");
@@ -537,7 +548,26 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
         });
 
+        $("#fecsalidaMaterial_" + id + "_" + i).datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fecsalidaMaterial_" + id + "_" + i).datepicker( "setDate" , new Date());
+
         i++;
+
+       
+        for (index = 1; index < 20; index++) {
+            $("#fecsalidaMaterial" + index).datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+            });
+        }
+        
     }
 
     $(function() {
@@ -635,6 +665,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     detMateriales.idActivos = $(this).find("[name=txtIdActivos]").val();
                     detMateriales.Cantidad = $(this).find("[name=txtCantidad]").val();
                     detMateriales.stock = $(this).find("[name=txtStock]").val();
+                    detMateriales.fecsalidaActivos = $(this).find("[name=fecsalidaMaterial]").val();
                     materiales.push(detMateriales);
                 }
             });
