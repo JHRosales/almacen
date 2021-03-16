@@ -368,6 +368,25 @@ class MantenimientosController extends Zend_Controller_Action
 
 
 
+    public function eliminarproveedorAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+
+            $idsigma = $this->_request->getPost('idsigma');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idsigma);
+
+            $person = $cn->ejec_store_procedura_sql('eliminar_proveedor', $params);
+            $cperson = count($person);
+            echo $person[0][0];
+        }
+    }
     public function eliminarpersonaAction()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -601,6 +620,7 @@ class MantenimientosController extends Zend_Controller_Action
                 $this->view->img = '';
                 $this->view->doc = '';
                 $this->view->idTipoMoneda = '';
+                $this->view->nStockMinimo = '';
             } else {
                 $this->view->idcat = $datos[0]['idCat'];
                 $this->view->idSubCat = $datos[0]['idSubCat'];
@@ -616,6 +636,7 @@ class MantenimientosController extends Zend_Controller_Action
                 $this->view->img = $datos[0]['iadjunto'];
                 $this->view->doc = $datos[0]['docadjunto'];
                 $this->view->idTipoMoneda = $datos[0]['idTipoMon'];
+                $this->view->nStockMinimo = $datos[0]['nStockMinimo'];
             }
         }
 
@@ -653,6 +674,7 @@ class MantenimientosController extends Zend_Controller_Action
             $estado = $this->_request->getPost('estado');
             $adjunto = $this->_request->getPost('adjunto');
             $tipomon = $this->_request->getPost('cbotipomon');
+            $txtstockMinimo = $this->_request->getPost('txtStockMinimo');
 
             if ($idsigma == '...') {
                 $idsigma = '';
@@ -694,6 +716,7 @@ class MantenimientosController extends Zend_Controller_Action
             $params[] = array('@vHostnm', $host);
             $params[] = array('@iadjunto', $adjunto);
             $params[] = array('@tipomon', $tipomon);
+            $params[] = array('@nstockMinimo', $txtstockMinimo);
 
             $producto = $cn->ejec_store_procedura_sql('InsUpd_Producto', $params);
             $cproduct = count($producto);
@@ -2588,18 +2611,18 @@ class MantenimientosController extends Zend_Controller_Action
     }
 
 
-/* 
+    /* 
     ----  Material Almacen
 */
 
-public function buscarmaterialalmacenAction()
-{
-    if ($this->getRequest()->isXmlHttpRequest()) {
-        $this->_helper->getHelper('ajaxContext')->initContext();
-        $this->_helper->layout->disableLayout();
+    public function buscarmaterialalmacenAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
     }
-}
-public function materialalmacenAction()
+    public function materialalmacenAction()
     {
         $func = new Libreria_Pintar();
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -2753,5 +2776,4 @@ public function materialalmacenAction()
             echo json_encode($mat);
         }
     }
-
 }

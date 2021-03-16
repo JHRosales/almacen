@@ -1,42 +1,44 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), array("3","TIPOMATERIAL"), array("4","MARCA"));
+$TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBRE"), array("3", "TIPOMATERIAL"), array("4", "MARCA"));
 ?>
 <div id="paneldPSM" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 100%;margin: 1px; height:95%;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
         <label>Agregar Material</label>
     </div>
     <div id="dialogPSM">
-                    <table class="ui-panelLayout-main">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
                         <tr>
-                            <td style="vertical-align: top;">
-                                <table border="0" style="margin-left:45px;">
-                                    <tr><td>
-                                            <b>  Datos Busqueda</b>
-                                        </td></tr>
-                                    <tr class="rowdatospsm" id="rowdatospsm">
-                                        <td style="text-align: left">
-                                            <select id="cbotipob" name="cbotipob" style="width:140px;">
-                                                <?php  echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon,0); ?>
-                                            </select>
-                                        </td>
-                                        <td>Texto de busqueda:</td>
-                                        <TD colspan="3">
-                                            <input class="ui-text pnl" id="c_textbusqueda"  onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
-                                        </TD>
-                                        <td> &nbsp;&nbsp;</td>
-                                        <td>
-                                            <button id="btnbuscarPSM" name="btnbuscarPSM" onclick="buscarMate()">Buscar</button>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td>
+                                <b> Datos Busqueda</b>
+                            </td>
+                        </tr>
+                        <tr class="rowdatospsm" id="rowdatospsm">
+                            <td style="text-align: left">
+                                <select id="cbotipob" name="cbotipob" style="width:140px;">
+                                    <?php echo $library->ContenidoCombo($TipoBusqueda, $this->ctipmon, 0); ?>
+                                </select>
+                            </td>
+                            <td>Texto de busqueda:</td>
+                            <TD colspan="3">
+                                <input class="ui-text pnl" id="c_textbusqueda" onkeypress="if(event.keyCode==13){buscarMate();}" style="width:100%" />
+                            </TD>
+                            <td> &nbsp;&nbsp;</td>
+                            <td>
+                                <button id="btnbuscarPSM" name="btnbuscarPSM" onclick="buscarMate()">Buscar</button>
                             </td>
                         </tr>
                     </table>
+                </td>
+            </tr>
+        </table>
     </div>
-    <input type="hidden" class="ui-text"  id="txtidEntradaMat" value="<?php echo $this->identrdamat; ?>" style="width:99%" />
-    <input type="hidden" class="ui-text"  id="txtidDetEntradaMat" value="<?php echo $this->iddetentrada; ?>" style="width:99%" />
-    <input type="hidden" class="ui-text"  id="txtidMaterial" value="<?php echo $this->idMaterial; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text" id="txtidEntradaMat" value="<?php echo $this->identrdamat; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text" id="txtidDetEntradaMat" value="<?php echo $this->iddetentrada; ?>" style="width:99%" />
+    <input type="hidden" class="ui-text" id="txtidMaterial" value="<?php echo $this->idMaterial; ?>" style="width:99%" />
     <div id="dialogMensaje">
     </div>
     <div id="panelPSM" align="left" style="width: 99%;margin-left: 5px;">
@@ -44,52 +46,53 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         <div id="ptblPSM">
         </div>
     </div>
-    <br/>
-<!--
+    <br />
+    <!--
     <div class="ui-widget ui-state-default ui-corner-all ui-title">
         <label>Agregar Material</label>
     </div>-->
-                <table border="0" style="margin-left:5px;">
-                    <tr class="rowdatospsm" id="rowdatospsm">
-                        <td>CANTIDAD:</td>
-                        <td style="text-align: left">
-                            <input class="ui-text pnl" id="txtCantidad"  value="<?php echo $this->cantidad; ?>" style="width:100%" />
-                        </td>
-                        <td> &nbsp;&nbsp;</td>
-                        <td>P. UNITARIO:</td>
-                        <TD colspan="3">
-                            <input class="ui-text pnl" id="txtPrecioUnit"  value="<?php echo $this->punitario; ?>"  style="width:100%" />
-                        </TD>
-                        <td> &nbsp;&nbsp; </td>
-                    </tr>
-                    <tr><td colspan="3"> &nbsp;&nbsp;</td>
-                        <td> &nbsp;&nbsp;</td>
-                        <td> <button id="btnAgregar" name="btnAgregar" onclick="addprodserv()">Agregar</button></td>
-                    </tr>
-                </table>
-    </div>
+    <table border="0" style="margin-left:5px;">
+        <tr class="rowdatospsm" id="rowdatospsm">
+            <td>CANTIDAD:</td>
+            <td style="text-align: left">
+                <input class="ui-text pnl" id="txtCantidad" value="<?php echo $this->cantidad; ?>" style="width:100%" />
+            </td>
+            <td> &nbsp;&nbsp;</td>
+            <td>P. UNITARIO:</td>
+            <TD colspan="3">
+                <input class="ui-text pnl" id="txtPrecioUnit" value="<?php echo $this->punitario; ?>" style="width:100%" />
+            </TD>
+            <td> &nbsp;&nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp;&nbsp;</td>
+            <td> &nbsp;&nbsp;</td>
+            <td> <button id="btnAgregar" name="btnAgregar" onclick="addprodserv()">Agregar</button></td>
+        </tr>
+    </table>
+</div>
 
 <script type="text/javascript">
     themeComboBox();
 
-    $( "#txtnombre" ).keyup(function( event ) {
+    $("#txtnombre").keyup(function(event) {
         buscarPServ();
         document.getElementById("txtnombre").focus();
-    }).keydown(function( event ) {
-        if ( event.which == 13 ) {
+    }).keydown(function(event) {
+        if (event.which == 13) {
 
         }
     });
-    $( "#txtdescri" ).keyup(function( event ) {
+    $("#txtdescri").keyup(function(event) {
         buscarMate();
         document.getElementById("txtdescri").focus();
-    }).keydown(function( event ) {
-        if ( event.which == 13 ) {
+    }).keydown(function(event) {
+        if (event.which == 13) {
 
         }
     });
 
-    $('#txtPrecioUnit').on('keypress', function (e) {
+    $('#txtPrecioUnit').on('keypress', function(e) {
         // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
 
         var field = $(this);
@@ -99,10 +102,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         if (key > 47 && key < 58) {
             if (field.val() === "") return true;
             var existePto = (/[.]/).test(field.val());
-            if (existePto === false){
+            if (existePto === false) {
                 regexp = /.[0-9]{10}$/;
-            }
-            else {
+            } else {
                 regexp = /.[0-9]{2}$/;
             }
 
@@ -115,7 +117,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         }
         return false;
     });
-    $('#txtCantidad').on('keypress', function (e) {
+    $('#txtCantidad').on('keypress', function(e) {
         // Backspace = 8, Enter = 13, �0? = 48, �9? = 57, �.� = 46
 
         var field = $(this);
@@ -125,10 +127,9 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         if (key > 47 && key < 58) {
             if (field.val() === "") return true;
             var existePto = (/[.]/).test(field.val());
-            if (existePto === false){
+            if (existePto === false) {
                 regexp = /.[0-9]{10}$/;
-            }
-            else {
+            } else {
                 regexp = /.[0-9]{2}$/;
             }
 
@@ -137,19 +138,19 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         return false;
     });
 
-   /* $("#cbo_bus").combobox({
-        selected: function(event, ui){
-           if($("#cbo_bus").val()=='1'){
-               $(".clprod").show();
-               $(".clserv").hide();
+    /* $("#cbo_bus").combobox({
+         selected: function(event, ui){
+            if($("#cbo_bus").val()=='1'){
+                $(".clprod").show();
+                $(".clserv").hide();
 
-           }else{
-               $(".clprod").hide();
-               $(".clserv").show();
+            }else{
+                $(".clprod").hide();
+                $(".clserv").show();
 
-           }
-        }
-    });*/
+            }
+         }
+     });*/
 
     var lastsel3;
     optionPSM = {
@@ -168,52 +169,113 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             'Categoria',
             'Estado'
         ],
-        colModel: [
-            {name: 'idMaterial', index:'idMaterial', width:60},
-            {name: 'vNombre', index:'vNombre', width:150},
-            {name: 'idTipoMaterial', index:'idTipoMaterial', hidden:true},
-            {name: 'vTipoMaterial', index:'vTipoMaterial', width:120},
-            {name: 'vMarca', index:'vMarca', width:100},
-            {name: 'idUnidadMed', index:'idUnidadMed', width:80,hidden:true},
-            {name: 'vUnidadMed', index:'vUnidadMed', width:120},
-            {name: 'nStock', index:'nStock', width:70},
-            {name: 'idCategoria', index:'idCategoria', width:150,hidden:true},
-            {name: 'vCategoria', index:'vCategoria', width:150},
-            {name: 'vEstado', index:'vEstado', width:50, hidden: true, editOptions:{value:"1:0",defaultvalue:"1"},formatter:'checkbox'}
+        colModel: [{
+                name: 'idMaterial',
+                index: 'idMaterial',
+                width: 60
+            },
+            {
+                name: 'vNombre',
+                index: 'vNombre',
+                width: 150
+            },
+            {
+                name: 'idTipoMaterial',
+                index: 'idTipoMaterial',
+                hidden: true
+            },
+            {
+                name: 'vTipoMaterial',
+                index: 'vTipoMaterial',
+                width: 120
+            },
+            {
+                name: 'vMarca',
+                index: 'vMarca',
+                width: 100
+            },
+            {
+                name: 'idUnidadMed',
+                index: 'idUnidadMed',
+                width: 80,
+                hidden: true
+            },
+            {
+                name: 'vUnidadMed',
+                index: 'vUnidadMed',
+                width: 120
+            },
+            {
+                name: 'nStock',
+                index: 'nStock',
+                width: 70
+            },
+            {
+                name: 'idCategoria',
+                index: 'idCategoria',
+                width: 150,
+                hidden: true
+            },
+            {
+                name: 'vCategoria',
+                index: 'vCategoria',
+                width: 150
+            },
+            {
+                name: 'vEstado',
+                index: 'vEstado',
+                width: 50,
+                hidden: true,
+                editOptions: {
+                    value: "1:0",
+                    defaultvalue: "1"
+                },
+                formatter: 'checkbox'
+            }
         ],
-        ignoreCase:true,
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Materiales Registrados",
-        ondblClickRow: function(id){
+        ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
             addprodserv();
         },
 
-        afterInsertRow:function(rowid,aData){
-            switch(
+        afterInsertRow: function(rowid, aData) {
+            switch (
                 aData.nestado
-                ){case'1':
-                break;
+            ) {
+                case '1':
+                    break;
                 case '0':
 
-                    jQuery("#tblPSM").jqGrid('setCell',rowid,'cidpers','',{color:'red'});
-                    jQuery("#tblPSM").jqGrid('setCell',rowid,'crazsoc','',{color:'red'});
-                    jQuery("#tblPSM").jqGrid('setCell',rowid,'vnrodoc','',{color:'red'});
-                    jQuery("#tblPSM").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    jQuery("#tblPSM").jqGrid('setCell', rowid, 'cidpers', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblPSM").jqGrid('setCell', rowid, 'crazsoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblPSM").jqGrid('setCell', rowid, 'vnrodoc', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblPSM").jqGrid('setCell', rowid, 'nestado', '', {
+                        color: 'red'
+                    });
                     break;
             }
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
-        }, gridComplete: function(){
+        },
+        gridComplete: function() {
             isGridComplete = true;
             $("#tblPSM").jqGrid('setSelection', 1, true);
         }
     };
 
-    eliminar=function(a){
-        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
+    eliminar = function(a) {
+        var selr = $('#tblPSM').jqGrid('getGridParam', 'selrow');
         var row = $("#tblPSM").jqGrid('getRowData', selr);
-        if(row.cidpers == "" || row.cidpers == undefined){
+        if (row.cidpers == "" || row.cidpers == undefined) {
             openDialogWarning("Seleccione un registro para eliminar.");
             return;
         }
@@ -221,104 +283,101 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             "idsigma": row.cidpers
         };
         //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
-       openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
+        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?", 350, {
 
-           "si":function(){
-               $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
-                   type: 'POST',
-                   cache: false,
-                   data: parameters,
-                   beforeSend: function (data) {
+            "si": function() {
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                    type: 'POST',
+                    cache: false,
+                    data: parameters,
+                    beforeSend: function(data) {
 
-                   },
-                   success: function (requestData) {
-                       $("#result").html(requestData);
-                       closeDialog("jqDialogConfirmacion1");
-                       closeDialog('jqDialog2');
-                       closeDialog('jqDialog1');
-                     },
-                   error: function (requestData, strError, strTipoError) {
-                       $("#result").html("Error " + strTipoError + ': ' + strError);
-                   },
-                   complete: function (requestData, exito) {
-                   }
-               });
-           },
-           "no":function(){
-               closeDialog("jqDialogConfirmacion1");
-           }
-       })
+                    },
+                    success: function(requestData) {
+                        $("#result").html(requestData);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog2');
+                        closeDialog('jqDialog1');
+                    },
+                    error: function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete: function(requestData, exito) {}
+                });
+            },
+            "no": function() {
+                closeDialog("jqDialogConfirmacion1");
+            }
+        })
     };
 
-    addprodserv=function(a){
-        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
+    addprodserv = function(a) {
+        var selr = $('#tblPSM').jqGrid('getGridParam', 'selrow');
         var row = $("#tblPSM").jqGrid('getRowData', selr);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
+        if (row.idMaterial == "" || row.idMaterial == undefined) {
             openDialogWarning("Seleccione un registro.");
             return;
         }
-        if( $("#txtidEntradaMat").val()==""){
+        if ($("#txtidEntradaMat").val() == "") {
             openDialogWarning("Primero debe buscar el proveedor.");
             return;
         }
-        if( $("#txtCantidad").val()==""){
+        if ($("#txtCantidad").val() == "") {
             openDialogWarning("Agregar Cantidad.");
             return;
         }
-        if( $("#txtPrecioUnit").val()==""){
+        if ($("#txtPrecioUnit").val() == "") {
             openDialogWarning("Agregar Precio Unitario.");
             return;
         }
         parameters = {
             "id": row.idMaterial,
-            "identradamat":  $("#txtidEntradaMat").val(),
-            "iddetentradamat":  $("#txtidDetEntradaMat").val(),
-            "Cantidad":$("#txtCantidad").val() ,
+            "identradamat": $("#txtidEntradaMat").val(),
+            "iddetentradamat": $("#txtidDetEntradaMat").val(),
+            "Cantidad": $("#txtCantidad").val(),
             "PrecioUnitario": $("#txtPrecioUnit").val()
         };
 
-       /* openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
-            "si":function(){*/
-                $.ajax({
-                    url: jQuery.scriptPath + "index.php/almacen/detentradamatadd",
-                    type: 'POST',
-                    cache: false,
-                    data: parameters,
-                    beforeSend: function (data) {
-                    },
-                    success: function (requestData) {
-                        $("#result").html(requestData);
-                        var datos=JSON.parse(requestData);
-                        console.log(datos[0].ok);
-                        closeDialog("jqDialogConfirmacion1");
-                        closeDialog('jqDialog1');
-                        buscarDetEntradaMat();
-                    },
-                    error: function (requestData, strError, strTipoError) {
-                        $("#result").html("Error " + strTipoError + ': ' + strError);
-                    },
-                    complete: function (requestData, exito) {
-                    }
-                });
-          /*  },
+        /* openDialogConfirm1("\u00BFEst\u00E1 seguro de agregar el material?",350,{
+             "si":function(){*/
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/detentradamatadd",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {},
+            success: function(requestData) {
+                $("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                console.log(datos[0].ok);
+                closeDialog("jqDialogConfirmacion1");
+                closeDialog('jqDialog1');
+                buscarDetEntradaMat();
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+        /*  },
             "no":function(){
                 closeDialog("jqDialogConfirmacion1");
             }
         })*/
     };
 
-    nuevaMaterial = function(){
+    nuevaMaterial = function() {
         parameters = {
             "idsigma": '...'
         };
         openDialogData3("mantenimientos/material", parameters, 500);
     };
     verMaterial = function() {
-        var selr = $('#tblPSM').jqGrid('getGridParam','selrow');
+        var selr = $('#tblPSM').jqGrid('getGridParam', 'selrow');
         var row = $("#tblPSM").jqGrid('getRowData', selr);
         console.log(row.idMaterial);
-        if(row.idMaterial == "" || row.idMaterial == undefined){
+        if (row.idMaterial == "" || row.idMaterial == undefined) {
             openDialogWarning("Seleccione un registro para editar.");
             return;
         }
@@ -328,27 +387,37 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
         openDialogData3("mantenimientos/material", parameters, 500);
     };
 
-    function buttonsGridPSM(){
-        $("#tblPSM").navGrid('#ptblPSM', {edit:false,add:false,del:false,search:false,refresh:false})
+    function buttonsGridPSM() {
+        $("#tblPSM").navGrid('#ptblPSM', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
 
-            .navButtonAdd('#ptblPSM',{
-                caption:"Agregar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-plus",
-                onClickButton: function(){
+            .navButtonAdd('#ptblPSM', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
                     nuevaMaterial();
                 },
-                position:"last"
+                position: "last"
             })
-         .navButtonAdd('#ptblPSM',{
-                caption:"Editar&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
+            .navButtonAdd('#ptblPSM', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
                     verMaterial();
                 },
-                position:"last"
-            })
-        ;
-        $("#tblPSM").jqGrid('filterToolbar', {stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true});
+                position: "last"
+            });
+        $("#tblPSM").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
     /*function reiniCombo(celement){
@@ -383,40 +452,13 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
     }*/
 
     buscarMate = function() {
-        if ( $("#txtidMaterial").val()){
+        if ($("#txtidMaterial").val()) {
 
         }
-        var params = '['
-            + '["@tBusqueda", "' + $("#cbotipob").val() + '"],'
-            + '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]'
-            + ']';
-        parameters = {
-            "name": "tblListaMate",
-            "procedure": "almacen.Bus_Material",
-            "print": "true",
-            "parameters": params
-        };
-        procesarProcedimientoJSON(
-            "panelPSM"
-            , "tblPSM"
-            , optionPSM
-            , parameters
-            , null
-            , buttonsGridPSM
-        );
-    };
-    buscarMatePrimeravez = function() {
-        var tbus="";
-        if ( $("#txtidMaterial").val()!=""){
-            tbus="1";
-        }
-        else{
-            tbus="0";
-        }
-        var params = '['
-            + '["@tBusqueda", "' + tbus + '"],'
-            + '["@vDatoBus", "' + $("#txtidMaterial").val() + '"]'
-            + ']';
+        var params = '[' +
+            '["@tBusqueda", "' + $("#cbotipob").val() + '"],' +
+            '["@vDatoBus", "' + $("#c_textbusqueda").val() + '"]' +
+            ']';
         parameters = {
             "name": "tblListaMate",
             "procedure": "almacen.Bus_MaterialAlmacen",
@@ -424,20 +466,40 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
             "parameters": params
         };
         procesarProcedimientoJSON(
-            "panelPSM"
-            , "tblPSM"
-            , optionPSM
-            , parameters
-            , null
-            , buttonsGridPSM
+            "panelPSM", "tblPSM", optionPSM, parameters, null, buttonsGridPSM
         );
     };
-    $(function(){
+    buscarMatePrimeravez = function() {
+        var tbus = "";
+        if ($("#txtidMaterial").val() != "") {
+            tbus = "1";
+        } else {
+            tbus = "0";
+        }
+        var params = '[' +
+            '["@tBusqueda", "' + tbus + '"],' +
+            '["@vDatoBus", "' + $("#txtidMaterial").val() + '"]' +
+            ']';
+        parameters = {
+            "name": "tblListaMate",
+            "procedure": "almacen.Bus_MaterialAlmacen",
+            "print": "true",
+            "parameters": params
+        };
+        procesarProcedimientoJSON(
+            "panelPSM", "tblPSM", optionPSM, parameters, null, buttonsGridPSM
+        );
+    };
+    $(function() {
         buscarMatePrimeravez();
-         $("#btnbuscarPSM").button({icons: {primary: "ui-icon-search"}});
+        $("#btnbuscarPSM").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        });
         $("#btnAgregar").button(ICON_SAVE);
 
-       /*reiniCombo("cbocsubcateg");
-       getSubcategoria($("#cbocategor").val(),"cbocsubcateg");*/
+        /*reiniCombo("cbocsubcateg");
+        getSubcategoria($("#cbocategor").val(),"cbocsubcateg");*/
     });
 </script>

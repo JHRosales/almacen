@@ -1311,6 +1311,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] =  array('@p_idSerie',  $value->idSerie); #idSerie
                 $params[] =  array('@p_Serie',  $value->vSerie); #Serie
                 $params[] =  array('@p_nstocksalida',  $value->stock); #cantidad
+                $params[] =  array('@p_fecSalidaProducto',  $value->fecsalidaProducto); #fechaSalida
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
@@ -2243,5 +2244,4 @@ class AlmacenController extends Zend_Controller_Action
             print_r(json_encode($resultPapeleta[0]));
         }
     }
-
 }

@@ -1,0 +1,12 @@
+USE [dhlalmacen]
+GO
+--AGREGANDO COLUMNA FECHA EN LA TABLA DETSALIDAMAT
+IF NOT EXISTS(
+			SELECT *
+			FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_NAME = N'detSalidaProd' AND COLUMN_NAME='dFecSalidaProducto')
+		BEGIN
+			ALTER TABLE almacen.detSalidaProd 
+			ADD dFecSalidaProducto DATE NULL
+		END
+		

@@ -1,13 +1,10 @@
 <?php
 $library = new Libreria_Pintar();
-$TipoDoc=array(array("1","DNI"), array("2","RUC"));
-$TipoPersona=array(array("1","Natural"), array("2","Juridica"));
+$TipoDoc = array(array("1", "DNI"), array("2", "RUC"));
+$TipoPersona = array(array("1", "Natural"), array("2", "Juridica"));
 
- ?>
-<div id="panelMantenimientoPersonas"
-     align="center"
-     class="ui-widget ui-widget-content ui-corner-top"
-     style="width: 415px;margin: 3px;">
+?>
+<div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 415px;margin: 3px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
         <label>Mantenimiento de Proveedores</label>
     </div>
@@ -19,12 +16,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 <input type="hidden" id="hdidsigma_mperson" name="hdidsigma_mperson" value="" />
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style="background-color: #e4e4e4;"
-                       type="text"
-                       id="txtidsigma_mperson"
-                       name="txtidsigma_mperson"
-                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+                <input class="editable ui-text" style="background-color: #e4e4e4;" type="text" id="txtidsigma_mperson" name="txtidsigma_mperson" value="<?php echo $this->idsigma; ?>" readonly="readonly" />
             </td>
         </tr>
         <tr>
@@ -32,13 +24,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 Nombre(s)
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       size="40"
-                       style=""
-                       type="text"
-                       id="txtvnombre"
-                       name="txtvnombre"
-                       value="<?php echo $this->vnombre; ?>"/>
+                <input class="editable ui-text" size="40" style="" type="text" id="txtvnombre" name="txtvnombre" value="<?php echo $this->vnombre; ?>" />
             </td>
         </tr>
 
@@ -48,7 +34,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
             </td>
             <td style="text-align: left">
                 <select id="cboctipper" name="cboctipper" style="width:140px;">
-                    <?php  echo $library->ContenidoCombo($TipoPersona, $this->ctipper,0); ?>
+                    <?php echo $library->ContenidoCombo($TipoPersona, $this->ctipper, 0); ?>
                 </select>
             </td>
         </tr>
@@ -59,13 +45,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
             <td style="text-align: left">
 
 
-                <input class="editable ui-text-disable"
-                       size="20" READONLY
-                       style=""
-                       type="text"
-                       id="txtdocumento"
-                       name="txtdocumento"
-                       value="<?php echo $this->tipdoc; ?>"/>
+                <input class="editable ui-text-disable" size="20" READONLY style="" type="text" id="txtdocumento" name="txtdocumento" value="<?php echo $this->tipdoc; ?>" />
 
 
 
@@ -78,40 +58,23 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 Número de documento
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style=""
-                       type="text"
-                       id="txtvnrodoc"
-                       name="txtvnrodoc"
-                       value="<?php echo $this->vnrodoc; ?>"/>
+                <input class="editable ui-text" style="" type="text" maxlength="15" id="txtvnrodoc" name="txtvnrodoc" value="<?php echo $this->vnrodoc; ?>" />
             </td>
         </tr>
-        <tr >
+        <tr>
             <td style="text-align: left">
                 Correo Electronico
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style=""
-                       size="40"
-                       type="text"
-                       id="txtvcorreo"
-                       name="txtvcorreo"
-                       value="<?php echo $this->vcorreo; ?>"/>
+                <input class="editable ui-text" style="" size="40" type="text" id="txtvcorreo" name="txtvcorreo" value="<?php echo $this->vcorreo; ?>" />
             </td>
         </tr>
-        <tr  class="soloJuridica">
+        <tr class="soloJuridica">
             <td style="text-align: left">
                 Persona Contacto
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style=""
-                       size="50"
-                       type="text"
-                       id="txtpersonacont"
-                       name="txtpersonacont"
-                       value="<?php echo $this->personcont; ?>"/>
+                <input class="editable ui-text" style="" size="50" type="text" id="txtpersonacont" name="txtpersonacont" value="<?php echo $this->personcont; ?>" />
             </td>
         </tr>
         <tr>
@@ -119,12 +82,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 Telefono Fijo
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style=""
-                       type="text"
-                       id="txtvtelfij"
-                       name="txtvtelfij"
-                       value="<?php echo $this->vtelfij; ?>"/>
+                <input class="editable ui-text" style="" maxlength="11" type="text" id="txtvtelfij" name="txtvtelfij" value="<?php echo $this->vtelfij; ?>" />
             </td>
         </tr>
 
@@ -133,12 +91,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 Telefono Movil
             </td>
             <td style="text-align: left">
-                <input class="editable ui-text"
-                       style=""
-                       type="text"
-                       id="txtvtelmov"
-                       name="txtvtelmov"
-                       value="<?php echo $this->vtelmov; ?>"/>
+                <input class="editable ui-text" style="" type="text" maxlength="11" id="txtvtelmov" name="txtvtelmov" value="<?php echo $this->vtelmov; ?>" />
             </td>
         </tr>
 
@@ -149,7 +102,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
             </td>
             <td style="text-align: left">
                 <select id="cdepartamento" name="cdepartamento" style="width:140px;">
-                    <?php  echo $this->util()->getComboContenedorOtro1( '1',$this->departamento,'Cmb_departamento','@idDep'); ?>
+                    <?php echo $this->util()->getComboContenedorOtro1('1', $this->departamento, 'Cmb_departamento', '@idDep'); ?>
                 </select>
             </td>
         </tr>
@@ -160,7 +113,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
             </td>
             <td style="text-align: left">
                 <select id="cprovincia" name="cprovincia" style="width:140px;">
-                    <?php  echo $this->util()->getComboContenedorOtro1( $this->departamento,$this->provincia,'Cmb_provincia','@idDep'); ?>
+                    <?php echo $this->util()->getComboContenedorOtro1($this->departamento, $this->provincia, 'Cmb_provincia', '@idDep'); ?>
                 </select>
             </td>
         </tr>
@@ -171,7 +124,7 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
             </td>
             <td style="text-align: left">
                 <select id="cdistrito" name="cdistrito" style="width:140px;">
-                    <?php  echo $this->util()->getComboContenedorOtro1( $this->provincia,$this->distrito,'Cmb_distrito','@idprov'); ?>
+                    <?php echo $this->util()->getComboContenedorOtro1($this->provincia, $this->distrito, 'Cmb_distrito', '@idprov'); ?>
                 </select>
             </td>
         </tr>
@@ -182,16 +135,19 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
                 Direcci&oacute;n
             </td>
             <td style="text-align: left">
-                <textarea class="editable ui-text"
-                          style="width:260px; height:100px;max-width:260px; max-height:100px;"
-                          id="txtvdirecc"
-                          name="txtvdirecc"><?php echo $this->vdirecc; ?></textarea>
+                <textarea class="editable ui-text" style="width:260px; height:100px;max-width:260px; max-height:100px;" id="txtvdirecc" name="txtvdirecc"><?php echo $this->vdirecc; ?></textarea>
             </td>
         </tr>
 
         <tr style="display: none">
             <td style="text-align: left">
-                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>> Estado
+                <input type="checkbox" name="estado" value="1" id="estado" offvalue="0" class="ui-text" <?php if ($this->nestado != '') {
+                                                                                                            if ($this->nestado == 1) {
+                                                                                                                echo 'checked';
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            echo 'checked';
+                                                                                                        } ?>> Estado
             </td>
 
         </tr>
@@ -209,10 +165,9 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
     </table>
 </div>
 <script type="text/javascript">
-
     var tipoPersona = {
-        NATURAL : "1",
-        JURIDICA : "2"
+        NATURAL: "1",
+        JURIDICA: "2"
     };
 
     themeComboBox("#cboctipper");
@@ -222,21 +177,25 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
     themeComboBox("#cdistrito");
 
     $("#btnguardarperson").button({
-        icons:{primary:'ui-icon-disk'},
-        text:true
+        icons: {
+            primary: 'ui-icon-disk'
+        },
+        text: true
     });
 
     $("#btncancelperson").button({
-        icons:{primary:'ui-icon-close'},
-        text:true
+        icons: {
+            primary: 'ui-icon-close'
+        },
+        text: true
     });
 
-    function validarTipoPersona(tipper){
-        switch(tipper){
-            case tipoPersona.NATURAL : // NATURAL
+    function validarTipoPersona(tipper) {
+        switch (tipper) {
+            case tipoPersona.NATURAL: // NATURAL
                 $(".soloJuridica").hide();
                 break;
-            case tipoPersona.JURIDICA : // JURIDICA
+            case tipoPersona.JURIDICA: // JURIDICA
                 $(".soloJuridica").show();
 
                 break;
@@ -245,27 +204,27 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
         }
     }
 
-    function validarTipoDocumento(tipdoc){
-        switch(tipdoc){
+    function validarTipoDocumento(tipdoc) {
+        switch (tipdoc) {
             case "1": // DNI
                 var vdni = $("#txtvnrodoc").val();
-                if (vdni.length > 8){
-                    vdni = vdni.substr(0,8);
+                if (vdni.length > 8) {
+                    vdni = vdni.substr(0, 8);
                     $("#txtvnrodoc").val(vdni);
                 }
-                $("#txtvnrodoc").attr("maxlength","8");
+                $("#txtvnrodoc").attr("maxlength", "8");
 
                 break;
             case "2": // RUC
                 var vruc = $("#txtvnrodoc").val();
-                if (vruc.length > 11){
-                    vruc = vruc.substr(0,11);
+                if (vruc.length > 11) {
+                    vruc = vruc.substr(0, 11);
                     $("#txtvnrodoc").val(vruc);
                 }
-                $("#txtvnrodoc").attr("maxlength","11");
+                $("#txtvnrodoc").attr("maxlength", "11");
                 break;
             default:
-                $("#txtvnrodoc").attr("maxlength","20");
+                $("#txtvnrodoc").attr("maxlength", "20");
                 break;
         }
     }
@@ -276,23 +235,23 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
 
 
     $("#cboctipper").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             validarTipoPersona($("#cboctipper").val());
 
-            if($("#cboctipper").val()=="1"){
+            if ($("#cboctipper").val() == "1") {
                 $("#txtdocumento").val("DNI");
+            } else
+
+            {
+                $("#txtdocumento").val("RUC");
             }
-            else
-
-            { $("#txtdocumento").val("RUC");}
 
         }
-        }
-    );
+    });
 
 
     $("#cboctipdoc").combobox({
-        selected : function(event, ui){
+        selected: function(event, ui) {
             validarTipoDocumento($("#cboctipdoc").val());
         }
     });
@@ -301,17 +260,17 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
 
 
     $("#cdepartamento").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             //reiniCombo("cprovincia");
-            getProvincia($("#cdepartamento").val(),"cprovincia");
+            getProvincia($("#cdepartamento").val(), "cprovincia");
 
         }
     });
 
     $("#cprovincia").combobox({
-        selected: function(event, ui){
+        selected: function(event, ui) {
             reiniCombo("cdistrito");
-            getDistrito($("#cprovincia").val(),"cdistrito");
+            getDistrito($("#cprovincia").val(), "cdistrito");
 
 
         }
@@ -319,60 +278,58 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
 
 
 
-    function reiniCombo(celement){
+    function reiniCombo(celement) {
         var xelem = $("#" + celement);
         xelem.combobox("destroy");
-        $("option:selected",xelem).removeAttr("selected");
-        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        $("option:selected", xelem).removeAttr("selected");
+        $("option[value='9999999999']", xelem).attr("selected", "selected");
         //xelem.combobox();
     }
 
-    function getProvincia(selecteds, celement){
-        if (selecteds == "9999999999" || selecteds == ""){
+    function getProvincia(selecteds, celement) {
+        if (selecteds == "9999999999" || selecteds == "") {
             $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
             $("#" + celement).val("9999999999");
-        }else{
+        } else {
             $.ajax({
                 dataType: "html",
                 type: "POST",
                 url: path + "mantenimientos/obtenerprovincia/",
-                data: "select="+selecteds+"&provincias="+ selecteds,
-                success: function(requestData){ 	//Llamada exitosa)
+                data: "select=" + selecteds + "&provincias=" + selecteds,
+                success: function(requestData) { //Llamada exitosa)
                     $("#" + celement).html(requestData);
                     $("#" + celement).combobox();
                 },
-                error: function(requestData, errNumber, errMessage){
-                }
+                error: function(requestData, errNumber, errMessage) {}
             });
         }
     }
 
-    function getDistrito(selecteds, celement){
-        if (selecteds == "9999999999" || selecteds == ""){
+    function getDistrito(selecteds, celement) {
+        if (selecteds == "9999999999" || selecteds == "") {
             $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
             $("#" + celement).val("9999999999");
-        }else{
+        } else {
             $.ajax({
                 dataType: "html",
                 type: "POST",
                 url: path + "mantenimientos/obtenerdistrito/",
-                data: "select="+selecteds+"&distritos="+ selecteds,
-                success: function(requestData){ 	//Llamada exitosa)
+                data: "select=" + selecteds + "&distritos=" + selecteds,
+                success: function(requestData) { //Llamada exitosa)
                     $("#" + celement).html(requestData);
                     $("#" + celement).combobox();
                 },
-                error: function(requestData, errNumber, errMessage){
-                }
+                error: function(requestData, errNumber, errMessage) {}
             });
         }
     }
 
 
-    function cerrarMantPersona(){
+    function cerrarMantPersona() {
         closeDialog("jqDialog2");
     }
 
-    function guardarPersona(){
+    function guardarPersona() {
 
         var idsigma = $("#txtidsigma_mperson").val();
         var vnombre = $("#txtvnombre").val();
@@ -382,59 +339,59 @@ $TipoPersona=array(array("1","Natural"), array("2","Juridica"));
         var vcorreo = $("#txtvcorreo").val();
         var personcont = $("#txtpersonacont").val();
         var vtelfij = $("#txtvtelfij").val();
-        var vtelmov  = $("#txtvtelmov").val();
-        var ubigeo  = $("#cdistrito").val();
+        var vtelmov = $("#txtvtelmov").val();
+        var ubigeo = $("#cdistrito").val();
         var vdirecc = $("#txtvdirecc").val();
 
 
-      /*  if(document.getElementById("estado").checked){
-            var nestado1=1;
-        }  else  {
-            var  nestado1=0;
-        }*/
+        /*  if(document.getElementById("estado").checked){
+              var nestado1=1;
+          }  else  {
+              var  nestado1=0;
+          }*/
 
 
-        if($.trim(vnombre) == ""){
+        if ($.trim(vnombre) == "") {
             openDialogError("Ingrese nombre", "250", "150", function() {
                 $("#txtvnombre").focus();
             });
             return;
         }
 
-    /*  if($.trim(vnrodoc) == ""){
-            openDialogError("Ingrese número de documento", "250", "150", function() {
-                $("#txtvnrodoc").focus();
-            });
-            return;
-        }*/
+        /*  if($.trim(vnrodoc) == ""){
+                openDialogError("Ingrese número de documento", "250", "150", function() {
+                    $("#txtvnrodoc").focus();
+                });
+                return;
+            }*/
 
 
         $.ajax({
             dataType: "html",
             type: "POST",
             url: path + "mantenimientos/guardarproveedor/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
-            data: "idsigma="+idsigma
-                +"&vnombre="+vnombre
-                +"&ctipper="+ctipper
-                +"&vdirecc="+vdirecc
-                +"&tipdoc="+tipdoc
-                +"&vnrodoc="+vnrodoc
-                +"&vcorreo="+vcorreo
-                +"&personcont="+personcont
-                +"&vtelfij="+vtelfij
-                +"&vtelmov="+vtelmov
-                +"&idUbigeo="+ubigeo,
-            success: function(requestData){ 	//Llamada exitosa)
+            data: "idsigma=" + idsigma +
+                "&vnombre=" + vnombre +
+                "&ctipper=" + ctipper +
+                "&vdirecc=" + vdirecc +
+                "&tipdoc=" + tipdoc +
+                "&vnrodoc=" + vnrodoc +
+                "&vcorreo=" + vcorreo +
+                "&personcont=" + personcont +
+                "&vtelfij=" + vtelfij +
+                "&vtelmov=" + vtelmov +
+                "&idUbigeo=" + ubigeo,
+            success: function(requestData) { //Llamada exitosa)
                 openDialogInfo("Registrado correctamente");
-               // $("#c_codigocontrib").val(requestData);
+                // $("#c_codigocontrib").val(requestData);
                 buscarPersona();
                 cerrarMantPersona();
             },
-            error: function(requestData, errNumber, errMessage){
-                if(errNumber == '') {
+            error: function(requestData, errNumber, errMessage) {
+                if (errNumber == '') {
                     openDialogError("No se puede determinar el error.");
                 } else {
-                    openDialogError(errNumber +': ' + errMessage);
+                    openDialogError(errNumber + ': ' + errMessage);
                 }
             }
         });

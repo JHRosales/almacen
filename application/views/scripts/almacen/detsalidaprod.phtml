@@ -148,6 +148,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                     <th>Modelo</th>
                     <th>Stock</th>
                     <th>Serie</th>
+                    <th></th>
                     <th>Buscar</th>
                     <th></th>
                 </tr>
@@ -160,7 +161,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                     </td>
                     <td>
                         <!-- <input id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
-                        <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:350px" id="txtNombreProd" name="txtNombreProd">&nbsp;</div>
+                        <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:300px" id="txtNombreProd" name="txtNombreProd">&nbsp;</div>
                     </td>
                     <td>
                         <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:90px" id="txtModelo" name="txtModelo">&nbsp;</div>
@@ -169,7 +170,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                         <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:50px">
                     </td>
                     <td>
-                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:250px">
+                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:180px">
+                    </td>
+                    <td>
+                        <input type="text" id="fecsalidaProducto" name="fecsalidaProducto" class="ui-text-disable " readonly style="text-align: left;width: 90px; " />
                     </td>
                     <!--<td>
                     <input id="txtFechaSalida"  name="txtFechaSalida" class="ui-text-disable" disabled="disabled"  style="width:250px" >
@@ -183,7 +187,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                         </div>
                     </td>
                 </tr>
-                <?php foreach ($this->detSalidaProd as $value) { ?>
+                <?php $cont = 0;
+                foreach ($this->detSalidaProd as $value) {
+                    $cont++ ?>
 
                     <tr>
                         <td>
@@ -192,7 +198,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                         </td>
                         <td>
                             <!--<input value="<?php echo $value["Producto"]; ?>" id="txtNombreMaterial" type="hidden" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled"  style="width:380px" >-->
-                            <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:350px" id="txtNombreProd" name="txtNombreProd"><?php echo $value["Producto"]; ?></div>
+                            <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:300px" id="txtNombreProd" name="txtNombreProd"><?php echo $value["Producto"]; ?></div>
                         </td>
                         <td>
                             <div class="ui-text-disable" style="padding: .4em 5px; text-align: left; width:90px" id="txtModelo" name="txtModelo">&nbsp;<?php echo $value["vModelo"]; ?></div>
@@ -201,7 +207,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                             <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:50px">
                         </td>
                         <td>
-                            <input value="<?php echo $value["Serie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:250px">
+                            <input value="<?php echo $value["Serie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:180px">
+                        </td>
+                        <td style="width: 120px !important;">
+                            <input type="text" id="fecsalidaProducto<?php echo $cont ?>" name="fecsalidaProducto" value="<?php echo $value["dFecSalidaProducto"]; ?>" class="ui-text-disable inputdatepicker" readonly style="text-align: left;width: 90px;" />
                         </td>
                         <!--<td>
                     <input  value="<?php echo $value["fechareg"]; ?>" id="txtFechaSalida"  name="txtFechaSalida" class="ui-text-disable" disabled="disabled"  style="width:250px" >
@@ -468,6 +477,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
         __gridConfigSeries.ondblClickRow = function(rowid) {
             row = $("#tblResult").jqGrid('getRowData', rowid);
             if (invocaBusPersona == 1) {
+                if (row.nStock <= row.nStockMinimo) {
+                    openDialogWarning("Comprar Material. Stock menor al Stock Minimo.");
+                }
                 $(d).parent().parent().find("input[name=txtCodigoSerie]").val(row.idProdSeries);
                 $(d).parent().parent().find("input[name=txtStock]").val(row.nStock - 1);
                 $(d).parent().parent().find("div[name=txtNombreProd]").html(row.producto);
@@ -570,7 +582,24 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
             buscarSeriesSalida(this);
 
         });
+        $("#fecsalidaProducto_" + id + "_" + i).datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fecsalidaProducto_" + id + "_" + i).datepicker("setDate", new Date());
+
         i++;
+
+        for (index = 1; index < 20; index++) {
+            $("#fecsalidaProducto" + index).datepicker({
+                showOn: "button",
+                buttonImage: pathImage + "calendar.gif",
+                buttonImageOnly: true,
+                dateFormat: "dd/mm/yy"
+            });
+        }
     };
 
     buscarCli = function() {
@@ -681,6 +710,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                     detseries.idSerie = $(this).find("[name=txtCodigoSerie]").val();
                     detseries.vSerie = $(this).find("[name=txtSerie]").val();
                     detseries.stock = $(this).find("[name=txtStock]").val();
+                    detseries.fecsalidaProducto = $(this).find("[name=fecsalidaProducto]").val();
                     series.push(detseries);
                 }
             });

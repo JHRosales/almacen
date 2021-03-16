@@ -23,8 +23,8 @@ class Model_DataAdapter
                 //$this->connection = mssql_connect("190.187.182.30,1433","sa","123456");
                 //$this->connection = mssql_connect("127.0.0.1,1433","sa","123456");
                 //$this->connection = mssql_connect("localhost","sa","ucv");
-                //$this->connection = mssql_connect("Usuario-PC", "sa", "ucv");
-                $this->connection = mssql_connect("DESKTOP-29DNGV2\SQLEXPRESS","sa","123456");
+                $this->connection = mssql_connect("Usuario-PC", "sa", "ucv");
+                //$this->connection = mssql_connect("DESKTOP-29DNGV2\SQLEXPRESS","sa","123456");
                 mssql_select_db(self::$db, $this->connection);
             } catch (Exception $e) {
                 $this->logger->error("initDB", $e);

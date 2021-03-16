@@ -242,7 +242,7 @@ class PDF1 extends TCPDF
 
 		$this->SetFont('times', '', 11);
 		$this->SetXY($lw + 20, $lh + 28);
-		$this->MultiCell(180, 5,fechaATexto($finalobra)  , 0, 'L');
+		$this->MultiCell(180, 5, $finalobra, 0, 'L');
 
 		$this->SetFont('times', 'B', 11);
 		$this->SetXY($lw, $lh + 32);
@@ -300,14 +300,14 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
 	LEFT JOIN almacen.entradaMat EM ON DEM.idEntradaMat=EM.idEntradaMat
 	WHERE DSM.idDetSalidaMat=B.idDetSalidaMat AND EM.dFecIngreso<=SM.dFecSalida
 	ORDER BY EM.dFecIngreso DESC)
- when 1 then 'S/'
- when 2 then '$' else ''end tipomoneda
+ when 1 then '$'
+ when 2 then 'S/' else ''end tipomoneda
  , coalesce( (select TOP 1 CONVERT(VARCHAR(10), dretm.dFecRetorno,103) as dFecRetorno from  almacen.RetornoMat dretm
  where dretm.idSalidaMat=a.idSalidaMat
  and dretm.vEstado=1),null) fechaRetorno
  from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
-inner join material m on b.idMaterial=m.idMaterial
+inner join material_almacen m on b.idMaterial=m.idMaterial
 inner join cliente c on a.idCliente=c.idCliente
 inner join tecnico t on a.idTecnico=t.idTecnico
 where a.vEstado =1 and b.vEstado=1
@@ -323,7 +323,9 @@ $rowTipoP = $Rs_tipoPer->pg_Get_Row();
 $vobra = $rowTipoP['vobra'];
 $Lugar = $rowTipoP['vlugar'];
 $cliente = $rowTipoP['clie'];
-$finalobra=$rowTipoP['fechaRetorno'];
+$cliente = str_replace("&ntilde;", 'ñ', $cliente);
+
+$finalobra = $rowTipoP['fechaRetorno'];
 $fecha = $rowTipoP['dFecSalida'];
 $vPersContac = "Reporte inversion Materiales"; //$rowTipoP['vPersContac'];
 $vTipoMoneda = $rowTipoP['tipomoneda'];
@@ -404,7 +406,7 @@ $migv = $rowTipoP['nIgv'];
 $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="50px"><b>ITEM</b></td><td width="55px"><b>CANT</b>
-</td><td width="400px"><b>MATERIAL</b></td><td width="55px"><b>Tipo Moneda</b></td><td width="63.5px"><b> PU </b></td><td width="64px"><b> PT ' . $vTipoMoneda . '</b></td>
+</td><td width="400px"><b>MATERIAL</b></td><td width="55px"><b>Tipo Moneda</b></td><td width="63.5px"><b> PU </b></td><td width="64px"><b> PT </b></td>
 </tr>';
 
 $N = 0;
@@ -474,7 +476,7 @@ $Rs_tipoPer->Poner_MSQL("select detcot.vDescrip,detcot.nCantidad,case coti.nTipo
 when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
 from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
-inner join material m on b.idMaterial=m.idMaterial
+left join material_almacen m on b.idMaterial=m.idMaterial
 left join compras.cotizacion coti on a.idCotiz=coti.idCotiz
 left join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and b.idMaterial=detcot.idMaterial
 where a.vEstado =1 and b.vEstado=1

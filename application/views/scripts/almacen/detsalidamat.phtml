@@ -179,8 +179,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <input id="txtCantidad" name="txtCantidad" class="ui-text" style="width:80px">
                     </td>
                     <td>
-                                <input type="text" id="fecsalidaMaterial" name="fecsalidaMaterial" class="ui-text-disable " readonly style="text-align: left;width: 80px;" />
-                      </td>
+                        <input type="text" id="fecsalidaMaterial" name="fecsalidaMaterial" class="ui-text-disable " readonly style="text-align: left;width: 80px; " />
+                    </td>
                     <!-- <td>
                     <input class="ui-text-disable pnl" type="hidden" readonly name="txtidtecnico"  id="txtidtecnico"  value="<?php echo $this->idtecnico; ?>"  style="width:100px" />
                     <input class="ui-text-disable pnl" readonly name="txtnombretecnico" id="txtnombretecnico"  value="<?php echo $this->nomtecnico; ?>"  style="width:250px" />
@@ -195,7 +195,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         </div>
                     </td>
                 </tr>
-                <?php $cont=0;   foreach ($this->detSalidaMat as $value) { $cont++ ?>
+                <?php $cont = 0;
+                foreach ($this->detSalidaMat as $value) {
+                    $cont++ ?>
 
                     <tr>
                         <td>
@@ -218,8 +220,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                             <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad" name="txtCantidad" class="ui-text" style="width:80px">
                         </td>
                         <td>
-                                <input type="text" id="fecsalidaMaterial<?php echo $cont ?>" name="fecsalidaMaterial" value="<?php echo $value["dFecSalidaMaterial"]; ?>" class="ui-text-disable inputdatepicker" readonly style="text-align: left;width: 80px;" />
-                            </td>
+                            <input type="text" id="fecsalidaMaterial<?php echo $cont ?>" name="fecsalidaMaterial" value="<?php echo $value["dFecSalidaMaterial"]; ?>" class="ui-text-disable inputdatepicker" readonly style="text-align: left;width: 80px;" />
+                        </td>
                         <!-- <td>
                         <input class="ui-text-disable pnl" type="hidden" name="txtidtecnico"  readonly id="txtidtecnico"  value="<?php echo $this->idtecnico; ?>"  style="width:10px" />
                         <input class="ui-text-disable pnl" readonly name="txtnombretecnico"  id="txtnombretecnico"  value="<?php echo $this->nomtecnico; ?>"  style="width:250px" />
@@ -505,9 +507,9 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         __gridConfigMaterial.ondblClickRow = function(rowid) {
             row = $("#tblResult").jqGrid('getRowData', rowid);
             if (invocaBusPersona == 1) {
-                if (row.nStock < row.nStockMinimo ){
-                openDialogWarning("Comprar Material. Stock menor al Stock Minimo.");
-            }
+                if (row.nStock <= row.nStockMinimo) {
+                    openDialogWarning("Comprar Material. Stock menor al Stock Minimo.");
+                }
                 $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
                 $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombre);
                 $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);
@@ -635,25 +637,25 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
           });*/
 
-          $("#fecsalidaMaterial_" + id + "_" + i).datepicker({
+        $("#fecsalidaMaterial_" + id + "_" + i).datepicker({
             showOn: "button",
             buttonImage: pathImage + "calendar.gif",
             buttonImageOnly: true,
             dateFormat: "dd/mm/yy"
         });
-        $("#fecsalidaMaterial_" + id + "_" + i).datepicker( "setDate" , new Date());
+        $("#fecsalidaMaterial_" + id + "_" + i).datepicker("setDate", new Date());
 
         i++;
 
         for (index = 1; index < 20; index++) {
             $("#fecsalidaMaterial" + index).datepicker({
-            showOn: "button",
-            buttonImage: pathImage + "calendar.gif",
-            buttonImageOnly: true,
-            dateFormat: "dd/mm/yy"
+                showOn: "button",
+                buttonImage: pathImage + "calendar.gif",
+                buttonImageOnly: true,
+                dateFormat: "dd/mm/yy"
             });
         }
-        
+
 
 
     }
@@ -672,8 +674,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             dateFormat: "dd/mm/yy"
         });
 
- 
-        
+
+
 
         $("#btnbuscartec").button({
             icons: {

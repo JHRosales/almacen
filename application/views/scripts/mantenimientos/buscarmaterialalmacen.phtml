@@ -73,8 +73,14 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         <div id="ptblListaMate"></div>
     </div>
     <br />
+
+
 </div>
+
+
 <script type="text/javascript">
+    var filteredIDs = new Array();
+
     optionPersona = {
         width: 900,
         height: 250,
@@ -161,6 +167,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             verMaterial();
         },
 
+
         afterInsertRow: function(rowid, aData) {
             switch (
                 aData.nestado
@@ -186,7 +193,11 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         },
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
+        },
+        loadComplete: function() {
+            this.p.lastSelected = lastSelected; // set this.p.lastSelected
         }
+
     };
 
 
@@ -346,16 +357,16 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 position: "last"
             })
             .navSeparatorAdd()
-        
-        .navButtonAdd('#ptblListaMate',{
-            caption:"Imprimir&nbsp;&nbsp;",
-            buttonicon:"ui-icon-print",
-            onClickButton: function(){
-                imprimir();
-            },
-            position:"last"
-        })
-        .navSeparatorAdd();
+
+            .navButtonAdd('#ptblListaMate', {
+                caption: "Imprimir&nbsp;&nbsp;",
+                buttonicon: "ui-icon-print",
+                onClickButton: function() {
+                    imprimir();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd();
 
         $("#tblListaMate").jqGrid('filterToolbar', {
             stringResult: true,
@@ -365,14 +376,138 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         });
     }
 
+    //Get Rows Selected
+    getRows = function() {
+        var grid = $("#tblListaMate");
+        //    var myData = grid.jqGrid('getGridParam', 'lastSelectedData');
+        var filteredData = grid.jqGrid('getGridParam', 'lastSelected')
+        console.log("grid.jqGrid('getGridParam', 'data');");
+        console.log(filteredData);
+    }
+
+
+
+    var oldFrom = $.jgrid.from,
+        lastSelected;
+
+    $.jgrid.from = function(source, initalQuery) {
+        var result = oldFrom.call(this, source, initalQuery),
+            old_select = result.select;
+        result.select = function(f) {
+            lastSelected = old_select.call(this, f);
+            return lastSelected;
+        };
+        return result;
+    };
+
+
+
     function imprimir() {
-        // var selr = $('#tblListaMate').jqGrid('getGridParam', 'selrow');
-        var rowData = $("#tblListaMate").jqGrid('getRowData');
+
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        // window.open(host + "rptMateriales.php", '_blank');
+
+        var rowData = $('#tblListaMate').jqGrid('getGridParam', 'lastSelected');
         // console.log(rowData);
 
-         host = '<?php echo $this->util()->getPath(); ?>report/';
-         window.open(host + "rptMateriales.php", '_blank');
+        //Forma 1
 
+        // let windowName = 'w_' + Date.now() + Math.floor(Math.random() * 100000).toString();
+        // var form = document.createElement("form");
+        // form.setAttribute("method", "post");
+        // form.setAttribute("action", host + "rptMateriales.php");
+        // form.setAttribute("target", windowName);
+        // var hiddenField = document.createElement("input");
+        // hiddenField.setAttribute("type", "hidden");
+        // hiddenField.setAttribute("name", "message");
+        // hiddenField.setAttribute("value", rowData);
+        // form.appendChild(hiddenField);
+        // document.body.appendChild(form);
+        // window.open('', windowName);
+        // form.submit();
+
+
+
+        //Forma 2
+        // var obj = {
+        //     "a": [1, 2, [3, 4]],
+        //     "b": "a",
+        //     "c": {
+        //         "x": [1],
+        //         "y": [2, 3],
+        //         "z": [{
+        //             "a": "Hello",
+        //             "b": "World"
+        //         }, {
+        //             "a": "Hallo",
+        //             "b": "Welt"
+        //         }]
+        //     }
+        // };
+        var objeto = {
+            "data": rowData
+        }
+        var form = getForm(host + "rptMateriales.php", "_blank", objeto, "post");
+        document.body.appendChild(form);
+        form.submit();
+        form.parentNode.removeChild(form);
+
+    }
+
+    function getForm(url, target, values, method) {
+        function grabValues(x) {
+            var path = [];
+            var depth = 0;
+            var results = [];
+
+            function iterate(x) {
+                switch (typeof x) {
+                    case 'function':
+                    case 'undefined':
+                    case 'null':
+                        break;
+                    case 'object':
+                        if (Array.isArray(x))
+                            for (var i = 0; i < x.length; i++) {
+                                path[depth++] = i;
+                                iterate(x[i]);
+                            }
+                        else
+                            for (var i in x) {
+                                path[depth++] = i;
+                                iterate(x[i]);
+                            }
+                        break;
+                    default:
+                        results.push({
+                            path: path.slice(0),
+                            value: x
+                        })
+                        break;
+                }
+                path.splice(--depth);
+            }
+            iterate(x);
+            return results;
+        }
+        var form = document.createElement("form");
+        form.method = method;
+        form.action = url;
+        form.target = target;
+
+        var values = grabValues(values);
+
+        for (var j = 0; j < values.length; j++) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.value = values[j].value;
+            input.name = values[j].path[0];
+            for (var k = 1; k < values[j].path.length; k++) {
+                input.name += "[" + values[j].path[k] + "]";
+            }
+            form.appendChild(input);
+        }
+        return form;
     }
 
     buscarMate = function() {
@@ -391,6 +526,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             "panelListaMate", "tblListaMate", optionPersona, parameters, null, buttonsGridPerson
         );
     };
+
 
     $(function() {
         buscarMate();

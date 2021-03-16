@@ -4,18 +4,17 @@ require_once('tcpdf_include.php');
 require_once("Connections/coneccionReporte.php");
 require_once("Connections/funciones_pg.php");
 include "lib_fecha_texto.php";
-class PDF1 extends TCPDF{
+class PDF1 extends TCPDF
+{
 
 
 
-	function Header(){
+	function Header()
+	{
 
 
 		//datos SQL
 		global $fecha;
-		global $motivo;
-		global $nroCotiz;
-		global $cliente;
 
 		global $topIni;
 		global $marIni;
@@ -26,159 +25,118 @@ class PDF1 extends TCPDF{
 		$ln = $topIni;
 		$ls = 3;
 		$lh = 0;
-		$this->Image('../img/logo.jpg',$lw+3,$ln,42,20,'PNG');
+		$this->Image('../img/logo.jpg', $lw + 3, $ln, 42, 20, 'PNG');
 
-		$lh = $lh+9;
+		$lh = $lh + 9;
 		$this->SetFont('times', '', 10);
-		$this->SetXY($lw+114,$lh);
-		$this->MultiCell(70,3,'Telf.: 471 7304 / 997 149 778',0,'R');
-		$this->SetXY($lw+114,$lh+4);
-		$this->MultiCell(70,3,'Av. Santa Catalina 104 dpto. 201',0,'R');
-		$this->SetXY($lw+114,$lh+8);
-		$this->MultiCell(70,3,'(Av. Canadá cdra. 8) La Victoria',0,'R');
-		$this->SetXY($lw+152,$lh+12);
-		$this->MultiCell(1,3,$this->addHtmlLink("",'ventas@dhlsecurity.pe'),0,'R');
-		$this->SetXY($lw+114,$lh+16);
-		$this->MultiCell(70,3,'www.dhlsecurity.pe',0,'R');
+		$this->SetXY($lw + 114, $lh);
+		$this->MultiCell(70, 3, 'Telf.: 471 7304 / 997 149 778', 0, 'R');
+		$this->SetXY($lw + 114, $lh + 4);
+		$this->MultiCell(70, 3, 'Av. Santa Catalina 104 dpto. 201', 0, 'R');
+		$this->SetXY($lw + 114, $lh + 8);
+		$this->MultiCell(70, 3, '(Av. Canadá cdra. 8) La Victoria', 0, 'R');
+		$this->SetXY($lw + 152, $lh + 12);
+		$this->MultiCell(1, 3, $this->addHtmlLink("", 'ventas@dhlsecurity.pe'), 0, 'R');
+		$this->SetXY($lw + 114, $lh + 16);
+		$this->MultiCell(70, 3, 'www.dhlsecurity.pe', 0, 'R');
 
-		$lh = $lh+20;
-
+		$lh = $lh + 20;
 	}
 
-	 function WriteResumen($x,$h, $corte,$topmar){
-		 $x =5;
-		 $h = $this->GetY()+0.2;
-		 $x = $this->GetX()+0.2;
-		 $this->SetFont('dejavusans','B',8);
-		$this->SetXY($x,$h);
-		$this->MultiCell(55,5,'Tipo de Cambio: 3.30',0,'L');
+	function WriteResumen($x, $h, $corte, $topmar)
+	{
+		$x = 5;
+		$h = $this->GetY() + 0.2;
+		$x = $this->GetX() + 0.2;
+		$this->SetFont('dejavusans', 'B', 8);
+		$this->SetXY($x, $h);
+		$this->MultiCell(55, 5, 'Tipo de Cambio: 3.30', 0, 'L');
 
-		$this->SetFont('dejavusans','',8);
-		$this->SetXY($x,$h+6);
-		$this->MultiCell(80,5,'Condiciones de la instalacion',0,'L');
-		$this->SetXY($x,$h+10);
-		$this->MultiCell(150,5,'El cliente brindará las facilidades para la instalación, incluyendo los permisos necesarios.',0,'L');
-		$this->SetXY($x,$h+20);
-		$this->MultiCell(180,5,'Condiciones Comerciales',0,'L');
-		$this->SetXY($x,$h+25);
+		$this->SetFont('dejavusans', '', 8);
+		$this->SetXY($x, $h + 6);
+		$this->MultiCell(80, 5, 'Condiciones de la instalacion', 0, 'L');
+		$this->SetXY($x, $h + 10);
+		$this->MultiCell(150, 5, 'El cliente brindará las facilidades para la instalación, incluyendo los permisos necesarios.', 0, 'L');
+		$this->SetXY($x, $h + 20);
+		$this->MultiCell(180, 5, 'Condiciones Comerciales', 0, 'L');
+		$this->SetXY($x, $h + 25);
 
-		$this->MultiCell(180,5,'Tiempo de entrega: 3 dias hábiles',0,'L');
-		$this->SetXY($x,$h+30);
+		$this->MultiCell(180, 5, 'Tiempo de entrega: 3 dias hábiles', 0, 'L');
+		$this->SetXY($x, $h + 30);
 
-		$this->MultiCell(180,5,'Garantía: 12 meses por equipos y 12 meses por instalacionón y Disco Duro',0,'L');
-		$this->SetXY($x,$h+35);
-		$this->MultiCell(180,5,'Forma de pago: Adelando del 50% del total y al finalizar el pago del 50& con la conformidad de la obra',0,'L');
-		$this->SetXY($x,$h+45);
-		$this->MultiCell(180,5,'Cuenta corriente BCP Soles: 191-1964430-0-26',0,'L');
-		$this->SetXY($x,$h+50);
-		$this->MultiCell(180,5,'Cuenta corriente BCP dólares: 191-2040241-1-04',0,'L');
-		$this->SetXY($x,$h+60);
-		$this->MultiCell(180,5,'Atte.',0,'L');
+		$this->MultiCell(180, 5, 'Garantía: 12 meses por equipos y 12 meses por instalacionón y Disco Duro', 0, 'L');
+		$this->SetXY($x, $h + 35);
+		$this->MultiCell(180, 5, 'Forma de pago: Adelando del 50% del total y al finalizar el pago del 50& con la conformidad de la obra', 0, 'L');
+		$this->SetXY($x, $h + 45);
+		$this->MultiCell(180, 5, 'Cuenta corriente BCP Soles: 191-1964430-0-26', 0, 'L');
+		$this->SetXY($x, $h + 50);
+		$this->MultiCell(180, 5, 'Cuenta corriente BCP dólares: 191-2040241-1-04', 0, 'L');
+		$this->SetXY($x, $h + 60);
+		$this->MultiCell(180, 5, 'Atte.', 0, 'L');
 
-		$this->SetXY($x,$h+70);
-		$this->MultiCell(180,5,'---------------------------------',0,'L');
-		$this->SetXY($x+2,$h+73);
-		$this->MultiCell(80,5,'Daniel Huaraca Livias',0,'L');
+		$this->SetXY($x, $h + 70);
+		$this->MultiCell(180, 5, '---------------------------------', 0, 'L');
+		$this->SetXY($x + 2, $h + 73);
+		$this->MultiCell(80, 5, 'Daniel Huaraca Livias', 0, 'L');
 
-		$this->SetXY($x,$h+77);
-		$this->MultiCell(60,5,'JEFE DE PROYECTOS DHL SYSTEM SECURITY EIRL',0,'L');
+		$this->SetXY($x, $h + 77);
+		$this->MultiCell(60, 5, 'JEFE DE PROYECTOS DHL SYSTEM SECURITY EIRL', 0, 'L');
 	}
 
-	function strip_tags_content($text, $tags = '', $invert = FALSE) {
+	function strip_tags_content($text, $tags = '', $invert = FALSE)
+	{
 
 		preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
 		$tags = array_unique($tags[1]);
 
-		if(is_array($tags) AND count($tags) > 0) {
-			if($invert == FALSE) {
-				return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
+		if (is_array($tags) and count($tags) > 0) {
+			if ($invert == FALSE) {
+				return preg_replace('@<(?!(?:' . implode('|', $tags) . ')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
+			} else {
+				return preg_replace('@<(' . implode('|', $tags) . ')\b.*?>.*?</\1>@si', '', $text);
 			}
-			else {
-				return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text);
-			}
-		}
-		elseif($invert == FALSE) {
+		} elseif ($invert == FALSE) {
 			return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text);
 		}
 		return $text;
 	}
 
 
-	function WriteCabecera($x,$h, $corte,$topmar){
-//datos SQL
+	function WriteCabecera($x, $h, $corte, $topmar)
+	{
+		//datos SQL
 		global $fecha;
-		global $motivo;
-		global $nroCotiz;
-		global $cliente;
 
+		$lh = $this->GetY() - 5;
+		$lw = $this->GetX() - 5;
 
-        $lh = $this->GetY()-5;
-        $lw = $this->GetX()-5;
+		$this->SetLineWidth(0);
+		$this->SetFillColor(255);
 
-        $this->SetLineWidth(0);
-        $this->SetFillColor(255);
-
-            $this->SetFont('times', '', 10);
-            $this->SetXY($lw,$lh+4);
-            $this->MultiCell(100,5,"Lima ".fechaATexto($fecha),0,'L');
-            $this->SetFont('times', '', 10);
-            $this->SetXY($lw,$lh+10);
-            $this->MultiCell(80,5,"Materiales: ",0,'L');
-            $this->SetFont('times', 'B', 10);
-            $this->SetXY($lw+17,$lh+10);
-            $this->MultiCell(80,5,'',0,'L');
-
-
-    }
+		$this->SetFont('times', '', 10);
+		$this->SetXY($lw, $lh + 4);
+		$this->MultiCell(100, 5, "Lima " . fechaATexto($fecha), 0, 'L');
+		$this->SetFont('times', '', 10);
+		$this->SetXY($lw, $lh + 10);
+		$this->MultiCell(80, 5, "Materiales: ", 0, 'L');
+		$this->SetFont('times', 'B', 10);
+		$this->SetXY($lw + 17, $lh + 10);
+		$this->MultiCell(80, 5, '', 0, 'L');
+	}
 }
 
 
-
+$data = $_POST['data']; //Data Selected
 
 $idcotiz = $_GET['idCotiz'];
-
-$Rs_tipoPer = new TSPResult($ConeccionRatania,"");
+$Rs_tipoPer = new TSPResult($ConeccionRatania, "");
 $Rs_tipoPer->Poner_MSQL("select a.vNombre Material, t.vNombre Tipo, a.nStock, a.nStockMinimo, CONVERT(VARCHAR(10), SYSDATETIME(), 103) Fecha
 from material_almacen a
 inner join almacen.tipoMaterial t on a.idTipoMaterial= t.idTipoMaterial
-where nStock<nStockMinimo
-
+where cCompra=1
 ");
-
 $Rs_tipoPer->executeMSQL();
-$rowTipoP= $Rs_tipoPer->pg_Get_Row();
-
-$nroCotiz = $rowTipoP['vnroCot'];
-$motivo = $rowTipoP['vMotivo'];
-$motivo = str_replace("&ntilde;",'ñ',$motivo);
-$motivo = str_replace("&Ntilde;",'Ñ',$motivo);
-
-
-
-$motivo = str_replace("&aacute;",'á',$motivo);
-$motivo = str_replace("&eacute;",'é',$motivo);
-$motivo = str_replace("&iacute;",'í',$motivo);
-$motivo = str_replace("&oacute;",'ó',$motivo);
-$motivo = str_replace("&uacute;",'ú',$motivo);
-$motivo = str_replace("&Aacute;",'Á',$motivo);
-$motivo = str_replace("&Eacute;",'É',$motivo);
-$motivo = str_replace("&Iacute;",'Í',$motivo);
-$motivo = str_replace("&Oacute;",'Ó',$motivo);
-$motivo = str_replace("&Uacute;",'Ú',$motivo);
-
-$cliente = $rowTipoP['cliente'];
-$cliente = str_replace("&ntilde;",'ñ',$cliente);
-$cliente = str_replace("&Ntilde;",'Ñ',$cliente);
-$cliente = str_replace("&aacute;",'á',$cliente);
-$cliente = str_replace("&eacute;",'é',$cliente);
-$cliente = str_replace("&iacute;",'í',$cliente);
-$cliente = str_replace("&oacute;",'ó',$cliente);
-$cliente = str_replace("&uacute;",'ú',$cliente);
-$cliente = str_replace("&Aacute;",'Á',$cliente);
-$cliente = str_replace("&Eacute;",'É',$cliente);
-$cliente = str_replace("&Iacute;",'Í',$cliente);
-$cliente = str_replace("&Oacute;",'Ó',$cliente);
-$cliente = str_replace("&Uacute;",'Ú',$cliente);
+$rowTipoP = $Rs_tipoPer->pg_Get_Row();
 
 $fecha = $rowTipoP['Fecha'];
 
@@ -194,18 +152,18 @@ $pdf->SetSubject('Detalle de Materiales');
 $pdf->SetKeywords('TCPDF, PDF, Materiales, detalle materiales');
 
 // set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH,"", PDF_HEADER_STRING);
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "", PDF_HEADER_STRING);
 
 
 // set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, 35.4, PDF_MARGIN_RIGHT,true); //margenes left - top - right (15-27-15) (PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT)
+$pdf->SetMargins(PDF_MARGIN_LEFT, 35.4, PDF_MARGIN_RIGHT, true); //margenes left - top - right (15-27-15) (PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT)
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER); //Margen top 5
 $pdf->SetFooterMargin(5); //margen bot 10 PDF_MARGIN_FOOTER
 $pdf->setPrintFooter(false);
@@ -217,11 +175,11 @@ $pdf->SetAutoPageBreak(true, 14);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-	require_once(dirname(__FILE__).'/lang/eng.php');
+if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+	require_once(dirname(__FILE__) . '/lang/eng.php');
 	$pdf->setLanguageArray($l);
 }
-$colCab = array('10','40','10','105','18','18');
+$colCab = array('10', '40', '10', '105', '18', '18');
 // ---------------------------------------------------------
 $topIni = 10;
 $marIni = 10;
@@ -230,32 +188,20 @@ $marIni = 10;
 // add a page
 $pdf->AddPage();
 //Cabecera
-$pdf->WriteCabecera($lw,0, 0,0);
+$pdf->WriteCabecera($lw, 0, 0, 0);
 
 // set font
 $pdf->SetFont('dejavusans', '', 8);
-$lw=5;
-$var1 = $pdf->GetY()+2.2;
-$pdf->SetXY($lw+2.5,$lh = $var1);
+$lw = 5;
+$var1 = $pdf->GetY() + 2.2;
+$pdf->SetXY($lw + 2.5, $lh = $var1);
 
 
 
-
-$personal = $rowTipoP['personal'];
-$cargo = $rowTipoP['cargo'];
-$garantia = $rowTipoP['garantia'];
-$tentrega = $rowTipoP['tentrega'];
-$formapago = $rowTipoP['formapago'];
-$referencial= $rowTipoP['vNota'];
-$disco= $rowTipoP['vDisco'];
-$tcambio = $rowTipoP['nTasaCambio'];
-$mtotal = $rowTipoP['nTotal'];
-$msubtotal = $rowTipoP['nSubTot'];
-$migv = $rowTipoP['nIgv'];
-$periodo = $rowTipoP['tiempo'];
+// $this->Ln();
 
 
-$html= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
+$html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="30px"><b>ITEM</b></td>
 <td width="335px"><b>MATERIAL</b></td>
@@ -265,30 +211,44 @@ $html= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-colla
 </tr>';
 
 $N = 0;
-$numsaltos=0;
-$numRows = $Rs_tipoPer->pg_Num_Rows();
-while($N < $numRows) {
+// $numRows = $Rs_tipoPer->pg_Num_Rows();
+// while ($N < $numRows) {
+// 	$row = $Rs_tipoPer->pg_Get_Row();
+// 	$Nombre = $row['Material'];
+// 	$tipo = $row['Tipo'];
+// 	$stock = $row['nStock'];
+// 	$stockMinimo = $row['nStockMinimo'];
+// 	$html .= '
+// 	<tr nobr="true" style="text-align: center; vertical-align: 10%">
+// 	<td width="30px" >' . ($N + 1) . '</td>
+// 	<td width="335px" style="font-size: 9px;" align="left" ><b>' . $Nombre . '</b><br></td>
+// 	<td width="135px">' . $tipo . '</td>
+// 	<td  align="center" width="95px">' . $stock . '</td>
+// 	<td width="95px" >' . $stockMinimo . '</td>';
+// 	$html .= '	</tr>';
+// 	$Rs_tipoPer->pg_Move_Next();
+// 	$N++;
+// }
 
-	$row = $Rs_tipoPer->pg_Get_Row();
 
-	$Nombre= $row['Material'];
-	$tipo= $row['Tipo'];
-	$stock= $row['nStock'];
-	$stockMinimo= $row['nStockMinimo'];
-
+// Data
+foreach ($data as $row) {
+	// foreach ($row as $col) {
 	$html .= '
-	<tr nobr="true" style="text-align: center; vertical-align: 10%">
-	<td width="30px" >'.($N+1).'</td>
-	<td width="335px" style="font-size: 9px;" align="left" ><b>'.$Nombre.'</b><br></td>
-	<td width="135px">'.$tipo.'</td>
-	<td  align="center" width="95px">'.$stock.'</td>
-	<td width="95px" >'.$stockMinimo.'</td>';
-
-    $html .= '	</tr>';
-
-	$Rs_tipoPer->pg_Move_Next();
-	$N ++;
+			<tr nobr="true" style="text-align: center; vertical-align: 10%">
+			<td width="30px" >' . ($N + 1) . '</td>
+			<td width="335px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
+			<td width="135px">' .  $row["vTipoMaterial"] . '</td>
+			<td  align="center" width="95px">' .  $row["nStock"] . '</td>
+			<td width="95px" >' .  $row["nStockMinimo"] . '</td>';
+	$html .= '	</tr>';
+	// }
+	$N++;
 }
+
+
+
+
 
 $html .= '
 </table>
@@ -297,23 +257,23 @@ $html .= '
 // output the HTML content
 $pdf->writeHTML($html, true, false, true, false, '');
 
-$lw=5;
-$var1 = $pdf->GetY()+-0.8;
-$pdf->SetXY($lw+2.5,$var1);
+$lw = 5;
+$var1 = $pdf->GetY() + -0.8;
+$pdf->SetXY($lw + 2.5, $var1);
 
 
 
-function limpia_espacios($cadena){
-    $cadena = str_replace(' ', '', $cadena);
-    return $cadena;
+function limpia_espacios($cadena)
+{
+	$cadena = str_replace(' ', '', $cadena);
+	return $cadena;
 }
 
 
-$pdf->Output('MATERIALES '.$nroCotiz.'_'.str_replace(' ', '   ', $motivo).'.pdf', 'I');
+$pdf->Output('MATERIALES.pdf', 'I');
 
 
 
 //============================================================+
 // END OF FILE
 //============================================================+
-
