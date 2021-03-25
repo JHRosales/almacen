@@ -170,8 +170,8 @@ class MantenimientosController extends Zend_Controller_Action
             $cdatos = count($datos);
             if ($cdatos == 0) {
                 $this->view->vnombre = '';
-                $this->view->ctipper = '1';
-                $this->view->tipdoc = 'DNI';
+                $this->view->ctipper = '2';
+                $this->view->tipdoc = 'RUC';
                 $this->view->vnrodoc = '';
                 $this->view->vcorreo = '';
                 $this->view->personcont = "";
@@ -361,6 +361,27 @@ class MantenimientosController extends Zend_Controller_Action
             $params[] = array('@vHostnm', $host);
 
             $person = $cn->ejec_store_procedura_sql('InsUpd_proveedor', $params);
+            $cperson = count($person);
+            echo $person[0][0];
+        }
+    }
+
+
+    public function eliminartecnicoAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+
+            $idsigma = $this->_request->getPost('idsigma');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idsigma);
+
+            $person = $cn->ejec_store_procedura_sql('eliminar_tecnico', $params);
             $cperson = count($person);
             echo $person[0][0];
         }

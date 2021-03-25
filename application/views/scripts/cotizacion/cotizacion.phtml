@@ -513,8 +513,15 @@ break;
                 },
                 position:"last"
             })
-            .navSeparatorAdd()
-        ;
+            .navSeparatorAdd();
+
+        $("#tblListaCotizacion").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
+
     }
 
 

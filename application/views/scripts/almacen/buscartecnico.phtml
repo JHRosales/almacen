@@ -4,7 +4,7 @@ $TipoBusqueda=array(array("0","GENERAL"), array("1","ID"), array("2","NOMBRE"), 
 ?>
 <div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 100%;margin: 3px; height:95%;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <label>Buscador de personas</label>
+        <label>Buscador de Tecnico</label>
     </div>
     <div id="dialogBuscarContribuyentePredio">
         <table class="ui-panelLayout-main">
@@ -117,7 +117,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             {name: 'vNombre', index:'vNombre', width:230},
             {name: 'vTipoDoc', index:'vTipoDoc', width:100, hidden: false},
             {name: 'vNroDoc', index:'vNroDoc',width:100, hidden: false},
-            {name: 'vEstado', index:'vEstado', width:80, hidden: false},
+            {name: 'vEstado', index:'vEstado', width:80, hidden: false, search: true},
             {name: 'vUsernm', index:'vUsernm', hidden: true},
             {name: 'vHostnm', index:'vHostnm', hidden: true},
             {name: 'dFecReg', index:'dFecReg', hidden: true}
@@ -127,7 +127,9 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             var row = $(this).getRowData(id);
             //console.log(row);
             //addCotizacion();
+
             seleccionarTec();
+            verTecnico();
         },
         afterInsertRow:function(rowid,aData){
         switch(aData.nestado){
@@ -176,7 +178,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
        openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar datos?",350,{
            "si":function(){
                $.ajax({
-                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminarpersona",
+                   url: jQuery.scriptPath + "index.php/mantenimientos/eliminartecnico",
                    type: 'POST',
                    cache: false,
                    data: parameters,
@@ -187,6 +189,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                        $("#result").html(requestData);
                        closeDialog("jqDialogConfirmacion1");
                        closeDialog('jqDialog1');
+                       buscarPersona();
                    },
                    error: function (requestData, strError, strTipoError) {
                        $("#result").html("Error " + strTipoError + ': ' + strError);
@@ -319,18 +322,15 @@ $( "#c_nrodoc" ).keyup(function( event ) {
                 },
                 position:"last"
             })
-            .navSeparatorAdd()
-/*
-            .navButtonAdd('#ptblListaPersona',{
-                caption:"Imprimir&nbsp;&nbsp;",
-                buttonicon:"ui-icon-pencil",
-                onClickButton: function(){
-             imprimirperso();
-                },
-                position:"last"
-            })
-            .navSeparatorAdd()
-        ;*/
+            .navSeparatorAdd();
+
+        $("#tblListaPersona").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
+
     }
 
 

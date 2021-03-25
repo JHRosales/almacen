@@ -464,7 +464,7 @@ if (trim($this->vFormaPago) == "") {
                 editoptions: {
                     dataInit: function(elem) {
                         setTimeout(function() {
-                            $(elem).numeric();
+                            $(elem).numeric();                            
                         }, 100);
                     }
                 }
@@ -785,7 +785,7 @@ if (trim($this->vFormaPago) == "") {
                     nPrecUnit: parseFloat(Math.round(subtotal * 100) / 100).toFixed(2)
                 });
                 $("#tblDetCotizacion").setRowData(i + 1, {
-                    nPrecTotal: parseFloat(Math.round(total1 * 100) / 100).toFixed(2)
+                    nPrecTotal:  parseFloat(Math.round(total1 * 100) / 100).toFixed(2)
                 });
             }
         }
@@ -906,7 +906,7 @@ if (trim($this->vFormaPago) == "") {
         }
         var total1 = subtot - (subtot * pdesc / 100);
         $("#tblDetCotizacion").setRowData(lastsel3, {
-            nPrecTotal: total1
+            nPrecTotal: parseFloat(Math.round(total1 * 100) / 100).toFixed(2) 
         });
 
         var rows = jQuery("#tblDetCotizacion").jqGrid('getRowData');
@@ -1940,7 +1940,7 @@ if (trim($this->vFormaPago) == "") {
         }
         var total1 = subtot - (subtot * pdesc / 100);
         $("#tblDetCotizacionOPC").setRowData(lastsel2, {
-            nPrecTotal: total1
+            nPrecTotal: parseFloat(Math.round(total1 * 100) / 100).toFixed(2) 
         });
 
         var rows = jQuery("#tblDetCotizacionOPC").jqGrid('getRowData');

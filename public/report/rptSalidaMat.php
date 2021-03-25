@@ -474,12 +474,10 @@ $html .= '
 
 $Rs_tipoPer->Poner_MSQL("select detcot.vDescrip,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
 when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
-from almacen.salidaMat a inner join
-almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
-left join material_almacen m on b.idMaterial=m.idMaterial
+from almacen.salidaMat a
 left join compras.cotizacion coti on a.idCotiz=coti.idCotiz
-left join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and b.idMaterial=detcot.idMaterial
-where a.vEstado =1 and b.vEstado=1
+left join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz
+where a.vEstado =1  and detcot.idMaterial is not null
 and a.idSalidaMat=$idsalida");
 $Rs_tipoPer->executeMSQL();
 $rowTipoP = $Rs_tipoPer->pg_Get_Row();
@@ -560,6 +558,38 @@ $html .= '
 </table>
 ';
 
+//TOtal de balance
+
+$html .= '
+<h3>Balance Nro: ' . $nroCotiz . ' </h3>
+';
+$html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
+<tr align="center" style="background-color: #ffda07; font-family: sans-serif">
+</tr>';
+$N = 0;
+$numsaltos = 0;
+$mtotal2 = 0;
+$numRows = $Rs_tipoPer->pg_Num_Rows();
+while ($N < $numRows) {
+
+	$row = $Rs_tipoPer->pg_Get_Row();
+	$mtotal2 = $mtotal2 + $mtotal;
+	$ptipoMoneda = $row['tipomoneda'];
+
+	$Rs_tipoPer->pg_Move_Next();
+	$N++;
+}
+
+$html .= '
+<tr>
+	<td COLSPAN="4" align="right" style="font-family:  Times, serif; font-size: 10px" >
+<b>TOTAL</b>
+</td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
+<b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
+</td></tr>';
+$html .= '
+</table>
+';
 
 // output the HTML content
 $pdf->writeHTML($html, true, false, true, false, '');

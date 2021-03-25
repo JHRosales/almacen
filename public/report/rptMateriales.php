@@ -130,9 +130,9 @@ $data = $_POST['data']; //Data Selected
 
 $idcotiz = $_GET['idCotiz'];
 $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
-$Rs_tipoPer->Poner_MSQL("select a.vNombre Material, t.vNombre Tipo, a.nStock, a.nStockMinimo, CONVERT(VARCHAR(10), SYSDATETIME(), 103) Fecha
+$Rs_tipoPer->Poner_MSQL("select a.vNombre Material, a.vMarca, a.nStock, a.nStockMinimo, t.vNombre Tipo, CONVERT(VARCHAR(10), SYSDATETIME(), 103) Fecha
 from material_almacen a
-inner join almacen.tipoMaterial t on a.idTipoMaterial= t.idTipoMaterial
+inner join almacen.unidadMed t on a.idUnidadMed= t.idUnidadMed
 where cCompra=1
 ");
 $Rs_tipoPer->executeMSQL();
@@ -204,10 +204,11 @@ $pdf->SetXY($lw + 2.5, $lh = $var1);
 $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="30px"><b>ITEM</b></td>
-<td width="335px"><b>MATERIAL</b></td>
-<td width="135px"><b>TIPO</b></td>
-<td width="95px"><b>STOCK</b></td>
-<td width="95px"><b>STOCK MINIMO</b></td>
+<td width="300px"><b>MATERIAL</b></td>
+<td width="100px"><b>MARCA</b></td>
+<td width="90px"><b>STOCK</b></td>
+<td width="90px"><b>STOCK MINIMO</b></td>
+<td width="90px"><b>UNID. MEDIDA</b></td>
 </tr>';
 
 $N = 0;
@@ -237,10 +238,14 @@ foreach ($data as $row) {
 	$html .= '
 			<tr nobr="true" style="text-align: center; vertical-align: 10%">
 			<td width="30px" >' . ($N + 1) . '</td>
-			<td width="335px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
-			<td width="135px">' .  $row["vTipoMaterial"] . '</td>
-			<td  align="center" width="95px">' .  $row["nStock"] . '</td>
-			<td width="95px" >' .  $row["nStockMinimo"] . '</td>';
+			<td width="300px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
+			<td width="100px">' .  $row["vMarca"] . '</td>
+			<td  align="center" width="90px">' .  $row["nStock"] . '</td>
+			<td width="90px" >' .  $row["nStockMinimo"] . '</td>
+
+			<td width="90px" >' .  $row["vUnidadMed"] . '</td>';
+
+
 	$html .= '	</tr>';
 	// }
 	$N++;
