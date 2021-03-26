@@ -259,15 +259,25 @@ class PDF1 extends TCPDF
 $idsalida = $_GET['idSalida'];
 
 $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
-$Rs_tipoPer->Poner_MSQL("select  a.vobra,vlugar,a.idmaterial,a.nMaterial,SUM(nCantidad) nCantidad 
-,idcliente,clie,vtipodoc,vdireccion,precUnit, SUM (total) total,dFecSalida,cotizacionTotal,tipomoneda
-,a.fechaRetorno from(
-select  a.vobra,a.vlugar,m.idmaterial,m.vNombre nMaterial
-,b.nCantidad - coalesce( (select TOP 1 dretmat.nCantidad from  almacen.RetornoMat dretm
+$Rs_tipoPer->Poner_MSQL("select  a.vobra,vlugar,a.idmaterial,a.nMaterial,SUM(nCantidad)- coalesce( (select sum(dretmat.nCantidad) nCantidad 
+from  almacen.RetornoMat dretm
  inner join almacen.detRetornoMat dretmat on dretm.idRetornoMat=dretmat.idRetornoMat
  where dretm.idSalidaMat=a.idSalidaMat
- and dretmat.idMaterial= b.idMaterial
- and dretm.vEstado=1),0) nCantidad
+ and dretmat.idMaterial= a.idMaterial
+ and dretm.vEstado=1),0)  nCantidad 
+,idcliente,clie,vtipodoc,vdireccion,precUnit, 
+precUnit * (SUM(nCantidad)- coalesce( (select sum(dretmat.nCantidad) nCantidad from  almacen.RetornoMat dretm
+ inner join almacen.detRetornoMat dretmat on dretm.idRetornoMat=dretmat.idRetornoMat
+ where dretm.idSalidaMat=a.idSalidaMat
+ and dretmat.idMaterial= a.idMaterial
+ and dretm.vEstado=1),0)) total,
+
+dFecSalida,cotizacionTotal,tipomoneda
+,a.fechaRetorno from(
+
+
+select  a.vobra,a.vlugar,m.idmaterial,m.vNombre nMaterial
+,b.nCantidad 
 
 ,c.idcliente,c.vnombre as clie,
 c.vtipodoc,c.vdireccion,
@@ -277,19 +287,7 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
 									 where de.idMaterial=m.idMaterial
 									 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida  as date)
 									 order by de.dFecReg  desc )abc ),0) precUnit,
-coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
-								select top 1 de.nPrecioUnit  from almacen.detEntradaMat de
-								inner join almacen.entradaMat ent on de.idEntradaMat=ent.idEntradaMat
-								 where de.idMaterial=m.idMaterial
-								 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida  as date)
-								 order by de.dFecReg  desc )abc) *
-								 (nCantidad - coalesce( ( select TOP 1 dretmat.nCantidad from  almacen.RetornoMat dretm
-								 inner join almacen.detRetornoMat dretmat on dretm.idRetornoMat=dretmat.idRetornoMat
-								 where dretm.idSalidaMat=a.idSalidaMat
-								 and dretmat.idMaterial= b.idMaterial
-								 and dretm.vEstado=1),0) --Cantidad Devuelta
- ),0) total,
-
+									 
  CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida
  ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, 
  case 
@@ -305,16 +303,17 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
  , coalesce( (select TOP 1 CONVERT(VARCHAR(10), dretm.dFecRetorno,103) as dFecRetorno from  almacen.RetornoMat dretm
  where dretm.idSalidaMat=a.idSalidaMat
  and dretm.vEstado=1),null) fechaRetorno
+ ,a.idSalidaMat
  from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
 inner join material_almacen m on b.idMaterial=m.idMaterial
 inner join cliente c on a.idCliente=c.idCliente
 inner join tecnico t on a.idTecnico=t.idTecnico
 where a.vEstado =1 and b.vEstado=1
-and a.idSalidaMat=$idsalida
+and a.idSalidaMat=$idsalida 
 ) a
 group by a.vObra,vLugar,a.idMaterial,a.nMaterial,idCliente,clie,vTipoDoc
-,vDireccion,precUnit,dFecSalida,cotizacionTotal,tipomoneda,a.fechaRetorno");
+,vDireccion,precUnit,dFecSalida,cotizacionTotal,tipomoneda,a.fechaRetorno,a.idSalidaMat");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
 $Rs_tipoPer->executeMSQL();
@@ -561,31 +560,18 @@ $html .= '
 //TOtal de balance
 
 $html .= '
-<h3>Balance Nro: ' . $nroCotiz . ' </h3>
+<h3>Balance </h3>
 ';
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 </tr>';
-$N = 0;
-$numsaltos = 0;
-$mtotal2 = 0;
-$numRows = $Rs_tipoPer->pg_Num_Rows();
-while ($N < $numRows) {
-
-	$row = $Rs_tipoPer->pg_Get_Row();
-	$mtotal2 = $mtotal2 + $mtotal;
-	$ptipoMoneda = $row['tipomoneda'];
-
-	$Rs_tipoPer->pg_Move_Next();
-	$N++;
-}
 
 $html .= '
 <tr>
 	<td COLSPAN="4" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
+<b><span style="color: red"> ' .  ($mtotal2 - $mtotal1) . '</span></b>
 </td></tr>';
 $html .= '
 </table>

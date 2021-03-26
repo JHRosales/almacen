@@ -513,17 +513,17 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE MATERIAL"), arra
             })
             .navSeparatorAdd()
 
-            .navButtonAdd('#ptblListaSalidaMat', {
-                caption: "Imprimir&nbsp;&nbsp;",
-                buttonicon: "ui-icon-pencil",
-                onClickButton: function() {
-                    imprimir();
-                },
-                position: "last"
-            })
-            .navSeparatorAdd();
+        // .navButtonAdd('#ptblListaSalidaMat', {
+        //     caption: "Imprimir&nbsp;&nbsp;",
+        //     buttonicon: "ui-icon-pencil",
+        //     onClickButton: function() {
+        //         imprimir();
+        //     },
+        //     position: "last"
+        // })
+        // .navSeparatorAdd();
 
-            $("#tblListaSalidaMat").jqGrid('filterToolbar', {
+        $("#tblListaSalidaMat").jqGrid('filterToolbar', {
             stringResult: true,
             searchOnEnter: false,
             defaultSearch: 'cn',

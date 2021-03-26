@@ -1,6 +1,11 @@
 <?php
 $library = new Libreria_Pintar();
 $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBRE"), array("3", "TIPOMATERIAL"), array("4", "MARCA"));
+
+
+$retornocant = array(array("1", "SI"), array("0", "NO"));
+
+
 ?>
 <style>
     #tableTestigos {
@@ -117,7 +122,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
     <div id="panelDatosConductor" align="center" class="ui-widget ui-widget-content ui-corner-all" style="width: 99%;height: 100%;margin: 3px;">
         <div class="ui-widget ui-state-default ui-corner-top ui-title">
-            <label>Materiales </label>
+            <label>Activos </label>
         </div>
         <div style="text-align: left">
             <button id="btnRegistroAgregar" style="display: none">Agregar</button>
@@ -126,7 +131,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             <thead>
                 <tr class="ui-widget-header">
                     <th>Codigo</th>
-                    <th>Material</th>
+                    <th>Activo</th>
                     <th>Serie</th>
                     <th>Stock</th>
                     <th>Cantidad Salida</th>
@@ -144,10 +149,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
                     </td>
                     <td>
-                        <input id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:300px">
+                        <input id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:200px">
                     </td>
                     <td>
-                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:100px">
+                        <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:90px">
                     </td>
                     <td>
                         <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
@@ -156,18 +161,25 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <input id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" style="width:90px">
                     </td>
                     <td>
-                        <input id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:90px">
+                        <input id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:80px">
                     </td>
                     <td>
-                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"></textarea>
+                        <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="20"></textarea>
                     </td>
+
+                    <td>
+                        <input type="text" id="fecRetornoActivos" name="fecRetornoActivos" class="ui-text-disable " readonly style="text-align: left;width: 90px;" />
+                    </td>
+
                     <td>
                         <div title="Eliminar" style="float: left; cursor: pointer; display: none;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
                             <span class="ui-icon ui-icon-trash"></span>
                         </div>
                     </td>
                 </tr>
-                <?php foreach ($this->detActivos as $value) { ?>
+                <?php $cont = 0;
+                foreach ($this->detActivos as $value) {
+                    $cont++ ?>
 
                     <tr>
                         <td>
@@ -176,22 +188,29 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                             <input value="<?php echo $value["idActivos"]; ?>" id="txtCodigoMaterial" name="txtCodigoMaterial" class="ui-text-disable" disabled="disabled" style="width:80px">
                         </td>
                         <td>
-                            <input value="<?php echo $value["activos"]; ?>" id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:300px">
+                            <input value="<?php echo $value["activos"]; ?>" id="txtNombreMaterial" name="txtNombreMaterial" class="ui-text-disable" disabled="disabled" style="width:200px">
                         </td>
                         <td>
-                            <input value="<?php echo $value["vSerie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:100px">
+                            <input value="<?php echo $value["vSerie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:90px">
                         </td>
                         <td>
                             <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
                         </td>
                         <td>
                             <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" style="width:90px">
+
                         </td>
                         <td>
-                            <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:90px">
+                            <!-- <input value="<?php echo $value["CantidadRetorno"]; ?>" id="txtCantidadretorno" name="txtCantidadretorno" class="ui-text" style="width:80px"> -->
+                            <select id="cbotipob" name="cbotipob" style="width:70px;">
+                                <?php echo $library->ContenidoCombo($retornocant, $value["CantidadRetorno"], 0); ?>
+                            </select>
                         </td>
                         <td>
-                            <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="40"><?php echo $value["vObserv"]; ?></textarea>
+                            <textarea id="txtareaIntervieneObservacion" name="txtareaIntervieneObservacion" rows="2" cols="20"><?php echo $value["vObserv"]; ?></textarea>
+                        </td>
+                        <td>
+                            <input type="text" id="fecRetornoActivos<?php echo $cont ?>" name="fecRetornoActivos" value="<?php echo $value["dFecRetornoActivos"]; ?>" class="ui-text-disable inputdatepicker" readonly style="text-align: left;width: 90px;" />
                         </td>
                         <td>
                             <div title="Eliminar" style="float: left; cursor: pointer; display: none;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
@@ -415,7 +434,26 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             buscarMaterialRetorno(this);
 
         });
+        $("#fecRetornoActivos_" + id + "_" + i).datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fecRetornoActivos_" + id + "_" + i).datepicker("setDate", new Date());
+
         i++;
+
+
+        for (index = 1; index < 20; index++) {
+            $("#fecRetornoActivos" + index).datepicker({
+                showOn: "button",
+                buttonImage: pathImage + "calendar.gif",
+                buttonImageOnly: true,
+                dateFormat: "dd/mm/yy"
+            });
+        }
+
     }
 
     $(function() {
@@ -431,7 +469,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             buttonImageOnly: true,
             dateFormat: "dd/mm/yy"
         });
-        $("#div_titulo").html("Almacen => Retorno Materiales");
+        $("#div_titulo").html("Almacen => Retorno Activos");
 
         $("#btnbuscartec").button({
             icons: {
@@ -491,9 +529,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     detActivos.idDetRetornoActivos = $(this).find("[name=txtidDetRetornoActivos]").val();
                     detActivos.idActivos = $(this).find("[name=txtCodigoMaterial]").val();
                     detActivos.idDetSalidaActivos = $(this).find("[name=txtIdDetSalidaActivos]").val();
-                    detActivos.cantidadRetorno = $(this).find("[name=txtCantidadretorno]").val();
+                    detActivos.cantidadRetorno = $(this).find("[name=cbotipob]").val();
                     detActivos.observacion = $(this).find("[name=txtareaIntervieneObservacion]").val();
                     detActivos.stock = $(this).find("[name=txtStock]").val();
+                    detActivos.fecretornoActivos = $(this).find("[name=fecRetornoActivos]").val();
                     materiales.push(detActivos);
                 }
             });

@@ -838,6 +838,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #cantidad
                 $params[] =  array('@p_observ',  $value->observacion); #cantidad
                 $params[] =  array('@p_stock',  $value->stock); #cantidad
+                $params[] =  array('@p_fecRetornoMat',  $value->fecretornoMat); #fecharetorno
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
@@ -1528,6 +1529,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] =  array('@p_iddetsalidaprod',  $value->idDetSalidaProd); #iddetsalidprod
                 $params[] =  array('@p_observ',  $value->observacion); #observacion
                 $params[] =  array('@p_stock',  $value->stock); #stock
+                $params[] =  array('@p_fecRetornoProd',  $value->fecretornoProd); #fecharetorno
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
@@ -2238,6 +2240,7 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #Cantidad
                 $params[] =  array('@p_observ',  $value->observacion); #Observacion
                 $params[] =  array('@p_stock',  $value->stock); #Stock
+                $params[] =  array('@p_fecRetornoActivos',  $value->fecretornoActivos); #FechaRetornoActivos
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
 

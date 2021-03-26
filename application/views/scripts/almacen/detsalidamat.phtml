@@ -506,10 +506,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         __gridConfigMaterial.data = [];
         __gridConfigMaterial.ondblClickRow = function(rowid) {
             row = $("#tblResult").jqGrid('getRowData', rowid);
-            if (invocaBusPersona == 1) {
+            if (row.nStock == 0) {
+                openDialogWarning("No tiene Stock disponible");
+            } else if (invocaBusPersona == 1) {
                 if (row.nStock <= row.nStockMinimo) {
                     openDialogWarning("Comprar Material. Stock menor al Stock Minimo.");
                 }
+
                 $(d).parent().parent().find("input[name=txtCodigoMaterial]").val(row.idMaterial);
                 $(d).parent().parent().find("input[name=txtNombreMaterial]").val(row.vNombre);
                 $(d).parent().parent().find("input[name=txtUnidadMedida]").val(row.vUnidadMed);

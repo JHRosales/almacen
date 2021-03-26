@@ -50,7 +50,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 </div>
 <script type="text/javascript">
     optionPersona = {
-        width: 900,
+        width: 930,
         height: 250,
         colNames: [
             'Codigo',
@@ -58,7 +58,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             'vSerie',
             'Marca',
             'Stock',
-            'Estado'
+            'Estado',
+            'Disponible'
         ],
         colModel: [{
                 name: 'idActivos',
@@ -95,6 +96,10 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     defaultvalue: "1"
                 }
                 //,formatter: chkEliminar
+            }, {
+                name: 'disponible',
+                index: 'disponible',
+                width: 80
             },
         ],
         ignoreCase: true,

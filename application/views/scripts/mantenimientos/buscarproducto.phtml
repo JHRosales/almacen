@@ -302,16 +302,19 @@
                     value: "1:0",
                     defaultvalue: "1"
                 },
-                formatter: chkEliminar
+                formatter: chkEliminar,
+                search: false
             },
             {
                 name: 'docadjunto',
                 index: 'docadjunto',
                 width: 140,
                 align: 'left',
-                formatter: linkadjunto
+                formatter: linkadjunto,
+                search: false
             }
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Productos Registrados",
         ondblClickRow: function(id) {
 
@@ -361,6 +364,9 @@
         onSelectRow: function(id) {
             var row = $(this).getRowData(id);
 
+        },
+        loadComplete: function() {
+            this.p.lastSelected = lastSelected; // set this.p.lastSelected
         }
     };
 
@@ -511,17 +517,23 @@
                 position: "last"
             })
             .navSeparatorAdd()
-        /*
-        .navButtonAdd('#ptblListaProducto',{
-            caption:"Imprimir&nbsp;&nbsp;",
-            buttonicon:"ui-icon-pencil",
-            onClickButton: function(){
-                imprimir();
-            },
-            position:"last"
-        })
-        .navSeparatorAdd()*/
-        ;
+
+            .navButtonAdd('#ptblListaProducto', {
+                caption: "Imprimir&nbsp;&nbsp;",
+                buttonicon: "ui-icon-print",
+                onClickButton: function() {
+                    imprimir();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd();
+
+        $("#tblListaProducto").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
     $("#cbocategor").combobox({
@@ -531,6 +543,91 @@
 
         }
     });
+
+    var oldFrom = $.jgrid.from,
+        lastSelected;
+
+    $.jgrid.from = function(source, initalQuery) {
+        var result = oldFrom.call(this, source, initalQuery),
+            old_select = result.select;
+        result.select = function(f) {
+            lastSelected = old_select.call(this, f);
+            return lastSelected;
+        };
+        return result;
+    };
+
+
+    function imprimir() {
+
+        host = '<?php echo $this->util()->getPath(); ?>report/';
+        var rowData = $('#tblListaProducto').jqGrid('getGridParam', 'lastSelected');
+        var objeto = {
+            "data": rowData
+        }
+        console.log(objeto);
+        var form = getForm(host + "rptProductos.php", "_blank", objeto, "post");
+        document.body.appendChild(form);
+        form.submit();
+        form.parentNode.removeChild(form);
+
+    }
+
+    function getForm(url, target, values, method) {
+        function grabValues(x) {
+            var path = [];
+            var depth = 0;
+            var results = [];
+
+            function iterate(x) {
+                switch (typeof x) {
+                    case 'function':
+                    case 'undefined':
+                    case 'null':
+                        break;
+                    case 'object':
+                        if (Array.isArray(x))
+                            for (var i = 0; i < x.length; i++) {
+                                path[depth++] = i;
+                                iterate(x[i]);
+                            }
+                        else
+                            for (var i in x) {
+                                path[depth++] = i;
+                                iterate(x[i]);
+                            }
+                        break;
+                    default:
+                        results.push({
+                            path: path.slice(0),
+                            value: x
+                        })
+                        break;
+                }
+                path.splice(--depth);
+            }
+            iterate(x);
+            return results;
+        }
+        var form = document.createElement("form");
+        form.method = method;
+        form.action = url;
+        form.target = target;
+
+        var values = grabValues(values);
+
+        for (var j = 0; j < values.length; j++) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.value = values[j].value;
+            input.name = values[j].path[0];
+            for (var k = 1; k < values[j].path.length; k++) {
+                input.name += "[" + values[j].path[k] + "]";
+            }
+            form.appendChild(input);
+        }
+        return form;
+    }
 
     function reiniCombo(celement) {
         var xelem = $("#" + celement);
