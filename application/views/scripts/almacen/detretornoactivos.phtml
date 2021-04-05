@@ -133,7 +133,7 @@ $retornocant = array(array("1", "SI"), array("0", "NO"));
                     <th>Codigo</th>
                     <th>Activo</th>
                     <th>Serie</th>
-                    <th>Stock</th>
+
                     <th>Cantidad Salida</th>
                     <th>Cantidad Retorno</th>
                     <th>Observacion</th>
@@ -154,9 +154,7 @@ $retornocant = array(array("1", "SI"), array("0", "NO"));
                     <td>
                         <input id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:90px">
                     </td>
-                    <td>
-                        <input id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
-                    </td>
+
                     <td>
                         <input id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" style="width:90px">
                     </td>
@@ -193,9 +191,7 @@ $retornocant = array(array("1", "SI"), array("0", "NO"));
                         <td>
                             <input value="<?php echo $value["vSerie"]; ?>" id="txtSerie" name="txtSerie" class="ui-text-disable" disabled="disabled" style="width:90px">
                         </td>
-                        <td>
-                            <input value="<?php echo $value["nStock"]; ?>" id="txtStock" name="txtStock" class="ui-text-disable" disabled="disabled" style="width:40px">
-                        </td>
+
                         <td>
                             <input value="<?php echo $value["nCantidad"]; ?>" id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" style="width:90px">
 
@@ -227,9 +223,18 @@ $retornocant = array(array("1", "SI"), array("0", "NO"));
 
     <div>
         <table align="left" style="width: 100%">
+
+            <tr>
+
+                <td>Observaciones: </td>
+
+
+
+            </tr>
+
             <tr>
                 <td>
-                    <textarea name="txtObs" id="txtObs" rows="3" style="width: 600px; margin-left:3px "><?php echo $this->obs; ?> </textarea>
+                    <textarea name="txtObs" id="txtObs" rows="4" style="width: 600px; margin-left:3px "><?php echo $this->obs; ?> </textarea>
                 </td>
             </tr>
         </table>

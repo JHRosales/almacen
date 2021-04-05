@@ -512,15 +512,13 @@ $html .= '
 
 //Cotizacion
 
-$Rs_tipoPer->Poner_MSQL("select m.vNombre,m.vModelo,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
-when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
-from almacen.salidaProd  a inner join
-almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
-inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
-inner join producto m on ps.idProducto=m.idProducto
+$Rs_tipoPer->Poner_MSQL("select detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
+when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot,
+(select top 1 coalesce(nTasa,0) tasa from tasacambio order by dfecha desc) nTasa
+from almacen.salidaProd  a 
 inner join compras.cotizacion coti on a.idCotiz=coti.idCotiz
-inner join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and m.idProducto=detcot.idProdServ and detcot.tipoPS=1
-where a.vEstado =1 and b.vEstado=1
+inner join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and detcot.tipoPS=1
+where a.vEstado =1
 and a.idSalidaProd=$idsalida");
 $Rs_tipoPer->executeMSQL();
 $rowTipoP = $Rs_tipoPer->pg_Get_Row();
@@ -534,11 +532,14 @@ $html .= '
 
 
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
-<tr align="center" style="background-color: #ffda07; font-family: sans-serif">
-<td width="100px"><b>Modelo</b></td><td width="300px"><b>PRODUCTOS</b></td><td width="55px"><b>CANT</b>
+<tr align="center" style="background-color: #ffda07; font-family: sans-serif">';
+
+/*
+$html .= '<td width="100px"><b>Modelo</b></td><td width="300px"><b>PRODUCTOS</b></td><td width="55px"><b>CANT</b>
 </td><td width="55px"><b>Tipo Moneda</b>
-</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>
-</tr>';
+</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>';*/
+
+$html .= '</tr>';
 
 $N = 0;
 $numsaltos = 0;
@@ -567,11 +568,13 @@ while ($N < $numRows) {
 
 	$modelo = $row['Modelo'];
 	$pt = $row['nPrecTotal'];
+	$ntasaCambio = $row['nTasa'];
 	$ptipoMoneda = $row['tipomoneda'];
 	$vModelo = $row['vModelo'];
 
 	$x = "";
 
+	/*
 	$html .= '
 	<tr nobr="true" style="text-align: center; vertical-align: 10%">
 	<td width="100px" >' . $vModelo . '</td>
@@ -582,10 +585,19 @@ while ($N < $numRows) {
 	<td width="64px" >' . $mtotal . '</td>';
 
 	$html .= '	</tr>';
+	*/
 
 
 	$Rs_tipoPer->pg_Move_Next();
 	$N++;
+}
+if ($ptipoMoneda != $vTipoMoneda ){
+	if($ptipoMoneda == '$') {
+		$mtotal2 = round($mtotal2 * $ntasaCambio ,2);
+	}else{
+		$mtotal2 = round($mtotal2 / $ntasaCambio ,2);
+		}
+	$ptipoMoneda = $vTipoMoneda;
 }
 
 $html .= '
@@ -594,6 +606,26 @@ $html .= '
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
 <b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
+</td></tr>';
+$html .= '
+</table>
+';
+
+//TOtal de balance
+
+$html .= '
+<h3>Balance </h3>
+';
+$html .= '<table border="0.1"  cellmargin="1" cellpadding="4" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
+<tr align="center" style="background-color: #ffda07; font-family: sans-serif">
+</tr>';
+
+$html .= '
+<tr>
+	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
+<b>TOTAL</b>
+</td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
+<b><span style="color: red"> ' .  ($mtotal2 - $mtotal1) . '</span></b>
 </td></tr>';
 $html .= '
 </table>

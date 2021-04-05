@@ -39,4 +39,17 @@ IF NOT EXISTS(
 			ALTER TABLE dbo.activos 
 			ADD disponible varchar(2) NULL
 		END
-					
+		
+
+/*
+--Cambios en add_salidaactivos
+actualizar el campo de disponible de la tabla activos
+--Cambios en add_entradaactvivos
+actualizar el campo de disponible de la tabla activos
+--Cambios en add_retornoactivos
+actualizar el campo de disponible de la tabla activos
+*/
+
+
+
+		

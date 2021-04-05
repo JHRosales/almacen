@@ -367,6 +367,28 @@ class MantenimientosController extends Zend_Controller_Action
     }
 
 
+    public function eliminaractivoAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $cn = new Model_DataAdapter();
+
+            $idsigma = $this->_request->getPost('idActivos');
+
+            $params = null;
+            $params[] = array('@p_idsigma', $idsigma);
+
+            $person = $cn->ejec_store_procedura_sql('eliminar_activo', $params);
+            $cperson = count($person);
+            echo json_encode($person);
+        }
+    }
+
+
+
     public function eliminartecnicoAction()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {

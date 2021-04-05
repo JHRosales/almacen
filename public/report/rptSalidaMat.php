@@ -397,7 +397,6 @@ $tentrega = $rowTipoP['tentrega'];
 $formapago = $rowTipoP['formapago'];
 $referencial = $rowTipoP['vNota'];
 $disco = $rowTipoP['vDisco'];
-$tcambio = $rowTipoP['nTasaCambio'];
 $msubtotal = $rowTipoP['nSubTot'];
 $migv = $rowTipoP['nIgv'];
 
@@ -472,7 +471,8 @@ $html .= '
 
 
 $Rs_tipoPer->Poner_MSQL("select detcot.vDescrip,detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
-when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot
+when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot,
+(select top 1 coalesce(nTasa,0) tasa from tasacambio order by dfecha desc) nTasa
 from almacen.salidaMat a
 left join compras.cotizacion coti on a.idCotiz=coti.idCotiz
 left join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz
@@ -491,7 +491,6 @@ $html .= '
 
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
-
 </tr>';
 // $html .= '
 // <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
@@ -525,6 +524,7 @@ while ($N < $numRows) {
 	$nMate = utf8_encode($det);
 
 	$pt = $row['nPrecTotal'];
+	$ntasaCambio = $row['nTasa'];
 	$ptipoMoneda = $row['tipomoneda'];
 
 
@@ -544,6 +544,14 @@ while ($N < $numRows) {
 
 	$Rs_tipoPer->pg_Move_Next();
 	$N++;
+}
+if ($ptipoMoneda != $vTipoMoneda ){
+	if($ptipoMoneda == '$') {
+		$mtotal2 = round($mtotal2 * $ntasaCambio ,2);
+	}else{
+		$mtotal2 = round($mtotal2 / $ntasaCambio ,2);
+		}
+	$ptipoMoneda = $vTipoMoneda;
 }
 
 $html .= '

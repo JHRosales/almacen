@@ -183,7 +183,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"));
             {name: 'nSubTot', index:'nSubTot', width:100},
             {name: 'nIgv', index:'nIgv', width:80},
             {name: 'nTotal', index:'nTotal', width:80},
-            {name: 'vEstado', index:'vEstado',width:50, hidden: false, editOptions:{value:"1:0",defaultvalue:"1"}, formatter: chkEliminar},
+            {name: 'vEstado', index:'vEstado',width:50, hidden: false, search: false,editOptions:{value:"1:0",defaultvalue:"1"}, formatter: chkEliminar},
             {name: 'vhostnm', index:'vhostnm',width:100, hidden: true},
             {name: 'vusernm', index:'vusernm', width:100, hidden: true},
             {name: 'personal', index:'personal', width:150, hidden: false},
@@ -191,6 +191,7 @@ $TipoResolucion=array(array("1","HD"), array("2","FULLHD"));
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
             { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Cotizaciones",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);

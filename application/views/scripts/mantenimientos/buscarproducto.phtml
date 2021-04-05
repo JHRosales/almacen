@@ -205,6 +205,7 @@
             'Categoria',
             'Sub Categoria',
             'Marca',
+            'Proveedor',
             'vResolucion',
             'vCapacidad',
             'Tecnologia',
@@ -252,6 +253,11 @@
             {
                 name: 'vMarca',
                 index: 'vMarca',
+                hidden: true
+            },
+            {
+                name: 'Uproveedor',
+                index: 'Uproveedor',
                 hidden: true
             },
             {
@@ -671,9 +677,7 @@
             '["@vDescripcion", "' + $("#id_desc").val() + '"],' +
             '["@vTecnolo", "' + $("#id_tec").val() + '"],' +
             '["@vcategoria", "' + cate + '"],' +
-            '["@vsubcategoria", "' + subcate + '"]'
-
-            +
+            '["@vsubcategoria", "' + subcate + '"]'  +
             ']';
         parameters = {
             "name": "tblListaProducto",

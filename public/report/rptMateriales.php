@@ -204,11 +204,12 @@ $pdf->SetXY($lw + 2.5, $lh = $var1);
 $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="30px"><b>ITEM</b></td>
-<td width="300px"><b>MATERIAL</b></td>
+<td width="180px"><b>MATERIAL</b></td>
 <td width="100px"><b>MARCA</b></td>
-<td width="90px"><b>STOCK</b></td>
-<td width="90px"><b>STOCK MINIMO</b></td>
-<td width="90px"><b>UNID. MEDIDA</b></td>
+<td width="150px"><b>PROVEEDOR</b></td>
+<td width="80px"><b>STOCK</b></td>
+<td width="80px"><b>STOCK MINIMO</b></td>
+<td width="80px"><b>UNID. MEDIDA</b></td>
 </tr>';
 
 $N = 0;
@@ -238,12 +239,13 @@ foreach ($data as $row) {
 	$html .= '
 			<tr nobr="true" style="text-align: center; vertical-align: 10%">
 			<td width="30px" >' . ($N + 1) . '</td>
-			<td width="300px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
+			<td width="180px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
 			<td width="100px">' .  $row["vMarca"] . '</td>
-			<td  align="center" width="90px">' .  $row["nStock"] . '</td>
-			<td width="90px" >' .  $row["nStockMinimo"] . '</td>
+			<td width="150px"  style="font-size: 9px;" align="left" >' .  $row["Uproveedor"] . '</td>
+			<td  align="center" width="80px">' .  $row["nStock"] . '</td>
+			<td width="80px" >' .  $row["nStockMinimo"] . '</td>
 
-			<td width="90px" >' .  $row["vUnidadMed"] . '</td>';
+			<td width="80px" >' .  $row["vUnidadMed"] . '</td>';
 
 
 	$html .= '	</tr>';

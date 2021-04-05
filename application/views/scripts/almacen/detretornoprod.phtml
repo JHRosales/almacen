@@ -131,7 +131,7 @@ $TipoBusqueda = array(array("5", "ID SALIDA"));
                 <tr class="ui-widget-header">
                     <th>Codigo</th>
                     <th>Producto</th>
-                    <th>Stock</th>
+                    <th>H. Stock</th>
                     <th>Serie</th>
                     <th>Observacion</th>
                     <th>Buscar</th>
@@ -215,9 +215,24 @@ $TipoBusqueda = array(array("5", "ID SALIDA"));
 
     <div>
         <table align="left" style="width: 100%">
+
+
             <tr>
+
+                <td>Observaciones: </td>
+
+
+
+            </tr>
+
+
+
+
+            <tr>
+
+
                 <td>
-                    <textarea name="txtObs" id="txtObs" rows="3" style="width: 600px; margin-left:3px "><?php echo $this->obs; ?> </textarea>
+                    <textarea name="txtObs" id="txtObs" rows="4" style="width: 600px; margin-left:3px "><?php echo $this->obs; ?> </textarea>
                 </td>
             </tr>
         </table>

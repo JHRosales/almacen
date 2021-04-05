@@ -48,14 +48,14 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
     </div>
     <br />
 
-    <table border="0" style="margin-left:5px;">
+    <table border="0" style="margin-right:55px;">
         <tr class="rowdatospsm" id="rowdatospsm">
-            <td>CANTIDAD:</td>
-            <td style="text-align: left">
-                <input class="ui-text pnl" id="txtCantidad" value="<?php echo $this->cantidad; ?>" style="width:100%" />
+            <td style="text-align: left; display: none">CANTIDAD:</td>
+            <td style="text-align: left; display: none">
+                <input class="ui-text pnl" id="txtCantidad" value="1" style="width:100%" />
             </td>
             <td> &nbsp;&nbsp;</td>
-            <td>P. UNITARIO:</td>
+            <td  style="text-align: right; ">P. UNITARIO:</td>
             <TD colspan="3">
                 <input class="ui-text pnl" id="txtPrecioUnit" value="<?php echo $this->punitario; ?>" style="width:100%" />
             </TD>
@@ -153,7 +153,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             {
                 name: 'vNombre',
                 index: 'vNombre',
-                width: 150
+                width: 220
             },
             {
                 name: 'vMarca',
@@ -163,7 +163,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             {
                 name: 'nStock',
                 index: 'nStock',
-                width: 70
+                width: 70,
+                hidden: true
             },
             {
                 name: 'vSerie',

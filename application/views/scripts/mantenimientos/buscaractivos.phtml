@@ -69,12 +69,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             {
                 name: 'vNombre',
                 index: 'vNombre',
-                width: 300
+                width: 350
             },
             {
                 name: 'vSerie',
                 index: 'vSerie',
-                hidden: false
+                hidden: false,
+                width: 150
             },
             {
                 name: 'vMarca',
@@ -84,13 +85,14 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             {
                 name: 'nStock',
                 index: 'nStock',
-                width: 100
+                width: 100,
+                hidden: true
             },
             {
                 name: 'vEstado',
                 index: 'vEstado',
                 width: 70,
-                hidden: false,
+                hidden: true,
                 editOptions: {
                     value: "1:0",
                     defaultvalue: "1"
@@ -99,7 +101,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             }, {
                 name: 'disponible',
                 index: 'disponible',
-                width: 80
+                width: 100
             },
         ],
         ignoreCase: true,
@@ -182,7 +184,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             "si": function() {
                 //openDialogData2("mantenimientos/eliminarpersona", parameters, 460);
                 $.ajax({
-                    url: jQuery.scriptPath + "index.php/mantenimientos/borrarmaterial",
+                    url: jQuery.scriptPath + "index.php/mantenimientos/eliminaractivo",
                     type: 'POST',
                     cache: false,
                     data: parameters,
@@ -193,22 +195,17 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         var IS_JSON = true;
                         try {
                             var datos = $.parseJSON(requestData);
-                            //console.log(datos[0].msj);
-                            if (datos[0].msj == "ok") {
+
                                 openDialogWarning("Eliminado Correctamente");
                                 closeDialog("jqDialogConfirmacion1");
                                 closeDialog('jqDialog2');
                                 $("#c_codigocontrib").val("");
                                 buscarActivos();
-                            } else {
-                                openDialogWarning("Error no se puede Eliminar el Material");
-                            }
-
                         } catch (err) {
                             IS_JSON = false;
                             closeDialog("jqDialogConfirmacion1");
                             $("#c_codigocontrib").val("");
-                            openDialogWarning("Error no se puede Eliminar el Material");
+                            openDialogWarning("Error no se puede Eliminar el activo");
                         }
 
 

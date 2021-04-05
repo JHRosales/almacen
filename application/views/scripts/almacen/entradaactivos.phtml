@@ -160,6 +160,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
             /* ,{ name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnNuevo,search:false},
              { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btnImprimir,search:false}*/
         ],
+
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Entrada Activos",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
@@ -459,7 +461,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
                 },
                 position: "last"
             })
-            .navSeparatorAdd()
+            .navSeparatorAdd();
 
 
         /*
@@ -472,6 +474,14 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "PROVE
                         position: "last"
                     })
                     .navSeparatorAdd();*/
+
+
+        $("#tblListaEntradaMat").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
 

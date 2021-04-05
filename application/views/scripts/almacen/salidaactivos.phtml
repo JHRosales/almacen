@@ -204,6 +204,8 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                 hidden: false
             }
         ],
+
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Salida de Activos",
         ondblClickRow: function(id) {
             var row = $(this).getRowData(id);
@@ -417,7 +419,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                 },
                 position: "last"
             })
-            .navSeparatorAdd()
+            .navSeparatorAdd();
         /*
                     .navButtonAdd('#ptblListaSalidaActivos', {
                         caption: "Imprimir&nbsp;&nbsp;",
@@ -428,6 +430,13 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "NOMBRE ACTIVO"), array(
                         position: "last"
                     })
                     .navSeparatorAdd();*/
+
+        $("#tblListaSalidaActivos").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
     }
 
 

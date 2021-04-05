@@ -201,10 +201,11 @@ $html = '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-coll
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">
 <td width="30px"><b>ITEM</b></td>
 <td width="90px"><b>MODELO</b></td>
-<td width="300px"><b>NOMBRE</b></td>
+<td width="200px"><b>NOMBRE</b></td>
+<td width="130px"><b>PROVEEDOR</b></td>
 <td width="100px"><b>MARCA</b></td>
-<td width="90px"><b>STOCK</b></td>
-<td width="90px"><b>STOCK MINIMO</b></td>
+<td width="70px"><b>STOCK</b></td>
+<td width="80px"><b>STOCK MINIMO</b></td>
 </tr>';
 
 $N = 0;
@@ -216,10 +217,11 @@ foreach ($data as $row) {
 			<tr nobr="true" style="text-align: center; vertical-align: 10%">
 			<td width="30px" >' . ($N + 1) . '</td>
 			<td width="90px" >' .  $row["vModelo"] . '</td>
-			<td width="300px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
+			<td width="200px" style="font-size: 9px;" align="left" ><b>' . $row["vNombre"] . '</b><br></td>
+			<td width="130px"  style="font-size: 9px;" align="left" >' .  $row["Uproveedor"] . '</td>
 			<td width="100px">' .  $row["vMarca"] . '</td>
-			<td  align="center" width="90px">' .  $row["nStock"] . '</td>
-			<td width="90px" >' .  $row["nStockMinimo"] . '</td>';
+			<td  align="center" width="70px">' .  $row["nStock"] . '</td>
+			<td width="80px" >' .  $row["nStockMinimo"] . '</td>';
 
 
 	$html .= '	</tr>';
@@ -248,7 +250,7 @@ function limpia_espacios($cadena)
 }
 
 
-$pdf->Output('MATERIALES.pdf', 'I');
+$pdf->Output('Productos.pdf', 'I');
 
 
 

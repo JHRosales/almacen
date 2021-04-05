@@ -117,11 +117,12 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             {name: 'vNombre', index:'vNombre', width:230},
             {name: 'vTipoDoc', index:'vTipoDoc', width:100, hidden: false},
             {name: 'vNroDoc', index:'vNroDoc',width:100, hidden: false},
-            {name: 'vEstado', index:'vEstado', width:80, hidden: false, search: true},
+            {name: 'vEstado', index:'vEstado', width:80, hidden: false, search: false},
             {name: 'vUsernm', index:'vUsernm', hidden: true},
             {name: 'vHostnm', index:'vHostnm', hidden: true},
             {name: 'dFecReg', index:'dFecReg', hidden: true}
         ],
+        ignoreCase: true,
         caption: "&nbsp;&nbsp;&nbsp;Personas Registradas",
         ondblClickRow: function(id){
             var row = $(this).getRowData(id);
@@ -129,7 +130,7 @@ $( "#c_nrodoc" ).keyup(function( event ) {
             //addCotizacion();
 
             seleccionarTec();
-            verTecnico();
+            //verTecnico();
         },
         afterInsertRow:function(rowid,aData){
         switch(aData.nestado){
