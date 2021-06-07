@@ -294,21 +294,6 @@ $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
 $Rs_tipoPer->Poner_MSQL("select  a.vobra,a.vlugar,m.idProducto,m.vNombre nProducto,ps.vNroSerie,vModelo,c.idcliente,c.vnombre as client,
 c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
 1 cantidad
-,coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
-			select top 1 de.nPrecioUnit  from almacen.detEntradaProd de
-			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
-			 where de.idProducto=m.idProducto
-			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
-			 order by ent.dFecIngreso  desc, ent.dFecReg desc
-  )abc ),0) precUnit,
-
-coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
-			select top 1 de.nPrecioUnit  from almacen.detEntradaProd de
-			inner join almacen.entradaProd ent on de.idEntradaProd=ent.idEntradaProd
-			 where de.idProducto=m.idProducto
-			 and cast(ent.dFecIngreso as date) <= cast(a.dFecSalida as date)
-			 order by ent.dFecIngreso  desc, ent.dFecReg desc
-  )abc  ),0)  total
   ,(select nTotal from compras.cotizacion where idCotiz=a.idCotiz) cotizacionTotal, 
   case 
 	  (SELECT EP.nTipoMoneda 
@@ -318,19 +303,26 @@ coalesce((  select MAX(nPrecioUnit) nPrecioUnit from(
 		LEFT JOIN almacen.entradaProd EP ON DEP.idEntradaProd=EP.idEntradaProd
 		WHERE DSP.idDetSalidaProd=B.idDetSalidaProd)
    when 1 then '$'
-  when 2 then 'S/' else ''end tipomoneda
+  when 2 then 'S/' else ''end tipomoneda,DEP.nPrecioUnit precUnit,DEP.nPrecioUnit total,
+  case 
+	  coti.nTipoMoneda
+   when 1 then '$'
+  when 2 then 'S/' else ''end tipomonedaC,
+  ( select top 1 nTasa from tasacambio tca where cast(tca.dFecha as date) <= cast(a.dFecSalida as date)) nTasaCambio
  from almacen.salidaProd a inner join
 		almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
 		inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
+		INNER JOIN almacen.detEntradaProd DEP ON PS.idDetEntradaProd=DEP.idDetEntradaProd
 		inner join producto m on ps.idProducto=m.idProducto
 		left join cliente c on a.idCliente=c.idCliente
 		inner join tecnico t on a.idTecnico=t.idTecnico
+		left join compras.cotizacion coti on a.idCotiz=coti.idCotiz
 		where a.vEstado =1 and b.vEstado=1
 		and a.idSalidaProd=$idsalida 
 		and b.idDetSalidaProd not in (
 			  select detretp.idDetSalidaProd from almacen.RetornoProd retP
 			  inner join almacen.detRetornoProd detretp on retP.idRetornoProd=detretp.idRetornoProd
-			  where retP.idSalidaProd=$idsalida   and detretp.vEstado=1)");
+			  where retP.idSalidaProd=$idsalida    and detretp.vEstado=1)");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
 $Rs_tipoPer->executeMSQL();
@@ -451,12 +443,25 @@ while ($N < $numRows) {
 	$nserie = $row['vNroSerie'];
 	$modelo = $row['vModelo'];
 	$vTipoMoneda = $row['tipomoneda'];
-	$mtotal1 = $mtotal1 + $mtotal;
+	$tMonedaCoti = $row['tipomonedaC'];
+
 
 	$pt = $row['nPrecTotal'];
 	$img = $row['img'];
 
 	$img = '';
+
+	if ($tMonedaCoti != $vTipoMoneda) {
+
+		if ($vTipoMoneda == '$') {
+			$mtotal = round($mtotal * $tcambio, 2);
+		} else {
+			$mtotal = round($mtotal / $tcambio, 2);
+		}
+		$vTipoMoneda = $tMonedaCoti;
+	}
+
+	$mtotal1 = $mtotal1 + $mtotal;
 
 	$tipops = $row['tipops'];
 	if ($tipops == '2') {
@@ -473,7 +478,7 @@ while ($N < $numRows) {
 	<td width="35px">' . $cant . '</td>
 	<td  align="left" width="260px">' . $nMate . '</td>
 	<td width="55px" > ' . $vTipoMoneda . '</td>
-	<td width="63.5px" >' . $pu . '</td>
+	<td width="63.5px" >' . $mtotal . '</td>
 	<td width="64px" >' . $mtotal . '</td>';
 
 		$html .= '	</tr>';
@@ -512,12 +517,13 @@ $html .= '
 
 //Cotizacion
 
-$Rs_tipoPer->Poner_MSQL("select detcot.nCantidad,case coti.nTipoMoneda when 1 then '$'
+$Rs_tipoPer->Poner_MSQL("select detcot.nCantidad, p.vModelo, vNombrePSM vNombre,case coti.nTipoMoneda when 1 then '$'
 when 2 then 'S/' else ''end tipomoneda,nPrecUnit,nPrecTotal,coti.vnroCot,
 (select top 1 coalesce(nTasa,0) tasa from tasacambio order by dfecha desc) nTasa
 from almacen.salidaProd  a 
 inner join compras.cotizacion coti on a.idCotiz=coti.idCotiz
-inner join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and detcot.tipoPS=1
+inner join compras.detCotizacion  detcot on coti.idCotiz=detcot.idCotiz and detcot.tipoPS=1 and opcional=0 and detcot.vEstado in ('1','2')
+left join producto p on detcot.idProdServ=p.idProducto
 where a.vEstado =1
 and a.idSalidaProd=$idsalida");
 $Rs_tipoPer->executeMSQL();
@@ -534,10 +540,10 @@ $html .= '
 $html .= '<table border="0.1"  cellmargin="1" cellpadding="3" style=" border-collapse: collapse;margin:0px;border:1px solid black; ">
 <tr align="center" style="background-color: #ffda07; font-family: sans-serif">';
 
-/*
+
 $html .= '<td width="100px"><b>Modelo</b></td><td width="300px"><b>PRODUCTOS</b></td><td width="55px"><b>CANT</b>
 </td><td width="55px"><b>Tipo Moneda</b>
-</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>';*/
+</td><td width="63.5px"><b> PU</b></td><td width="64px"><b> PT</b></td>';
 
 $html .= '</tr>';
 
@@ -566,7 +572,7 @@ while ($N < $numRows) {
 	$nMate = utf8_encode($det);
 
 
-	$modelo = $row['Modelo'];
+	$modelo = $row['vModelo'];
 	$pt = $row['nPrecTotal'];
 	$ntasaCambio = $row['nTasa'];
 	$ptipoMoneda = $row['tipomoneda'];
@@ -574,7 +580,7 @@ while ($N < $numRows) {
 
 	$x = "";
 
-	/*
+
 	$html .= '
 	<tr nobr="true" style="text-align: center; vertical-align: 10%">
 	<td width="100px" >' . $vModelo . '</td>
@@ -585,18 +591,18 @@ while ($N < $numRows) {
 	<td width="64px" >' . $mtotal . '</td>';
 
 	$html .= '	</tr>';
-	*/
+
 
 
 	$Rs_tipoPer->pg_Move_Next();
 	$N++;
 }
-if ($ptipoMoneda != $vTipoMoneda ){
-	if($ptipoMoneda == '$') {
-		$mtotal2 = round($mtotal2 * $ntasaCambio ,2);
-	}else{
-		$mtotal2 = round($mtotal2 / $ntasaCambio ,2);
-		}
+if ($ptipoMoneda != $vTipoMoneda) {
+	if ($ptipoMoneda == '$') {
+		$mtotal2 = round($mtotal2 * $ntasaCambio, 2);
+	} else {
+		$mtotal2 = round($mtotal2 / $ntasaCambio, 2);
+	}
 	$ptipoMoneda = $vTipoMoneda;
 }
 

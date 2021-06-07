@@ -174,7 +174,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                         <button id="btnTestigoBuscarPersona">Buscar</button>
                     </td>
                     <td>
-                        <input id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" type="number"  style="width:100px">
+                        <input id="txtCantidad" name="txtCantidad" class="ui-text-disable" disabled="disabled" type="number" style="width:100px">
                     </td>
                     <td>
                         <input type="text" id="fecsalidaMaterial" name="fecsalidaMaterial" class="ui-text-disable " readonly style="text-align: left;width: 80px;" />
@@ -678,7 +678,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     detMateriales.idDetSalidaActivos = $(this).find("[name=txtDetSalidaActivos]").val();
                     detMateriales.idActivos = $(this).find("[name=txtIdActivos]").val();
                     detMateriales.Cantidad = $(this).find("[name=txtCantidad]").val();
-                    detMateriales.stock = $(this).find("[name=txtStock]").val();
+                    detMateriales.stock = 0; // $(this).find("[name=txtStock]").val();
                     detMateriales.fecsalidaActivos = $(this).find("[name=fecsalidaMaterial]").val();
                     materiales.push(detMateriales);
                 }
