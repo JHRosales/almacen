@@ -156,7 +156,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                                                 <button id="btnTestigoBuscarTecnico">Buscar Técnico</button>
                                             </td>
                                             <td>
-                                                <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                                                <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTableTecnico(this);">
                                                     <span class="ui-icon ui-icon-trash">Quitar</span>
                                                 </div>
                                             </td>
@@ -174,7 +174,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
                                                     <button id="btnTestigoBuscarTecnico" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" onclick="buscarTecni(this)"><span class="ui-button-text">Buscar Tecnico</span></button>
                                                 </td>
                                                 <td>
-                                                    <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                                                    <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTableTecnico(this);">
                                                         <span class="ui-icon ui-icon-trash">Quitar</span>
                                                     </div>
                                                 </td>
@@ -609,6 +609,49 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "SERIE
             beforeSend: function(data) {},
             success: function(requestData) {
                 $("#result").html(requestData);
+                var datos = JSON.parse(requestData);
+                console.log(datos[0][1]);
+                console.log(datos[0][0]);
+                if (datos[0][0] == "ok") {
+                    $(d).parent().parent().remove();
+                } else {
+                    openDialogInfo(datos[0][1], "280", "150", null, function() {
+                        return;
+                    });
+                }
+
+            },
+            error: function(requestData, strError, strTipoError) {
+                $("#result").html("Error " + strTipoError + ': ' + strError);
+            },
+            complete: function(requestData, exito) {}
+        });
+
+    };
+
+
+    deleteFilaTableTecnico = function(d) {
+        var idTecnico = $(d).parent().parent().find("input[name=txtIdTecnico]").val();
+        var iddettecnicoprod = $(d).parent().parent().find("input[name=txtidDetTecnicoProd]").val();
+
+
+        if (iddettecnicoprod == "" || iddettecnicoprod == undefined) {
+            $(d).parent().parent().remove();
+            return;
+        }
+
+        parameters = {
+            "id": idTecnico,
+            "idDettecnicoProd": iddettecnicoprod
+        };
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/almacen/eliminartecnicosalidaprod",
+            type: 'POST',
+            cache: false,
+            data: parameters,
+            beforeSend: function(data) {},
+            success: function(requestData) {
+                // $("#result").html(requestData);
                 var datos = JSON.parse(requestData);
                 console.log(datos[0][1]);
                 console.log(datos[0][0]);

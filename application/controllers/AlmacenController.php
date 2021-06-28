@@ -2285,4 +2285,59 @@ class AlmacenController extends Zend_Controller_Action
             print_r(json_encode($resultPapeleta[0]));
         }
     }
+
+    // Eliminar un tecnico agregado Materiales
+    public function eliminartecnicosalidamatAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidtecnico = $this->_request->getParam('id');
+            $piddettecnicomat = $this->_request->getParam('idDetTecnicoMat');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_tecnicoMateliminar';
+
+            $params = null;
+            $params[] = array('@p_idtecnico',  $pidtecnico);  #idTecnico
+            $params[] =  array('@p_idDetTecnicomat', $piddettecnicomat); #idDetTecnicoMat
+            $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
+// Eliminar tecnico agregado en salida productos
+    public function eliminartecnicosalidaprodAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin = $ddatosuserlog->userlogin;
+
+            $pidtecnico = $this->_request->getParam('id');
+            $piddettecnicoProd = $this->_request->getParam('idDettecnicoProd');
+
+
+            $dataSet = new Model_DataAdapter();
+            $_proc_dtestigo = 'almacen.salida_tecnicosprodeliminar';
+
+            $params = null;
+            $params[] = array('@p_idtecnico',  $pidtecnico);  #idTecnico
+            $params[] =  array('@p_idDetTecnicoprod', $piddettecnicoProd); #idDetTecnico
+            $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+
+            print_r(json_encode($permiso));
+            // print_r(json_encode($resultDescta[0]["b"]));
+        }
+    }
 }
