@@ -307,8 +307,8 @@ coalesce((select MAX(nPrecioUnit) nPrecioUnit from(
  from almacen.salidaMat a inner join
 almacen.detSalidaMat b on a.idSalidaMat=b.idSalidaMat
 inner join material_almacen m on b.idMaterial=m.idMaterial
-inner join cliente c on a.idCliente=c.idCliente
-inner join tecnico t on a.idTecnico=t.idTecnico
+left join cliente c on a.idCliente=c.idCliente
+left join tecnico t on a.idTecnico=t.idTecnico
 where a.vEstado =1 and b.vEstado=1
 and a.idSalidaMat=$idsalida 
 ) a
@@ -327,7 +327,7 @@ $cliente = str_replace("&ntilde;", 'ñ', $cliente);
 $finalobra = $rowTipoP['fechaRetorno'];
 $fecha = $rowTipoP['dFecSalida'];
 $vPersContac = "Reporte inversion Materiales"; //$rowTipoP['vPersContac'];
-$vTipoMoneda = $rowTipoP['tipomoneda'];
+$vTipoMoneda1 = $rowTipoP['tipomoneda'];
 $vCotizacionTotal = $rowTipoP['cotizacionTotal'];
 
 
@@ -446,8 +446,8 @@ while ($N < $numRows) {
 	<td width="55px">' . $cant . '</td>
 	<td  align="left" width="400px"><b>' . $nMate . '</b></td>
 	<td width="55px" >' . $vTipoMoneda . '</td>
-	<td width="63.5px" >' . $pu . '</td>
-	<td width="64px" >' . $mtotal . '</td>';
+	<td width="63.5px" >' . number_format($pu,5) . '</td>
+	<td width="64px" >' . number_format($mtotal ,2). '</td>';
 
 	$html .= '	</tr>';
 
@@ -461,7 +461,7 @@ $html .= '
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $mtotal1 . '</span></b>
+<b><span style="color: red"> ' . number_format($mtotal1,2) . '</span></b>
 </td></tr>';
 $html .= '
 </table>
@@ -547,19 +547,24 @@ while ($N < $numRows) {
 }
 if ($ptipoMoneda != $vTipoMoneda ){
 	if($ptipoMoneda == '$') {
-		$mtotal2 = round($mtotal2 * $ntasaCambio ,2);
+		$mtotal2 = number_format($mtotal2 * $ntasaCambio ,2);
 	}else{
-		$mtotal2 = round($mtotal2 / $ntasaCambio ,2);
+		$mtotal2 = number_format($mtotal2 / $ntasaCambio ,2);
 		}
 	$ptipoMoneda = $vTipoMoneda;
 }
+
+if ($ptipoMoneda == ' ' or $ptipoMoneda == ''){
+    $ptipoMoneda = $vTipoMoneda1;
+}
+
 
 $html .= '
 <tr>
 	<td COLSPAN="4" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
+<b><span style="color: red"> '. $ptipoMoneda . ' ' . $mtotal2 . '</span></b>
 </td></tr>';
 $html .= '
 </table>
@@ -579,7 +584,7 @@ $html .= '
 	<td COLSPAN="4" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' .  ($mtotal2 - $mtotal1) . '</span></b>
+<b><span style="color: red"> ' .$ptipoMoneda .  number_format( $mtotal2 - $mtotal1,2) . '</span></b>
 </td></tr>';
 $html .= '
 </table>

@@ -44,6 +44,9 @@ class PDF1 extends TCPDF{
 		$this->SetXY($lw+114,$lh+16);
 		$this->MultiCell(70,3,'www.dhlsecurity.pe',0,'R');
 
+        $this->SetXY($lw+114,$lh+20);
+        $this->MultiCell(70,3,'RUC: 20548115354',0,'R');
+
 		$lh = $lh+20;
 
 /*
@@ -304,9 +307,9 @@ CONVERT(varchar, convert(money, nSubTot), 1)as nSubTot
  --Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end
  Case when b.tipoPS!='1' then 'GLOBAL' else CONVERT(varchar, convert(money, sum(b.nPrecUnit)), 1)  end
  as nPrecUnit,Case when b.tipoPS!='1' then '-'
- else CAST(sum(b.nCantidad) AS varchar(5))  end nCantidad,CONVERT(varchar, convert(money, sum(b.nPrecTotal)), 1)
+ else CAST(b.nCantidad AS varchar(5))  end nCantidad,CONVERT(varchar, convert(money, sum(b.nPrecTotal)), 1)
   as nPrecTotal ,c.idCliente,c.vNombre as cliente , Case when b.tipoPS!='1' then '1.jpg'
- else  coalesce(dbo.imgadjunto(b.idProdServ),'1.jpg')     end as img,
+ else  dbo.imgadjunto(b.idProdServ)   end as img,
   Case when b.tipoPS!='1' then ''
  else  dbo.ModeloProd(b.idProdServ)   end as Modelo,b.idprodserv,
  coalesce(a.tiempEntrega,'') as tentrega , coalesce(a.vGarantia,'') as garantia,
@@ -324,7 +327,7 @@ inner join cliente c on a.idCliente=c.idCliente
 left join personal p on a.idPersonal=p.idPersonal
 where a.idCotiz=$idcotiz
 and (opcional is null or opcional='' or opcional='0' )
-group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nIgv,a.nTotal,b.vNombrePSM,c.idCliente,
+group by  a.idCotiz,a.vnroCot,a.dfecCot,a.nSubTot,a.nIgv,a.nTotal,b.vNombrePSM,b.nCantidad,c.idCliente,
 c.vNombre,idProdServ,tipoPS, a.tiempEntrega , a.vGarantia,p.vNombre,p.vCargo, a.nTasaCambio,b.tipops, a.vMotivo,c.vPersContac,a.nTipoMoneda,a.vFormaPago,a.vNota,a.vDisco,a.tiempo
 order by tipoPS,subcat,b.vNombrePSM desc");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
@@ -622,7 +625,7 @@ $Rs_opcional->Poner_MSQL("select a.idCotiz,b.vNombrePSM,
  --sum(b.nPrecUnit) as nPrecUnit,
  --Case when SUBSTRING(b.vNombrePSM,0,9)='Materiales' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,sum(b.nPrecTotal)  as nPrecTotal ,
    Case when b.tipoPS!='1' then 'GLOBAL' else CAST(sum(b.nPrecUnit)AS varchar(10))  end as nPrecUnit,
-   Case when b.tipoPS!='1' then '-' else CAST(sum(b.nCantidad) AS varchar(5))  end nCantidad,cast(sum(b.nPrecTotal)as numeric(12,2))
+   Case when b.tipoPS!='1' then '-' else CAST(b.nCantidad AS varchar(5))  end nCantidad,cast(sum(b.nPrecTotal)as numeric(12,2))
   as nPrecTotal,
 
   Case when b.tipoPS!='1' then '1.jpg'
@@ -640,7 +643,7 @@ inner join cliente c on a.idCliente=c.idCliente
 left join personal p on a.idPersonal=p.idPersonal
 where a.idCotiz=$idcotiz
 and opcional='1'
-group by  a.idCotiz,a.nSubTot,a.nTotal,b.vNombrePSM,idProdServ,tipoPS, p.vNombre
+group by  a.idCotiz,a.nSubTot,a.nTotal,b.vNombrePSM,b.nCantidad,idProdServ,tipoPS, p.vNombre
 order by tipoPS,b.idProdServ,nCantidad");
 $Rs_opcional->executeMSQL();
 $rowopcional= $Rs_opcional->pg_Get_Row();
@@ -810,6 +813,8 @@ Forma de pago: '.$formapago.'
 Cuenta corriente BCP Soles: 191-1964430-0-26
 <br>
 Cuenta corriente BCP dólares: 191-2040241-1-04
+<br>
+Cuenta corriente BBVA Soles: 0011-0131-0100049557
 <br>
 <br>
 Atte.

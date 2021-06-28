@@ -532,7 +532,17 @@ class AlmacenController extends Zend_Controller_Action
                 $arrDetMateriales = $dtbdtestigo;
             }
 
+            $arrDetTecnicoMat = array();
+            $params_tecn[] = array('@tBusqueda', "0");
+            $params_tecn[] = array('@vIdSalidaMat', $idsalidamat);
+            $params_tecn[] = array('@vDatoBus', "");
+            $dtbdtestigo = $cn->executeAssocQuery("almacen.Bus_DetTecnicoMat", $params_tecn);
+            if (count($dtbdtestigo) > 0) {
+                $arrDetTecnicoMat = $dtbdtestigo;
+            }
+
             $this->view->detSalidaMat = $arrDetMateriales;
+            $this->view->detTecnicoMat = $arrDetTecnicoMat;
         }
     }
 
@@ -777,7 +787,6 @@ class AlmacenController extends Zend_Controller_Action
 
 
             $_proc_dtestigo = 'add_detsalidamat';
-
             foreach ($jPapeleta->materiales as $value) {
                 $params = null;
                 $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
@@ -789,6 +798,16 @@ class AlmacenController extends Zend_Controller_Action
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
             }
+            // Guardando Tecnicos
+            $_proc_dtecnico = 'add_dettecnicomat';
+            foreach ($jPapeleta->tecnicos as $value) {
+                $paramst = null;
+                $paramst[] = array('@p_idDetTecnicoMat', $value->idDetTecnicoMat);  #idDettecnico
+                $paramst[] = array('@p_idsalidamat', $resultPapeleta[0]["idSalidaMat"]);   #idSalidaMat
+                $paramst[] = array('@p_idTecnico',  $value->idTecnico);  #idTecnico
+                $tecnicosave = $dataSet->ejec_store_procedura_sql($_proc_dtecnico, $paramst);
+            }
+
 
             print_r(json_encode($resultPapeleta[0]));
             // print_r(json_encode($resultDescta[0]["b"]));
@@ -830,17 +849,19 @@ class AlmacenController extends Zend_Controller_Action
             $_proc_dtestigo = 'add_detretornomat';
 
             foreach ($jPapeleta->materiales as $value) {
-                $params = null;
-                $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
-                $params[] = array('@p_idretornomat', $resultPapeleta[0]["idRetornoMat"]);   #p_mpapeleta
-                $params[] = array('@p_iddetretornomat',  $value->idDetRetornoMat);  #p_mperson
-                $params[] = array('@p_iddetsalidamat',  $value->idDetSalidaMat);  #p_mperson
-                $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #cantidad
-                $params[] =  array('@p_observ',  $value->observacion); #cantidad
-                $params[] =  array('@p_stock',  $value->stock); #cantidad
-                $params[] =  array('@p_fecRetornoMat',  $value->fecretornoMat); #fecharetorno
-                //print_r($params);
-                $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+                if ($value->cantidadRetorno > 0) {
+                    $params = null;
+                    $params[] = array('@p_idmat', $value->idMaterial);  #p_idsigma
+                    $params[] = array('@p_idretornomat', $resultPapeleta[0]["idRetornoMat"]);   #p_mpapeleta
+                    $params[] = array('@p_iddetretornomat',  $value->idDetRetornoMat);  #p_mperson
+                    $params[] = array('@p_iddetsalidamat',  $value->idDetSalidaMat);  #p_mperson
+                    $params[] =  array('@p_cantidad',  $value->cantidadRetorno); #cantidad
+                    $params[] =  array('@p_observ',  $value->observacion); #cantidad
+                    $params[] =  array('@p_stock', 0); # $value->stock); #cantidad
+                    $params[] =  array('@p_fecRetornoMat',  $value->fecretornoMat); #fecharetorno
+                    //print_r($params);
+                    $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+                }
             }
 
             print_r(json_encode($resultPapeleta[0]));
@@ -901,8 +922,18 @@ class AlmacenController extends Zend_Controller_Action
             if (count($dtbdtestigo) > 0) {
                 $arrDetMateriales = $dtbdtestigo;
             }
-
             $this->view->detSalidaProd = $arrDetMateriales;
+
+            $arrDetTecnicoProd = array();
+            $params_tecn[] = array('@tBusqueda', "0");
+            $params_tecn[] = array('@vIdSalidaProd', $idsalidaProd);
+            $params_tecn[] = array('@vDatoBus', "");
+            $dtbdtestigo2 = $cn->executeAssocQuery("almacen.Bus_DetTecnicoProd", $params_tecn);
+            if (count($dtbdtestigo2) > 0) {
+                $arrDetTecnicoProd = $dtbdtestigo2;
+            }
+
+            $this->view->detTecnicoProd = $arrDetTecnicoProd;
         }
     }
 
@@ -1300,11 +1331,8 @@ class AlmacenController extends Zend_Controller_Action
             $params1[] = array('@p_idsalidaprod', $resultPapeleta[0]["idSalidaprod"]); // $jPapeleta->idSalidaMat);
             $resultEok = $dataSet->executeAssocQuery($_proc_okEliminado, $params1);
 
-
-
-
+            // Guardar detalle
             $_proc_dtestigo = 'add_detsalidaprod';
-
             foreach ($jSalidaP->series as $value) {
                 $params = null;
                 $params[] = array('@p_idsalidaprod', $resultPapeleta[0]["idSalidaprod"]);   #salida
@@ -1315,6 +1343,16 @@ class AlmacenController extends Zend_Controller_Action
                 $params[] =  array('@p_fecSalidaProducto',  $value->fecsalidaProducto); #fechaSalida
                 //print_r($params);
                 $permiso = $dataSet->ejec_store_procedura_sql($_proc_dtestigo, $params);
+            }
+
+            // Guardando Tecnicos
+            $_proc_dtecnico = 'add_dettecnicoprod';
+            foreach ($jSalidaP->tecnicos as $value) {
+                $paramst = null;
+                $paramst[] = array('@p_idDetTecnicoProd', $value->idDetTecnicoProd);  #idDettecnico
+                $paramst[] = array('@p_idsalidaprod', $resultPapeleta[0]["idSalidaprod"]);   #idSalidaMat
+                $paramst[] = array('@p_idTecnico',  $value->idTecnico);  #idTecnico
+                $tecnicosave = $dataSet->ejec_store_procedura_sql($_proc_dtecnico, $paramst);
             }
 
             print_r(json_encode($resultPapeleta[0]));

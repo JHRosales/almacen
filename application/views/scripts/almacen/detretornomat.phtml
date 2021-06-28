@@ -511,6 +511,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
     agregarFilaTable = function(id) {
         var id_combobox = "";
 
+        /*
         $("#" + id + " tbody tr:first").clone().show().find("input,select,button").each(function() {
             if ($(this).is("select")) {
                 id_combobox = this.id + '_' + id + "_" + i;
@@ -520,6 +521,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                 'value': ''
             });
         }).end().appendTo("#" + id);
+        */
 
         themeComboBox("#" + id_combobox);
         $("#btnBuscarMaterial_" + id + "_" + i).button().click(function() {

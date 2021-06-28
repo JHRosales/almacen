@@ -197,6 +197,7 @@ class PDF1 extends TCPDF
 		global $idsalida;
 		global $vobra;
 		global $cliente;
+        global $tasaCambio;
 		global $lugar;
 
 
@@ -273,8 +274,17 @@ class PDF1 extends TCPDF
 		$this->SetXY($lw + 15, $lh + 22);
 		$this->MultiCell(180, 5, $cliente, 0, 'L');
 
-		$this->SetFont('times', 'B', 11);
+        $this->SetFont('times', '', 11);
 		$this->SetXY($lw, $lh + 27);
+        $this->MultiCell(80, 5, "Tasa Cambio: ", 0, 'J');
+
+        $this->SetFont('times', 'B', 11);
+        $this->SetXY($lw + 15, $lh + 27);
+        $this->MultiCell(180, 5, $tasaCambio, 0, 'L');
+
+
+		$this->SetFont('times', 'B', 11);
+		$this->SetXY($lw, $lh + 30);
 		$this->MultiCell(190, 5, "Reporte Inversion de Productos", 0, 'C');
 
 		$this->SetFont('times', '', 10);
@@ -308,7 +318,7 @@ c.vtipodoc,c.vdireccion,CONVERT(VARCHAR(10),a.dFecSalida,103) as dFecSalida,
 	  coti.nTipoMoneda
    when 1 then '$'
   when 2 then 'S/' else ''end tipomonedaC,
-  ( select top 1 nTasa from tasacambio tca where cast(tca.dFecha as date) <= cast(a.dFecSalida as date)) nTasaCambio
+  ( select top 1 nTasa from tasacambio tca where cast(tca.dFecha as date) <= cast(a.dFecSalida as date) order by tca.dfecha desc) nTasaCambio
  from almacen.salidaProd a inner join
 		almacen.detSalidaProd b on a.idSalidaProd=b.idSalidaProd
 		inner join almacen.prodSeries ps on ps.idProdSeries=b.idProdSeries
@@ -331,6 +341,7 @@ $rowTipoP = $Rs_tipoPer->pg_Get_Row();
 $vobra = $rowTipoP['vobra'];
 $lugar = $rowTipoP['vlugar'];
 $cliente = $rowTipoP['client'];
+$tasaCambio = $rowTipoP['nTasaCambio'];
 $fecha = $rowTipoP['dFecSalida'];
 $vPersContac = $rowTipoP['vPersContac'];
 $vTipoMoneda = $rowTipoP['tipomoneda'];
@@ -478,8 +489,8 @@ while ($N < $numRows) {
 	<td width="35px">' . $cant . '</td>
 	<td  align="left" width="260px">' . $nMate . '</td>
 	<td width="55px" > ' . $vTipoMoneda . '</td>
-	<td width="63.5px" >' . $mtotal . '</td>
-	<td width="64px" >' . $mtotal . '</td>';
+	<td width="63.5px" >' .  number_format($mtotal,2) . '</td>
+	<td width="64px" >' .  number_format($mtotal,2) . '</td>';
 
 		$html .= '	</tr>';
 	}
@@ -509,7 +520,7 @@ $html .= '
 	<td COLSPAN="7" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' . $mtotal1 . '</span></b>
+<b><span style="color: red"> ' .  number_format($mtotal1,2) . '</span></b>
 </td></tr>';
 $html .= '
 </table>
@@ -588,7 +599,7 @@ while ($N < $numRows) {
 	<td width="55px">' . $cant . '</td>	
 	<td width="55px">' . $ptipoMoneda . '</td>	
 	<td width="63.5px" >' . $pu . '</td>
-	<td width="64px" >' . $mtotal . '</td>';
+	<td width="64px" >' .  number_format($mtotal,2) . '</td>';
 
 	$html .= '	</tr>';
 
@@ -597,11 +608,14 @@ while ($N < $numRows) {
 	$Rs_tipoPer->pg_Move_Next();
 	$N++;
 }
+
 if ($ptipoMoneda != $vTipoMoneda) {
 	if ($ptipoMoneda == '$') {
-		$mtotal2 = round($mtotal2 * $ntasaCambio, 2);
+
+		$mtotal2 = number_format( $mtotal2 * $ntasaCambio,2);
 	} else {
-		$mtotal2 = round($mtotal2 / $ntasaCambio, 2);
+
+		$mtotal2 =  number_format( $mtotal2 / $ntasaCambio,2);
 	}
 	$ptipoMoneda = $vTipoMoneda;
 }
@@ -631,7 +645,7 @@ $html .= '
 	<td COLSPAN="5" align="right" style="font-family:  Times, serif; font-size: 10px" >
 <b>TOTAL</b>
 </td><td  align="center" style="font-family:sans-serif; font-size: 10px;">
-<b><span style="color: red"> ' .  ($mtotal2 - $mtotal1) . '</span></b>
+<b><span style="color: red"> ' . $ptipoMoneda . ' '  . number_format(($mtotal2 - $mtotal1),2) . '</span></b>
 </td></tr>';
 $html .= '
 </table>

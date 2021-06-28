@@ -15,6 +15,19 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         padding: .4em 5px;
         text-align: left;
     }
+
+    #tableTecnicos {
+        margin: 0em 2em 0em 0em;
+        border-collapse: collapse;
+        width: 95%;
+    }
+
+    #tableTecnicos td,
+    #tableTecnicos th {
+        border: 1.5px solid #eee;
+        padding: .4em 5px;
+        text-align: left;
+    }
 </style>
 
 <div id="panelMantenimientoCotizacion" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 1px; height:95%;">
@@ -106,12 +119,20 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
                         <tr>
                             <td width="230" style="text-align: left">Tecnico encargado:</td>
-                            <td width="10">&nbsp;</td>
-                            <td width="10">&nbsp;</td>
-                            <td width="230" colspan="5" style="text-align: left"></td>
+                            <td width="10">
+
+                            </td>
+                            <td width="10">
+                                <div style="text-align: left">
+                                    <button id="btnTecnicoAgregar">Agregar Técnico</button>
+                                </div>
+                            </td>
+                            <td width="230" colspan="5" style="text-align: left">
+                                &nbsp;
+                            </td>
                             <td width="150">&nbsp;</td>
                         </tr>
-                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente" style="display: none;">
 
                             <td colspan="3">
                                 <input class="ui-text-disable pnl" type="hidden" readonly id="txtidtecnico" value="<?php echo $this->idtecnico; ?>" style="width:100%" />
@@ -124,10 +145,62 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                                 <button id="btnbuscartec" name="btnbuscartec" onclick="buscarTecni()">Buscar Tecnico</button>
                             </td>
                         </tr>
+
                         <tr>
-                            <td colspan="13" height="8px"></td>
+                            <td colspan="5">
+                                <table id="tableTecnicos" border="1" class="ui-widget ui-widget-content">
+                                    <thead style="display: none;">
+                                        <tr class="ui-widget-header">
+                                            <th>Tecnico</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="display: none;">
+                                            <td>
+                                                <input type="hidden" name="txtidDetTecnicoMat" id="txtidDetTecnicoMat" />
+                                                <input type="hidden" id="txtIdTecnico" name="txtIdTecnico" class="ui-text-disable" disabled="disabled" style="width:450px">
+                                                <input id="txtTecnico" name="txtTecnico" class="ui-text-disable" disabled="disabled" style="width:450px">
+                                            </td>
+                                            <td>
+                                                <button id="btnTestigoBuscarTecnico">Buscar Técnico</button>
+                                            </td>
+                                            <td>
+                                                <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                                                    <span class="ui-icon ui-icon-trash">Quitar</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php $cont = 0;
+                                        foreach ((array)$this->detTecnicoMat as $value) {
+                                            $cont++ ?>
+                                            <tr>
+                                                <td>
+                                                    <input value="<?php echo $value["idDetTecnicoMat"]; ?>" type="hidden" name="txtidDetTecnicoMat" id="txtidDetTecnicoMat" />
+                                                    <input value="<?php echo $value["idTecnico"]; ?>" type="hidden" id="txtIdTecnico" name="txtIdTecnico" class="ui-text-disable" disabled="disabled" style="width:450px">
+                                                    <input value="<?php echo $value["NombreTecnico"]; ?>" id="txtTecnico" name="txtTecnico" class="ui-text-disable" disabled="disabled" style="width:450px">
+                                                </td>
+                                                <td>
+                                                    <button id="btnTestigoBuscarTecnico" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-hover" onclick="buscarTecni(this)"><span class="ui-button-text">Buscar Tecnico</span></button>
+                                                </td>
+                                                <td>
+                                                    <div title="Eliminar" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit" onmouseover="jQuery(this).addClass('ui-state-hover');" onmouseout="jQuery(this).removeClass('ui-state-hover')" onclick="deleteFilaTable(this);">
+                                                        <span class="ui-icon ui-icon-trash">Quitar</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
 
+                        <tr>
+                            <td colspan="13" height="8px">
+
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -196,7 +269,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
                     </td>
                 </tr>
                 <?php $cont = 0;
-                foreach ($this->detSalidaMat as $value) {
+                foreach ((array)$this->detSalidaMat as $value) {
                     $cont++ ?>
 
                     <tr>
@@ -545,6 +618,37 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         $("#c_codigocontrib").focus();
     }
 
+
+    buscarTecni = function(d) {
+        // console.log(d);
+        parameters = {
+            "idsigma": $("#identradamat").val()
+        };
+        // openDialogData1("almacen/buscartecnico", parameters, 660, 500);
+
+        openDialogDataFunction1("almacen/buscartecnico", parameters, 660, 500, "Buscar tecnico.!", cargarTecn = function() {
+            var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
+            var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+            // console.log(row);
+            // invocaBusPersona == 1 && 
+            if (row.idTecnico != undefined) {
+                $(d).parent().parent().find("input[name=txtIdTecnico]").val(row.idTecnico);
+                $(d).parent().parent().find("input[name=txtTecnico]").val(row.vNombre);
+                closeDialog("jqDialog1");
+            }
+        }, {});
+
+        // openDialogDataFunction1("almacen/buscartecnico", parameters, "750", "625", "Buscar tecnico.!!!", function() {
+        //     $("#txt_idsigma").val(row.idsigma);
+        //     $("#txtnumero").val(row.dnumero);
+        //     $("#txtviacentrpob").val(row.tnomvia);
+        //     $("#txtczoncat").val(row.czoncat);
+        //     habpredio();
+        // });
+    };
+
+
+
     /*buscarTecnico = function (d) {
         console.log(d);
 
@@ -615,14 +719,6 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
     }
 
-    buscarTecni = function() {
-        parameters = {
-            "idsigma": $("#identradamat").val()
-        };
-        openDialogData1("almacen/buscartecnico", parameters, 660, 500);
-        //   window.open(path + "mantenimientos/backup", "_self");
-
-    };
 
 
     agregarFilaTable = function(id) {
@@ -671,6 +767,29 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
 
 
+    }
+    agregarFilaTableTecnico = function(id) {
+        var id_combobox = "";
+
+        $("#" + id + " tbody tr:first").clone().show().find("input,select,button").each(function() {
+            if ($(this).is("select")) {
+                id_combobox = this.id + '_' + id + "_" + i;
+            }
+            $(this).attr({
+                'id': this.id + '_' + id + "_" + i,
+                'value': ''
+            });
+        }).end().appendTo("#" + id);
+
+        themeComboBox("#" + id_combobox);
+        $("#btnTestigoBuscarTecnico_" + id + "_" + i).button().click(function() {
+            invocaBusPersona = 1;
+            // buscarMaterialSalida(this);
+            buscarTecni(this);
+
+        });
+
+        i++;
     }
 
     $(function() {
@@ -735,6 +854,18 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
         });
         //fin clone inspector
 
+        // Clonar tecnico
+
+        agregarFilaTableTecnico("tableTecnicos");
+        $("#btnTecnicoAgregar").click(function() {
+            agregarFilaTableTecnico("tableTecnicos");
+        });
+        $("#btnTecnicoAgregar").button({
+            icons: {
+                primary: "ui-icon-plus"
+            }
+        });
+
         //--- Buscar persona
         Persona.init(true);
         BuscadorMaterial.init(BuscadorMaterial.MODO_FULL, true);
@@ -771,6 +902,7 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
 
             var detallesalida = {};
             var materiales = [];
+            var tecnicos = [];
 
             //Datos generales del salida de Materiales
             detallesalida.idSalidaMat = $("#idsalidamat").val();
@@ -803,10 +935,25 @@ $TipoBusqueda = array(array("0", "GENERAL"), array("1", "ID"), array("2", "NOMBR
             });
             detallesalida.materiales = materiales;
 
+            //Datos Tecnicos
+            $('#tableTecnicos > tbody  > tr').each(function() {
+                var detTecnicos = {};
+                if ($(this).find("[name=txtIdTecnico]").val() != '') {
+                    detTecnicos.idDetTecnicoMat = $(this).find("[name=txtidDetTecnicoMat]").val();
+                    detTecnicos.idTecnico = $(this).find("[name=txtIdTecnico]").val();
+                    detTecnicos.NombreTecnico = $(this).find("[name=txtTecnico]").val();
+                    tecnicos.push(detTecnicos);
+                }
+            });
+            detallesalida.tecnicos = tecnicos;
+
+
             var pSalidaMat = {};
             pSalidaMat.objSalidaMat = JSON.stringify(detallesalida);
             //console.log(JSON.stringify(pPapeleta));
             //console.log(papeleta);
+
+
 
 
             $.post(path + "almacen/guardarsalidamat", pSalidaMat, function(data) {
