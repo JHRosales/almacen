@@ -259,7 +259,7 @@ class PDF1 extends TCPDF
 $idsalida = $_GET['idSalida'];
 
 $Rs_tipoPer = new TSPResult($ConeccionRatania, "");
-$Rs_tipoPer->Poner_MSQL("select  a.vobra,vlugar,a.idmaterial,a.nMaterial,SUM(nCantidad)- coalesce( (select sum(dretmat.nCantidad) nCantidad 
+$Rs_tipoPer->Poner_MSQL("select * from(select  a.vobra,vlugar,a.idmaterial,a.nMaterial,SUM(nCantidad)- coalesce( (select sum(dretmat.nCantidad) nCantidad 
 from  almacen.RetornoMat dretm
  inner join almacen.detRetornoMat dretmat on dretm.idRetornoMat=dretmat.idRetornoMat
  where dretm.idSalidaMat=a.idSalidaMat
@@ -310,10 +310,11 @@ inner join material_almacen m on b.idMaterial=m.idMaterial
 left join cliente c on a.idCliente=c.idCliente
 left join tecnico t on a.idTecnico=t.idTecnico
 where a.vEstado =1 and b.vEstado=1
-and a.idSalidaMat=$idsalida 
+and a.idSalidaMat=$idsalida
 ) a
 group by a.vObra,vLugar,a.idMaterial,a.nMaterial,idCliente,clie,vTipoDoc
-,vDireccion,precUnit,dFecSalida,cotizacionTotal,tipomoneda,a.fechaRetorno,a.idSalidaMat");
+,vDireccion,precUnit,dFecSalida,cotizacionTotal,tipomoneda,a.fechaRetorno,a.idSalidaMat)b
+where b.nCantidad>0");
 //$Rs_tipoPer->pg_Poner_Esquema("public");
 
 $Rs_tipoPer->executeMSQL();
